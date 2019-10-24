@@ -18,7 +18,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.session.GwtSessionP
 public class DatastoreSessionPermission extends GwtSessionPermission {
 
     protected DatastoreSessionPermission() {
-        super();
     }
 
     private DatastoreSessionPermission(GwtSessionPermissionAction action) {

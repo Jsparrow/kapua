@@ -45,6 +45,8 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 import java.io.StringWriter;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link DeviceConfigurationManagementService} implementation.
@@ -54,7 +56,8 @@ import java.util.Date;
 @KapuaProvider
 public class DeviceConfigurationManagementServiceImpl extends AbstractDeviceManagementServiceImpl implements DeviceConfigurationManagementService {
 
-    private static final DeviceConfigurationFactory DEVICE_CONFIGURATION_FACTORY = LOCATOR.getFactory(DeviceConfigurationFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeviceConfigurationManagementServiceImpl.class);
+	private static final DeviceConfigurationFactory DEVICE_CONFIGURATION_FACTORY = LOCATOR.getFactory(DeviceConfigurationFactory.class);
 
     @Override
     public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String configurationId, String configurationComponentPid, Long timeout)
@@ -185,12 +188,12 @@ public class DeviceConfigurationManagementServiceImpl extends AbstractDeviceMana
         createDeviceEvent(scopeId, deviceId, configurationRequestMessage, responseMessage);
 
         //
-        // Check response
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new ConfigurationPutManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
-        }
+		// Check response
+		if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new ConfigurationPutManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
 
     }
 
@@ -203,7 +206,8 @@ public class DeviceConfigurationManagementServiceImpl extends AbstractDeviceMana
                     XmlUtil.unmarshal(xmlDeviceConfig, DeviceConfigurationImpl.class),
                     timeout);
         } catch (JAXBException | XMLStreamException | FactoryConfigurationError | SAXException e) {
-            throw new KapuaIllegalArgumentException("xmlDeviceConfig", xmlDeviceConfig);
+            logger.error(e.getMessage(), e);
+			throw new KapuaIllegalArgumentException("xmlDeviceConfig", xmlDeviceConfig);
         }
     }
 
@@ -259,11 +263,11 @@ public class DeviceConfigurationManagementServiceImpl extends AbstractDeviceMana
         createDeviceEvent(scopeId, deviceId, configurationRequestMessage, responseMessage);
 
         //
-        // Check response
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new ConfigurationPutManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
-        }
+		// Check response
+		if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new ConfigurationPutManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
     }
 }

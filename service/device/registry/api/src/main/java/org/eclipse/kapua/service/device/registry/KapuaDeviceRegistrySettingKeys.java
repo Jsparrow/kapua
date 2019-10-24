@@ -47,7 +47,8 @@ public enum KapuaDeviceRegistrySettingKeys implements SettingKey {
      * @since 1.0.0
      * 
      */
-    public String key() {
+    @Override
+	public String key() {
         return key;
     }
 }

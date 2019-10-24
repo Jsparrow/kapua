@@ -90,7 +90,7 @@ public class CertificateUtils {
     private static String getBytesOnly(String keyOrCertificate) {
         String lineEnding = "(\r)?\n";
         return keyOrCertificate
-                .replaceAll("-----(BEGIN|END)(.*)-----(" + lineEnding + ")?", "")
+                .replaceAll(new StringBuilder().append("-----(BEGIN|END)(.*)-----(").append(lineEnding).append(")?").toString(), "")
                 .replaceAll(lineEnding, "");
     }
 }

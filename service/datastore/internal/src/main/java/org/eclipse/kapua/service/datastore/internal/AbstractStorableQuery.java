@@ -49,8 +49,6 @@ public abstract class AbstractStorableQuery<S extends Storable> implements Stora
      * @since 1.0.0
      */
     public AbstractStorableQuery() {
-        super();
-
         fetchStyle = StorableFetchStyle.SOURCE_FULL;
         fetchAttributes = new ArrayList<>();
         askTotalCount = false;

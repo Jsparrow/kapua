@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.datastore;
 
 public class DatastoreDomains {
 
-    private DatastoreDomains() { }
-
     public static final DatastoreDomain DATASTORE_DOMAIN = new DatastoreDomain();
+
+	private DatastoreDomains() { }
 }

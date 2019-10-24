@@ -20,7 +20,6 @@ public class JsonMessageListResult extends AbstractStorableListResult<JsonDatast
      * Construct a message result list
      */
     public JsonMessageListResult() {
-        super();
     }
 
     /**

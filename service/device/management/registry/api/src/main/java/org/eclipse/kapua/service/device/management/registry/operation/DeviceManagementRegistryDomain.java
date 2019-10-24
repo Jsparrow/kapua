@@ -25,7 +25,7 @@ import java.util.Set;
  *
  * @since 1.0.0
  */
-public class DeviceManagementRegistryDomain extends AbstractDomain implements Domain {
+public class DeviceManagementRegistryDomain extends AbstractDomain {
 
     private String name = "device_management_registry";
     private Set<Actions> actions = new HashSet<>(Arrays.asList(Actions.execute, Actions.read, Actions.write));

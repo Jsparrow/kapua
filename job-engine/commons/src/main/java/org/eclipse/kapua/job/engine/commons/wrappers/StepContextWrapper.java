@@ -28,6 +28,8 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 import java.io.Serializable;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@link StepContextWrapper} wraps the {@link StepContext} and offers utility methods around it.
@@ -36,7 +38,8 @@ import java.util.Properties;
  */
 public class StepContextWrapper {
 
-    private StepContext stepContext;
+    private static final Logger logger = LoggerFactory.getLogger(StepContextWrapper.class);
+	private StepContext stepContext;
 
     public StepContextWrapper(StepContext stepContext) {
         this.stepContext = stepContext;
@@ -87,13 +90,15 @@ public class StepContextWrapper {
                 try {
                     stepProperty = (T) Enum.valueOf(enumType, stepPropertyString);
                 } catch (IllegalArgumentException iae) {
-                    throw new KapuaIllegalArgumentException(stepPropertyName, stepPropertyString);
+                    logger.error(iae.getMessage(), iae);
+					throw new KapuaIllegalArgumentException(stepPropertyName, stepPropertyString);
                 }
             } else {
                 try {
                     stepProperty = XmlUtil.unmarshal(stepPropertyString, type);
                 } catch (JAXBException | XMLStreamException | FactoryConfigurationError | SAXException e) {
-                    throw new KapuaIllegalArgumentException(stepPropertyName, stepPropertyString);
+                    logger.error(e.getMessage(), e);
+					throw new KapuaIllegalArgumentException(stepPropertyName, stepPropertyString);
                 }
             }
         } else {

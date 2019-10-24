@@ -115,6 +115,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Implementation of Gherkin steps used in DeviceRegistry.feature scenarios.
@@ -326,7 +327,7 @@ public class DeviceRegistrySteps extends TestBase {
 
         KapuaId dev;
 
-        if (deviceId.trim().toLowerCase().equals("null")) {
+        if ("null".equals(StringUtils.lowerCase(deviceId.trim()))) {
             dev = null;
         } else {
             dev = getKapuaId(deviceId);
@@ -340,7 +341,7 @@ public class DeviceRegistrySteps extends TestBase {
 
         String id;
 
-        if (clientId.trim().toLowerCase().equals("null")) {
+        if ("null".equals(StringUtils.lowerCase(clientId.trim()))) {
             id = null;
         } else {
             id = clientId;
@@ -544,7 +545,7 @@ public class DeviceRegistrySteps extends TestBase {
 
         String client;
 
-        if (clientId.trim().toLowerCase().equals("null")) {
+        if ("null".equals(StringUtils.lowerCase(clientId.trim()))) {
             client = null;
         } else {
             client = clientId;
@@ -854,8 +855,8 @@ public class DeviceRegistrySteps extends TestBase {
 
         primeException();
         try {
-            assertNull(deviceRegistryService.findByClientId(getCurrentScopeId(), deviceCreator.getClientId().toLowerCase()));
-            assertNull(deviceRegistryService.findByClientId(getCurrentScopeId(), deviceCreator.getClientId().toUpperCase()));
+            assertNull(deviceRegistryService.findByClientId(getCurrentScopeId(), StringUtils.lowerCase(deviceCreator.getClientId())));
+            assertNull(deviceRegistryService.findByClientId(getCurrentScopeId(), StringUtils.upperCase(deviceCreator.getClientId())));
             assertNotNull(deviceRegistryService.findByClientId(getCurrentScopeId(), deviceCreator.getClientId()));
         } catch (KapuaException ex) {
             verifyException(ex);
@@ -1680,7 +1681,7 @@ public class DeviceRegistrySteps extends TestBase {
         Assert.assertNotNull(stepData.get("DeviceEventList"));
         Assert.assertNotEquals(0, ((DeviceEventListResult) stepData.get("DeviceEventList")).getSize());
         tmpList = (DeviceEventListResult) stepData.get("DeviceEventList");
-        Assert.assertEquals(type.trim().toUpperCase(), tmpList.getItem(tmpList.getSize() - 1).getResource().trim().toUpperCase());
+        Assert.assertEquals(StringUtils.upperCase(type.trim()), StringUtils.upperCase(tmpList.getItem(tmpList.getSize() - 1).getResource().trim()));
     }
 
     @Then("^I find (\\d+) device event(?:|s)?$")
@@ -1808,7 +1809,7 @@ public class DeviceRegistrySteps extends TestBase {
         Account tmpAccount = (Account) stepData.get("LastAccount");
 
         Assert.assertNotNull(clientId);
-        Assert.assertFalse(clientId.isEmpty());
+        Assert.assertFalse(StringUtils.isEmpty(clientId));
         Assert.assertNotNull(tmpAccount);
         Assert.assertNotNull(tmpAccount.getId());
 
@@ -1965,7 +1966,7 @@ public class DeviceRegistrySteps extends TestBase {
 
             for (CucUser tmpTestUsr : users) {
                 User tmpUser = aclCreator.createUser(account, tmpTestUsr.getName());
-                if ((tmpTestUsr.getPassword() != null) && !tmpTestUsr.getPassword().isEmpty()) {
+                if ((tmpTestUsr.getPassword() != null) && !StringUtils.isEmpty(tmpTestUsr.getPassword())) {
                     aclCreator.attachUserCredentials(account, tmpUser, tmpTestUsr.getPassword());
                 } else {
                     aclCreator.attachUserCredentials(account, tmpUser);
@@ -2128,7 +2129,7 @@ public class DeviceRegistrySteps extends TestBase {
 
             Assert.assertNotNull(tmpConn);
 
-            if (resUser.isEmpty() || resUser.trim().toLowerCase().contains("null")) {
+            if (StringUtils.isEmpty(resUser) || StringUtils.contains(resUser.trim().toLowerCase(), "null")) {
                 userId = null;
             } else {
                 userId = userService.findByName(resUser).getId();
@@ -2142,7 +2143,8 @@ public class DeviceRegistrySteps extends TestBase {
             } catch (KapuaException ex) {
                 verifyException(ex);
             } catch (Exception e) {
-                int a = 10;
+                LOGGER.error(e.getMessage(), e);
+				int a = 10;
             }
         });
     }
@@ -2277,7 +2279,7 @@ public class DeviceRegistrySteps extends TestBase {
     private KapuaMethod getMethodFromString(String name) {
         KapuaMethod tmpMeth = null;
 
-        switch (name.trim().toUpperCase()) {
+        switch (StringUtils.upperCase(name.trim())) {
             case "READ":
                 tmpMeth = KapuaMethod.READ;
                 break;
@@ -2490,7 +2492,7 @@ public class DeviceRegistrySteps extends TestBase {
     }
 
     DeviceConnectionStatus parseConnectionStatusString(String stat) {
-        switch (stat.trim().toUpperCase()) {
+        switch (StringUtils.upperCase(stat.trim())) {
             case "CONNECTED":
                 return DeviceConnectionStatus.CONNECTED;
             case "DISCONNECTED":
@@ -2502,7 +2504,7 @@ public class DeviceRegistrySteps extends TestBase {
     }
 
     ConnectionUserCouplingMode parseConnectionCouplingString(String mode) {
-        switch (mode.trim().toUpperCase()) {
+        switch (StringUtils.upperCase(mode.trim())) {
             case "INHERITED":
                 return ConnectionUserCouplingMode.INHERITED;
             case "LOOSE":
@@ -2514,7 +2516,7 @@ public class DeviceRegistrySteps extends TestBase {
     }
 
     boolean parseBooleanFromString(String value) {
-        switch (value.trim().toLowerCase()) {
+        switch (StringUtils.lowerCase(value.trim())) {
             case "true":
                 return true;
             case "false":

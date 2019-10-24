@@ -18,7 +18,7 @@ import org.eclipse.kapua.app.console.module.api.client.util.DateUtils;
 import org.eclipse.kapua.app.console.module.api.client.util.MessageUtils;
 import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 
-public class GwtSnapshot extends KapuaBaseModel implements Serializable {
+public class GwtSnapshot extends KapuaBaseModel {
     private static final long serialVersionUID = 204571826084819719L;
 
 

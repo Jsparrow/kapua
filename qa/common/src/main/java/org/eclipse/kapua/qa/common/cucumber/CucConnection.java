@@ -19,6 +19,7 @@ import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.registry.ConnectionUserCouplingMode;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
 import org.eclipse.kapua.service.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Data object used in Gherkin to input Device Connection parameters.
@@ -27,41 +28,40 @@ import org.eclipse.kapua.service.user.UserService;
  */
 public class CucConnection {
 
-    String scope;
-    KapuaId scopeId;
-    String status;
-    String clientId;
-    String user;
-    KapuaId userId;
-    String allowUserChange;
-    String userCouplingMode;
-    String reservedUser;
-    KapuaId reservedUserId;
-    String protocol;
-    String clientIp;
-    String serverIp;
-
     private static UserService userService = KapuaLocator.getInstance().getService(UserService.class);
-    private static AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
+	private static AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
+	String scope;
+	KapuaId scopeId;
+	String status;
+	String clientId;
+	String user;
+	KapuaId userId;
+	String allowUserChange;
+	String userCouplingMode;
+	String reservedUser;
+	KapuaId reservedUserId;
+	String protocol;
+	String clientIp;
+	String serverIp;
 
-    public String getScope() {
+	public String getScope() {
         return scope;
     }
 
-    public void setScope(String scope) {
+	public void setScope(String scope) {
         this.scope = scope;
     }
 
-    public KapuaId getScopeId() throws KapuaException {
+	public KapuaId getScopeId() throws KapuaException {
         return KapuaSecurityUtils.doPrivileged(() -> accountService.findByName(scope).getId());
     }
 
-    public DeviceConnectionStatus getStatus() {
+	public DeviceConnectionStatus getStatus() {
         DeviceConnectionStatus tmpStatus = null;
         if (status == null) {
             return null;
         }
-        switch (status.trim().toUpperCase()) {
+        switch (StringUtils.upperCase(status.trim())) {
         case "CONNECTED":
             tmpStatus = DeviceConnectionStatus.CONNECTED;
             break;
@@ -75,36 +75,36 @@ public class CucConnection {
         return tmpStatus;
     }
 
-    public void setStatus(String status) {
+	public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getClientId() {
+	public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
+	public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
-    public String getUser() {
+	public String getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+	public void setUser(String user) {
         this.user = user;
     }
 
-    public KapuaId getUserId() throws KapuaException {
+	public KapuaId getUserId() throws KapuaException {
         return KapuaSecurityUtils.doPrivileged(() -> userService.findByName(user).getId());
     }
 
-    public boolean getAllowUserChange() {
+	public boolean getAllowUserChange() {
         boolean allowChng = false;
         if (allowUserChange == null) {
             return false;
         }
-        switch (allowUserChange.trim().toLowerCase()) {
+        switch (StringUtils.lowerCase(allowUserChange.trim())) {
         case "true":
             allowChng = true;
             break;
@@ -117,17 +117,17 @@ public class CucConnection {
         return allowChng;
     }
 
-    public void setAllowUserChange(String allowUserChange) {
+	public void setAllowUserChange(String allowUserChange) {
         this.allowUserChange = allowUserChange;
     }
 
-    public ConnectionUserCouplingMode getUserCouplingMode() {
+	public ConnectionUserCouplingMode getUserCouplingMode() {
         ConnectionUserCouplingMode mode;
 
         if (userCouplingMode == null) {
             return ConnectionUserCouplingMode.INHERITED;
         }
-        switch (userCouplingMode.toUpperCase().trim()) {
+        switch (StringUtils.trim(userCouplingMode.toUpperCase())) {
         case "INHERITED":
             mode = ConnectionUserCouplingMode.INHERITED;
             break;
@@ -143,47 +143,47 @@ public class CucConnection {
         return mode;
     }
 
-    public void setUserCouplingMode(String userCouplingMode) {
+	public void setUserCouplingMode(String userCouplingMode) {
         this.userCouplingMode = userCouplingMode;
     }
 
-    public String getReservedUser() {
+	public String getReservedUser() {
         return reservedUser;
     }
 
-    public void setReservedUser(String reservedUser) {
+	public void setReservedUser(String reservedUser) {
         this.reservedUser = reservedUser;
     }
 
-    public KapuaId getReservedUserId() throws KapuaException {
-        if ((reservedUser == null) || reservedUser.isEmpty()) {
+	public KapuaId getReservedUserId() throws KapuaException {
+        if ((reservedUser == null) || StringUtils.isEmpty(reservedUser)) {
             return null;
         } else {
             return KapuaSecurityUtils.doPrivileged(() -> userService.findByName(reservedUser).getId());
         }
     }
 
-    public String getProtocol() {
+	public String getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(String protocol) {
+	public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
 
-    public String getClientIp() {
+	public String getClientIp() {
         return clientIp;
     }
 
-    public void setClientIp(String clientIp) {
+	public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
     }
 
-    public String getServerIp() {
+	public String getServerIp() {
         return serverIp;
     }
 
-    public void setServerIp(String serverIp) {
+	public void setServerIp(String serverIp) {
         this.serverIp = serverIp;
     }
 }

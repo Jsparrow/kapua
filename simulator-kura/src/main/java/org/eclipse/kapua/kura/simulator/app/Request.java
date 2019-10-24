@@ -87,13 +87,13 @@ public class Request {
 
         final String requestId = Metrics.getAsString(metrics, Metrics.KEY_REQUEST_ID);
         if (requestId == null) {
-            throw new IllegalArgumentException("Request ID (" + Metrics.KEY_REQUEST_ID + ") missing in message");
+            throw new IllegalArgumentException(new StringBuilder().append("Request ID (").append(Metrics.KEY_REQUEST_ID).append(") missing in message").toString());
         }
 
         final String requesterClientId = Metrics.getAsString(metrics, Metrics.KEY_REQUESTER_CLIENT_ID);
         if (requesterClientId == null) {
             throw new IllegalArgumentException(
-                    "Requester Client ID (" + Metrics.KEY_REQUESTER_CLIENT_ID + ") missing in message");
+                    new StringBuilder().append("Requester Client ID (").append(Metrics.KEY_REQUESTER_CLIENT_ID).append(") missing in message").toString());
         }
 
         return new Request(context, message, metrics, requestId, requesterClientId);
@@ -135,29 +135,25 @@ public class Request {
      * @return a new sender, never returns {@code null}
      */
     public Sender reply(final int responseCode) {
-        return new Sender() {
+        return (final KuraPayload.Builder payload) -> {
 
-            @Override
-            public void send(final KuraPayload.Builder payload) {
+		    // check for existing response code metric
 
-                // check for existing response code metric
+		    for (final KuraMetricOrBuilder metric : payload.getMetricOrBuilderList()) {
+		        if (metric.getName().equals(Metrics.KEY_RESPONSE_CODE)) {
+		            throw new IllegalArgumentException(
+		                    String.format("Metrics must not already contain '%s'", Metrics.KEY_RESPONSE_CODE));
+		        }
+		    }
 
-                for (final KuraMetricOrBuilder metric : payload.getMetricOrBuilderList()) {
-                    if (metric.getName().equals(Metrics.KEY_RESPONSE_CODE)) {
-                        throw new IllegalArgumentException(
-                                String.format("Metrics must not already contain '%s'", Metrics.KEY_RESPONSE_CODE));
-                    }
-                }
+		    // add response code
 
-                // add response code
+		    Metrics.addMetric(payload, Metrics.KEY_RESPONSE_CODE, responseCode);
 
-                Metrics.addMetric(payload, Metrics.KEY_RESPONSE_CODE, responseCode);
-
-                Request.this.applicationContext
-                        .sender(Topic.reply(Request.this.requesterClientId, Request.this.requestId))
-                        .send(payload);
-            }
-        };
+		    Request.this.applicationContext
+		            .sender(Topic.reply(Request.this.requesterClientId, Request.this.requestId))
+		            .send(payload);
+		};
     }
 
     /**
@@ -170,15 +166,7 @@ public class Request {
      * @return a new sender, never returns {@code null}
      */
     public Sender notification(final String resource) {
-        return new Sender() {
-
-            @Override
-            public void send(final Builder payload) {
-                Request.this.applicationContext
-                        .sender(Topic.notify(Request.this.requesterClientId, resource))
-                        .send(payload);
-            }
-        };
+        return (final Builder payload) -> Request.this.applicationContext.sender(Topic.notify(Request.this.requesterClientId, resource)).send(payload);
     }
 
     /**
@@ -210,7 +198,7 @@ public class Request {
             sb.append(NL);
         }
 
-        for (final Map.Entry<String, Object> entry : this.metrics.entrySet()) {
+        this.metrics.entrySet().forEach((final Map.Entry<String, Object> entry) -> {
             final Object value = entry.getValue();
 
             sb.append("\t");
@@ -221,7 +209,7 @@ public class Request {
                 sb.append("null");
             }
             sb.append(NL);
-        }
+        });
         sb.append("]");
 
         return sb.toString();

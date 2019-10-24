@@ -29,7 +29,19 @@ import org.eclipse.kapua.kura.simulator.generator.GeneratorScheduler;
 
 public class ConfiguredSimulation implements Simulation {
 
-    public static ConfiguredSimulation from(final Configuration.Application configuration, final String applicationId) {
+    private final Descriptor descriptor;
+	private final GeneratorScheduler scheduler;
+	private final Map<String, Generator> generators;
+	private final Map<String, Topic> topics;
+
+	private ConfiguredSimulation(final String applicationId, final GeneratorScheduler scheduler, final Map<String, Generator> generators, final Map<String, Topic> topics) {
+        this.descriptor = new Descriptor(applicationId);
+        this.scheduler = scheduler;
+        this.generators = generators;
+        this.topics = topics;
+    }
+
+	public static ConfiguredSimulation from(final Configuration.Application configuration, final String applicationId) {
         Objects.requireNonNull(configuration);
         Objects.requireNonNull(applicationId);
 
@@ -59,7 +71,7 @@ public class ConfiguredSimulation implements Simulation {
         return new ConfiguredSimulation(applicationId, scheduler, generators, topics);
     }
 
-    private static Topic convertTopic(final Configuration.Topic value) {
+	private static Topic convertTopic(final Configuration.Topic value) {
         if (value == null) {
             return null;
         }
@@ -67,25 +79,12 @@ public class ConfiguredSimulation implements Simulation {
         return new Topic(value.getPositionGenerator(), value.getBodyGenerator(), value.getMetrics());
     }
 
-    private final Descriptor descriptor;
-    private final GeneratorScheduler scheduler;
-
-    private final Map<String, Generator> generators;
-    private final Map<String, Topic> topics;
-
-    private ConfiguredSimulation(final String applicationId, final GeneratorScheduler scheduler, final Map<String, Generator> generators, final Map<String, Topic> topics) {
-        this.descriptor = new Descriptor(applicationId);
-        this.scheduler = scheduler;
-        this.generators = generators;
-        this.topics = topics;
-    }
-
-    @Override
+	@Override
     public void close() throws Exception {
         this.scheduler.close();
     }
 
-    @Override
+	@Override
     public Application createApplication(final String simulatorId) {
         return new Application() {
 

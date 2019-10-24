@@ -51,15 +51,6 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
     /**
      * Constructor.
      *
-     * @since 1.0.0
-     */
-    protected RolePermissionImpl() {
-        super();
-    }
-
-    /**
-     * Constructor.
-     *
      * @param scopeId The scope {@link KapuaId} to set into the {@link RolePermission}
      * @since 1.0.0
      */
@@ -67,7 +58,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         super(scopeId);
     }
 
-    /**
+	/**
      * Constructor.
      *
      * @param scopeId    The scope {@link KapuaId} to set into the {@link RolePermission}
@@ -80,7 +71,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         setPermission(permission);
     }
 
-    /**
+	/**
      * Clone constructor
      *
      * @param rolePermission
@@ -94,17 +85,25 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         setPermission(rolePermission.getPermission());
     }
 
-    @Override
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected RolePermissionImpl() {
+    }
+
+	@Override
     public void setRoleId(KapuaId roleId) {
         this.roleId = KapuaEid.parseKapuaId(roleId);
     }
 
-    @Override
+	@Override
     public KapuaId getRoleId() {
         return roleId;
     }
 
-    @Override
+	@Override
     public void setPermission(Permission permission) {
         PermissionImpl permissionImpl = null;
         if (permission != null) {
@@ -113,17 +112,17 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         this.permission = permissionImpl;
     }
 
-    @Override
+	@Override
     public Permission getPermission() {
         return permission != null ? permission : new PermissionImpl(null, null, null, null);
     }
 
-    @Override
+	@Override
     public String toString() {
         return getPermission().toString();
     }
 
-    @PreUpdate
+	@PreUpdate
     protected void preUpdateAction() {
         if (getCreatedBy() == null) {
             setCreatedBy(KapuaSecurityUtils.getSession().getUserId());
@@ -134,7 +133,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         }
     }
 
-    @Override
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -143,7 +142,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         return result;
     }
 
-    @Override
+	@Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

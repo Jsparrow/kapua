@@ -41,7 +41,8 @@ public enum KapuaSchedulerSettingKeys implements SettingKey {
      * Gets the key for this {@link KapuaSchedulerSettingKeys}
      * 
      */
-    public String key() {
+    @Override
+	public String key() {
         return key;
     }
 }

@@ -50,7 +50,7 @@ public class ListBodyWriter implements MessageBodyWriter<List<?>> {
     @Override
     public void writeTo(List<?> t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
             MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-            throws IOException, WebApplicationException {
+            throws IOException {
         try {
             if (providers == null) {
                 throw new WebApplicationException("Unable to find any provider.");

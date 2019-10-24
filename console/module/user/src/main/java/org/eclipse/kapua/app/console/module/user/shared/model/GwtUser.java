@@ -22,14 +22,15 @@ public class GwtUser extends GwtUpdatableEntityModel implements IsSerializable {
 
     private static final long serialVersionUID = -3731370307878410611L;
 
-    public enum GwtUserStatus implements IsSerializable {
-        ENABLED, DISABLED, ANY;
-
-        GwtUserStatus() {
-        }
+    public GwtUser() {
     }
 
-    @Override
+	public GwtUser(String username) {
+        this();
+        this.setUsername(username);
+    }
+
+	@Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
         if ("statusEnum".equals(property)) {
@@ -45,84 +46,82 @@ public class GwtUser extends GwtUpdatableEntityModel implements IsSerializable {
         }
     }
 
-    public GwtUser() {
-        super();
-    }
-
-    public GwtUser(String username) {
-        this();
-        this.setUsername(username);
-    }
-
-    public String getUsername() {
+	public String getUsername() {
         return (String) get("username");
     }
 
-    public String getUnescapedUsername() {
+	public String getUnescapedUsername() {
         return (String) getUnescaped("username");
     }
 
-    public void setUsername(String username) {
+	public void setUsername(String username) {
         set("username", username);
     }
 
-    public String getDisplayName() {
+	public String getDisplayName() {
         return (String) get("displayName");
     }
 
-    public String getUnescapedDisplayName() {
+	public String getUnescapedDisplayName() {
         return (String) getUnescaped("displayName");
     }
 
-    public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName) {
         set("displayName", displayName);
     }
 
-    public String getEmail() {
+	public String getEmail() {
         return (String) get("email");
     }
 
-    public String getUnescapedEmail() {
+	public String getUnescapedEmail() {
         return (String) getUnescaped("email");
     }
 
-    public void setEmail(String email) {
+	public void setEmail(String email) {
         set("email", email);
     }
 
-    public String getPhoneNumber() {
+	public String getPhoneNumber() {
         return (String) get("phoneNumber");
     }
 
-    public String getUnescapedPhoneNumber() {
+	public String getUnescapedPhoneNumber() {
         return (String) getUnescaped("phoneNumber");
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
         set("phoneNumber", phoneNumber);
     }
 
-    public String getStatus() {
+	public String getStatus() {
         return (String) get("status");
     }
 
-    public GwtUserStatus getStatusEnum() {
+	public GwtUserStatus getStatusEnum() {
         return (GwtUserStatus) get("statusEnum");
     }
 
-    public void setStatus(String status) {
+	public void setStatus(String status) {
         set("status", status);
     }
 
-    public Date getExpirationDate() {
+	public Date getExpirationDate() {
         return get("expirationDate");
     }
 
-    public String getExpirationDateFormatted() {
+	public String getExpirationDateFormatted() {
         return get("expirationDateFormatted");
     }
 
-    public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(Date expirationDate) {
         set("expirationDate", expirationDate);
+    }
+
+	public enum GwtUserStatus implements IsSerializable {
+        ENABLED, DISABLED, ANY;
+
+        GwtUserStatus() {
+        }
     }
 }

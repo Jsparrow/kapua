@@ -28,11 +28,14 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class ClientUtilsIndexNameTest extends Assert {
 
-    private static final KapuaId ONE = new KapuaEid(BigInteger.ONE);
+    private static final Logger logger = LoggerFactory.getLogger(ClientUtilsIndexNameTest.class);
+	private static final KapuaId ONE = new KapuaEid(BigInteger.ONE);
 
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -52,7 +55,8 @@ public class ClientUtilsIndexNameTest extends Assert {
             // Index by Hour
             Assert.assertEquals("1-2017-01-01-00", DatastoreUtils.getDataIndexName(ONE, instant.toEpochMilli(), DatastoreUtils.INDEXING_WINDOW_OPTION_HOUR));
         } catch (KapuaException kaex) {
-            Assert.fail("Error while generating index name");
+            logger.error(kaex.getMessage(), kaex);
+			Assert.fail("Error while generating index name");
         }
     }
 
@@ -69,7 +73,8 @@ public class ClientUtilsIndexNameTest extends Assert {
             // Index by Hour
             Assert.assertEquals("1-2017-02-01-00", DatastoreUtils.getDataIndexName(ONE, instant.toEpochMilli(), DatastoreUtils.INDEXING_WINDOW_OPTION_HOUR));
         } catch (KapuaException kaex) {
-            Assert.fail("Error while generating index name");
+            logger.error(kaex.getMessage(), kaex);
+			Assert.fail("Error while generating index name");
         }
     }
 }

@@ -37,7 +37,6 @@ public class KapuaLifeCycleConverter extends AbstractKapuaConverter {
     private Counter metricConverterNotifyMessage;
 
     public KapuaLifeCycleConverter() {
-        super();
         metricConverterAppMessage = METRICS_SERVICE.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "app", "count");
         metricConverterBirthMessage = METRICS_SERVICE.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "birth", "count");
         metricConverterDcMessage = METRICS_SERVICE.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "dc", "count");

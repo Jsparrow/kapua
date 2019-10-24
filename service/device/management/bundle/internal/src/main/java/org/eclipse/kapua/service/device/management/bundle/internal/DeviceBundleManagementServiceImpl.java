@@ -157,12 +157,12 @@ public class DeviceBundleManagementServiceImpl extends AbstractDeviceManagementS
         createDeviceEvent(scopeId, deviceId, bundleRequestMessage, responseMessage);
 
         //
-        // Check response
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new KapuaException(BundleManagementResponseErrorCodes.BUNDLE_START_ERROR);
-        }
+		// Check response
+		if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new KapuaException(BundleManagementResponseErrorCodes.BUNDLE_START_ERROR);
     }
 
     @Override
@@ -206,12 +206,12 @@ public class DeviceBundleManagementServiceImpl extends AbstractDeviceManagementS
         createDeviceEvent(scopeId, deviceId, bundleRequestMessage, responseMessage);
 
         //
-        // Check response
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new KapuaException(BundleManagementResponseErrorCodes.BUNDLE_STOP_ERROR);
-        }
+		// Check response
+		if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new KapuaException(BundleManagementResponseErrorCodes.BUNDLE_STOP_ERROR);
     }
 
 }

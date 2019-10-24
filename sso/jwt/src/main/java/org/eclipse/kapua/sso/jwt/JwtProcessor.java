@@ -35,63 +35,25 @@ import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.jwt.consumer.JwtContext;
 import org.jose4j.keys.resolvers.HttpsJwksVerificationKeyResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JwtProcessor implements AutoCloseable {
 
     private static final String OPEN_ID_CONFIGURATION_WELL_KNOWN_PATH = ".well-known/openid-configuration";
     private static final String JWKS_URI_WELL_KNOWN_KEY = "jwks_uri";
+	private Map<URI, Processor> processors = new HashMap<>();
+	private String[] audiences;
+	private String[] expectedIssuers;
+	private Duration cacheTimeout;
 
-    private static class Processor {
-
-        private Instant lastUsed = Instant.now();
-
-        private JwtConsumer consumer;
-
-        public Processor(final URI jwksUri, String[] audiences, String[] expectedIssuers) {
-            final HttpsJwksVerificationKeyResolver resolver = new HttpsJwksVerificationKeyResolver(new HttpsJwks(jwksUri.toString()));
-
-            this.consumer = new JwtConsumerBuilder()
-                    .setVerificationKeyResolver(resolver) // Set resolver key
-                    .setRequireIssuedAt() // Set require reserved claim: iat
-                    .setRequireExpirationTime() // Set require reserved claim: exp
-                    .setRequireSubject() // // Set require reserved claim: sub
-                    .setExpectedIssuers(true, expectedIssuers)
-                    .setExpectedAudience(audiences)
-                    .build();
-        }
-
-        public boolean validate(final String jwt) {
-            try {
-                process(jwt);
-                return true;
-            } catch (InvalidJwtException e) {
-                return false;
-            }
-        }
-
-        public JwtContext process(final String jwt) throws InvalidJwtException {
-            lastUsed = Instant.now();
-            return consumer.process(jwt);
-        }
-
-        public boolean isExpired(final Duration timeout) {
-            return lastUsed.plus(timeout).isBefore(Instant.now());
-        }
-    }
-
-    private Map<URI, Processor> processors = new HashMap<>();
-
-    private String[] audiences;
-    private String[] expectedIssuers;
-    private Duration cacheTimeout;
-
-    public JwtProcessor(final List<String> audiences, final List<String> expectedIssuers, final Duration cacheTimeout) {
+	public JwtProcessor(final List<String> audiences, final List<String> expectedIssuers, final Duration cacheTimeout) {
         this.audiences = audiences.toArray(new String[audiences.size()]);
         this.expectedIssuers = expectedIssuers.toArray(new String[expectedIssuers.size()]);
         this.cacheTimeout = cacheTimeout;
     }
 
-    public boolean validate(final String jwt) throws Exception {
+	public boolean validate(final String jwt) throws Exception {
         final URI issuer = extractIssuer(jwt);
 
         return lookupProcessor(issuer)
@@ -99,7 +61,7 @@ public class JwtProcessor implements AutoCloseable {
                 .validate(jwt);
     }
 
-    public JwtContext process(final String jwt) throws Exception {
+	public JwtContext process(final String jwt) throws Exception {
         final URI issuer = extractIssuer(jwt);
 
         return lookupProcessor(issuer)
@@ -107,11 +69,11 @@ public class JwtProcessor implements AutoCloseable {
                 .process(jwt);
     }
 
-    @Override
+	@Override
     public void close() throws Exception {
     }
 
-    private static URI extractIssuer(final String jwt) throws InvalidJwtException, MalformedClaimException {
+	private static URI extractIssuer(final String jwt) throws InvalidJwtException, MalformedClaimException {
 
         // Parse JWT without validation
 
@@ -132,13 +94,13 @@ public class JwtProcessor implements AutoCloseable {
         return URI.create(issuer);
     }
 
-    private static Optional<URI> retrieveJwksUri(final URI issuer) throws IOException, URISyntaxException {
+	private static Optional<URI> retrieveJwksUri(final URI issuer) throws IOException, URISyntaxException {
 
         final JsonObject jsonObject;
 
         // Read .well-known resource
 
-        try (final InputStream stream = new URL(issuer.toString() + "/" + OPEN_ID_CONFIGURATION_WELL_KNOWN_PATH).openStream()) {
+        try (final InputStream stream = new URL(new StringBuilder().append(issuer.toString()).append("/").append(OPEN_ID_CONFIGURATION_WELL_KNOWN_PATH).toString()).openStream()) {
             // Parse json response
             jsonObject = Json.createReader(stream).readObject();
         }
@@ -158,7 +120,7 @@ public class JwtProcessor implements AutoCloseable {
         return Optional.empty();
     }
 
-    private Optional<Processor> lookupProcessor(final URI issuer) throws IOException, URISyntaxException {
+	private Optional<Processor> lookupProcessor(final URI issuer) throws IOException, URISyntaxException {
 
         Processor processor = processors.get(issuer);
 
@@ -184,6 +146,47 @@ public class JwtProcessor implements AutoCloseable {
         // return result
 
         return Optional.of(processor);
+    }
+
+    private static class Processor {
+
+        private final Logger logger = LoggerFactory.getLogger(Processor.class);
+
+		private Instant lastUsed = Instant.now();
+
+        private JwtConsumer consumer;
+
+        public Processor(final URI jwksUri, String[] audiences, String[] expectedIssuers) {
+            final HttpsJwksVerificationKeyResolver resolver = new HttpsJwksVerificationKeyResolver(new HttpsJwks(jwksUri.toString()));
+
+            this.consumer = new JwtConsumerBuilder()
+                    .setVerificationKeyResolver(resolver) // Set resolver key
+                    .setRequireIssuedAt() // Set require reserved claim: iat
+                    .setRequireExpirationTime() // Set require reserved claim: exp
+                    .setRequireSubject() // // Set require reserved claim: sub
+                    .setExpectedIssuers(true, expectedIssuers)
+                    .setExpectedAudience(audiences)
+                    .build();
+        }
+
+        public boolean validate(final String jwt) {
+            try {
+                process(jwt);
+                return true;
+            } catch (InvalidJwtException e) {
+                logger.error(e.getMessage(), e);
+				return false;
+            }
+        }
+
+        public JwtContext process(final String jwt) throws InvalidJwtException {
+            lastUsed = Instant.now();
+            return consumer.process(jwt);
+        }
+
+        public boolean isExpired(final Duration timeout) {
+            return lastUsed.plus(timeout).isBefore(Instant.now());
+        }
     }
 
 }

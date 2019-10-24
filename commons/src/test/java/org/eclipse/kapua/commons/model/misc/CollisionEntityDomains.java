@@ -13,7 +13,7 @@ package org.eclipse.kapua.commons.model.misc;
 
 public class CollisionEntityDomains {
 
-    private CollisionEntityDomains() { }
-
     public static final CollisionEntityDomain COLLISION_ENTITY_DOMAIN = new CollisionEntityDomain();
+
+	private CollisionEntityDomains() { }
 }

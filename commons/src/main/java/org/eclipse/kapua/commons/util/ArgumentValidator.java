@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility class to validate arguments passed in a parameters in service methods.
@@ -96,7 +97,7 @@ public class ArgumentValidator {
      */
     public static void isEmptyOrNull(String value, String argumentName)
             throws KapuaIllegalArgumentException {
-        if (!(value == null || value.trim().length() == 0)) {
+        if (!(value == null || StringUtils.trim(value).isEmpty())) {
             throw new KapuaIllegalArgumentException(argumentName, value);
         }
     }
@@ -110,7 +111,7 @@ public class ArgumentValidator {
      */
     public static void notEmptyOrNull(String value, String argumentName)
             throws KapuaIllegalNullArgumentException {
-        if (value == null || value.trim().length() == 0) {
+        if (value == null || StringUtils.trim(value).isEmpty()) {
             throw new KapuaIllegalNullArgumentException(argumentName);
         }
     }

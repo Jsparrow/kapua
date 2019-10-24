@@ -23,14 +23,13 @@ import org.eclipse.kapua.service.device.management.registry.operation.notificati
  */
 public class ManagementOperationNotificationQueryImpl extends AbstractKapuaQuery<ManagementOperationNotification> implements ManagementOperationNotificationQuery {
 
-    private ManagementOperationNotificationQueryImpl() {
-        super();
-    }
-
     public ManagementOperationNotificationQueryImpl(KapuaId scopeId) {
         this();
 
         setScopeId(scopeId);
+    }
+
+	private ManagementOperationNotificationQueryImpl() {
     }
 
 }

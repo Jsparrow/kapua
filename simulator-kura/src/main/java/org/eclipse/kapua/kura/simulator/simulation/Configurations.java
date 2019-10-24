@@ -30,9 +30,7 @@ public final class Configurations {
 
         final List<Simulation> result = new ArrayList<>(configuration.getApplications().size());
 
-        for (final Map.Entry<String, Configuration.Application> entry : configuration.getApplications().entrySet()) {
-            result.add(ConfiguredSimulation.from(entry.getValue(), entry.getKey()));
-        }
+        configuration.getApplications().entrySet().forEach((final Map.Entry<String, Configuration.Application> entry) -> result.add(ConfiguredSimulation.from(entry.getValue(), entry.getKey())));
 
         return result;
     }

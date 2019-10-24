@@ -34,7 +34,7 @@ public class ServiceResolver<S extends KapuaService, I extends S> {
             throw new KapuaLocatorException(KapuaLocatorErrorCodes.SERVICE_PROVIDER_INVALID, implementation, service);
         }
 
-        return new ServiceResolver<S,I>((Class<S>)service, (Class<I>)implementation);
+        return new ServiceResolver<>((Class<S>)service, (Class<I>)implementation);
     }
 
     public Class<S> getServiceClass() {

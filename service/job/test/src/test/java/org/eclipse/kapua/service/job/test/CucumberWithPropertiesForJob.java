@@ -49,10 +49,14 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CucumberWithPropertiesForJob extends CucumberWithProperties {
 
-    public CucumberWithPropertiesForJob(Class<?> clazz) throws InitializationError, IOException {
+    private static final Logger logger = LoggerFactory.getLogger(CucumberWithPropertiesForJob.class);
+
+	public CucumberWithPropertiesForJob(Class<?> clazz) throws InitializationError, IOException {
         super(clazz);
         setupDI();
     }
@@ -76,6 +80,7 @@ public class CucumberWithPropertiesForJob extends CucumberWithProperties {
                 try {
                     Mockito.doNothing().when(mockedAuthorization).checkPermission(Matchers.any(Permission.class));
                 } catch (KapuaException e) {
+					logger.error(e.getMessage(), e);
                     // skip
                 }
                 bind(AuthorizationService.class).toInstance(mockedAuthorization);

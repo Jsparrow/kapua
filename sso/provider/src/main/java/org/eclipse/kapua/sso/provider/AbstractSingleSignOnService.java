@@ -34,6 +34,7 @@ import org.eclipse.kapua.sso.provider.setting.SsoSetting;
 import org.eclipse.kapua.sso.provider.setting.SsoSettingKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractSingleSignOnService implements SingleSignOnService {
 
@@ -90,13 +91,13 @@ public abstract class AbstractSingleSignOnService implements SingleSignOnService
         urlConnection.setRequestMethod("POST");
         urlConnection.setRequestProperty(HttpHeaders.CONTENT_TYPE, URLEncodedUtils.CONTENT_TYPE);
 
-        final List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        final List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
         parameters.add(new BasicNameValuePair("code", authCode));
         parameters.add(new BasicNameValuePair("client_id", getClientId()));
 
         final String clientSecret = getClientSecret();
-        if (clientSecret != null && !clientSecret.isEmpty()) {
+        if (clientSecret != null && !StringUtils.isEmpty(clientSecret)) {
             parameters.add(new BasicNameValuePair("client_secret", clientSecret));
         }
 

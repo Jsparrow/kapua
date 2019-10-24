@@ -13,5 +13,5 @@ package org.eclipse.kapua.sso;
 
 public interface SingleSignOnLocator {
 
-    public SingleSignOnService getService();
+    SingleSignOnService getService();
 }

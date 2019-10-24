@@ -27,7 +27,6 @@ public class RolePermissionQueryImpl extends AbstractKapuaQuery<RolePermission> 
      * Constructor
      */
     public RolePermissionQueryImpl() {
-        super();
     }
 
     /**

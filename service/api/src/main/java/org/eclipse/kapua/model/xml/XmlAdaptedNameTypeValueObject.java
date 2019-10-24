@@ -22,7 +22,6 @@ public class XmlAdaptedNameTypeValueObject extends XmlAdaptedTypeValueObject {
     private String name;
 
     public XmlAdaptedNameTypeValueObject() {
-        super();
     }
 
     public String getName() {

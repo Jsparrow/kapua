@@ -38,7 +38,7 @@ import org.eclipse.kapua.service.job.targets.JobTargetStatus;
  *
  * @since 1.1.0
  */
-public abstract class AbstractDevicePackageTargetProcessor extends AbstractTargetProcessor implements TargetProcessor {
+public abstract class AbstractDevicePackageTargetProcessor extends AbstractTargetProcessor {
 
     private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
 
@@ -68,33 +68,30 @@ public abstract class AbstractDevicePackageTargetProcessor extends AbstractTarge
             throw new KapuaEntityNotFoundException(DeviceManagementOperation.TYPE, operationId);
         }
 
-        if (deviceManagementOperation.getEndedOn() != null && deviceManagementOperation.getEndedOn().before(jobDeviceManagementOperation.getCreatedOn())) {
-            JobTargetStatus jobTargetStatus;
-            if (OperationStatus.COMPLETED.equals(deviceManagementOperation.getStatus())) {
-                jobTargetStatus = JobTargetStatus.NOTIFIED_COMPLETION;
-            } else if (OperationStatus.FAILED.equals(deviceManagementOperation.getStatus())) {
-                jobTargetStatus = JobTargetStatus.PROCESS_FAILED;
-            } else {
-                return;
-            }
-
-            jobTarget.setStatus(jobTargetStatus);
-
-            //
-            // If PROCESS_FAILED no need to continue the JobTarget processing
-            if (JobTargetStatus.PROCESS_FAILED.equals(jobTarget.getStatus())) {
-                return;
-            }
-
-            //
-            // Enqueue the job
-            JobStartOptions jobStartOptions = JOB_ENGINE_FACTORY.newJobStartOptions();
-            jobStartOptions.addTargetIdToSublist(jobTarget.getId());
-            jobStartOptions.setFromStepIndex(jobTarget.getStepIndex());
-            jobStartOptions.setEnqueue(true);
-
-            KapuaSecurityUtils.doPrivileged(() -> JOB_ENGINE_SERVICE.startJob(scopeId, jobDeviceManagementOperation.getJobId(), jobStartOptions));
-        }
+        if (!(deviceManagementOperation.getEndedOn() != null && deviceManagementOperation.getEndedOn().before(jobDeviceManagementOperation.getCreatedOn()))) {
+			return;
+		}
+		JobTargetStatus jobTargetStatus;
+		if (OperationStatus.COMPLETED == deviceManagementOperation.getStatus()) {
+		    jobTargetStatus = JobTargetStatus.NOTIFIED_COMPLETION;
+		} else if (OperationStatus.FAILED == deviceManagementOperation.getStatus()) {
+		    jobTargetStatus = JobTargetStatus.PROCESS_FAILED;
+		} else {
+		    return;
+		}
+		jobTarget.setStatus(jobTargetStatus);
+		//
+		// If PROCESS_FAILED no need to continue the JobTarget processing
+		if (JobTargetStatus.PROCESS_FAILED == jobTarget.getStatus()) {
+		    return;
+		}
+		//
+		// Enqueue the job
+		JobStartOptions jobStartOptions = JOB_ENGINE_FACTORY.newJobStartOptions();
+		jobStartOptions.addTargetIdToSublist(jobTarget.getId());
+		jobStartOptions.setFromStepIndex(jobTarget.getStepIndex());
+		jobStartOptions.setEnqueue(true);
+		KapuaSecurityUtils.doPrivileged(() -> JOB_ENGINE_SERVICE.startJob(scopeId, jobDeviceManagementOperation.getJobId(), jobStartOptions));
     }
 
 }

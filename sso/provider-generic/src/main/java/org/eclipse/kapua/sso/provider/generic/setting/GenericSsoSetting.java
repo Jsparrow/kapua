@@ -19,15 +19,15 @@ public class GenericSsoSetting extends AbstractKapuaSetting<GenericSsoSettingKey
 
     private static final GenericSsoSetting INSTANCE = new GenericSsoSetting();
 
-    private GenericSsoSetting() {
-        super(GENERIC_SSO_SETTING_RESOURCE);
-    }
-
     GenericSsoSetting(final String resourceName) {
         super(resourceName);
     }
 
-    public static GenericSsoSetting getInstance() {
+	private GenericSsoSetting() {
+        super(GENERIC_SSO_SETTING_RESOURCE);
+    }
+
+	public static GenericSsoSetting getInstance() {
         return INSTANCE;
     }
 }

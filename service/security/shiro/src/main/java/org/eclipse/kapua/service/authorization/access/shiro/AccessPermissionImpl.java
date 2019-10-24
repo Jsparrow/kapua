@@ -46,15 +46,6 @@ public class AccessPermissionImpl extends AbstractKapuaEntity implements AccessP
     private PermissionImpl permission;
 
     /**
-     * Constructor
-     *
-     * @since 1.0.0
-     */
-    protected AccessPermissionImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scope {@link KapuaId} to set into the {@link AccessPermission}
@@ -64,7 +55,7 @@ public class AccessPermissionImpl extends AbstractKapuaEntity implements AccessP
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor
      *
      * @param accessPermission
@@ -77,17 +68,25 @@ public class AccessPermissionImpl extends AbstractKapuaEntity implements AccessP
         setPermission(accessPermission.getPermission());
     }
 
-    @Override
+	/**
+     * Constructor
+     *
+     * @since 1.0.0
+     */
+    protected AccessPermissionImpl() {
+    }
+
+	@Override
     public void setAccessInfoId(KapuaId accessInfoId) {
         this.accessInfoId = KapuaEid.parseKapuaId(accessInfoId);
     }
 
-    @Override
+	@Override
     public KapuaId getAccessInfoId() {
         return accessInfoId;
     }
 
-    @Override
+	@Override
     public void setPermission(Permission permission) {
         PermissionImpl permissionImpl = null;
         if (permission != null) {
@@ -96,12 +95,12 @@ public class AccessPermissionImpl extends AbstractKapuaEntity implements AccessP
         this.permission = permissionImpl;
     }
 
-    @Override
+	@Override
     public Permission getPermission() {
         return permission != null ? permission : new PermissionImpl(null, null, null, null);
     }
 
-    @Override
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -110,7 +109,7 @@ public class AccessPermissionImpl extends AbstractKapuaEntity implements AccessP
         return result;
     }
 
-    @Override
+	@Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

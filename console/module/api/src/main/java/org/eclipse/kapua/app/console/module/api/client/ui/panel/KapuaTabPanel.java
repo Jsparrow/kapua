@@ -29,13 +29,13 @@ public class KapuaTabPanel<M extends GwtEntityModel> extends TabPanel {
             ((KapuaTabItem<M>) t).setEntity(entity);
         }
 
-        if (getSelectedItem() != null) {
-            if (!getSelectedItem().isEnabled()) {
-                selectDefaultTab();
-            }
-
-            ((KapuaTabItem<M>) getSelectedItem()).refresh();
-        }
+        if (getSelectedItem() == null) {
+			return;
+		}
+		if (!getSelectedItem().isEnabled()) {
+		    selectDefaultTab();
+		}
+		((KapuaTabItem<M>) getSelectedItem()).refresh();
     }
 
     public void selectDefaultTab() {

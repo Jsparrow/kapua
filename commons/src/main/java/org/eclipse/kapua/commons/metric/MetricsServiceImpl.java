@@ -52,7 +52,8 @@ public class MetricsServiceImpl implements MetricsService {
             metricRegistry = SharedMetricRegistries.getDefault();
             logger.info("Default Metric Registry loaded");
         } catch (IllegalStateException e) {
-            metricRegistry = new MetricRegistry();
+            logger.error(e.getMessage(), e);
+			metricRegistry = new MetricRegistry();
             logger.warn("Unable to load Default Metric Registry - creating a new one");
         }
 

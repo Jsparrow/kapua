@@ -13,5 +13,5 @@ package org.eclipse.kapua.broker.core.plugin;
 
 public interface TestFragment<X extends Throwable> {
 
-    public void run() throws X;
+    void run() throws X;
 }

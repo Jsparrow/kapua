@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @XmlJavaTypeAdapter(EndPointAdapter.class)
 public interface EndPoint {
 
-    static Logger logger = LoggerFactory.getLogger(EndPoint.class);
+    Logger logger = LoggerFactory.getLogger(EndPoint.class);
 
     boolean matches(Exchange exchange, Object value, @Header(Exchange.SLIP_ENDPOINT) String previous, @Properties Map<String, Object> properties);
 

@@ -47,27 +47,17 @@ import java.util.List;
 public class ServiceEventHousekeeper implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceEventHousekeeper.class);
+	private static final long WAIT_TIME = SystemSetting.getInstance().getLong(SystemSettingKey.HOUSEKEEPER_EXECUTION_WAIT_TIME);
+	private static final long OLD_MESSAGES_TIME_WINDOW = SystemSetting.getInstance().getLong(SystemSettingKey.HOUSEKEEPER_OLD_MESSAGES_TIME_WINDOW);
+	private static final int EVENT_SCAN_WINDOW = SystemSetting.getInstance().getInt(SystemSettingKey.HOUSEKEEPER_EVENT_SCAN_WINDOW);
+	private final Object monitor = new Object();
+	private EventStoreService kapuaEventService;
+	private EntityManager manager;
+	private ServiceEventBus eventbus;
+	private List<ServiceEntry> servicesEntryList;
+	private boolean running;
 
-    private enum EventsProcessType {
-        OLD,
-        SEND_ERROR
-    }
-
-    private static final long WAIT_TIME = SystemSetting.getInstance().getLong(SystemSettingKey.HOUSEKEEPER_EXECUTION_WAIT_TIME);
-    private static final long OLD_MESSAGES_TIME_WINDOW = SystemSetting.getInstance().getLong(SystemSettingKey.HOUSEKEEPER_OLD_MESSAGES_TIME_WINDOW);
-    private static final int EVENT_SCAN_WINDOW = SystemSetting.getInstance().getInt(SystemSettingKey.HOUSEKEEPER_EVENT_SCAN_WINDOW);
-
-    private final Object monitor = new Object();
-
-    private EventStoreService kapuaEventService;
-
-    private EntityManager manager;
-
-    private ServiceEventBus eventbus;
-    private List<ServiceEntry> servicesEntryList;
-    private boolean running;
-
-    /**
+	/**
      * Default constructor
      *
      * @param entityManagerFactory
@@ -82,18 +72,16 @@ public class ServiceEventHousekeeper implements Runnable {
         kapuaEventService = new EventStoreServiceImpl(entityManagerFactory);
     }
 
-    @Override
+	@Override
     public void run() {
         //TODO handling events table cleanup
         running = true;
         while (running) {
             waitStep();
-            for (ServiceEntry serviceEntry : servicesEntryList) {
+            servicesEntryList.forEach(serviceEntry -> {
                 try {
                     if (running) {
-                        KapuaSecurityUtils.doPrivileged(() -> {
-                            processServiceEvents(serviceEntry.getServiceName());
-                        });
+                        KapuaSecurityUtils.doPrivileged(() -> processServiceEvents(serviceEntry.getServiceName()));
                     }
                 } catch (KapuaException e) {
                     LOGGER.warn("Generic error {}", e.getMessage(), e);
@@ -103,12 +91,12 @@ public class ServiceEventHousekeeper implements Runnable {
                         manager.rollback();
                     }
                 }
-            }
+            });
         }
         running = false;
     }
 
-    private void processServiceEvents(String serviceName) throws KapuaException {
+	private void processServiceEvents(String serviceName) throws KapuaException {
         try {
             LOGGER.trace("Scan not processed events for service '{}'", serviceName);
             Date startRun = Date.from(KapuaDateUtils.getKapuaSysDate());
@@ -121,7 +109,8 @@ public class ServiceEventHousekeeper implements Runnable {
             //release lock
             updateLock(kapuaEventHousekeeper, serviceName, startRun);
         } catch (LockException | NoExecutionNeededException e) {
-            LOGGER.trace("The lock is handled by someone else or the last execution was to close");
+            LOGGER.error(e.getMessage(), e);
+			LOGGER.trace("The lock is handled by someone else or the last execution was to close");
         } finally {
             //remove the lock if present
             if (manager.isTransactionActive()) {
@@ -130,7 +119,7 @@ public class ServiceEventHousekeeper implements Runnable {
         }
     }
 
-    private void findAndSendUnsentEvents(String serviceName, EventsProcessType eventsProcessType) throws KapuaException {
+	private void findAndSendUnsentEvents(String serviceName, EventsProcessType eventsProcessType) throws KapuaException {
         EventStoreRecordListResult unsentMessagesList = getUnsentEvents(serviceName, eventsProcessType);
         //send unprocessed events
         if (!unsentMessagesList.isEmpty()) {
@@ -159,13 +148,14 @@ public class ServiceEventHousekeeper implements Runnable {
         }
     }
 
-    private EventStoreRecordListResult getUnsentEvents(String serviceName, EventsProcessType eventsProcessType) throws KapuaException {
+	private EventStoreRecordListResult getUnsentEvents(String serviceName, EventsProcessType eventsProcessType) throws KapuaException {
         EventStoreRecordQuery query = new EventStoreFactoryImpl().newQuery(null);
 
         AndPredicate andPredicate = query.andPredicate();
         andPredicate.and(query.attributePredicate(EventStoreRecordAttributes.SERVICE_NAME, serviceName));
 
-        if (EventsProcessType.SEND_ERROR.equals(eventsProcessType)) {
+        //add timestamp predicate
+		if (EventsProcessType.SEND_ERROR == eventsProcessType) {
             LOGGER.trace("Looking for SENT_ERROR events. Add EventStatus=SENT_ERROR query predicate.");
             andPredicate.and(query.attributePredicate(EventStoreRecordAttributes.EVENT_STATUS, EventStatus.SEND_ERROR));
         } else {
@@ -183,7 +173,7 @@ public class ServiceEventHousekeeper implements Runnable {
         return kapuaEventService.query(query);
     }
 
-    private void waitStep() {
+	private void waitStep() {
         try {
             synchronized (monitor) {
                 monitor.wait(WAIT_TIME);
@@ -193,14 +183,14 @@ public class ServiceEventHousekeeper implements Runnable {
         }
     }
 
-    public void stop() {
+	public void stop() {
         running = false;
         synchronized (monitor) {
             monitor.notify();
         }
     }
 
-    private HousekeeperRun getLock(String serviceName) throws LockException, NoExecutionNeededException {
+	private HousekeeperRun getLock(String serviceName) throws LockException, NoExecutionNeededException {
         HousekeeperRun kapuaEventHousekeeper = null;
         try {
             manager.beginTransaction();
@@ -215,11 +205,16 @@ public class ServiceEventHousekeeper implements Runnable {
         return kapuaEventHousekeeper;
     }
 
-    private void updateLock(HousekeeperRun kapuaEventHousekeeper, String serviceName, Date startRun) throws KapuaException {
+	private void updateLock(HousekeeperRun kapuaEventHousekeeper, String serviceName, Date startRun) throws KapuaException {
         kapuaEventHousekeeper.setLastRunBy(serviceName);
         kapuaEventHousekeeper.setLastRunOn(startRun);
         manager.persist(kapuaEventHousekeeper);
         manager.commit();
+    }
+
+	private enum EventsProcessType {
+        OLD,
+        SEND_ERROR
     }
 
     private class LockException extends Exception {

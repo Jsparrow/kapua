@@ -17,12 +17,11 @@ import java.util.Map;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import org.eclipse.kapua.app.console.module.api.client.util.KapuaSafeHtmlUtils;
 
-public class KapuaBaseModel extends BaseModel implements Serializable {
+public class KapuaBaseModel extends BaseModel {
 
     private static final long serialVersionUID = -240340584288457781L;
 
     public KapuaBaseModel() {
-        super();
     }
 
     @Override

@@ -17,7 +17,7 @@ import org.eclipse.kapua.app.console.module.api.shared.model.GwtUpdatableEntityM
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GwtDeviceConnection extends GwtUpdatableEntityModel implements Serializable {
+public class GwtDeviceConnection extends GwtUpdatableEntityModel {
 
     /**
      * 
@@ -36,7 +36,103 @@ public class GwtDeviceConnection extends GwtUpdatableEntityModel implements Seri
         }
     }
 
-    public enum GwtConnectionUserCouplingMode implements IsSerializable {
+    public String getConnectionStatus() {
+        return get("connectionStatus");
+    }
+
+	public GwtDeviceConnectionStatus getConnectionStatusEnum() {
+        return get("connectionStatusEnum");
+    }
+
+	public void setConnectionStatus(String connectionStatus) {
+        set("connectionStatus", connectionStatus);
+    }
+
+	public String getClientId() {
+        return get("clientId");
+    }
+
+	public void setClientId(String clientId) {
+        set("clientId", clientId);
+    }
+
+	public String getUserId() {
+        return get("userId");
+    }
+
+	public void setUserId(String userId) {
+        set("userId", userId);
+    }
+
+	public String getProtocol() {
+        return get("protocol");
+    }
+
+	public void setProtocol(String protocol) {
+        set("protocol", protocol);
+    }
+
+	public String getClientIp() {
+        return get("clientIp");
+    }
+
+	public void setClientIp(String clientIp) {
+        set("clientIp", clientIp);
+    }
+
+	public String getServerIp() {
+        return get("serverIp");
+    }
+
+	public void setServerIp(String serverIp) {
+        set("serverIp", serverIp);
+    }
+
+	public String getUserName() {
+        return get("userName");
+    }
+
+	public void setUserName(String userName) {
+        set("userName", userName);
+    }
+
+	public String getConnectionUserCouplingMode() {
+        return get("connectionUserCouplingMode");
+    }
+
+	public GwtConnectionUserCouplingMode getConnectionUserCouplingModeEnum() {
+        return get("connectionUserCouplingModeEnum");
+    }
+
+	public void setConnectionUserCouplingMode(String connectionUserCouplingMode) {
+        set("connectionUserCouplingMode", connectionUserCouplingMode);
+    }
+
+	public String getReservedUserId() {
+        return get("reservedUserId");
+    }
+
+	public void setReservedUserId(String userId) {
+        set("reservedUserId", userId);
+    }
+
+	public String getReservedUserName() {
+        return get("reservedUserName");
+    }
+
+	public void setReservedUserName(String userName) {
+        set("reservedUserName", userName);
+    }
+
+	public Boolean getAllowUserChange() {
+        return get("allowUserChange");
+    }
+
+	public void setAllowUserChange(Boolean allowUserChange) {
+        set("allowUserChange", allowUserChange);
+    }
+
+	public enum GwtConnectionUserCouplingMode implements IsSerializable {
         LOOSE("Unbound"), //
         STRICT("Device-bound"), //
         INHERITED("Account Default");
@@ -62,102 +158,6 @@ public class GwtDeviceConnection extends GwtUpdatableEntityModel implements Seri
 
             return gdct;
         }
-    }
-
-    public String getConnectionStatus() {
-        return get("connectionStatus");
-    }
-
-    public GwtDeviceConnectionStatus getConnectionStatusEnum() {
-        return get("connectionStatusEnum");
-    }
-
-    public void setConnectionStatus(String connectionStatus) {
-        set("connectionStatus", connectionStatus);
-    }
-
-    public String getClientId() {
-        return get("clientId");
-    }
-
-    public void setClientId(String clientId) {
-        set("clientId", clientId);
-    }
-
-    public String getUserId() {
-        return get("userId");
-    }
-
-    public void setUserId(String userId) {
-        set("userId", userId);
-    }
-
-    public String getProtocol() {
-        return get("protocol");
-    }
-
-    public void setProtocol(String protocol) {
-        set("protocol", protocol);
-    }
-
-    public String getClientIp() {
-        return get("clientIp");
-    }
-
-    public void setClientIp(String clientIp) {
-        set("clientIp", clientIp);
-    }
-
-    public String getServerIp() {
-        return get("serverIp");
-    }
-
-    public void setServerIp(String serverIp) {
-        set("serverIp", serverIp);
-    }
-
-    public String getUserName() {
-        return get("userName");
-    }
-
-    public void setUserName(String userName) {
-        set("userName", userName);
-    }
-
-    public String getConnectionUserCouplingMode() {
-        return get("connectionUserCouplingMode");
-    }
-
-    public GwtConnectionUserCouplingMode getConnectionUserCouplingModeEnum() {
-        return get("connectionUserCouplingModeEnum");
-    }
-
-    public void setConnectionUserCouplingMode(String connectionUserCouplingMode) {
-        set("connectionUserCouplingMode", connectionUserCouplingMode);
-    }
-
-    public String getReservedUserId() {
-        return get("reservedUserId");
-    }
-
-    public void setReservedUserId(String userId) {
-        set("reservedUserId", userId);
-    }
-
-    public String getReservedUserName() {
-        return get("reservedUserName");
-    }
-
-    public void setReservedUserName(String userName) {
-        set("reservedUserName", userName);
-    }
-
-    public Boolean getAllowUserChange() {
-        return get("allowUserChange");
-    }
-
-    public void setAllowUserChange(Boolean allowUserChange) {
-        set("allowUserChange", allowUserChange);
     }
 
 }

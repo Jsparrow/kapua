@@ -17,17 +17,18 @@ import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * Entity manager factory for the scheduler module.
  *
  * @since 1.0
  */
-public class SchedulerEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class SchedulerEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-scheduler";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static SchedulerEntityManagerFactory instance = new SchedulerEntityManagerFactory();
 

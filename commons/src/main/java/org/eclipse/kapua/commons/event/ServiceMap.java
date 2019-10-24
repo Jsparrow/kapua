@@ -42,7 +42,7 @@ public class ServiceMap {
      * @param servicesEntryList
      */
     public static synchronized void registerServices(String serviceDefaultAddress, List<ServiceEntry> servicesEntryList) {
-        for (ServiceEntry serviceEntry : servicesEntryList) {
+        servicesEntryList.forEach(serviceEntry -> {
             //register service name
             String tmpServiceName = AVAILABLE_SERVICES.get(serviceEntry.getServiceName());
             if (tmpServiceName == null) {
@@ -53,7 +53,7 @@ public class ServiceMap {
             } else {
                 LOG.info("The service '{}' is already registered with address '{}'", serviceEntry.getServiceName(), serviceEntry.getAddress());
             }
-        }
+        });
     }
 
     /**
@@ -63,14 +63,14 @@ public class ServiceMap {
      */
     public static synchronized void unregisterServices(List<String> servicesNames) {
         if (servicesNames != null) {
-            for (String serviceName : servicesNames) {
+            servicesNames.forEach(serviceName -> {
                 String tmpServiceName = AVAILABLE_SERVICES.remove(serviceName);
                 if (tmpServiceName == null) {
                     LOG.warn("Cannot deregister service '{}'. The service wasn't registered!", serviceName);
                 } else {
                     LOG.info("Deregistered service '{}' from address '{}'", serviceName, tmpServiceName);
                 }
-            }
+            });
         }
     }
 

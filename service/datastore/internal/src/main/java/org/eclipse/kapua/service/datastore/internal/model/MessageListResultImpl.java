@@ -30,7 +30,6 @@ public class MessageListResultImpl extends AbstractStorableListResult<DatastoreM
      * Construct a message result list
      */
     public MessageListResultImpl() {
-        super();
     }
 
     /**

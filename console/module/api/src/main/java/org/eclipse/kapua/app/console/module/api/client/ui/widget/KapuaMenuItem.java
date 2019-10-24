@@ -54,10 +54,11 @@ public class KapuaMenuItem extends MenuItem {
     @Override
     public void setIcon(AbstractImagePrototype icon) {
         super.setIcon(icon);
-        if (this.iconSetIcon != null && rendered) {
-            Element e = DOM.createElement("i");
-            El.fly(e).addStyleName("x-menu-item-icon", "fa", "fa-fw", iconSetIcon.getStyleName());
-            el().insertChild(e, 0);
-        }
+        if (!(this.iconSetIcon != null && rendered)) {
+			return;
+		}
+		Element e = DOM.createElement("i");
+		El.fly(e).addStyleName("x-menu-item-icon", "fa", "fa-fw", iconSetIcon.getStyleName());
+		el().insertChild(e, 0);
     }
 }

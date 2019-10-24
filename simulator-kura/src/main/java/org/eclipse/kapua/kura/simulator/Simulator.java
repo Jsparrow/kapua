@@ -63,23 +63,23 @@ public class Simulator implements AutoCloseable {
 
     protected void connected() {
         logger.info("Connected ... sending birth certificate ...");
-        for (final Module module : modules) {
+        modules.forEach((final Module module) -> {
             try {
                 module.connected(transport);
             } catch (final Exception e) {
                 logger.warn("Failed to call module: {}", module, e);
             }
-        }
+        });
     }
 
     protected void disconnected() {
-        for (final Module module : modules) {
+        modules.forEach((final Module module) -> {
             try {
                 module.disconnected(transport);
             } catch (final Exception e) {
                 logger.warn("Failed to call module: {}", module, e);
             }
-        }
+        });
     }
 
 }

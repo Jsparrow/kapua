@@ -40,27 +40,27 @@ public class PermissionValidator {
 
     public static void validatePermissions(@NotNull Set<Permission> permissions) throws KapuaException {
 
-        if (!permissions.isEmpty()) {
-            DomainListResult domains = DOMAIN_SERVICE.query(DOMAIN_FACTORY.newQuery(null));
+        if (permissions.isEmpty()) {
+			return;
+		}
+		DomainListResult domains = DOMAIN_SERVICE.query(DOMAIN_FACTORY.newQuery(null));
+		for (Permission p : permissions) {
+		    if (p.getDomain() != null) {
+		        boolean matched = false;
+		        for (Domain domain : domains.getItems()) {
+		            if (domain.getName().equals(p.getDomain())) {
+		                matched = true;
+		                if (!domain.getGroupable() && p.getGroupId() != null) {
+		                    throw new KapuaIllegalArgumentException(PermissionAttributes.GROUP_ID, p.getGroupId().toStringId());
+		                }
+		                break;
+		            }
+		        }
 
-            for (Permission p : permissions) {
-                if (p.getDomain() != null) {
-                    boolean matched = false;
-                    for (Domain domain : domains.getItems()) {
-                        if (domain.getName().equals(p.getDomain())) {
-                            matched = true;
-                            if (!domain.getGroupable() && p.getGroupId() != null) {
-                                throw new KapuaIllegalArgumentException(PermissionAttributes.GROUP_ID, p.getGroupId().toStringId());
-                            }
-                            break;
-                        }
-                    }
-
-                    if (!matched) {
-                        throw new KapuaIllegalArgumentException(PermissionAttributes.DOMAIN, p.getDomain());
-                    }
-                }
-            }
-        }
+		        if (!matched) {
+		            throw new KapuaIllegalArgumentException(PermissionAttributes.DOMAIN, p.getDomain());
+		        }
+		    }
+		}
     }
 }

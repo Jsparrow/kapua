@@ -75,7 +75,7 @@ public class JobDeviceManagementOperationManagerServiceImpl implements JobDevice
 
     @Override
     public void processJobTargetOnNotification(KapuaId scopeId, KapuaId operationId, Date updateOn, String resource, OperationStatus status) throws KapuaException {
-        if (OperationStatus.RUNNING.equals(status)) {
+        if (OperationStatus.RUNNING == status) {
             return;
         }
 
@@ -93,7 +93,8 @@ public class JobDeviceManagementOperationManagerServiceImpl implements JobDevice
         try {
             jobDeviceManagementOperation = getJobDeviceManagementOperation(scopeId, operationId);
         } catch (KapuaEntityNotFoundException kenfe) {
-            LOG.warn("The operationId {} does not match any Job. Likely this is run interactively using a DeviceManagementService ", operationId);
+            LOG.error(kenfe.getMessage(), kenfe);
+			LOG.warn("The operationId {} does not match any Job. Likely this is run interactively using a DeviceManagementService ", operationId);
             return;
         }
 
@@ -146,7 +147,7 @@ public class JobDeviceManagementOperationManagerServiceImpl implements JobDevice
 
         //
         // If PROCESS_FAILED no need to continue the JobTarget processing
-        if (JobTargetStatus.PROCESS_FAILED.equals(jobTarget.getStatus())) {
+        if (JobTargetStatus.PROCESS_FAILED == jobTarget.getStatus()) {
             return;
         }
 
@@ -174,10 +175,10 @@ public class JobDeviceManagementOperationManagerServiceImpl implements JobDevice
      */
     private boolean checkLastNotification(DeviceManagementOperation deviceManagementOperation, OperationStatus status, String resource) {
         boolean isLastNotification = true;
-        if (!OperationStatus.FAILED.equals(status)) {
+        if (OperationStatus.FAILED != status) {
             for (DeviceManagementOperationProperty ip : deviceManagementOperation.getInputProperties()) {
-                if (ip.getName().equals("kapua.package.download.install")) {
-                    if (resource.equals("download")) {
+                if ("kapua.package.download.install".equals(ip.getName())) {
+                    if ("download".equals(resource)) {
                         isLastNotification = !Boolean.parseBoolean(ip.getPropertyValue());
                     }
                     break;

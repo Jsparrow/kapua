@@ -20,7 +20,7 @@ import org.eclipse.kapua.service.device.management.commons.message.response.Kapu
  * @since 1.0
  * 
  */
-public class CommandResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload {
+public class CommandResponsePayload extends KapuaResponsePayloadImpl {
 
     /**
      * Standard error application property

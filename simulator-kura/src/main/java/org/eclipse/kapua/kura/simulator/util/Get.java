@@ -13,6 +13,7 @@ package org.eclipse.kapua.kura.simulator.util;
 
 import java.util.Map;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 public final class Get {
 
@@ -62,7 +63,7 @@ public final class Get {
     }
 
     public static Optional<String> getNonEmptyString(final Map<String, Object> configuration, final String key) {
-        return getString(configuration, key).map(str -> !str.isEmpty() ? str : null);
+        return getString(configuration, key).map(str -> !StringUtils.isEmpty(str) ? str : null);
     }
 
     public static Optional<String> getString(final Map<String, Object> configuration, final String key) {

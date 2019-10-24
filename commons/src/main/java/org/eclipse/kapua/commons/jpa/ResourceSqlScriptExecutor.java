@@ -92,13 +92,10 @@ public class ResourceSqlScriptExecutor {
                         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(qStr);
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
 
-                    String sqlLine;
-                    while ((sqlLine = bufferedReader.readLine()) != null) {
-                        sqlStringBuilder.append(sqlLine).append(System.lineSeparator());
-                    }
+                    bufferedReader.lines().forEach(sqlLine -> sqlStringBuilder.append(sqlLine).append(System.lineSeparator()));
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
             Query q = entityManager.createNativeQuery(sqlStringBuilder.toString());

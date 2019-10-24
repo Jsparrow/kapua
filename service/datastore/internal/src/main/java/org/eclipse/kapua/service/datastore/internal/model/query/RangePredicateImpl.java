@@ -30,29 +30,17 @@ public class RangePredicateImpl implements RangePredicate {
     protected Object minValue;
     protected Object maxValue;
 
-    private <V extends Comparable<V>> void checkRange(Class<V> clazz) throws KapuaException {
-        if (minValue == null || maxValue == null) {
-            return;
-        }
-
-        V min = clazz.cast(minValue);
-        V max = clazz.cast(maxValue);
-        if (min.compareTo(max) > 0) {
-            throw KapuaException.internalError("Min value must not be graeter than max value");
-        }
-    }
-
     /**
      * Default constructor
      */
     public RangePredicateImpl() {
     }
 
-    public <V extends Comparable<V>> RangePredicateImpl(StorableField field, V minValue, V maxValue) {
+	public <V extends Comparable<V>> RangePredicateImpl(StorableField field, V minValue, V maxValue) {
         this(field.field(), minValue, maxValue);
     }
 
-    /**
+	/**
      * Construct a range predicate given the field and the values
      *
      * @param field
@@ -65,16 +53,28 @@ public class RangePredicateImpl implements RangePredicate {
         this.maxValue = maxValue;
     }
 
-    @Override
+	private <V extends Comparable<V>> void checkRange(Class<V> clazz) throws KapuaException {
+        if (minValue == null || maxValue == null) {
+            return;
+        }
+
+        V min = clazz.cast(minValue);
+        V max = clazz.cast(maxValue);
+        if (min.compareTo(max) > 0) {
+            throw KapuaException.internalError("Min value must not be graeter than max value");
+        }
+    }
+
+	@Override
     public String getField() {
         return field;
     }
 
-    public RangePredicate setField(StorableField field) {
+	public RangePredicate setField(StorableField field) {
         return setField(field.field());
     }
 
-    /**
+	/**
      * Get the field
      *
      * @param field
@@ -85,17 +85,17 @@ public class RangePredicateImpl implements RangePredicate {
         return this;
     }
 
-    @Override
+	@Override
     public Object getMinValue() {
         return minValue;
     }
 
-    @Override
+	@Override
     public <V extends Comparable<V>> V getMinValue(Class<V> clazz) {
         return clazz.cast(minValue);
     }
 
-    /**
+	/**
      * Set the minimum value (typed)
      *
      * @param clazz
@@ -109,17 +109,17 @@ public class RangePredicateImpl implements RangePredicate {
         return this;
     }
 
-    @Override
+	@Override
     public Object getMaxValue() {
         return maxValue;
     }
 
-    @Override
+	@Override
     public <V extends Comparable<V>> V getMaxValue(Class<V> clazz) {
         return clazz.cast(maxValue);
     }
 
-    /**
+	/**
      * Set the maximum value (typed)
      *
      * @param clazz
@@ -133,7 +133,7 @@ public class RangePredicateImpl implements RangePredicate {
         return this;
     }
 
-    /**
+	/**
      * <pre>
      *  {
      *      "query": {
@@ -149,7 +149,8 @@ public class RangePredicateImpl implements RangePredicate {
      * 
      * @throws DatamodelMappingException
      */
-    public ObjectNode toSerializedMap() throws DatamodelMappingException {
+    @Override
+	public ObjectNode toSerializedMap() throws DatamodelMappingException {
         ObjectNode rootNode = SchemaUtil.getObjectNode();
         ObjectNode valuesNode = SchemaUtil.getObjectNode();
         if (maxValue != null) {

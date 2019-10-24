@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.module.api.client.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 public class SplitTooltipStringUtil {
 
@@ -36,7 +38,7 @@ public class SplitTooltipStringUtil {
                 } else {
                     end = input.length();
                 }
-                multiRowString.append(input.substring(start, end));
+                multiRowString.append(StringUtils.substring(input, start, end));
                 if (end < input.length()) {
                     multiRowString.append("</br>");
                 }

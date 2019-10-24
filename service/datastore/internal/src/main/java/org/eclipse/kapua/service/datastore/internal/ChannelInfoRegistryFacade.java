@@ -141,7 +141,6 @@ public class ChannelInfoRegistryFacade {
     public void delete(KapuaId scopeId, StorableId id)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(scopeId, "scopeId");
         ArgumentValidator.notNull(id, "id");
@@ -155,11 +154,12 @@ public class ChannelInfoRegistryFacade {
         }
         String indexName = SchemaUtil.getKapuaIndexName(scopeId);
         ChannelInfo channelInfo = find(scopeId, id);
-        if (channelInfo != null) {
-            mediator.onBeforeChannelInfoDelete(channelInfo);
-            TypeDescriptor typeDescriptor = new TypeDescriptor(indexName, ChannelInfoSchema.CHANNEL_TYPE_NAME);
-            client.delete(typeDescriptor, id.toString());
-        }
+        if (channelInfo == null) {
+			return;
+		}
+		mediator.onBeforeChannelInfoDelete(channelInfo);
+		TypeDescriptor typeDescriptor = new TypeDescriptor(indexName, ChannelInfoSchema.CHANNEL_TYPE_NAME);
+		client.delete(typeDescriptor, id.toString());
     }
 
     /**
@@ -176,7 +176,6 @@ public class ChannelInfoRegistryFacade {
     public ChannelInfo find(KapuaId scopeId, StorableId id)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(scopeId, "scopeId");
         ArgumentValidator.notNull(id, "id");
@@ -205,7 +204,6 @@ public class ChannelInfoRegistryFacade {
     public ChannelInfoListResult query(ChannelInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -236,7 +234,6 @@ public class ChannelInfoRegistryFacade {
     public long count(ChannelInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -267,7 +264,6 @@ public class ChannelInfoRegistryFacade {
      */
     void delete(ChannelInfoQuery query)
             throws KapuaIllegalArgumentException,
-            QueryMappingException,
             ConfigurationException,
             ClientException {
         ArgumentValidator.notNull(query, "query");

@@ -59,7 +59,6 @@ public class ServiceConfigImpl extends AbstractKapuaUpdatableEntity implements S
      * @since 1.0.0
      */
     public ServiceConfigImpl() {
-        super();
     }
 
     /**

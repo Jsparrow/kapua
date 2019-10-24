@@ -33,7 +33,7 @@ public class FactoryResolver<F extends KapuaObjectFactory, I extends F> {
             throw new KapuaLocatorException(KapuaLocatorErrorCodes.FACTORY_PROVIDER_INVALID, implementation, factory);
         }
 
-        return new FactoryResolver<F,I>((Class<F>)factory, (Class<I>)implementation);
+        return new FactoryResolver<>((Class<F>)factory, (Class<I>)implementation);
     }
 
     public Class<F> getFactoryClass() {

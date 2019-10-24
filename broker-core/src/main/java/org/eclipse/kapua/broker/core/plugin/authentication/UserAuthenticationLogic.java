@@ -35,20 +35,19 @@ import java.util.Map;
  */
 public class UserAuthenticationLogic extends AuthenticationLogic {
 
-    protected String aclCtrlAccReply;
-    protected String aclCtrlAccCliMqttLifeCycle;
-    protected String aclCtrlAcc;
-    protected String aclCtrlAccCli;
-    protected String aclDataAcc;
-    protected String aclDataAccCli;
-    protected String aclCtrlAccNotify;
-
     protected static final int BROKER_CONNECT_IDX = 0;
-    protected static final int DEVICE_MANAGE_IDX = 1;
-    protected static final int DATA_VIEW_IDX = 2;
-    protected static final int DATA_MANAGE_IDX = 3;
+	protected static final int DEVICE_MANAGE_IDX = 1;
+	protected static final int DATA_VIEW_IDX = 2;
+	protected static final int DATA_MANAGE_IDX = 3;
+	protected String aclCtrlAccReply;
+	protected String aclCtrlAccCliMqttLifeCycle;
+	protected String aclCtrlAcc;
+	protected String aclCtrlAccCli;
+	protected String aclDataAcc;
+	protected String aclDataAccCli;
+	protected String aclCtrlAccNotify;
 
-    /**
+	/**
      * Default constructor
      *
      * @param options
@@ -58,16 +57,16 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
         String addressPrefix = (String) options.get(Authenticator.ADDRESS_PREFIX_KEY);
         String addressClassifier = (String) options.get(Authenticator.ADDRESS_CLASSIFIER_KEY);
 
-        aclCtrlAccReply = addressPrefix + addressClassifier + ".{0}.*.*.REPLY.>";
-        aclCtrlAccCliMqttLifeCycle = addressPrefix + addressClassifier + ".{0}.{1}.MQTT.>";
-        aclCtrlAcc = addressPrefix + addressClassifier + ".{0}.>";
-        aclCtrlAccCli = addressPrefix + addressClassifier + ".{0}.{1}.>";
+        aclCtrlAccReply = new StringBuilder().append(addressPrefix).append(addressClassifier).append(".{0}.*.*.REPLY.>").toString();
+        aclCtrlAccCliMqttLifeCycle = new StringBuilder().append(addressPrefix).append(addressClassifier).append(".{0}.{1}.MQTT.>").toString();
+        aclCtrlAcc = new StringBuilder().append(addressPrefix).append(addressClassifier).append(".{0}.>").toString();
+        aclCtrlAccCli = new StringBuilder().append(addressPrefix).append(addressClassifier).append(".{0}.{1}.>").toString();
         aclDataAcc = addressPrefix + "{0}.>";
         aclDataAccCli = addressPrefix + "{0}.{1}.>";
-        aclCtrlAccNotify = addressPrefix + addressClassifier + ".{0}.*.*.NOTIFY.{1}.>";
+        aclCtrlAccNotify = new StringBuilder().append(addressPrefix).append(addressClassifier).append(".{0}.*.*.NOTIFY.{1}.>").toString();
     }
 
-    @Override
+	@Override
     public List<AuthorizationEntry> connect(KapuaConnectionContext kcc) throws KapuaException {
         Context loginNormalUserTimeContext = loginMetric.getNormalUserTime().time();
 
@@ -97,7 +96,7 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
         return authorizationEntries;
     }
 
-    @Override
+	@Override
     public boolean disconnect(KapuaConnectionContext kcc, Throwable error) {
         boolean stealingLinkDetected = isStealingLink(kcc, error);
         boolean deviceOwnedByTheCurrentNode = true;
@@ -133,7 +132,7 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
                 }
                 if(deviceOwnedByTheCurrentNode) {
                     //update status only if the old status wasn't missing
-                    if (DeviceConnectionStatus.MISSING.equals(deviceConnection.getStatus())) {
+                    if (DeviceConnectionStatus.MISSING == deviceConnection.getStatus()) {
                         logger.warn("Skipping device status update for device {} since last status was MISSING!", deviceConnection.getClientId());
                     }
                     else {
@@ -150,7 +149,7 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
         return !stealingLinkDetected && deviceOwnedByTheCurrentNode && !kcc.isMissing();
     }
 
-    @Override
+	@Override
     protected List<AuthorizationEntry> buildAuthorizationMap(KapuaConnectionContext kcc) {
         ArrayList<AuthorizationEntry> ael = new ArrayList<>();
         ael.add(createAuthorizationEntry(kcc, Acl.WRITE_ADMIN, aclAdvisory));
@@ -181,7 +180,7 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
         return ael;
     }
 
-    protected boolean[] checkPermissions(KapuaConnectionContext kcc) throws KapuaException {
+	protected boolean[] checkPermissions(KapuaConnectionContext kcc) throws KapuaException {
         boolean[] hasPermissions = new boolean[] {
                 authorizationService.isPermitted(permissionFactory.newPermission(BROKER_DOMAIN, Actions.connect, kcc.getScopeId())),
                 authorizationService.isPermitted(permissionFactory.newPermission(DEVICE_MANAGEMENT_DOMAIN, Actions.write, kcc.getScopeId())),
@@ -196,7 +195,7 @@ public class UserAuthenticationLogic extends AuthenticationLogic {
         return hasPermissions;
     }
 
-    /**
+	/**
      * Create a new {@link DeviceConnection} or updates the existing one using the info provided in the {@link KapuaConnectionContext}.
      *
      * @param kcc              The {@link KapuaConnectionContext} of the currect connection

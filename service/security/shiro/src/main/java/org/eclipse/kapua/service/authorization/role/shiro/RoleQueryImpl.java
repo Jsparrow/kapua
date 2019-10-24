@@ -27,7 +27,6 @@ public class RoleQueryImpl extends AbstractKapuaQuery<Role> implements RoleQuery
      * Constructor
      */
     public RoleQueryImpl() {
-        super();
     }
 
     /**

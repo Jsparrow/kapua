@@ -24,32 +24,32 @@ import org.eclipse.kapua.service.datastore.client.SchemaKeys;
  */
 public class ClientInfoSchema {
 
-    private ClientInfoSchema() {
-
-    }
-
     /**
      * Client information schema name
      */
     public static final String CLIENT_TYPE_NAME = "client";
-    /**
+	/**
      * Client information - client identifier
      */
     public static final String CLIENT_ID = "client_id";
-    /**
+	/**
      * Client information - scope id
      */
     public static final String CLIENT_SCOPE_ID = "scope_id";
-    /**
+	/**
      * Client information - message timestamp (of the first message published in this channel)
      */
     public static final String CLIENT_TIMESTAMP = "timestamp";
-    /**
+	/**
      * Client information - message identifier (of the first message published in this channel)
      */
     public static final String CLIENT_MESSAGE_ID = "message_id";
 
-    /**
+	private ClientInfoSchema() {
+
+    }
+
+	/**
      * Create and return the Json representation of the client info schema
      *
      * @param allEnable

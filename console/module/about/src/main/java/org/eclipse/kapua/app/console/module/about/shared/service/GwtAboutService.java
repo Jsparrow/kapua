@@ -22,7 +22,7 @@ import org.eclipse.kapua.app.console.module.about.shared.model.GwtAboutInformati
 @RemoteServiceRelativePath("about")
 public interface GwtAboutService extends RemoteService {
 
-    public GwtAboutInformation getInformation();
+    GwtAboutInformation getInformation();
 
-    public GwtAboutDependency dummyGwtAboutDependency();
+    GwtAboutDependency dummyGwtAboutDependency();
 }

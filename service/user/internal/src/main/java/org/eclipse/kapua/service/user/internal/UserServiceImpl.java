@@ -146,11 +146,10 @@ public class UserServiceImpl extends AbstractKapuaConfigurableResourceLimitedSer
             // Check not deleting environment admin
             validateSystemUser(user.getName());
         }
-        if (user.getId().equals(KapuaSecurityUtils.getSession().getUserId())) {
-            if (user.getStatus().equals(UserStatus.DISABLED)) {
-                throw new KapuaIllegalArgumentException("status", user.getStatus().name());
-            }
-        }
+        boolean condition = user.getId().equals(KapuaSecurityUtils.getSession().getUserId()) && user.getStatus() == UserStatus.DISABLED;
+		if (condition) {
+		    throw new KapuaIllegalArgumentException("status", user.getStatus().name());
+		}
         //
         // Do update
         return entityManagerSession.onTransactedResult(em -> {
@@ -306,11 +305,11 @@ public class UserServiceImpl extends AbstractKapuaConfigurableResourceLimitedSer
         }
         LOGGER.info("UserService: received kapua event from {}, operation {}", kapuaEvent.getService(), kapuaEvent.getOperation());
         if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteUserByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteUserByAccountId(kapuaEvent.getEntityId());
         }
     }
 
-    private void deleteUserByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteUserByAccountId(KapuaId accountId) throws KapuaException {
         UserQuery query = new UserQueryImpl(accountId);
         UserListResult usersToDelete = query(query);
 

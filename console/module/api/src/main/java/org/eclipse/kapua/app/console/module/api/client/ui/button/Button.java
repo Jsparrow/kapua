@@ -21,7 +21,6 @@ public class Button extends com.extjs.gxt.ui.client.widget.button.Button {
     private KapuaIcon icon;
 
     public Button(String text, KapuaIcon icon, SelectionListener<ButtonEvent> listener) {
-        super();
         setText(text);
         setIcon(icon);
         addSelectionListener(listener);
@@ -47,7 +46,7 @@ public class Button extends com.extjs.gxt.ui.client.widget.button.Button {
     }
 
     public void setIcon(KapuaIcon icon) {
-        super.setText(icon.getInlineHTML() + "&nbsp;&nbsp;" + originalText);
+        super.setText(new StringBuilder().append(icon.getInlineHTML()).append("&nbsp;&nbsp;").append(originalText).toString());
         this.icon = icon;
     }
 

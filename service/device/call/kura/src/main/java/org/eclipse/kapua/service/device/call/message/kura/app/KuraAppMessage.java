@@ -22,7 +22,6 @@ import java.util.Date;
 public abstract class KuraAppMessage<C extends KuraAppChannel, P extends KuraAppPayload> extends KuraMessage<C, P> implements DeviceAppMessage<C, P> {
 
     public KuraAppMessage() {
-        super();
     }
 
     public KuraAppMessage(C channel, Date timestamp, P payload) {

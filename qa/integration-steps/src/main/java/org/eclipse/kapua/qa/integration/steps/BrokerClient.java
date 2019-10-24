@@ -37,7 +37,7 @@ public class BrokerClient implements MqttCallback {
 
     public BrokerClient(String broker, int port, String clientId, String user, String pass) throws MqttException {
 
-        this.broker = "tcp://" + broker + ":" + port;
+        this.broker = new StringBuilder().append("tcp://").append(broker).append(":").append(port).toString();
         persistence = new MemoryPersistence();
         mqttClient = new MqttClient(this.broker, clientId, persistence);
         connOpts.setCleanSession(true);

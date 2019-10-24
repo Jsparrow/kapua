@@ -44,6 +44,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.MessageFormat;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Xml utilities
@@ -53,17 +54,16 @@ import java.text.MessageFormat;
 public class XmlUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
+	private static JAXBContextProvider jaxbContextProvider;
 
-    private XmlUtil() {
+	private XmlUtil() {
     }
 
-    private static JAXBContextProvider jaxbContextProvider;
-
-    public static void setContextProvider(JAXBContextProvider provider) {
+	public static void setContextProvider(JAXBContextProvider provider) {
         jaxbContextProvider = provider;
     }
 
-    /**
+	/**
      * Marshal the object to a String
      *
      * @param object
@@ -77,14 +77,14 @@ public class XmlUtil {
         return sw.toString();
     }
 
-    public static String marshalJson(Object object)
+	public static String marshalJson(Object object)
             throws JAXBException {
         StringWriter sw = new StringWriter();
         marshalJson(object, sw);
         return sw.toString();
     }
 
-    /**
+	/**
      * Marshal the object to a writer
      *
      * @param object
@@ -119,7 +119,7 @@ public class XmlUtil {
         }
     }
 
-    /**
+	/**
      * Marshal the object to a writer in json format
      *
      * @param object
@@ -156,7 +156,7 @@ public class XmlUtil {
         }
     }
 
-    /**
+	/**
      * Unmashal the String to an object
      *
      * @param s
@@ -173,7 +173,7 @@ public class XmlUtil {
         return unmarshal(sr, clazz);
     }
 
-    /**
+	/**
      * Unmashal the reader to an object
      *
      * @param sr
@@ -189,7 +189,7 @@ public class XmlUtil {
         return unmarshal(sr, clazz, null);
     }
 
-    /**
+	/**
      * Unmarshal method which injects the namespace URI provided in all the elements before attempting the parsing.
      *
      * @param s
@@ -207,13 +207,13 @@ public class XmlUtil {
         return unmarshal(sr, clazz, nsUri);
     }
 
-    public static <T> T unmarshalJson(String s, Class<T> clazz, String nsUri)
+	public static <T> T unmarshalJson(String s, Class<T> clazz, String nsUri)
             throws JAXBException, XMLStreamException, FactoryConfigurationError, SAXException {
         StringReader sr = new StringReader(s);
         return unmarshalJson(sr, clazz, nsUri);
     }
 
-    /**
+	/**
      * Unmarshal method which injects the namespace URI provided in all the elements before attempting the parsing.
      *
      * @param r
@@ -271,7 +271,7 @@ public class XmlUtil {
         return elem.getValue();
     }
 
-    /**
+	/**
      * Unmarshal method which injects the namespace URI provided in all the elements before attempting the parsing.
      *
      * @param r
@@ -331,7 +331,7 @@ public class XmlUtil {
         return elem.getValue();
     }
 
-    /**
+	/**
      * Find child element by QName
      *
      * @param node
@@ -346,7 +346,7 @@ public class XmlUtil {
 
             boolean isElement = n instanceof Element;
             boolean matchName = qname.getLocalPart().equals(n.getLocalName());
-            boolean matchNsURI = qname.getNamespaceURI().isEmpty() ? (n.getNamespaceURI() == null || n.getNamespaceURI().isEmpty()) : qname.getNamespaceURI().equals(n.getNamespaceURI());
+            boolean matchNsURI = StringUtils.isEmpty(qname.getNamespaceURI()) ? (n.getNamespaceURI() == null || StringUtils.isEmpty(n.getNamespaceURI())) : qname.getNamespaceURI().equals(n.getNamespaceURI());
 
             if (isElement && matchName && matchNsURI) {
                 return (Element) n;
@@ -355,7 +355,7 @@ public class XmlUtil {
         return null;
     }
 
-    /**
+	/**
      * Get the default JAXB context available.
      *
      * @return The default JAXB context available.

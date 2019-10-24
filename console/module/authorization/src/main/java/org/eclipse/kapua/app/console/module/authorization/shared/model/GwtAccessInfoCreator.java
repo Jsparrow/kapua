@@ -21,7 +21,6 @@ public class GwtAccessInfoCreator extends GwtEntityCreator {
     private String userId;
 
     public GwtAccessInfoCreator() {
-        super();
     }
 
     public String getUserId() {

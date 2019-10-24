@@ -47,18 +47,6 @@ public class TriggerPropertyImpl implements TriggerProperty {
     }
 
     /**
-     * Clone constructor.
-     *
-     * @param triggerProperty The {@link TriggerProperty} to clone.
-     * @since 1.1.0
-     */
-    private TriggerPropertyImpl(TriggerProperty triggerProperty) {
-        setName(triggerProperty.getName());
-        setPropertyType(triggerProperty.getPropertyType());
-        setPropertyValue(triggerProperty.getPropertyValue());
-    }
-
-    /**
      * Constructor.
      *
      * @param name          The name.
@@ -72,37 +60,49 @@ public class TriggerPropertyImpl implements TriggerProperty {
         setPropertyValue(propertyValue);
     }
 
-    @Override
+	/**
+     * Clone constructor.
+     *
+     * @param triggerProperty The {@link TriggerProperty} to clone.
+     * @since 1.1.0
+     */
+    private TriggerPropertyImpl(TriggerProperty triggerProperty) {
+        setName(triggerProperty.getName());
+        setPropertyType(triggerProperty.getPropertyType());
+        setPropertyValue(triggerProperty.getPropertyValue());
+    }
+
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getPropertyType() {
         return propertyType;
     }
 
-    @Override
+	@Override
     public void setPropertyType(String propertyType) {
         this.propertyType = propertyType;
     }
 
-    @Override
+	@Override
     public String getPropertyValue() {
         return propertyValue;
     }
 
-    @Override
+	@Override
     public void setPropertyValue(String propertyValue) {
         this.propertyValue = propertyValue;
     }
 
-    public static TriggerPropertyImpl parse(TriggerProperty triggerProperty) {
+	public static TriggerPropertyImpl parse(TriggerProperty triggerProperty) {
         return triggerProperty != null ? (triggerProperty instanceof TriggerPropertyImpl ? (TriggerPropertyImpl) triggerProperty : new TriggerPropertyImpl(triggerProperty)) : null;
     }
 }

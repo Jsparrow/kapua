@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.html.HtmlEscapers;
+import org.apache.commons.lang3.StringUtils;
 
 public class GwtAboutServiceImpl extends KapuaRemoteServiceServlet implements GwtAboutService {
 
@@ -69,7 +70,7 @@ public class GwtAboutServiceImpl extends KapuaRemoteServiceServlet implements Gw
 
         final String notice = entry.getNotice();
         if (notice != null) {
-            if (notice.contains("</html>")) {
+            if (StringUtils.contains(notice, "</html>")) {
                 result.setNotice(HtmlEscapers.htmlEscaper().escape(notice));
                 result.setNoticeMimeType("text/html");
             } else {
@@ -99,7 +100,8 @@ public class GwtAboutServiceImpl extends KapuaRemoteServiceServlet implements Gw
         return result;
     }
 
-    public GwtAboutDependency dummyGwtAboutDependency() {
+    @Override
+	public GwtAboutDependency dummyGwtAboutDependency() {
         return null;
     }
 }

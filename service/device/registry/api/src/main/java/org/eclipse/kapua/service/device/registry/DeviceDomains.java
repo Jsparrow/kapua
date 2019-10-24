@@ -17,13 +17,13 @@ import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain
 
 public class DeviceDomains {
 
-    private DeviceDomains() { }
-
     public static final DeviceDomain DEVICE_DOMAIN = new DeviceDomain();
 
-    public static final DeviceConnectionDomain DEVICE_CONNECTION_DOMAIN = new DeviceConnectionDomain();
+	public static final DeviceConnectionDomain DEVICE_CONNECTION_DOMAIN = new DeviceConnectionDomain();
 
-    public static final DeviceEventDomain DEVICE_EVENT_DOMAIN = new DeviceEventDomain();
+	public static final DeviceEventDomain DEVICE_EVENT_DOMAIN = new DeviceEventDomain();
 
-    public static final DeviceLifecycleDomain DEVICE_LIFECYCLE_DOMAIN = new DeviceLifecycleDomain();
+	public static final DeviceLifecycleDomain DEVICE_LIFECYCLE_DOMAIN = new DeviceLifecycleDomain();
+
+	private DeviceDomains() { }
 }

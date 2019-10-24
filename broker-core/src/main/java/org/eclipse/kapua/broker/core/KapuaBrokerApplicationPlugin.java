@@ -37,7 +37,8 @@ public class KapuaBrokerApplicationPlugin implements BrokerPlugin {
 
     private static final Logger logger = LoggerFactory.getLogger(KapuaBrokerApplicationPlugin.class);
 
-    public Broker installPlugin(Broker broker) throws Exception {
+    @Override
+	public Broker installPlugin(Broker broker) throws Exception {
         logger.info("Installing Kapua application broker plugin...");
         try {
             return new KapuaApplicationBrokerFilter(broker);

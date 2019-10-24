@@ -47,6 +47,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Datastore utility class
@@ -56,42 +57,31 @@ import java.util.regex.Pattern;
 public class DatastoreUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(DatastoreUtils.class);
-//    private static final MessageStoreService MESSAGE_STORE_SERVICE = KapuaLocator.getInstance().getService(MessageStoreService.class);
-
-    private DatastoreUtils() {
-    }
-
-    private static final char SPECIAL_DOT = '.';
-    private static final String SPECIAL_DOT_ESC = "$2e";
-
-    private static final char SPECIAL_DOLLAR = '$';
-    private static final String SPECIAL_DOLLAR_ESC = "$24";
-
-    public static final CharSequence ILLEGAL_CHARS = "\"\\/*?<>|,. ";
-
-    public static final String CLIENT_METRIC_TYPE_STRING = "string";
-    public static final String CLIENT_METRIC_TYPE_INTEGER = "integer";
-    public static final String CLIENT_METRIC_TYPE_LONG = "long";
-    public static final String CLIENT_METRIC_TYPE_FLOAT = "float";
-    public static final String CLIENT_METRIC_TYPE_DOUBLE = "double";
-    public static final String CLIENT_METRIC_TYPE_DATE = "date";
-    public static final String CLIENT_METRIC_TYPE_BOOLEAN = "boolean";
-    public static final String CLIENT_METRIC_TYPE_BINARY = "binary";
-
-    public static final String CLIENT_METRIC_TYPE_STRING_ACRONYM = "str";
-    public static final String CLIENT_METRIC_TYPE_INTEGER_ACRONYM = "int";
-    public static final String CLIENT_METRIC_TYPE_LONG_ACRONYM = "lng";
-    public static final String CLIENT_METRIC_TYPE_FLOAT_ACRONYM = "flt";
-    public static final String CLIENT_METRIC_TYPE_DOUBLE_ACRONYM = "dbl";
-    public static final String CLIENT_METRIC_TYPE_DATE_ACRONYM = "dte";
-    public static final String CLIENT_METRIC_TYPE_BOOLEAN_ACRONYM = "bln";
-    public static final String CLIENT_METRIC_TYPE_BINARY_ACRONYM = "bin";
-
-    public static final String INDEXING_WINDOW_OPTION_WEEK = "week";
-    public static final String INDEXING_WINDOW_OPTION_DAY = "day";
-    public static final String INDEXING_WINDOW_OPTION_HOUR = "hour";
-
-    private static final DateTimeFormatter DATA_INDEX_FORMATTER_WEEK = new DateTimeFormatterBuilder()
+	private static final char SPECIAL_DOT = '.';
+	private static final String SPECIAL_DOT_ESC = "$2e";
+	private static final char SPECIAL_DOLLAR = '$';
+	private static final String SPECIAL_DOLLAR_ESC = "$24";
+	public static final CharSequence ILLEGAL_CHARS = "\"\\/*?<>|,. ";
+	public static final String CLIENT_METRIC_TYPE_STRING = "string";
+	public static final String CLIENT_METRIC_TYPE_INTEGER = "integer";
+	public static final String CLIENT_METRIC_TYPE_LONG = "long";
+	public static final String CLIENT_METRIC_TYPE_FLOAT = "float";
+	public static final String CLIENT_METRIC_TYPE_DOUBLE = "double";
+	public static final String CLIENT_METRIC_TYPE_DATE = "date";
+	public static final String CLIENT_METRIC_TYPE_BOOLEAN = "boolean";
+	public static final String CLIENT_METRIC_TYPE_BINARY = "binary";
+	public static final String CLIENT_METRIC_TYPE_STRING_ACRONYM = "str";
+	public static final String CLIENT_METRIC_TYPE_INTEGER_ACRONYM = "int";
+	public static final String CLIENT_METRIC_TYPE_LONG_ACRONYM = "lng";
+	public static final String CLIENT_METRIC_TYPE_FLOAT_ACRONYM = "flt";
+	public static final String CLIENT_METRIC_TYPE_DOUBLE_ACRONYM = "dbl";
+	public static final String CLIENT_METRIC_TYPE_DATE_ACRONYM = "dte";
+	public static final String CLIENT_METRIC_TYPE_BOOLEAN_ACRONYM = "bln";
+	public static final String CLIENT_METRIC_TYPE_BINARY_ACRONYM = "bin";
+	public static final String INDEXING_WINDOW_OPTION_WEEK = "week";
+	public static final String INDEXING_WINDOW_OPTION_DAY = "day";
+	public static final String INDEXING_WINDOW_OPTION_HOUR = "hour";
+	private static final DateTimeFormatter DATA_INDEX_FORMATTER_WEEK = new DateTimeFormatterBuilder()
             .parseDefaulting(WeekFields.ISO.dayOfWeek(), 1)
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
@@ -101,7 +91,7 @@ public class DatastoreUtils {
             .withLocale(KapuaDateUtils.getLocale())
             .withResolverStyle(ResolverStyle.STRICT)
             .withZone(KapuaDateUtils.getTimeZone());
-    private static final DateTimeFormatter DATA_INDEX_FORMATTER_DAY = new DateTimeFormatterBuilder()
+	private static final DateTimeFormatter DATA_INDEX_FORMATTER_DAY = new DateTimeFormatterBuilder()
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
             .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
@@ -110,7 +100,7 @@ public class DatastoreUtils {
             .withLocale(KapuaDateUtils.getLocale())
             .withResolverStyle(ResolverStyle.STRICT)
             .withZone(KapuaDateUtils.getTimeZone());
-    private static final DateTimeFormatter DATA_INDEX_FORMATTER_HOUR = new DateTimeFormatterBuilder()
+	private static final DateTimeFormatter DATA_INDEX_FORMATTER_HOUR = new DateTimeFormatterBuilder()
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
             .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
             .appendPattern("YYYY-ww-ee-HH")
@@ -118,18 +108,19 @@ public class DatastoreUtils {
             .withLocale(KapuaDateUtils.getLocale())
             .withResolverStyle(ResolverStyle.STRICT)
             .withZone(KapuaDateUtils.getTimeZone());
+	//    private static final MessageStoreService MESSAGE_STORE_SERVICE = KapuaLocator.getInstance().getService(MessageStoreService.class);
+	
+	    private DatastoreUtils() {
+	    }
 
-    /**
+	/**
      * Return the hash code for the provided components (typically components are a sequence of account - client id - channel ...)
      *
      * @param components
      * @return
      */
     public static String getHashCode(String... components) {
-        String concatString = "";
-        for (String str : components) {
-            concatString = concatString.concat(str);
-        }
+        String concatString = Arrays.stream(components).collect(Collectors.joining());
 
         byte[] hashCode = Hashing.sha256()
                 .hashString(concatString, StandardCharsets.UTF_8)
@@ -140,20 +131,20 @@ public class DatastoreUtils {
         return Base64.getEncoder().encodeToString(hashCode);
     }
 
-    private static String normalizeIndexName(String name) {
+	private static String normalizeIndexName(String name) {
         String normName = null;
         try {
             DatastoreUtils.checkIdxAliasName(name);
             normName = name;
         } catch (IllegalArgumentException exc) {
             LOG.trace(exc.getMessage(), exc);
-            normName = name.toLowerCase().replace(ILLEGAL_CHARS, "_");
+            normName = StringUtils.lowerCase(name).replace(ILLEGAL_CHARS, "_");
             DatastoreUtils.checkIdxAliasName(normName);
         }
         return normName;
     }
 
-    /**
+	/**
      * Normalize the metric name to be compliant to Kapua/Elasticserach constraints.<br>
      * It escapes the '$' and '.'
      *
@@ -163,7 +154,7 @@ public class DatastoreUtils {
      */
     public static String normalizeMetricName(String name) {
         String newName = name;
-        if (newName.contains(".")) {
+        if (StringUtils.contains(newName, ".")) {
             newName = newName.replace(String.valueOf(SPECIAL_DOLLAR), SPECIAL_DOLLAR_ESC);
             newName = newName.replace(String.valueOf(SPECIAL_DOT), SPECIAL_DOT_ESC);
             LOG.trace(String.format("Metric %s contains a special char '%s' that will be replaced with '%s'", name, String.valueOf(SPECIAL_DOT), SPECIAL_DOT_ESC));
@@ -171,7 +162,7 @@ public class DatastoreUtils {
         return newName;
     }
 
-    /**
+	/**
      * Restore the metric name, so switch back to the 'not escaped' values for '$' and '.'
      *
      * @param normalizedName
@@ -185,7 +176,7 @@ public class DatastoreUtils {
         return oldName;
     }
 
-    /**
+	/**
      * Return the metric parts for the composed metric name (split the metric name by '.')
      *
      * @param fullName
@@ -195,7 +186,7 @@ public class DatastoreUtils {
         return fullName == null ? null : fullName.split(Pattern.quote("."));
     }
 
-    /**
+	/**
      * Check the index alias correctness.<br>
      * The alias cnnot be null, starts with '_', contains uppercase character or contains {@link DatastoreUtils#ILLEGAL_CHARS}
      *
@@ -203,10 +194,10 @@ public class DatastoreUtils {
      * @since 1.0.0
      */
     public static void checkIdxAliasName(String alias) {
-        if (alias == null || alias.isEmpty()) {
+        if (alias == null || StringUtils.isEmpty(alias)) {
             throw new IllegalArgumentException(String.format("Alias name cannot be %s", alias == null ? "null" : "empty"));
         }
-        if (alias.startsWith("_")) {
+        if (StringUtils.startsWith(alias, "_")) {
             throw new IllegalArgumentException(String.format("Alias name cannot start with _"));
         }
         for (int i = 0; i < alias.length(); i++) {
@@ -214,12 +205,12 @@ public class DatastoreUtils {
                 throw new IllegalArgumentException(String.format("Alias name cannot contain uppercase chars [found %s]", alias.charAt(i)));
             }
         }
-        if (alias.contains(ILLEGAL_CHARS)) {
+        if (StringUtils.contains(alias, ILLEGAL_CHARS)) {
             throw new IllegalArgumentException(String.format("Alias name cannot contain special chars [found oneof %s]", ILLEGAL_CHARS));
         }
     }
 
-    /**
+	/**
      * Check the index name ({@link DatastoreUtils#checkIdxAliasName(String index)}
      *
      * @param index
@@ -229,7 +220,7 @@ public class DatastoreUtils {
         DatastoreUtils.checkIdxAliasName(index);
     }
 
-    /**
+	/**
      * Normalize the index alias name and replace the '-' with '_'
      *
      * @param alias
@@ -242,7 +233,7 @@ public class DatastoreUtils {
         return aliasName;
     }
 
-    /**
+	/**
      * Normalize the account index name and and the suffix '-*'
      *
      * @param scopeId
@@ -259,7 +250,7 @@ public class DatastoreUtils {
         return sb.toString();
     }
 
-    /**
+	/**
      * Get the data index for the specified base name and timestamp
      *
      * @param scopeId
@@ -291,7 +282,7 @@ public class DatastoreUtils {
         return sb.toString();
     }
 
-    /**
+	/**
      * Get the Kapua index name for the specified base name
      *
      * @param scopeId
@@ -309,7 +300,7 @@ public class DatastoreUtils {
         return sb.toString();
     }
 
-    /**
+	/**
      * Normalize the index ({@link DatastoreUtils#normalizeIndexName(String index)}
      *
      * @param index
@@ -319,7 +310,7 @@ public class DatastoreUtils {
         return normalizeIndexName(index);
     }
 
-    /**
+	/**
      * Return the list of the data indexes between start and windowEnd instant by scope id.
      * Only the indexes that will be *FULLY* included in the list (i.e. with a starting date ON OR AFTER the window start AND
      * the end date ON OR BEFORE the window end will be returned
@@ -391,21 +382,21 @@ public class DatastoreUtils {
         return result.toArray(new String[0]);
     }
 
-    private static boolean isIndexFullyAfterInstant(@NotNull Instant indexStart, @NotNull Instant indexEnd, @NotNull Instant checkpoint) {
+	private static boolean isIndexFullyAfterInstant(@NotNull Instant indexStart, @NotNull Instant indexEnd, @NotNull Instant checkpoint) {
         return !indexStart.isBefore(checkpoint) && !indexEnd.isBefore(checkpoint);
     }
 
-    private static boolean isIndexFullyBeforeInstant(@NotNull Instant indexStart, @NotNull Instant indexEnd, @NotNull Instant checkpoint) {
+	private static boolean isIndexFullyBeforeInstant(@NotNull Instant indexStart, @NotNull Instant indexEnd, @NotNull Instant checkpoint) {
         return !indexStart.isAfter(checkpoint) && !indexEnd.isAfter(checkpoint);
     }
 
-    private static String stripPrefixAndAccount(@NotNull String index) {
+	private static String stripPrefixAndAccount(@NotNull String index) {
         String[] fragments = index.split("-");
         int start = index.matches("^[A-Za-z].*$") ? 2 : 1;
         return StringUtils.join(Arrays.copyOfRange(fragments, start, fragments.length), '-');
     }
 
-    /**
+	/**
      * Get the full metric name used to store the metric in Elasticsearch.<br>
      * The full metric name is composed by the metric and the type acronym as suffix ('.' is used as separator between the 2 parts)
      *
@@ -418,7 +409,7 @@ public class DatastoreUtils {
         return String.format("%s.%s", name, shortType);
     }
 
-    /**
+	/**
      * Get the client metric type from the metric value type
      *
      * @param clazz
@@ -452,7 +443,7 @@ public class DatastoreUtils {
         return value;
     }
 
-    /**
+	/**
      * Get the client metric type acronym for the given client metric type full name
      *
      * @param acronym
@@ -487,7 +478,7 @@ public class DatastoreUtils {
         throw new IllegalArgumentException(String.format("Unknown type [%s]", acronym));
     }
 
-    /**
+	/**
      * Check if the metric type is date
      *
      * @param acronym
@@ -497,7 +488,7 @@ public class DatastoreUtils {
         return CLIENT_METRIC_TYPE_DATE_ACRONYM.equals(acronym);
     }
 
-    /**
+	/**
      * Convert the metric value class type (Kapua side) to the proper string type description (client side)
      *
      * @param aClass
@@ -532,7 +523,7 @@ public class DatastoreUtils {
         throw new IllegalArgumentException(String.format("Unknown type [%s]", aClass.getName()));
     }
 
-    /**
+	/**
      * Convert the client metric type to the corresponding Kapua type
      *
      * @param clientType
@@ -563,7 +554,7 @@ public class DatastoreUtils {
         return clazz;
     }
 
-    /**
+	/**
      * Convert the metric value to the correct type using the metric acronym type
      *
      * @param acronymType
@@ -575,7 +566,7 @@ public class DatastoreUtils {
         Object convertedValue = null;
         if (CLIENT_METRIC_TYPE_DOUBLE_ACRONYM.equals(acronymType)) {
             if (value instanceof Number) {
-                convertedValue = new Double(((Number) value).doubleValue());
+                convertedValue = Double.valueOf(((Number) value).doubleValue());
             } else if (value instanceof String) {
                 convertedValue = Double.parseDouble((String) value);
             } else {
@@ -583,7 +574,7 @@ public class DatastoreUtils {
             }
         } else if (CLIENT_METRIC_TYPE_FLOAT_ACRONYM.equals(acronymType)) {
             if (value instanceof Number) {
-                convertedValue = new Float(((Number) value).floatValue());
+                convertedValue = Float.valueOf(((Number) value).floatValue());
             } else if (value instanceof String) {
                 convertedValue = Float.parseFloat((String) value);
             } else {
@@ -591,7 +582,7 @@ public class DatastoreUtils {
             }
         } else if (CLIENT_METRIC_TYPE_INTEGER_ACRONYM.equals(acronymType)) {
             if (value instanceof Number) {
-                convertedValue = new Integer(((Number) value).intValue());
+                convertedValue = Integer.valueOf(((Number) value).intValue());
             } else if (value instanceof String) {
                 convertedValue = Integer.parseInt((String) value);
             } else {
@@ -599,7 +590,7 @@ public class DatastoreUtils {
             }
         } else if (CLIENT_METRIC_TYPE_LONG_ACRONYM.equals(acronymType)) {
             if (value instanceof Number) {
-                convertedValue = new Long(((Number) value).longValue());
+                convertedValue = Long.valueOf(((Number) value).longValue());
             } else if (value instanceof String) {
                 convertedValue = Long.parseLong((String) value);
             } else {
@@ -612,7 +603,8 @@ public class DatastoreUtils {
                 try {
                     convertedValue = KapuaDateUtils.parseDate((String) value);
                 } catch (ParseException e) {
-                    throw new IllegalArgumentException(
+                    LOG.error(e.getMessage(), e);
+					throw new IllegalArgumentException(
                             String.format("Type [%s] cannot be converted to Date. Allowed format [%s] - Value to convert [%s]!", getValueClass(value), KapuaDateUtils.ISO_DATE_PATTERN,
                                     value));
                 }
@@ -626,7 +618,7 @@ public class DatastoreUtils {
         return convertedValue;
     }
 
-    private static String getValueClass(Object value) {
+	private static String getValueClass(Object value) {
         return value != null ? value.getClass().toString() : "null";
     }
 

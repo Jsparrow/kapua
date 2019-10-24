@@ -38,7 +38,7 @@ public interface BinaryPayloadCodec {
      * @throws Exception
      *             if anything goes wrong
      */
-    public ByteBuffer encode(Payload payload, ByteBuffer buffer) throws Exception;
+    ByteBuffer encode(Payload payload, ByteBuffer buffer) throws Exception;
 
     /**
      * Decode a {@link Payload} structure from the provided BLOB
@@ -49,5 +49,5 @@ public interface BinaryPayloadCodec {
      * @throws Exception
      *             if anything goes wrong
      */
-    public Payload decode(ByteBuffer buffer) throws Exception;
+    Payload decode(ByteBuffer buffer) throws Exception;
 }

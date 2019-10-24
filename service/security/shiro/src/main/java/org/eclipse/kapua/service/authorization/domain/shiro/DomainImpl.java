@@ -59,7 +59,6 @@ public class DomainImpl extends AbstractKapuaEntity implements Domain {
      * @since 1.0.0
      */
     public DomainImpl() {
-        super();
     }
 
     /**

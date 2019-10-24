@@ -53,7 +53,8 @@ public enum KapuaAuthenticationSettingKeys implements SettingKey {
         this.key = key;
     }
 
-    public String key() {
+    @Override
+	public String key() {
         return key;
     }
 }

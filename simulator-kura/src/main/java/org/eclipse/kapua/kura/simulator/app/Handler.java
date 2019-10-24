@@ -15,16 +15,16 @@ import org.eclipse.kapua.kura.simulator.payload.Message;
 
 public interface Handler extends AutoCloseable {
 
-    public default void connected() {
+    default void connected() {
     }
 
-    public default void disconnected() {
+    default void disconnected() {
     }
 
-    public default void processMessage(final Message message) {
+    default void processMessage(final Message message) {
     }
 
     @Override
-    public default void close() throws Exception {
+    default void close() throws Exception {
     }
 }

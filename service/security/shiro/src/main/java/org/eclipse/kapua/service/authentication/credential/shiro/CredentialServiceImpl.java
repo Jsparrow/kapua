@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.SecureRandom;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link CredentialService} implementation.
@@ -83,7 +84,7 @@ public class CredentialServiceImpl extends AbstractKapuaConfigurableService impl
             // Check if a PASSWORD credential already exists for the user
             CredentialListResult existingCredentials = findByUserId(credentialCreator.getScopeId(), credentialCreator.getUserId());
             for (Credential credential : existingCredentials.getItems()) {
-                if (credential.getCredentialType().equals(CredentialType.PASSWORD)) {
+                if (credential.getCredentialType() == CredentialType.PASSWORD) {
                     throw new KapuaExistingCredentialException(CredentialType.PASSWORD);
                 }
             }
@@ -120,7 +121,7 @@ public class CredentialServiceImpl extends AbstractKapuaConfigurableService impl
 
                     byte[] bPre = new byte[preLength];
                     random.nextBytes(bPre);
-                    String pre = Base64.encodeToString(bPre).substring(0, preLength);
+                    String pre = StringUtils.substring(Base64.encodeToString(bPre), 0, preLength);
 
                     byte[] bKey = new byte[keyLength];
                     random.nextBytes(bKey);
@@ -320,7 +321,7 @@ public class CredentialServiceImpl extends AbstractKapuaConfigurableService impl
             KapuaAuthenticationSetting setting = KapuaAuthenticationSetting.getInstance();
             int preLength = setting.getInt(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_LENGTH);
             String preSeparator = setting.getString(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_SEPARATOR);
-            String apiKeyPreValue = apiKey.substring(0, preLength).concat(preSeparator);
+            String apiKeyPreValue = StringUtils.substring(apiKey, 0, preLength) + preSeparator;
 
             //
             // Build query
@@ -411,7 +412,7 @@ public class CredentialServiceImpl extends AbstractKapuaConfigurableService impl
         if ("user".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
             deleteCredentialByUserId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
         } else if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteCredentialByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteCredentialByAccountId(kapuaEvent.getEntityId());
         }
     }
 
@@ -429,7 +430,7 @@ public class CredentialServiceImpl extends AbstractKapuaConfigurableService impl
         }
     }
 
-    private void deleteCredentialByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteCredentialByAccountId(KapuaId accountId) throws KapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
 

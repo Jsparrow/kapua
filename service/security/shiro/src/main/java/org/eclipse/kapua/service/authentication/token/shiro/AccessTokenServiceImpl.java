@@ -245,7 +245,7 @@ public class AccessTokenServiceImpl extends AbstractKapuaService implements Acce
         if ("user".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
             deleteAccessTokenByUserId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
         } else if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteAccessTokenByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteAccessTokenByAccountId(kapuaEvent.getEntityId());
         }
     }
 
@@ -261,7 +261,7 @@ public class AccessTokenServiceImpl extends AbstractKapuaService implements Acce
         }
     }
 
-    private void deleteAccessTokenByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteAccessTokenByAccountId(KapuaId accountId) throws KapuaException {
 
         AccessTokenQuery query = new AccessTokenQueryImpl(accountId);
 

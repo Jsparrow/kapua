@@ -89,19 +89,19 @@ public class GwtKapuaAuthorizationModelConverter {
         GroupQuery query = groupFactory.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtGroupQuery.getScopeId()));
 
         AndPredicate predicate = query.andPredicate();
-        if (gwtGroupQuery.getName() != null && !gwtGroupQuery.getName().isEmpty()) {
+        if (gwtGroupQuery.getName() != null && !StringUtils.isEmpty(gwtGroupQuery.getName())) {
             predicate.and(query.attributePredicate(GroupAttributes.NAME, gwtGroupQuery.getName(), Operator.LIKE));
         }
-        if (gwtGroupQuery.getDescription() != null && !gwtGroupQuery.getDescription().isEmpty()) {
+        if (gwtGroupQuery.getDescription() != null && !StringUtils.isEmpty(gwtGroupQuery.getDescription())) {
             predicate.and(query.attributePredicate(GroupAttributes.DESCRIPTION, gwtGroupQuery.getDescription(), Operator.LIKE));
         }
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? GroupAttributes.NAME : loadConfig.getSortField();
-        if (sortField.equals("groupName")) {
+        if ("groupName".equals(sortField)) {
             sortField = GroupAttributes.NAME;
-        } else if (sortField.equals("createdOnFormatted")) {
+        } else if ("createdOnFormatted".equals(sortField)) {
             sortField = GroupAttributes.CREATED_ON;
         }
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setOffset(loadConfig.getOffset());
@@ -129,19 +129,19 @@ public class GwtKapuaAuthorizationModelConverter {
 
         AndPredicate predicate = query.andPredicate();
 
-        if (gwtRoleQuery.getName() != null && !gwtRoleQuery.getName().trim().isEmpty()) {
+        if (gwtRoleQuery.getName() != null && !StringUtils.isEmpty(gwtRoleQuery.getName().trim())) {
             predicate.and(query.attributePredicate(RoleAttributes.NAME, gwtRoleQuery.getName(), Operator.LIKE));
         }
-        if (gwtRoleQuery.getDescription() != null && !gwtRoleQuery.getDescription().trim().isEmpty()) {
+        if (gwtRoleQuery.getDescription() != null && !StringUtils.isEmpty(gwtRoleQuery.getDescription().trim())) {
             predicate.and(query.attributePredicate(RoleAttributes.DESCRIPTION, gwtRoleQuery.getDescription(), Operator.LIKE));
         }
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? RoleAttributes.NAME : loadConfig.getSortField();
-        if (sortField.equals("modifiedOnFormatted")) {
+        if ("modifiedOnFormatted".equals(sortField)) {
             sortField = RoleAttributes.MODIFIED_ON;
-        } else if (sortField.equals("modifiedByName")) {
+        } else if ("modifiedByName".equals(sortField)) {
             sortField = RoleAttributes.MODIFIED_BY;
         }
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setOffset(loadConfig.getOffset());
@@ -391,7 +391,7 @@ public class GwtKapuaAuthorizationModelConverter {
 
         String gwtDomainName = gwtDomain.getDomainName();
 
-        if (gwtDomainName == null || gwtDomainName.isEmpty()) {
+        if (gwtDomainName == null || StringUtils.isEmpty(gwtDomainName)) {
             return null;
         }
 

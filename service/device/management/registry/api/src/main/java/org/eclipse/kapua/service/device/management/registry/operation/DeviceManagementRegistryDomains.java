@@ -21,8 +21,8 @@ import org.eclipse.kapua.model.domain.Domain;
  */
 public class DeviceManagementRegistryDomains {
 
-    private DeviceManagementRegistryDomains() {
-    }
-
     public static final DeviceManagementRegistryDomain DEVICE_MANAGEMENT_REGISTRY_DOMAIN = new DeviceManagementRegistryDomain();
+
+	private DeviceManagementRegistryDomains() {
+    }
 }

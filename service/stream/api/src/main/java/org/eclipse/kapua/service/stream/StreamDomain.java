@@ -15,9 +15,9 @@ import org.eclipse.kapua.model.domain.AbstractDomain;
 import org.eclipse.kapua.model.domain.Actions;
 import org.eclipse.kapua.model.domain.Domain;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Collections;
 
 /**
  * {@link StreamService} domain.<br>
@@ -28,7 +28,7 @@ import java.util.Set;
 public class StreamDomain extends AbstractDomain {
 
     private String name = "stream";
-    private Set<Actions> actions = new HashSet<>(Arrays.asList(Actions.write));
+    private Set<Actions> actions = new HashSet<>(Collections.singletonList(Actions.write));
 
     @Override
     public String getName() {

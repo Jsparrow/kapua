@@ -21,13 +21,17 @@ import java.util.Date;
 
 import org.eclipse.kapua.service.user.UserStatus;
 import org.eclipse.kapua.service.user.UserType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data object used in Gherkin to transfer User data.
  */
 public class CucUser {
 
-    private String name;
+    private static final Logger logger = LoggerFactory.getLogger(CucUser.class);
+
+	private String name;
 
     private String displayName;
 
@@ -133,6 +137,7 @@ public class CucUser {
         try {
             expDate = df.parse(expirationDate);
         } catch (ParseException | NullPointerException e) {
+			logger.error(e.getMessage(), e);
             // skip, leave date null
         }
 

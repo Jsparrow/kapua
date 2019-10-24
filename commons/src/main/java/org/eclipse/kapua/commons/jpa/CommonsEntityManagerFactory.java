@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
+import java.util.Collections;
 
 /**
  * Commons module entity manager reference service.
@@ -25,7 +26,7 @@ public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-commons";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static CommonsEntityManagerFactory instance = new CommonsEntityManagerFactory();
 

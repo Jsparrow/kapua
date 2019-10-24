@@ -292,26 +292,24 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
             public void run() throws Exception {
                 AccessInfo userAccessInfo = ACCESS_INFO_SERVICE.findByUserId(user.getScopeId(), user.getId());
 
-                if (userAccessInfo != null) {
+                if (userAccessInfo == null) {
+					return;
+				}
+				// Permission info
+				AccessPermissionListResult accessPermissions = ACCESS_PERMISSION_SERVICE.findByAccessInfoId(userAccessInfo.getScopeId(), userAccessInfo.getId());
+				for (AccessPermission ap : accessPermissions.getItems()) {
+				    gwtSession.addSessionPermission(convert(ap.getPermission()));
+				}
+				// Role info
+				AccessRoleListResult accessRoles = ACCESS_ROLE_SERVICE.findByAccessInfoId(userAccessInfo.getScopeId(), userAccessInfo.getId());
+				for (AccessRole ar : accessRoles.getItems()) {
+				    Role role = ROLE_SERVICE.find(ar.getScopeId(), ar.getRoleId());
 
-                    // Permission info
-                    AccessPermissionListResult accessPermissions = ACCESS_PERMISSION_SERVICE.findByAccessInfoId(userAccessInfo.getScopeId(), userAccessInfo.getId());
-                    for (AccessPermission ap : accessPermissions.getItems()) {
-                        gwtSession.addSessionPermission(convert(ap.getPermission()));
-                    }
-
-                    // Role info
-                    AccessRoleListResult accessRoles = ACCESS_ROLE_SERVICE.findByAccessInfoId(userAccessInfo.getScopeId(), userAccessInfo.getId());
-
-                    for (AccessRole ar : accessRoles.getItems()) {
-                        Role role = ROLE_SERVICE.find(ar.getScopeId(), ar.getRoleId());
-
-                        RolePermissionListResult rolePermissions = ROLE_PERMISSION_SERVICE.findByRoleId(role.getScopeId(), role.getId());
-                        for (RolePermission rp : rolePermissions.getItems()) {
-                            gwtSession.addSessionPermission(convert(rp.getPermission()));
-                        }
-                    }
-                }
+				    RolePermissionListResult rolePermissions = ROLE_PERMISSION_SERVICE.findByRoleId(role.getScopeId(), role.getId());
+				    for (RolePermission rp : rolePermissions.getItems()) {
+				        gwtSession.addSessionPermission(convert(rp.getPermission()));
+				    }
+				}
             }
         });
 

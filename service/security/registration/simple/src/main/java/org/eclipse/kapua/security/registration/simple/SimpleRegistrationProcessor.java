@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A processor which creates a simple account and user setup
@@ -78,6 +79,196 @@ import java.util.Set;
 public class SimpleRegistrationProcessor implements RegistrationProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleRegistrationProcessor.class);
+	private final AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
+	private final AccountFactory accountFactory = KapuaLocator.getInstance().getFactory(AccountFactory.class);
+	private final CredentialService credentialService = KapuaLocator.getInstance().getService(CredentialService.class);
+	private final CredentialFactory credentialFactory = KapuaLocator.getInstance().getFactory(CredentialFactory.class);
+	private final DeviceRegistryService deviceRegistryService = KapuaLocator.getInstance().getService(DeviceRegistryService.class);
+	private final UserService userService = KapuaLocator.getInstance().getService(UserService.class);
+	private final UserFactory userFactory = KapuaLocator.getInstance().getFactory(UserFactory.class);
+	private final AccessInfoService accessInfoService = KapuaLocator.getInstance().getService(AccessInfoService.class);
+	private final AccessInfoFactory accessInfoFactory = KapuaLocator.getInstance().getFactory(AccessInfoFactory.class);
+	private final PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
+	private final String claimName;
+	private final Settings settings;
+
+	/**
+     * Create a new simple registration processor
+     *
+     * @param claimName the claim to use as account name
+     * @param settings  the settings for the processor
+     */
+    public SimpleRegistrationProcessor(String claimName, Settings settings) {
+        this.claimName = claimName;
+        this.settings = settings;
+    }
+
+	@Override
+    public void close() {
+    }
+
+	@Override
+    public Optional<User> createUser(JwtContext context) throws Exception {
+        KapuaSession session = new KapuaSession(null, settings.getRootAccount(), settings.getRootAccount());
+
+        KapuaSession oldSession = KapuaSecurityUtils.getSession();
+        KapuaSecurityUtils.setSession(session);
+        try {
+            return KapuaSecurityUtils.doPrivileged(() -> internalCreateUser(context));
+        } finally {
+            KapuaSecurityUtils.setSession(oldSession);
+        }
+    }
+
+	private Optional<User> internalCreateUser(JwtContext context) throws Exception {
+
+        String name = context.getJwtClaims().getClaimValue(claimName, String.class);
+        if (name == null || StringUtils.isEmpty(name)) {
+            return Optional.empty();
+        }
+
+        String email = context.getJwtClaims().getClaimValue("email", String.class);
+        if (email == null || StringUtils.isEmpty(email)) {
+            return Optional.empty();
+        }
+
+        String displayName = context.getJwtClaims().getClaimValue("name", String.class);
+
+        String subject = context.getJwtClaims().getSubject();
+
+        // define account
+
+        AccountCreator accountCreator = accountFactory.newCreator(settings.getRootAccount(), name);
+        accountCreator.setOrganizationEmail(email);
+        accountCreator.setOrganizationName(name);
+        accountCreator.setExpirationDate(Date.from(Instant.now().plus(SimpleSetting.getInstance().getInt(SimpleSettingKeys.ACCOUNT_EXPIRATION_DATE_DAYS, 30), ChronoUnit.DAYS)));
+
+        // create account
+
+        Account account = accountService.create(accountCreator);
+
+        // set the resource limits for the UserService of this account
+
+        Map<String, Object> userValues = new HashMap<>(2);
+        customizeUserLimits(userValues);
+        userService.setConfigValues(account.getId(), account.getScopeId(), userValues);
+
+        // set the resource limits for the UserService of this account
+
+        Map<String, Object> deviceRegistryValues = new HashMap<>(2);
+        customizeDeviceRegistryLimits(deviceRegistryValues);
+        deviceRegistryService.setConfigValues(account.getId(), account.getScopeId(), deviceRegistryValues);
+
+        // user user
+
+        User user = createUser(name, email, displayName, subject, account);
+
+        // user broker user
+
+        createBrokerUser(name, account);
+
+        // return result
+
+        return Optional.of(user);
+    }
+
+	private User createUser(String name, String email, String displayName, String subject, Account account) throws KapuaException {
+
+        // define
+
+        UserCreator userCreator = userFactory.newCreator(account.getId(), name);
+        userCreator.setUserType(UserType.EXTERNAL);
+        userCreator.setExternalId(subject);
+        userCreator.setEmail(email);
+        userCreator.setDisplayName(displayName);
+
+        // create
+
+        User user = userService.create(userCreator);
+
+        // assign login permissions
+
+        AccessInfoCreator accessInfoCreator = accessInfoFactory.newCreator(user.getScopeId());
+        accessInfoCreator.setUserId(user.getId());
+
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(permissionFactory.newPermission(new AccessInfoDomain(), Actions.read, user.getScopeId()));
+
+        permissions.addAll(permissionFactory.newPermissions(AccountDomains.ACCOUNT_DOMAIN, user.getScopeId(), Actions.read));
+        permissions.addAll(permissionFactory.newPermissions(AuthenticationDomains.CREDENTIAL_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.delete));
+        permissions.addAll(permissionFactory.newPermissions(DatastoreDomains.DATASTORE_DOMAIN, user.getScopeId(), Actions.read));
+        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.delete));
+        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_CONNECTION_DOMAIN, user.getScopeId(), Actions.read));
+        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_EVENT_DOMAIN, user.getScopeId(), Actions.read, Actions.write));
+        permissions.addAll(permissionFactory.newPermissions(DeviceManagementDomains.DEVICE_MANAGEMENT_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.execute));
+        permissions.addAll(permissionFactory.newPermissions(AuthorizationDomains.GROUP_DOMAIN, user.getScopeId(), Actions.read));
+        permissions.addAll(permissionFactory.newPermissions(AuthorizationDomains.ROLE_DOMAIN, user.getScopeId(), Actions.read));
+        permissions.addAll(permissionFactory.newPermissions(UserDomains.USER_DOMAIN, user.getScopeId(), Actions.read));
+
+        accessInfoCreator.setPermissions(permissions);
+
+        accessInfoService.create(accessInfoCreator);
+
+        // return result
+
+        return user;
+    }
+
+	private User createBrokerUser(String baseName, Account account) throws KapuaException {
+
+        // define
+
+        UserCreator userCreator = userFactory.newCreator(account.getId(), baseName + "-broker");
+        userCreator.setUserType(UserType.INTERNAL); // FIXME: need to find out why this isn't DEVICE but INTERNAL
+        userCreator.setDisplayName("Gateway User");
+
+        // create
+
+        User user = userService.create(userCreator);
+
+        // assign permissions
+
+        AccessInfoCreator accessInfoCreator = accessInfoFactory.newCreator(user.getScopeId());
+        accessInfoCreator.setUserId(user.getId());
+
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(permissionFactory.newPermission(BrokerDomains.BROKER_DOMAIN, Actions.connect, user.getScopeId()));
+
+        accessInfoCreator.setPermissions(permissions);
+
+        accessInfoService.create(accessInfoCreator);
+
+        // Create default password
+
+        CredentialCreator credential = credentialFactory.newCreator(account.getId(), user.getId(), CredentialType.PASSWORD, baseName + "-password", CredentialStatus.ENABLED, null);
+        credentialService.create(credential);
+
+        return user;
+    }
+
+	protected void customizeUserLimits(Map<String, Object> values) {
+        Objects.requireNonNull(values);
+
+        setChildEntityLimits(values, settings.getMaximumNumberOfUsers());
+    }
+
+	protected void customizeDeviceRegistryLimits(Map<String, Object> values) {
+        Objects.requireNonNull(values);
+
+        setChildEntityLimits(values, settings.getMaximumNumberOfDevices());
+    }
+
+	protected static void setChildEntityLimits(Map<String, Object> values, int limit) {
+        Objects.requireNonNull(values);
+
+        if (limit < 0) {
+            values.put("maxNumberChildEntities", limit);
+            values.put("infiniteChildEntities", false);
+        } else {
+            values.put("maxNumberChildEntities", Integer.MAX_VALUE);
+            values.put("infiniteChildEntities", true);
+        }
+    }
 
     public static class Settings {
 
@@ -122,7 +313,7 @@ public class SimpleRegistrationProcessor implements RegistrationProcessor {
         public static Optional<SimpleRegistrationProcessor.Settings> loadSimpleSettings(AbstractKapuaSetting<SimpleSettingKeys> settings) {
             try {
                 String accountName = settings.getString(SimpleSettingKeys.SIMPLE_ROOT_ACCOUNT);
-                if (accountName != null && !accountName.isEmpty()) {
+                if (accountName != null && !StringUtils.isEmpty(accountName)) {
                     return loadFrom(accountName).map(rootAccount -> applySimpleSettings(rootAccount, settings));
                 }
                 return Optional.empty();
@@ -147,203 +338,6 @@ public class SimpleRegistrationProcessor implements RegistrationProcessor {
             return settings;
         }
 
-    }
-
-    private final AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
-    private final AccountFactory accountFactory = KapuaLocator.getInstance().getFactory(AccountFactory.class);
-
-    private final CredentialService credentialService = KapuaLocator.getInstance().getService(CredentialService.class);
-    private final CredentialFactory credentialFactory = KapuaLocator.getInstance().getFactory(CredentialFactory.class);
-
-    private final DeviceRegistryService deviceRegistryService = KapuaLocator.getInstance().getService(DeviceRegistryService.class);
-
-    private final UserService userService = KapuaLocator.getInstance().getService(UserService.class);
-    private final UserFactory userFactory = KapuaLocator.getInstance().getFactory(UserFactory.class);
-
-    private final AccessInfoService accessInfoService = KapuaLocator.getInstance().getService(AccessInfoService.class);
-    private final AccessInfoFactory accessInfoFactory = KapuaLocator.getInstance().getFactory(AccessInfoFactory.class);
-
-    private final PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
-
-    private final String claimName;
-    private final Settings settings;
-
-    /**
-     * Create a new simple registration processor
-     *
-     * @param claimName the claim to use as account name
-     * @param settings  the settings for the processor
-     */
-    public SimpleRegistrationProcessor(String claimName, Settings settings) {
-        this.claimName = claimName;
-        this.settings = settings;
-    }
-
-    @Override
-    public void close() {
-    }
-
-    @Override
-    public Optional<User> createUser(JwtContext context) throws Exception {
-        KapuaSession session = new KapuaSession(null, settings.getRootAccount(), settings.getRootAccount());
-
-        KapuaSession oldSession = KapuaSecurityUtils.getSession();
-        KapuaSecurityUtils.setSession(session);
-        try {
-            return KapuaSecurityUtils.doPrivileged(() -> internalCreateUser(context));
-        } finally {
-            KapuaSecurityUtils.setSession(oldSession);
-        }
-    }
-
-    private Optional<User> internalCreateUser(JwtContext context) throws Exception {
-
-        String name = context.getJwtClaims().getClaimValue(claimName, String.class);
-        if (name == null || name.isEmpty()) {
-            return Optional.empty();
-        }
-
-        String email = context.getJwtClaims().getClaimValue("email", String.class);
-        if (email == null || email.isEmpty()) {
-            return Optional.empty();
-        }
-
-        String displayName = context.getJwtClaims().getClaimValue("name", String.class);
-
-        String subject = context.getJwtClaims().getSubject();
-
-        // define account
-
-        AccountCreator accountCreator = accountFactory.newCreator(settings.getRootAccount(), name);
-        accountCreator.setOrganizationEmail(email);
-        accountCreator.setOrganizationName(name);
-        accountCreator.setExpirationDate(Date.from(Instant.now().plus(SimpleSetting.getInstance().getInt(SimpleSettingKeys.ACCOUNT_EXPIRATION_DATE_DAYS, 30), ChronoUnit.DAYS)));
-
-        // create account
-
-        Account account = accountService.create(accountCreator);
-
-        // set the resource limits for the UserService of this account
-
-        Map<String, Object> userValues = new HashMap<>(2);
-        customizeUserLimits(userValues);
-        userService.setConfigValues(account.getId(), account.getScopeId(), userValues);
-
-        // set the resource limits for the UserService of this account
-
-        Map<String, Object> deviceRegistryValues = new HashMap<>(2);
-        customizeDeviceRegistryLimits(deviceRegistryValues);
-        deviceRegistryService.setConfigValues(account.getId(), account.getScopeId(), deviceRegistryValues);
-
-        // user user
-
-        User user = createUser(name, email, displayName, subject, account);
-
-        // user broker user
-
-        createBrokerUser(name, account);
-
-        // return result
-
-        return Optional.of(user);
-    }
-
-    private User createUser(String name, String email, String displayName, String subject, Account account) throws KapuaException {
-
-        // define
-
-        UserCreator userCreator = userFactory.newCreator(account.getId(), name);
-        userCreator.setUserType(UserType.EXTERNAL);
-        userCreator.setExternalId(subject);
-        userCreator.setEmail(email);
-        userCreator.setDisplayName(displayName);
-
-        // create
-
-        User user = userService.create(userCreator);
-
-        // assign login permissions
-
-        AccessInfoCreator accessInfoCreator = accessInfoFactory.newCreator(user.getScopeId());
-        accessInfoCreator.setUserId(user.getId());
-
-        Set<Permission> permissions = new HashSet<>();
-        permissions.add(permissionFactory.newPermission(new AccessInfoDomain(), Actions.read, user.getScopeId()));
-
-        permissions.addAll(permissionFactory.newPermissions(AccountDomains.ACCOUNT_DOMAIN, user.getScopeId(), Actions.read));
-        permissions.addAll(permissionFactory.newPermissions(AuthenticationDomains.CREDENTIAL_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.delete));
-        permissions.addAll(permissionFactory.newPermissions(DatastoreDomains.DATASTORE_DOMAIN, user.getScopeId(), Actions.read));
-        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.delete));
-        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_CONNECTION_DOMAIN, user.getScopeId(), Actions.read));
-        permissions.addAll(permissionFactory.newPermissions(DeviceDomains.DEVICE_EVENT_DOMAIN, user.getScopeId(), Actions.read, Actions.write));
-        permissions.addAll(permissionFactory.newPermissions(DeviceManagementDomains.DEVICE_MANAGEMENT_DOMAIN, user.getScopeId(), Actions.read, Actions.write, Actions.execute));
-        permissions.addAll(permissionFactory.newPermissions(AuthorizationDomains.GROUP_DOMAIN, user.getScopeId(), Actions.read));
-        permissions.addAll(permissionFactory.newPermissions(AuthorizationDomains.ROLE_DOMAIN, user.getScopeId(), Actions.read));
-        permissions.addAll(permissionFactory.newPermissions(UserDomains.USER_DOMAIN, user.getScopeId(), Actions.read));
-
-        accessInfoCreator.setPermissions(permissions);
-
-        accessInfoService.create(accessInfoCreator);
-
-        // return result
-
-        return user;
-    }
-
-    private User createBrokerUser(String baseName, Account account) throws KapuaException {
-
-        // define
-
-        UserCreator userCreator = userFactory.newCreator(account.getId(), baseName + "-broker");
-        userCreator.setUserType(UserType.INTERNAL); // FIXME: need to find out why this isn't DEVICE but INTERNAL
-        userCreator.setDisplayName("Gateway User");
-
-        // create
-
-        User user = userService.create(userCreator);
-
-        // assign permissions
-
-        AccessInfoCreator accessInfoCreator = accessInfoFactory.newCreator(user.getScopeId());
-        accessInfoCreator.setUserId(user.getId());
-
-        Set<Permission> permissions = new HashSet<>();
-        permissions.add(permissionFactory.newPermission(BrokerDomains.BROKER_DOMAIN, Actions.connect, user.getScopeId()));
-
-        accessInfoCreator.setPermissions(permissions);
-
-        accessInfoService.create(accessInfoCreator);
-
-        // Create default password
-
-        CredentialCreator credential = credentialFactory.newCreator(account.getId(), user.getId(), CredentialType.PASSWORD, baseName + "-password", CredentialStatus.ENABLED, null);
-        credentialService.create(credential);
-
-        return user;
-    }
-
-    protected void customizeUserLimits(Map<String, Object> values) {
-        Objects.requireNonNull(values);
-
-        setChildEntityLimits(values, settings.getMaximumNumberOfUsers());
-    }
-
-    protected void customizeDeviceRegistryLimits(Map<String, Object> values) {
-        Objects.requireNonNull(values);
-
-        setChildEntityLimits(values, settings.getMaximumNumberOfDevices());
-    }
-
-    protected static void setChildEntityLimits(Map<String, Object> values, int limit) {
-        Objects.requireNonNull(values);
-
-        if (limit < 0) {
-            values.put("maxNumberChildEntities", limit);
-            values.put("infiniteChildEntities", false);
-        } else {
-            values.put("maxNumberChildEntities", Integer.MAX_VALUE);
-            values.put("infiniteChildEntities", true);
-        }
     }
 
 }

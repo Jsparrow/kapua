@@ -147,7 +147,7 @@ public class IndexCalculatorTest extends Assert {
                 calEndDate != null ? calEndDate.get(Calendar.WEEK_OF_YEAR) : "Infinity",
                 calEndDate != null ? calEndDate.get(Calendar.DAY_OF_WEEK) : "Infinity");
 
-        String[] index = DatastoreUtils.convertToDataIndexes(getDataIndexesByAccount(KapuaEid.ONE), startDate != null ? startDate.toInstant() : null, endDate != null ? endDate.toInstant() : null);
+        String[] index = DatastoreUtils.convertToDataIndexes(getDataIndexesByAccount(), startDate != null ? startDate.toInstant() : null, endDate != null ? endDate.toInstant() : null);
         compareResult(expectedIndexes, index);
     }
 
@@ -202,7 +202,7 @@ public class IndexCalculatorTest extends Assert {
         }
     }
 
-    private String[] getDataIndexesByAccount(KapuaId scopeId) {
+    private String[] getDataIndexesByAccount() {
         return buildExpectedResult("1", 1, 2015, 52, 2018, new int[]{ 53, 52, 52, 52 });
     }
 }

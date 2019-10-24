@@ -22,7 +22,6 @@ public class GwtAccessRoleCreator extends GwtEntityCreator {
     private String roleId;
 
     public GwtAccessRoleCreator() {
-        super();
     }
 
     public String getAccessInfoId() {

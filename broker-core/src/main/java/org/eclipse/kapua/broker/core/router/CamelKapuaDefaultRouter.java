@@ -81,20 +81,13 @@ public class CamelKapuaDefaultRouter {
                 exchange.getIn().getHeader(MessageConstants.PROPERTY_ORIGINAL_TOPIC, String.class),
                 previous,
                 exchange.getIn().getHeader(CamelConstants.JMS_CORRELATION_ID));
-        for (EndPoint endPoint : endPointContainer.getEndPoints()) {
-            if (endPoint.matches(exchange, value, previous, properties)) {
-                return endPoint.getEndpoint(exchange, value, previous, properties);
-            }
-        }
-        return null;
+        return endPointContainer.getEndPoints().stream().filter(endPoint -> endPoint.matches(exchange, value, previous, properties)).findFirst().map(endPoint -> endPoint.getEndpoint(exchange, value, previous, properties)).orElse(null);
     }
 
     private void logLoadedEndPoints(List<EndPoint> endPoints) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("\n");
-        for (EndPoint endPoint : endPoints) {
-            endPoint.toLog(buffer, "");
-        }
+        endPoints.forEach(endPoint -> endPoint.toLog(buffer, ""));
         LOG.info(buffer.toString());
     }
 

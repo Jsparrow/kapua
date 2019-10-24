@@ -22,7 +22,7 @@ import java.util.Date;
  * The application message is sent by the {@link org.eclipse.kapua.service.device.registry.Device} to update the platform knowledge about its available features.
  * </p>
  */
-public class KuraAppsMessage extends AbstractKuraAppsBirthMessage<KuraAppsChannel, KuraAppsPayload> implements DeviceLifecycleMessage<KuraAppsChannel, KuraAppsPayload> {
+public class KuraAppsMessage extends AbstractKuraAppsBirthMessage<KuraAppsChannel, KuraAppsPayload> {
 
     /**
      * Constructor

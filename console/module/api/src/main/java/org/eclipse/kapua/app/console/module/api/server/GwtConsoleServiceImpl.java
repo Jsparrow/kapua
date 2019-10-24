@@ -39,10 +39,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GwtConsoleServiceImpl extends KapuaRemoteServiceServlet implements GwtConsoleService {
 
-    private static final ServiceLoader<MainViewDescriptor> MAIN_VIEW_DESCRIPTOR_CLASSES = ServiceLoader.load(MainViewDescriptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(GwtConsoleServiceImpl.class);
+	private static final ServiceLoader<MainViewDescriptor> MAIN_VIEW_DESCRIPTOR_CLASSES = ServiceLoader.load(MainViewDescriptor.class);
     private static final JsonArray MAIN_VIEW_DESCRIPTORS;
     private static JsonReader jsonReader;
 
@@ -51,7 +54,7 @@ public class GwtConsoleServiceImpl extends KapuaRemoteServiceServlet implements 
         try {
             jsonReader = Json.createReader(ResourceUtils.openAsReader(ResourceUtils.getResource("org/eclipse/kapua/app/console/view-descriptors.json"), Charset.forName("UTF-8")));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         MAIN_VIEW_DESCRIPTORS = jsonReader.readArray();
     }
@@ -80,7 +83,7 @@ public class GwtConsoleServiceImpl extends KapuaRemoteServiceServlet implements 
                 JsonObject descriptor = MAIN_VIEW_DESCRIPTORS.getJsonObject(i);
                 if (descriptor.getString("view").equals(viewClass)) {
                     for (JsonValue jsonValue : descriptor.getJsonArray("tabs")) {
-                        if (jsonValue != null && jsonValue instanceof JsonString) {
+                        if (jsonValue instanceof JsonString) {
                             tabs.add((TabDescriptor) Class.forName(((JsonString) jsonValue).getString()).newInstance());
                         }
                     }

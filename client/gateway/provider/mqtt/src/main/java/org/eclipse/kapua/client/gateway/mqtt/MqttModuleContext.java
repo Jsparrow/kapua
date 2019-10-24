@@ -19,8 +19,8 @@ import java.util.concurrent.CompletionStage;
  */
 public interface MqttModuleContext {
 
-    public CompletionStage<?> publishMqtt(String topic, ByteBuffer payload);
+    CompletionStage<?> publishMqtt(String topic, ByteBuffer payload);
 
-    public String getMqttClientId();
+    String getMqttClientId();
 
 }

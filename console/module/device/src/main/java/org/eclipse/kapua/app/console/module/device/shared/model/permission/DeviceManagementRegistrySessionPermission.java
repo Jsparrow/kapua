@@ -20,7 +20,6 @@ public class DeviceManagementRegistrySessionPermission extends GwtSessionPermiss
     private static final long serialVersionUID = 1L;
 
     public DeviceManagementRegistrySessionPermission() {
-        super();
     }
 
     private DeviceManagementRegistrySessionPermission(GwtSessionPermissionAction action) {

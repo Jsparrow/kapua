@@ -51,13 +51,6 @@ public class DatastoreMediator implements MessageStoreMediator,
 
     private static final DatastoreMediator INSTANCE;
 
-    private final Schema esSchema;
-
-    private MessageStoreFacade messageStoreFacade;
-    private ClientInfoRegistryFacade clientInfoStoreFacade;
-    private ChannelInfoRegistryFacade channelInfoStoreFacade;
-    private MetricInfoRegistryFacade metricInfoStoreFacade;
-
     static {
         INSTANCE = new DatastoreMediator();
 
@@ -67,11 +60,21 @@ public class DatastoreMediator implements MessageStoreMediator,
         KapuaLocator.getInstance().getService(MetricInfoRegistryService.class);
     }
 
-    private DatastoreMediator() {
+	private final Schema esSchema;
+
+	private MessageStoreFacade messageStoreFacade;
+
+	private ClientInfoRegistryFacade clientInfoStoreFacade;
+
+	private ChannelInfoRegistryFacade channelInfoStoreFacade;
+
+	private MetricInfoRegistryFacade metricInfoStoreFacade;
+
+	private DatastoreMediator() {
         esSchema = new Schema();
     }
 
-    /**
+	/**
      * Get the {@link DatastoreMediator} instance (singleton)
      *
      * @return
@@ -81,7 +84,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         return INSTANCE;
     }
 
-    /**
+	/**
      * Set the message store facade
      *
      * @param messageStoreFacade
@@ -91,7 +94,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         this.messageStoreFacade = messageStoreFacade;
     }
 
-    /**
+	/**
      * Set the client info facade
      *
      * @param clientInfoStoreFacade
@@ -101,7 +104,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         this.clientInfoStoreFacade = clientInfoStoreFacade;
     }
 
-    /**
+	/**
      * Set the channel info facade
      *
      * @param channelInfoStoreFacade
@@ -111,7 +114,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         this.channelInfoStoreFacade = channelInfoStoreFacade;
     }
 
-    /**
+	/**
      * Set the metric info facade
      *
      * @param metricInfoStoreFacade
@@ -121,7 +124,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         this.metricInfoStoreFacade = metricInfoStoreFacade;
     }
 
-    /*
+	/*
      *
      * Message Store Mediator methods
      */
@@ -130,12 +133,12 @@ public class DatastoreMediator implements MessageStoreMediator,
         return esSchema.synch(scopeId, indexedOn);
     }
 
-    @Override
+	@Override
     public void onUpdatedMappings(KapuaId scopeId, long indexedOn, Map<String, Metric> metrics) throws ClientException {
         esSchema.updateMessageMappings(scopeId, indexedOn, metrics);
     }
 
-    @Override
+	@Override
     public void onAfterMessageStore(MessageInfo messageInfo,
             DatastoreMessage message)
             throws KapuaIllegalArgumentException,
@@ -186,7 +189,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         metricInfoStoreFacade.upstore(messageMetrics);
     }
 
-    /*
+	/*
      *
      * ClientInfo Store Mediator methods
      */
@@ -200,7 +203,7 @@ public class DatastoreMediator implements MessageStoreMediator,
         // otherwise the computational cost for each delete operation will be too high
     }
 
-    /*
+	/*
      *
      * ChannelInfo Store Mediator methods
      */
@@ -208,21 +211,20 @@ public class DatastoreMediator implements MessageStoreMediator,
     public void onBeforeChannelInfoDelete(ChannelInfo channelInfo)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         // nothing to do at the present
         // the datastore coherence will be guarantee by a periodic task that will scan the datastore looking for a no more referenced info registry record
         // otherwise the computational cost for each delete operation will be too high
     }
 
-    @Override
+	@Override
     public void onAfterChannelInfoDelete(ChannelInfo channelInfo) {
         // nothing to do at the present
         // the datastore coherence will be guarantee by a periodic task that will scan the datastore looking for a no more referenced info registry record
         // otherwise the computational cost for each delete operation will be too high
     }
 
-    /*
+	/*
      *
      * MetricInfo Store Mediator methods
      */
@@ -233,21 +235,21 @@ public class DatastoreMediator implements MessageStoreMediator,
         // otherwise the computational cost for each delete operation will be too high
     }
 
-    public void refreshAllIndexes() throws ClientException {
+	public void refreshAllIndexes() throws ClientException {
         messageStoreFacade.refreshAllIndexes();
     }
 
-    public void deleteAllIndexes() throws ClientException {
+	public void deleteAllIndexes() throws ClientException {
         messageStoreFacade.deleteAllIndexes();
         clearCache();
     }
 
-    public void deleteIndexes(String indexExp) throws ClientException {
+	public void deleteIndexes(String indexExp) throws ClientException {
         messageStoreFacade.deleteIndexes(indexExp);
         clearCache();
     }
 
-    public void clearCache() {
+	public void clearCache() {
         DatastoreCacheManager.getInstance().getChannelsCache().invalidateAll();
         DatastoreCacheManager.getInstance().getClientsCache().invalidateAll();
         DatastoreCacheManager.getInstance().getMetricsCache().invalidateAll();

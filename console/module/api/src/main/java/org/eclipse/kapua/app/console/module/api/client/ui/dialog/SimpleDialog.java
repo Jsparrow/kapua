@@ -19,7 +19,6 @@ public abstract class SimpleDialog extends ActionDialog {
     protected ContentPanel bodyPanel;
 
     public SimpleDialog() {
-        super();
     }
 
     @Override

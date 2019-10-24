@@ -53,6 +53,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * JMS event bus implementation
@@ -260,7 +261,7 @@ public class JMSServiceEventBus implements ServiceEventBus, ServiceEventBusDrive
 
         void publish(String address, ServiceEvent kapuaEvent)
                 throws ServiceEventBusException {
-            if (address != null && address.trim().length() > 0) {
+            if (address != null && StringUtils.trim(address).length() > 0) {
                 SenderPool senderPool = senders.get(address);
                 Sender sender = null;
                 try {
@@ -297,35 +298,31 @@ public class JMSServiceEventBus implements ServiceEventBus, ServiceEventBusDrive
                     final Session jmsSession = jmsConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                     Topic jmsTopic = jmsSession.createTopic(subscriptionStr);
                     MessageConsumer jmsConsumer = jmsSession.createSharedDurableConsumer(jmsTopic, subscription.getName());
-                    jmsConsumer.setMessageListener(new MessageListener() {
+                    jmsConsumer.setMessageListener((Message message) -> {
+					    try {
+					        if (message instanceof TextMessage) {
+					            TextMessage textMessage = (TextMessage) message;
+					            final ServiceEvent kapuaEvent = eventBusMarshaler.unmarshal(textMessage.getText());
+					            setSession(kapuaEvent);
+					            KapuaSecurityUtils.doPrivileged(() -> {
+					                try {
+					                    // restore event context
+					                    ServiceEventScope.set(kapuaEvent);
+					                    subscription.getKapuaEventListener().onKapuaEvent(kapuaEvent);
+					                } finally {
+					                    ServiceEventScope.end();
+					                }
+					            });
 
-                        @Override
-                        public void onMessage(Message message) {
-                            try {
-                                if (message instanceof TextMessage) {
-                                    TextMessage textMessage = (TextMessage) message;
-                                    final ServiceEvent kapuaEvent = eventBusMarshaler.unmarshal(textMessage.getText());
-                                    setSession(kapuaEvent);
-                                    KapuaSecurityUtils.doPrivileged(() -> {
-                                        try {
-                                            // restore event context
-                                            ServiceEventScope.set(kapuaEvent);
-                                            subscription.getKapuaEventListener().onKapuaEvent(kapuaEvent);
-                                        } finally {
-                                            ServiceEventScope.end();
-                                        }
-                                    });
-
-                                } else {
-                                    LOGGER.error("Discarding wrong event message type '{}'", message != null ? message.getClass() : "null");
-                                }
-                            } catch (Throwable t) {
-                                LOGGER.error(t.getMessage(), t);
-                                // throwing the exception to prevent the message acknowledging (https://docs.oracle.com/javaee/7/api/javax/jms/Session.html#AUTO_ACKNOWLEDGE)
-                                throw KapuaRuntimeException.internalError(t);
-                            }
-                        }
-                    });
+					        } else {
+					            LOGGER.error("Discarding wrong event message type '{}'", message != null ? message.getClass() : "null");
+					        }
+					    } catch (Throwable t) {
+					        LOGGER.error(t.getMessage(), t);
+					        // throwing the exception to prevent the message acknowledging (https://docs.oracle.com/javaee/7/api/javax/jms/Session.html#AUTO_ACKNOWLEDGE)
+					        throw KapuaRuntimeException.internalError(t);
+					    }
+					});
                 }
                 LOGGER.info("Subscribing to address {} - name {} - pool size {} ...DONE", subscriptionStr, subscription.getName(), CONSUMER_POOL_SIZE);
             } catch (JMSException e) {

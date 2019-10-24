@@ -113,7 +113,7 @@ public class TranslatorAppPackageKuraKapua extends AbstractSimpleTranslatorRespo
 
         KuraResponseCode responseCode = KuraResponseCode.fromResponseCode((Integer) metrics.get(KuraResponseMetrics.EXIT_CODE.getValue()));
 
-        if (!KuraResponseCode.INTERNAL_ERROR.equals(responseCode)) {
+        if (KuraResponseCode.INTERNAL_ERROR != responseCode) {
             if (metrics.get(PackageMetrics.APP_METRIC_PACKAGE_OPERATION_ID.getValue()) != null) {
                 responsePayload.setPackageDownloadOperationId(new KapuaEid(new BigInteger(metrics.get(PackageMetrics.APP_METRIC_PACKAGE_OPERATION_ID.getValue()).toString())));
 

@@ -25,7 +25,6 @@ public abstract class KuraAppChannel extends KuraChannel implements DeviceAppCha
      * Constructor
      */
     public KuraAppChannel() {
-        super();
     }
 
     /**

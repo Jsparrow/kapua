@@ -52,7 +52,6 @@ public class AbstractKuraAppsBirthPayload extends KuraPayload implements DeviceL
      * Constructor
      */
     public AbstractKuraAppsBirthPayload() {
-        super();
     }
 
     /**
@@ -112,8 +111,6 @@ public class AbstractKuraAppsBirthPayload extends KuraPayload implements DeviceL
                                         String modemImei,
                                         String modemImsi,
                                         String modemIccid) {
-        super();
-
         if (uptime != null) {
             getMetrics().put(UPTIME, uptime);
         }

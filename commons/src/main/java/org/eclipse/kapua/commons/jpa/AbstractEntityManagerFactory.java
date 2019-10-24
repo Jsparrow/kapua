@@ -75,11 +75,9 @@ public abstract class AbstractEntityManagerFactory implements org.eclipse.kapua.
         }
 
         //
-        // Set unique constrains for this persistence unit
-        // FIXME: this is needed? With EclipseLink we lost the ConstraintViolationException.
-        for (Entry<String, String> uc : uniqueConstraints.entrySet()) {
-            UNIQUE_CONTRAINTS.put(uc.getKey(), uc.getValue());
-        }
+		// Set unique constrains for this persistence unit
+		// FIXME: this is needed? With EclipseLink we lost the ConstraintViolationException.
+		uniqueConstraints.entrySet().forEach(uc -> UNIQUE_CONTRAINTS.put(uc.getKey(), uc.getValue()));
     }
 
     // Entity manager factory methods
@@ -91,7 +89,8 @@ public abstract class AbstractEntityManagerFactory implements org.eclipse.kapua.
      * @throws KapuaException If {@link EntityManagerFactory#createEntityManager()} cannot create the {@link EntityManager}
      * @since 1.0.0
      */
-    public EntityManager createEntityManager()
+    @Override
+	public EntityManager createEntityManager()
             throws KapuaException {
         return new EntityManager(entityManagerFactory.createEntityManager());
     }

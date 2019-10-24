@@ -20,11 +20,6 @@ package org.eclipse.kapua.client.gateway;
  */
 public interface Application extends AutoCloseable {
 
-    public interface Builder {
-
-        public Application build();
-    }
-
     /**
      * Lookup a data controller to an application topic
      *
@@ -32,9 +27,9 @@ public interface Application extends AutoCloseable {
      *            the topic the controller is bound to, must never be {@code null}
      * @return the data controller
      */
-    public Data data(Topic topic);
+    Data data(Topic topic);
 
-    /**
+	/**
      * Lookup a transport controller
      * <p>
      * A transport controller for the client's underlying transport mechanism.
@@ -46,5 +41,10 @@ public interface Application extends AutoCloseable {
      *
      * @return the transport controller
      */
-    public Transport transport();
+    Transport transport();
+
+	public interface Builder {
+
+        Application build();
+    }
 }

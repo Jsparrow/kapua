@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link ApiKeyCredentials} based {@link AuthenticatingRealm} implementation.
@@ -84,14 +85,15 @@ public class JwtAuthenticatingRealm extends AuthenticatingRealm implements Destr
 
     @Override
     public void destroy() throws Exception {
-        if (jwtProcessor != null) {
-            jwtProcessor.close();
-            jwtProcessor = null;
-        }
+        if (jwtProcessor == null) {
+			return;
+		}
+		jwtProcessor.close();
+		jwtProcessor = null;
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
         //
         // Extract credentials
         JwtCredentialsImpl token = (JwtCredentialsImpl) authenticationToken;
@@ -132,7 +134,7 @@ public class JwtAuthenticatingRealm extends AuthenticatingRealm implements Destr
 
         // Check disabled
 
-        if (UserStatus.DISABLED.equals(user.getStatus())) {
+        if (UserStatus.DISABLED == user.getStatus()) {
             throw new DisabledAccountException();
         }
 
@@ -194,7 +196,7 @@ public class JwtAuthenticatingRealm extends AuthenticatingRealm implements Destr
             throw new ShiroException("Failed to parse JWT", e);
         }
 
-        if (id == null || id.isEmpty()) {
+        if (id == null || StringUtils.isEmpty(id)) {
             throw new ShiroException("'subject' missing on JWT");
         }
 
@@ -202,8 +204,7 @@ public class JwtAuthenticatingRealm extends AuthenticatingRealm implements Destr
     }
 
     @Override
-    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info)
-            throws AuthenticationException {
+    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info) {
         final LoginAuthenticationInfo kapuaInfo = (LoginAuthenticationInfo) info;
 
         super.assertCredentialsMatch(authcToken, info);

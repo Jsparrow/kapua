@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.apache.commons.lang3.StringUtils;
 
 public class FileServlet extends KapuaHttpServlet {
 
@@ -71,9 +72,9 @@ public class FileServlet extends KapuaHttpServlet {
         }
         // END XSRF security check
 
-        if (reqPathInfo.equals("/command")) {
+        if ("/command".equals(reqPathInfo)) {
             doPostCommand(kapuaFormFields, resp);
-        } else if (reqPathInfo.equals("/configuration/snapshot")) {
+        } else if ("/configuration/snapshot".equals(reqPathInfo)) {
             doPostConfigurationSnapshot(kapuaFormFields, resp);
         } else {
             resp.sendError(404);
@@ -88,11 +89,11 @@ public class FileServlet extends KapuaHttpServlet {
             String scopeIdString = kapuaFormFields.get("scopeIdString");
             String deviceIdString = kapuaFormFields.get("deviceIdString");
 
-            if (scopeIdString == null || scopeIdString.isEmpty()) {
+            if (scopeIdString == null || StringUtils.isEmpty(scopeIdString)) {
                 throw new IllegalArgumentException("scopeIdString");
             }
 
-            if (deviceIdString == null || deviceIdString.isEmpty()) {
+            if (deviceIdString == null || StringUtils.isEmpty(deviceIdString)) {
                 throw new IllegalArgumentException("deviceIdString");
             }
 
@@ -150,15 +151,15 @@ public class FileServlet extends KapuaHttpServlet {
             final String password = kapuaFormFields.get("password");
             final String timeoutString = kapuaFormFields.get("timeout");
 
-            if (scopeIdString == null || scopeIdString.isEmpty()) {
+            if (scopeIdString == null || StringUtils.isEmpty(scopeIdString)) {
                 throw new IllegalArgumentException("scopeId");
             }
 
-            if (deviceIdString == null || deviceIdString.isEmpty()) {
+            if (deviceIdString == null || StringUtils.isEmpty(deviceIdString)) {
                 throw new IllegalArgumentException("deviceId");
             }
 
-            if (command == null || command.isEmpty()) {
+            if (command == null || StringUtils.isEmpty(command)) {
                 throw new IllegalArgumentException("command");
             }
 
@@ -167,11 +168,12 @@ public class FileServlet extends KapuaHttpServlet {
             }
 
             Integer timeout = null;
-            if (timeoutString != null && !timeoutString.isEmpty()) {
+            if (timeoutString != null && !StringUtils.isEmpty(timeoutString)) {
                 try {
                     timeout = Integer.parseInt(timeoutString);
                 } catch (NumberFormatException nfe) {
-                    throw new IllegalArgumentException("timeout");
+                    logger.error(nfe.getMessage(), nfe);
+					throw new IllegalArgumentException("timeout");
                 }
             }
 
@@ -195,7 +197,7 @@ public class FileServlet extends KapuaHttpServlet {
             }
 
             commandInput.setCommand(cmd);
-            commandInput.setPassword(password == null || password.isEmpty() ? null : password);
+            commandInput.setPassword(password == null || StringUtils.isEmpty(password) ? null : password);
             commandInput.setArguments(args);
             commandInput.setTimeout(timeout);
             commandInput.setWorkingDir("/tmp/");
@@ -247,7 +249,7 @@ public class FileServlet extends KapuaHttpServlet {
             throws ServletException, IOException {
         String reqPathInfo = request.getPathInfo();
 
-        if (reqPathInfo.startsWith("/icons")) {
+        if (StringUtils.startsWith(reqPathInfo, "/icons")) {
             doGetIconResource(request, response);
         } else {
             response.sendError(404);
@@ -258,7 +260,7 @@ public class FileServlet extends KapuaHttpServlet {
             throws ServletException, IOException {
         final String id = request.getParameter("id");
 
-        if (id == null || id.isEmpty()) {
+        if (id == null || StringUtils.isEmpty(id)) {
             throw new IllegalArgumentException("id");
         }
 
@@ -270,7 +272,7 @@ public class FileServlet extends KapuaHttpServlet {
 
         StringBuilder filePathSb = new StringBuilder(tmpPath);
 
-        if (!tmpPath.endsWith("/")) {
+        if (!StringUtils.endsWith(tmpPath, "/")) {
             filePathSb.append("/");
         }
 

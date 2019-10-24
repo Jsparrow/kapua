@@ -21,7 +21,35 @@ import java.util.Objects;
 
 public abstract class AbstractCommandApplication extends AbstractDefaultApplication {
 
-    public static class Result {
+    public AbstractCommandApplication() {
+        super("CMD-V1");
+    }
+
+	public abstract Result executeCommand(String command);
+
+	@Override
+    protected void processRequest(final Request request) {
+        if (!"EXEC/command".equals(request.getMessage().getTopic().render(0, 2))) {
+            request.replyNotFound();
+            return;
+        }
+
+        final String command = Metrics.getAsString(request.getMetrics(), "command.command");
+
+        final Result resultValue = executeCommand(command);
+        if (resultValue == null) {
+            throw new IllegalStateException("Failed to execute command");
+        }
+
+        final Map<String, Object> result = new HashMap<>();
+        result.put("command.stdout", resultValue.getStandardOutput());
+        result.put("command.stderr", resultValue.getStandardError());
+        result.put("command.exit.code", resultValue.getReturnCode());
+        result.put("command.timedout", resultValue.isTimeout());
+        request.replySuccess().send(result);
+    }
+
+	public static class Result {
 
         private final String standardOutput;
         private final String standardError;
@@ -54,34 +82,6 @@ public abstract class AbstractCommandApplication extends AbstractDefaultApplicat
         public boolean isTimeout() {
             return timeout;
         }
-    }
-
-    public abstract Result executeCommand(String command);
-
-    public AbstractCommandApplication() {
-        super("CMD-V1");
-    }
-
-    @Override
-    protected void processRequest(final Request request) {
-        if (!"EXEC/command".equals(request.getMessage().getTopic().render(0, 2))) {
-            request.replyNotFound();
-            return;
-        }
-
-        final String command = Metrics.getAsString(request.getMetrics(), "command.command");
-
-        final Result resultValue = executeCommand(command);
-        if (resultValue == null) {
-            throw new IllegalStateException("Failed to execute command");
-        }
-
-        final Map<String, Object> result = new HashMap<>();
-        result.put("command.stdout", resultValue.getStandardOutput());
-        result.put("command.stderr", resultValue.getStandardError());
-        result.put("command.exit.code", resultValue.getReturnCode());
-        result.put("command.timedout", resultValue.isTimeout());
-        request.replySuccess().send(result);
     }
 
 }

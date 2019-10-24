@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
 @ScenarioScoped
 public class BasicSteps extends TestBase {
@@ -169,7 +170,7 @@ public class BasicSteps extends TestBase {
 
     @Given("^System property \"(.*)\" with value \"(.*)\"$")
     public void setSystemProperty(String key, String value) {
-        if ("null".equalsIgnoreCase(value)) {
+        if (StringUtils.equalsIgnoreCase("null", value)) {
             System.clearProperty(key);
         } else {
             System.setProperty(key, value);

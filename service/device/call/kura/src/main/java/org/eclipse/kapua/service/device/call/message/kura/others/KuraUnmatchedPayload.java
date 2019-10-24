@@ -18,6 +18,6 @@ import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 /**
  * Kura device unmatched message payload implementation.
  */
-public class KuraUnmatchedPayload extends KuraPayload implements DevicePayload {
+public class KuraUnmatchedPayload extends KuraPayload {
 
 }

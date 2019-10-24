@@ -20,7 +20,28 @@ import org.junit.experimental.categories.Category;
 @Category(JUnitTests.class)
 public class AbstractKapuaSettingTest {
 
-    private static class TestSettingKey implements SettingKey {
+    @Test
+    public void shouldReadPathFromEnv() {
+        // When
+        String path = new TestSetting().property("PATH");
+
+        // Then
+        Assertions.assertThat(path).isNotEmpty();
+    }
+
+	@Test
+    public void shouldReadEnvUsingDotNotation() {
+        // Given
+        System.setProperty("FOO_BAR_BAZ", "qux");
+
+        // When
+        String path = new TestSetting().property("foo.bar.baz");
+
+        // Then
+        Assertions.assertThat(path).isEqualTo("qux");
+    }
+
+	private static class TestSettingKey implements SettingKey {
 
         private String key;
 
@@ -35,35 +56,14 @@ public class AbstractKapuaSettingTest {
         }
     }
 
-    @Test
-    public void shouldReadPathFromEnv() {
-        // When
-        String path = new TestSetting().property("PATH");
-
-        // Then
-        Assertions.assertThat(path).isNotEmpty();
-    }
-
-    @Test
-    public void shouldReadEnvUsingDotNotation() {
-        // Given
-        System.setProperty("FOO_BAR_BAZ", "qux");
-
-        // When
-        String path = new TestSetting().property("foo.bar.baz");
-
-        // Then
-        Assertions.assertThat(path).isEqualTo("qux");
-    }
-
     static class TestSetting extends AbstractKapuaSetting<TestSettingKey> {
-
-        String property(String key) {
-            return config.getString(key);
-        }
 
         protected TestSetting() {
             super("test.properties");
+        }
+
+		String property(String key) {
+            return config.getString(key);
         }
 
     }

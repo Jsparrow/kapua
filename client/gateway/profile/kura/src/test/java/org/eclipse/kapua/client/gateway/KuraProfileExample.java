@@ -44,9 +44,7 @@ public final class KuraProfileExample {
 
                 // subscribe to a topic
 
-                application.data(Topic.of("my", "topic")).subscribe(message -> {
-                    System.out.format("Received: %s%n", message);
-                });
+                application.data(Topic.of("my", "topic")).subscribe(message -> System.out.format("Received: %s%n", message));
 
                 // example payload
 
@@ -80,9 +78,7 @@ public final class KuraProfileExample {
 
                     // send
 
-                    sender.send(Payload.of("counter", i)).whenComplete((value, error) -> {
-                        System.out.format("Send complete - value: %s, error: %s%n", value, error);
-                    });
+                    sender.send(Payload.of("counter", i)).whenComplete((value, error) -> System.out.format("Send complete - value: %s, error: %s%n", value, error));
 
                     Thread.sleep(1_000);
                 }

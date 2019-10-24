@@ -27,7 +27,6 @@ public class CredentialQueryImpl extends AbstractKapuaQuery<Credential> implemen
      * Constructor
      */
     public CredentialQueryImpl() {
-        super();
     }
 
     /**

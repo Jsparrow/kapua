@@ -38,21 +38,19 @@ public class TransportAsync implements Transport {
     }
 
     public synchronized Future<?> handleConnected() {
-        if (!state) {
-            state = true;
-            return fireEvent(true);
-        }
-
-        return CompletableFuture.completedFuture(null);
+        if (state) {
+			return CompletableFuture.completedFuture(null);
+		}
+		state = true;
+		return fireEvent(true);
     }
 
     public synchronized Future<?> handleDisconnected() {
-        if (state) {
-            state = false;
-            return fireEvent(false);
-        }
-
-        return CompletableFuture.completedFuture(null);
+        if (!state) {
+			return CompletableFuture.completedFuture(null);
+		}
+		state = false;
+		return fireEvent(false);
     }
 
     @Override

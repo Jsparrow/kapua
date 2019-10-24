@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The implementation of this class is inspired from the org.eclipse.equinox.metatype.impl.ValueTokenizer class
@@ -56,12 +57,12 @@ public class ValueTokenizer {
             return;
         }
         // The trick is to strip out unescaped whitespace characters before and
-        // after the input string as well as before and after each
-        // individual token within the input string without losing any escaped
-        // whitespace characters. Whitespace between two non-whitespace
-        // characters may or may not be escaped. Also, any character may be
-        // escaped. The escape character is '\'. The delimiter is ','.
-        StringBuffer buffer = new StringBuffer();
+		// after the input string as well as before and after each
+		// individual token within the input string without losing any escaped
+		// whitespace characters. Whitespace between two non-whitespace
+		// characters may or may not be escaped. Also, any character may be
+		// escaped. The escape character is '\'. The delimiter is ','.
+		StringBuilder buffer = new StringBuilder();
         // Loop over the characters within the input string and extract each
         // value token.
         for (int i = 0; i < valuesStr.length(); i++) {
@@ -118,7 +119,7 @@ public class ValueTokenizer {
                                 continue;
                             }
                             if (c2 != DELIMITER) {
-                                buffer.append(valuesStr.substring(i, j));
+                                buffer.append(StringUtils.substring(valuesStr, i, j));
                             }
                             // Let loop counter i catch up with the inner loop but keep in
                             // mind it will still be incremented at the end of the outer loop.

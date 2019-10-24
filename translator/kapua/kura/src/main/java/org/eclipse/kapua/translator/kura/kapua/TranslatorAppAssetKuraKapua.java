@@ -116,11 +116,11 @@ public class TranslatorAppAssetKuraKapua extends AbstractSimpleTranslatorRespons
                 DeviceAssetFactory deviceAssetFactory = locator.getFactory(DeviceAssetFactory.class);
                 DeviceAssets deviceAssets = deviceAssetFactory.newAssetListResult();
                 KuraAssets kuraAssets = KuraAssets.readJsonNode(jsonNode);
-                for (KuraAsset kuraAsset : kuraAssets.getAssets()) {
+                kuraAssets.getAssets().forEach(kuraAsset -> {
                     DeviceAsset deviceAsset = deviceAssetFactory.newDeviceAsset();
                     deviceAsset.setName(kuraAsset.getName());
 
-                    for (KuraAssetChannel kuraAssetChannel : kuraAsset.getChannels()) {
+                    kuraAsset.getChannels().forEach(kuraAssetChannel -> {
                         DeviceAssetChannel deviceAssetChannel = deviceAssetFactory.newDeviceAssetChannel();
 
                         deviceAssetChannel.setName(kuraAssetChannel.getName());
@@ -137,10 +137,10 @@ public class TranslatorAppAssetKuraKapua extends AbstractSimpleTranslatorRespons
                         deviceAssetChannel.setError(kuraAssetChannel.getError());
 
                         deviceAsset.getChannels().add(deviceAssetChannel);
-                    }
+                    });
 
                     deviceAssets.getAssets().add(deviceAsset);
-                }
+                });
 
                 assetResponsePayload.setBody(XmlUtil.marshal(deviceAssets).getBytes());
 

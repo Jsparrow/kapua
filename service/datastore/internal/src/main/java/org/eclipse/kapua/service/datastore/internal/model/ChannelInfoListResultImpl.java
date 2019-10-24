@@ -30,7 +30,6 @@ public class ChannelInfoListResultImpl extends AbstractStorableListResult<Channe
      * Construct a channel info result list
      */
     public ChannelInfoListResultImpl() {
-        super();
     }
 
     /**

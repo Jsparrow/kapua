@@ -20,7 +20,27 @@ import org.eclipse.kapua.client.gateway.mqtt.MqttNamespace;
 
 public class KuraNamespace implements MqttNamespace {
 
-    public static final class Builder {
+    private final String accountName;
+
+	private KuraNamespace(final String accountName) {
+        this.accountName = accountName;
+    }
+
+	@Override
+    public String dataTopic(final String clientId, final String applicationId, final Topic topic) {
+        Topic.ensureNotSpecial(clientId);
+        Topic.ensureNotSpecial(applicationId);
+
+        return Stream.concat(
+                Stream.of(
+                        accountName,
+                        clientId,
+                        applicationId),
+                topic.stream())
+                .collect(Collectors.joining("/"));
+    }
+
+	public static final class Builder {
 
         private String accountName;
 
@@ -43,26 +63,6 @@ public class KuraNamespace implements MqttNamespace {
 
             return new KuraNamespace(accountName);
         }
-    }
-
-    private final String accountName;
-
-    private KuraNamespace(final String accountName) {
-        this.accountName = accountName;
-    }
-
-    @Override
-    public String dataTopic(final String clientId, final String applicationId, final Topic topic) {
-        Topic.ensureNotSpecial(clientId);
-        Topic.ensureNotSpecial(applicationId);
-
-        return Stream.concat(
-                Stream.of(
-                        accountName,
-                        clientId,
-                        applicationId),
-                topic.stream())
-                .collect(Collectors.joining("/"));
     }
 
 }

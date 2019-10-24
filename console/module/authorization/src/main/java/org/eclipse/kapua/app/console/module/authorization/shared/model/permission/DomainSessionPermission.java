@@ -18,7 +18,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.session.GwtSessionP
 public class DomainSessionPermission extends GwtSessionPermission {
 
     protected DomainSessionPermission() {
-        super();
     }
 
     private DomainSessionPermission(GwtSessionPermissionAction action) {

@@ -28,7 +28,7 @@ public interface GwtDomainRegistryService extends RemoteService {
      * @return a list of {@link org.eclipse.kapua.service.authorization.domain.Domain} objects
      * @throws GwtKapuaException
      */
-    public List<GwtDomain> findAll()
+    List<GwtDomain> findAll()
             throws GwtKapuaException;
 
     /**
@@ -38,7 +38,7 @@ public interface GwtDomainRegistryService extends RemoteService {
      * @return a list of {@link org.eclipse.kapua.model.domain.Actions} objects
      * @throws GwtKapuaException
      */
-    public List<GwtAction> findActionsByDomainName(String domainName)
+    List<GwtAction> findActionsByDomainName(String domainName)
             throws GwtKapuaException;
 
 }

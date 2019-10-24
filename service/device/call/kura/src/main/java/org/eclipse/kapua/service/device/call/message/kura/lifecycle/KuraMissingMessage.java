@@ -29,7 +29,6 @@ public class KuraMissingMessage extends KuraMessage<KuraMissingChannel, KuraMiss
      * Constructor
      */
     public KuraMissingMessage() {
-        super();
     }
 
     /**

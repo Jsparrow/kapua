@@ -15,7 +15,7 @@ import com.extjs.gxt.ui.client.data.PagingLoader;
 
 public interface KapuaPagingLoader<D extends KapuaPagingLoadResult<?>> extends PagingLoader<D> {
 
-    public int getVirtualOffset();
+    int getVirtualOffset();
 
-    public void setVirtualOffset(int offset);
+    void setVirtualOffset(int offset);
 }

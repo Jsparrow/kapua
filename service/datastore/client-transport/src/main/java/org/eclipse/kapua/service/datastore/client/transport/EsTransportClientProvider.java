@@ -30,6 +30,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Elasticsearch transport client implementation.<br>
@@ -54,110 +55,6 @@ public class EsTransportClientProvider implements ClientProvider<Client> {
 
     private TransportClient client;
 
-    private static int getDefaultPort() {
-        return ClientSettings.getInstance().getInt(ClientSettingsKey.ELASTICSEARCH_PORT, DEFAULT_PORT);
-    }
-
-    /**
-     * Get the {@link EsTransportClientProvider} instance
-     * 
-     * @return
-     * @throws ClientUnavailableException
-     */
-    public static EsTransportClientProvider getInstance() throws ClientUnavailableException {
-        if (instance == null) {
-            throw new ClientUnavailableException(PROVIDER_NOT_INITIALIZED_MSG);
-        }
-        return instance;
-    }
-
-    /**
-     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
-     * The nodes addresses, the cluster name and other parameters are read from the configuration file.<br>
-     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
-     * before initializing the new one.</b>
-     * 
-     * @return
-     * @throws ClientUnavailableException
-     */
-    public static EsTransportClientProvider init() throws ClientUnavailableException {
-        synchronized (EsTransportClientProvider.class) {
-            logger.info(">>> Initializing ES transport client...");
-            closeIfInstanceInitialized();
-            instance = new EsTransportClientProvider();
-            logger.info(">>> Initializing ES transport client... DONE");
-        }
-        return instance;
-    }
-
-    /**
-     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
-     * The nodes addresses, the cluster name and other parameters are overwritten with the provided settings.<br>
-     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
-     * before initializing the new one.</b>
-     * 
-     * @param settings
-     * @throws ClientUnavailableException
-     */
-    public static void init(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
-        synchronized (EsTransportClientProvider.class) {
-            logger.info(">>> Initializing ES transport client...");
-            closeIfInstanceInitialized();
-            instance = new EsTransportClientProvider(settings);
-            logger.info(">>> Initializing ES transport client... DONE");
-        }
-    }
-
-    /**
-     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
-     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
-     * before initializing the new one.</b>
-     * 
-     * @param addresses
-     *            nodes addresses list
-     * @param clustername
-     *            ES cluster name
-     * @throws ClientUnavailableException
-     */
-    public static void init(List<InetSocketAddress> addresses, String clustername) throws ClientUnavailableException {
-        synchronized (EsTransportClientProvider.class) {
-            logger.info(">>> Initializing ES transport client...");
-            closeIfInstanceInitialized();
-            instance = new EsTransportClientProvider(addresses, clustername);
-            logger.info(">>> Initializing ES transport client... DONE");
-        }
-    }
-
-    private static void closeIfInstanceInitialized() {
-        if (instance != null) {
-            logger.warn(PROVIDER_ALREADY_INITIALIZED_MSG);
-            close();
-        }
-    }
-
-    /**
-     * Close the ES transport client
-     */
-    public static void close() {
-        synchronized (EsTransportClientProvider.class) {
-            if (instance != null) {
-                instance.closeClient();
-            } else {
-                logger.warn(PROVIDER_CANNOT_CLOSE_CLIENT_MSG);
-            }
-        }
-    }
-
-    private void closeClient() {
-        if (client != null) {
-            try {
-                client.close();
-            } finally {
-                client = null;
-            }
-        }
-    }
-
     /**
      * Create the Elasticsearch transport client based on the default configuration settings ({@link ClientSettingsKey})
      *
@@ -167,7 +64,7 @@ public class EsTransportClientProvider implements ClientProvider<Client> {
         this(ClientSettings.getInstance());
     }
 
-    /**
+	/**
      * Create the Elasticsearch transport client based on the provided configuration settings
      * 
      * @param settings
@@ -177,7 +74,7 @@ public class EsTransportClientProvider implements ClientProvider<Client> {
         this(parseAddresses(settings), settings.getString(ClientSettingsKey.ELASTICSEARCH_CLUSTER));
     }
 
-    /**
+	/**
      * Create the Elasticsearch transport client based on the provided configuration addresses and clustername
      * 
      * @param addresses
@@ -203,9 +100,159 @@ public class EsTransportClientProvider implements ClientProvider<Client> {
 
     }
 
-    @Override
+	private static int getDefaultPort() {
+        return ClientSettings.getInstance().getInt(ClientSettingsKey.ELASTICSEARCH_PORT, DEFAULT_PORT);
+    }
+
+	/**
+     * Get the {@link EsTransportClientProvider} instance
+     * 
+     * @return
+     * @throws ClientUnavailableException
+     */
+    public static EsTransportClientProvider getInstance() throws ClientUnavailableException {
+        if (instance == null) {
+            throw new ClientUnavailableException(PROVIDER_NOT_INITIALIZED_MSG);
+        }
+        return instance;
+    }
+
+	/**
+     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
+     * The nodes addresses, the cluster name and other parameters are read from the configuration file.<br>
+     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
+     * before initializing the new one.</b>
+     * 
+     * @return
+     * @throws ClientUnavailableException
+     */
+    public static EsTransportClientProvider init() throws ClientUnavailableException {
+        synchronized (EsTransportClientProvider.class) {
+            logger.info(">>> Initializing ES transport client...");
+            closeIfInstanceInitialized();
+            instance = new EsTransportClientProvider();
+            logger.info(">>> Initializing ES transport client... DONE");
+        }
+        return instance;
+    }
+
+	/**
+     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
+     * The nodes addresses, the cluster name and other parameters are overwritten with the provided settings.<br>
+     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
+     * before initializing the new one.</b>
+     * 
+     * @param settings
+     * @throws ClientUnavailableException
+     */
+    public static void init(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
+        synchronized (EsTransportClientProvider.class) {
+            logger.info(">>> Initializing ES transport client...");
+            closeIfInstanceInitialized();
+            instance = new EsTransportClientProvider(settings);
+            logger.info(">>> Initializing ES transport client... DONE");
+        }
+    }
+
+	/**
+     * Initialize the {@link EsTransportClientProvider} singleton instance.<br>
+     * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
+     * before initializing the new one.</b>
+     * 
+     * @param addresses
+     *            nodes addresses list
+     * @param clustername
+     *            ES cluster name
+     * @throws ClientUnavailableException
+     */
+    public static void init(List<InetSocketAddress> addresses, String clustername) throws ClientUnavailableException {
+        synchronized (EsTransportClientProvider.class) {
+            logger.info(">>> Initializing ES transport client...");
+            closeIfInstanceInitialized();
+            instance = new EsTransportClientProvider(addresses, clustername);
+            logger.info(">>> Initializing ES transport client... DONE");
+        }
+    }
+
+	private static void closeIfInstanceInitialized() {
+        if (instance == null) {
+			return;
+		}
+		logger.warn(PROVIDER_ALREADY_INITIALIZED_MSG);
+		close();
+    }
+
+	/**
+     * Close the ES transport client
+     */
+    public static void close() {
+        synchronized (EsTransportClientProvider.class) {
+            if (instance != null) {
+                instance.closeClient();
+            } else {
+                logger.warn(PROVIDER_CANNOT_CLOSE_CLIENT_MSG);
+            }
+        }
+    }
+
+	private void closeClient() {
+        if (client != null) {
+            try {
+                client.close();
+            } finally {
+                client = null;
+            }
+        }
+    }
+
+	@Override
     public TransportClient getClient() {
         return client;
+    }
+
+	static List<InetSocketAddress> parseAddresses(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
+
+        // first try the legacy map approach
+        final Map<String, String> map = settings.getMap(String.class, ClientSettingsKey.ELASTICSEARCH_NODE, "[0-9]+");
+        if (map != null && !map.isEmpty()) {
+            return parseAndAdd(map.values().stream());
+        }
+
+        // next try the list
+        final List<String> nodes = settings.getList(String.class, ClientSettingsKey.ELASTICSEARCH_NODES);
+        if (nodes != null && !nodes.isEmpty()) {
+            return parseAndAdd(nodes.stream());
+        }
+
+        // now try the single node approach
+        final String node = settings.getString(ClientSettingsKey.ELASTICSEARCH_NODE);
+        if (node != null && !StringUtils.isEmpty(node)) {
+            return parseAndAdd(Stream.of(node));
+        }
+
+        return Collections.emptyList();
+    }
+
+	static List<InetSocketAddress> parseAndAdd(Stream<String> stream) {
+        return stream.map(EsTransportClientProvider::parseAddress).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+	static InetSocketAddress parseAddress(String node) {
+        if (node == null || StringUtils.isEmpty(node)) {
+            return null;
+        }
+
+        final int idx = node.lastIndexOf(':');
+        if (idx < 0) {
+            return new InetSocketAddress(node, getDefaultPort());
+        } else {
+            final String host = StringUtils.substring(node, 0, idx);
+            final String port = StringUtils.substring(node, idx + 1);
+            if (StringUtils.isEmpty(port)) {
+                return new InetSocketAddress(host, getDefaultPort());
+            }
+            return new InetSocketAddress(host, Integer.parseInt(port));
+        }
     }
 
     // static TransportClient getClient(List<InetSocketAddress> addresses, String clustername) throws ClientUnavailableException, UnknownHostException {
@@ -237,49 +284,6 @@ public class EsTransportClientProvider implements ClientProvider<Client> {
     // }
     // }
 
-    static List<InetSocketAddress> parseAddresses(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
-
-        // first try the legacy map approach
-        final Map<String, String> map = settings.getMap(String.class, ClientSettingsKey.ELASTICSEARCH_NODE, "[0-9]+");
-        if (map != null && !map.isEmpty()) {
-            return parseAndAdd(map.values().stream());
-        }
-
-        // next try the list
-        final List<String> nodes = settings.getList(String.class, ClientSettingsKey.ELASTICSEARCH_NODES);
-        if (nodes != null && !nodes.isEmpty()) {
-            return parseAndAdd(nodes.stream());
-        }
-
-        // now try the single node approach
-        final String node = settings.getString(ClientSettingsKey.ELASTICSEARCH_NODE);
-        if (node != null && !node.isEmpty()) {
-            return parseAndAdd(Stream.of(node));
-        }
-
-        return Collections.emptyList();
-    }
-
-    static List<InetSocketAddress> parseAndAdd(Stream<String> stream) {
-        return stream.map(EsTransportClientProvider::parseAddress).filter(Objects::nonNull).collect(Collectors.toList());
-    }
-
-    static InetSocketAddress parseAddress(String node) {
-        if (node == null || node.isEmpty()) {
-            return null;
-        }
-
-        final int idx = node.lastIndexOf(':');
-        if (idx < 0) {
-            return new InetSocketAddress(node, getDefaultPort());
-        } else {
-            final String host = node.substring(0, idx);
-            final String port = node.substring(idx + 1);
-            if (port.isEmpty()) {
-                return new InetSocketAddress(host, getDefaultPort());
-            }
-            return new InetSocketAddress(host, Integer.parseInt(port));
-        }
-    }
+    
 
 }

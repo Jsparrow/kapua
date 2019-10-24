@@ -27,7 +27,6 @@ public class AccessRoleQueryImpl extends AbstractKapuaQuery<AccessRole> implemen
      * Constructor
      */
     public AccessRoleQueryImpl() {
-        super();
     }
 
     /**

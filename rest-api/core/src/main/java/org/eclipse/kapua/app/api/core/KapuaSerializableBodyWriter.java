@@ -51,7 +51,7 @@ public class KapuaSerializableBodyWriter implements MessageBodyWriter<KapuaSeria
     @Override
     public void writeTo(KapuaSerializable t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
             MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-            throws IOException, WebApplicationException {
+            throws IOException {
         try {
             if (providers == null) {
                 throw new WebApplicationException("Unable to find any provider.");

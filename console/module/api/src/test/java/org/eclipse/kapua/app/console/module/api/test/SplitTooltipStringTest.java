@@ -16,6 +16,7 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.apache.commons.lang3.StringUtils;
 
 @Category(JUnitTests.class)
 public class SplitTooltipStringTest {
@@ -24,6 +25,6 @@ public class SplitTooltipStringTest {
     public void testStringSplit() {
         String inputString = "testtesttesttest";
         String result = SplitTooltipStringUtil.splitTooltipString(inputString, 10);
-        Assert.assertTrue(result.contains("</br>"));
+        Assert.assertTrue(StringUtils.contains(result, "</br>"));
     }
 }

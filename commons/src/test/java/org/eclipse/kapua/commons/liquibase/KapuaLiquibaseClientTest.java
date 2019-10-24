@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 @Category(JUnitTests.class)
 public class KapuaLiquibaseClientTest {
@@ -127,7 +128,7 @@ public class KapuaLiquibaseClientTest {
         ResultSet sqlResults = connection.getMetaData().getTables(null, null, "%", types);
 
         while (sqlResults.next()) {
-            String sqlStatement = String.format("DROP TABLE IF EXISTS %s", sqlResults.getString("TABLE_NAME").toUpperCase());
+            String sqlStatement = String.format("DROP TABLE IF EXISTS %s", StringUtils.upperCase(sqlResults.getString("TABLE_NAME")));
             connection.prepareStatement(sqlStatement).execute();
         }
     }

@@ -47,10 +47,10 @@ public class GwtKapuaTagModelConverter {
 
         // Predicates conversion
         AndPredicate andPredicate = query.andPredicate();
-        if (gwtTagQuery.getName() != null && !gwtTagQuery.getName().isEmpty()) {
+        if (gwtTagQuery.getName() != null && !StringUtils.isEmpty(gwtTagQuery.getName())) {
             andPredicate.and(query.attributePredicate(TagAttributes.NAME, gwtTagQuery.getName(), Operator.LIKE));
         }
-        if (gwtTagQuery.getDescription() != null && !gwtTagQuery.getDescription().isEmpty()) {
+        if (gwtTagQuery.getDescription() != null && !StringUtils.isEmpty(gwtTagQuery.getDescription())) {
             andPredicate.and(query.attributePredicate(TagAttributes.DESCRIPTION, gwtTagQuery.getDescription(), Operator.LIKE));
         }
         if (!gwtTagQuery.getIds().isEmpty()) {
@@ -66,12 +66,12 @@ public class GwtKapuaTagModelConverter {
 
         // Sort order conversion
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? TagAttributes.NAME : loadConfig.getSortField();
-        if (sortField.equals("tagName")) {
+        if ("tagName".equals(sortField)) {
             sortField = TagAttributes.NAME;
-        } else if (sortField.equals("createdOnFormatted")) {
+        } else if ("createdOnFormatted".equals(sortField)) {
             sortField = TagAttributes.CREATED_ON;
         }
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
 
         // Query conversion

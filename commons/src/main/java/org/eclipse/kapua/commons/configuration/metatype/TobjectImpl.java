@@ -51,7 +51,7 @@ public class TobjectImpl implements KapuaTobject {
     protected List<TattributeImpl> attribute;
     protected List<Object> any;
     protected String ocdref;
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the attribute property.
@@ -73,11 +73,12 @@ public class TobjectImpl implements KapuaTobject {
      * Objects of the following type(s) are allowed in the list
      * {@link TattributeImpl }
      */
-    public List<KapuaTattribute> getAttribute() {
+    @Override
+	public List<KapuaTattribute> getAttribute() {
         if (attribute == null) {
-            attribute = new ArrayList<TattributeImpl>();
+            attribute = new ArrayList<>();
         }
-        return new ArrayList<KapuaTattribute>(this.attribute);
+        return new ArrayList<>(this.attribute);
     }
 
     /**
@@ -101,9 +102,10 @@ public class TobjectImpl implements KapuaTobject {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -114,7 +116,8 @@ public class TobjectImpl implements KapuaTobject {
      * @return possible object is
      * {@link String }
      */
-    public String getOcdref() {
+    @Override
+	public String getOcdref() {
         return ocdref;
     }
 
@@ -124,7 +127,8 @@ public class TobjectImpl implements KapuaTobject {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setOcdref(String value) {
+    @Override
+	public void setOcdref(String value) {
         this.ocdref = value;
     }
 
@@ -140,7 +144,8 @@ public class TobjectImpl implements KapuaTobject {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 

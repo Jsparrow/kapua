@@ -72,7 +72,15 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
     private static final UserService USER_SERVICE = LOCATOR.getService(UserService.class);
     private static final UserFactory USER_FACTORY = LOCATOR.getFactory(UserFactory.class);
 
-    @Override
+	Comparator<Credential> credentialComparator = new Comparator<Credential>() {
+
+        @Override
+        public int compare(Credential credential1, Credential credential2) {
+            return credential1.getId().toString().compareTo(credential2.getId().toString());
+        }
+    };
+
+	@Override
     public PagingLoadResult<GwtCredential> query(PagingLoadConfig loadConfig, final GwtCredentialQuery gwtCredentialQuery) throws GwtKapuaException {
         int totalLength = 0;
         List<GwtCredential> gwtCredentials = new ArrayList<GwtCredential>();
@@ -118,7 +126,7 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
         return new BasePagingLoadResult<GwtCredential>(gwtCredentials, loadConfig.getOffset(), totalLength);
     }
 
-    @Override
+	@Override
     public void delete(GwtXSRFToken xsrfToken, String stringAccountId, String gwtCredentialId) throws GwtKapuaException {
         checkXSRFToken(xsrfToken);
 
@@ -132,7 +140,7 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
         }
     }
 
-    @Override
+	@Override
     public GwtCredential create(GwtXSRFToken xsrfToken, GwtCredentialCreator gwtCredentialCreator) throws GwtKapuaException {
         //
         // Checking XSRF token
@@ -162,7 +170,7 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
         return gwtCredential;
     }
 
-    @Override
+	@Override
     public GwtCredential update(GwtXSRFToken gwtXsrfToken, GwtCredential gwtCredential) throws GwtKapuaException {
         //
         // Checking XSRF token
@@ -199,7 +207,7 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
         return gwtCredentialUpdated;
     }
 
-    @Override
+	@Override
     public void changePassword(GwtXSRFToken gwtXsrfToken, String oldPassword, final String newPassword, String stringUserId, String stringScopeId) throws GwtKapuaException {
         String username = null;
         try {
@@ -262,7 +270,7 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
         }
     }
 
-    @Override
+	@Override
     public void unlock(GwtXSRFToken xsrfToken, String stringScopeId, String gwtCredentialId) throws GwtKapuaException {
 
         try {
@@ -278,12 +286,4 @@ public class GwtCredentialServiceImpl extends KapuaRemoteServiceServlet implemen
             KapuaExceptionHandler.handle(t);
         }
     }
-
-    Comparator<Credential> credentialComparator = new Comparator<Credential>() {
-
-        @Override
-        public int compare(Credential credential1, Credential credential2) {
-            return credential1.getId().toString().compareTo(credential2.getId().toString());
-        }
-    };
 }

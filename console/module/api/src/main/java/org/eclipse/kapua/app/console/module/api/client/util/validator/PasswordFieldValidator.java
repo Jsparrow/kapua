@@ -21,7 +21,8 @@ public class PasswordFieldValidator extends TextFieldValidator {
         textField.setRegex(null);
     }
 
-    public String validate(Field<?> field, String value) {
+    @Override
+	public String validate(Field<?> field, String value) {
 
         // if the field is not dirty, ignore the validation
         // this is needed for the update flow, in which we do not show the whole password

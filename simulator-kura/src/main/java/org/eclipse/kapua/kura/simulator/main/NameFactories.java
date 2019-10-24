@@ -16,6 +16,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.StringJoiner;
+import org.apache.commons.lang3.StringUtils;
 
 public final class NameFactories {
 
@@ -83,7 +84,7 @@ public final class NameFactories {
 
     private static String getHostname() {
         final String hostname = System.getenv("HOSTNAME");
-        if (hostname == null || hostname.isEmpty()) {
+        if (hostname == null || StringUtils.isEmpty(hostname)) {
             throw new IllegalStateException("Environment variable 'HOSTNAME' is not set");
         }
         return hostname;

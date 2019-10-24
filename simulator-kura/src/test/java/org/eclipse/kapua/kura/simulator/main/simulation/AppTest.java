@@ -29,11 +29,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.eclipse.kura.core.message.protobuf.KuraPayloadProto.KuraPayload.Builder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class AppTest {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(AppTest.class);
+
+	@Test
     public void test1() throws Exception {
         final Configuration cfg = new Configuration();
         final Configuration.Application app1 = new Configuration.Application();
@@ -54,20 +58,10 @@ public class AppTest {
 
         for (final Simulation sim : sims) {
             final Application app = sim.createApplication("sim1");
-            try (final Handler handler = app.createHandler(new ApplicationContext() {
-
-                @Override
-                public Sender sender(org.eclipse.kapua.kura.simulator.topic.Topic topic) {
-                    return new Sender() {
-
-                        @Override
-                        public void send(Builder payload) {
-                            System.out.format("Sending: %s%n", payload);
-                            payloads.add(payload);
-                        }
-                    };
-                }
-            })) {
+            try (final Handler handler = app.createHandler((org.eclipse.kapua.kura.simulator.topic.Topic topic) -> (Builder payload) -> {
+				System.out.format("Sending: %s%n", payload);
+				payloads.add(payload);
+			})) {
                 handler.connected();
                 Thread.sleep(5_000);
             }
@@ -77,6 +71,6 @@ public class AppTest {
             sim.close();
         }
 
-        System.out.println(payloads);
+        logger.info(String.valueOf(payloads));
     }
 }

@@ -23,5 +23,5 @@ public interface ConnectorDescriptorProvider {
      *            The name of the connector to lookup
      * @return The connector descriptor, or {@code null} if this provider could not find one
      */
-    public ConnectorDescriptor getDescriptor(String connectorName);
+    ConnectorDescriptor getDescriptor(String connectorName);
 }

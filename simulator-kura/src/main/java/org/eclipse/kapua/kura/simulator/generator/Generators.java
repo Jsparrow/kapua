@@ -31,7 +31,7 @@ public final class Generators {
 
     public static Function<Instant, Double> sine(final Duration period, final double amplitude, final double offset, final Short shift) {
         final ToDoubleFunction<Instant> func = sineDouble(period, amplitude, offset, shift);
-        return timestamp -> func.applyAsDouble(timestamp);
+        return func::applyAsDouble;
     }
 
     public static ToDoubleFunction<Instant> sineDouble(final Duration period, final double amplitude, final double offset, final Short shift) {
@@ -46,7 +46,7 @@ public final class Generators {
 
     public static Function<Instant, Double> sineBetween(final Duration period, final double lower, final double upper, final Short shift) {
         final ToDoubleFunction<Instant> func = sineDoubleBetween(period, lower, upper, shift);
-        return timestamp -> func.applyAsDouble(timestamp);
+        return func::applyAsDouble;
     }
 
     public static ToDoubleFunction<Instant> sineDoubleBetween(final Duration period, final double lower, final double upper, final Short shift) {

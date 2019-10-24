@@ -13,7 +13,7 @@ package org.eclipse.kapua.app.console.module.api.client.ui.widget;
 
 public interface KapuaPagingToolbarMessages {
 
-public String pagingToolbarShowingPost();
+String pagingToolbarShowingPost();
 
-public String pagingToolbarNoResult();
+String pagingToolbarNoResult();
 }

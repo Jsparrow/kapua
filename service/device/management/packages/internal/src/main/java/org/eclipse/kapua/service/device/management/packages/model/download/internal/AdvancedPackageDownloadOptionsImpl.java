@@ -41,8 +41,6 @@ public class AdvancedPackageDownloadOptionsImpl implements AdvancedPackageDownlo
      * @since 1.1.0
      */
     public AdvancedPackageDownloadOptionsImpl(AdvancedPackageDownloadOptions advancedPackageDownloadOptions) {
-        super();
-
         setBlockSize(advancedPackageDownloadOptions.getBlockSize());
         setBlockDelay(advancedPackageDownloadOptions.getBlockDelay());
         setBlockTimeout(advancedPackageDownloadOptions.getBlockTimeout());

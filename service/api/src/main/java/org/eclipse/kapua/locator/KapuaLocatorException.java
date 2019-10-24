@@ -56,7 +56,8 @@ public class KapuaLocatorException extends KapuaException {
         super(code, cause, arguments);
     }
 
-    protected String getKapuaErrorMessagesBundle() {
+    @Override
+	protected String getKapuaErrorMessagesBundle() {
         return KAPUA_ERROR_MESSAGES;
     }
 }

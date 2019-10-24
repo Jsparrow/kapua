@@ -21,6 +21,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.GwtXSRFToken;
 @RemoteServiceRelativePath("xsrf")
 public interface GwtSecurityTokenService extends RemoteService {
 
-    public GwtXSRFToken generateSecurityToken();
+    GwtXSRFToken generateSecurityToken();
 
 }

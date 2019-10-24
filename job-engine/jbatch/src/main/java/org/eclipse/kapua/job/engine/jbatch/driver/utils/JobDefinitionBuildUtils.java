@@ -88,7 +88,7 @@ public class JobDefinitionBuildUtils {
         // Resumed job execution
         Property resumedJobExecutionIdProperty = new Property();
         resumedJobExecutionIdProperty.setName(JobContextPropertyNames.RESUMED_KAPUA_EXECUTION_ID);
-        resumedJobExecutionIdProperty.setValue("#{jobParameters['" + JobContextPropertyNames.RESUMED_KAPUA_EXECUTION_ID + "']}");
+        resumedJobExecutionIdProperty.setValue(new StringBuilder().append("#{jobParameters['").append(JobContextPropertyNames.RESUMED_KAPUA_EXECUTION_ID).append("']}").toString());
         jslPropertyList.add(resumedJobExecutionIdProperty);
 
         // Reset target step index
@@ -144,24 +144,22 @@ public class JobDefinitionBuildUtils {
         Map<String, Property> customStepProperties = new HashMap<>();
 
         //
-        // Add default properties
-        for (JobStepProperty jobStepProperty : jobStepDefinition.getStepProperties()) {
+		// Add default properties
+		jobStepDefinition.getStepProperties().forEach(jobStepProperty -> {
             Property jslStepProperty = new Property();
             jslStepProperty.setName(jobStepProperty.getName());
             jslStepProperty.setValue(jobStepProperty.getPropertyValue());
             customStepProperties.put(jobStepProperty.getName(), jslStepProperty);
-        }
+        });
 
         //
-        // Add custom values
-        for (JobStepProperty jobStepProperty : jobStep.getStepProperties()) {
-            if (jobStepProperty.getPropertyValue() != null) {
-                Property jslStepProperty = new Property();
-                jslStepProperty.setName(jobStepProperty.getName());
-                jslStepProperty.setValue(jobStepProperty.getPropertyValue());
-                customStepProperties.put(jobStepProperty.getName(), jslStepProperty);
-            }
-        }
+		// Add custom values
+		jobStep.getStepProperties().stream().filter(jobStepProperty -> jobStepProperty.getPropertyValue() != null).forEach(jobStepProperty -> {
+		    Property jslStepProperty = new Property();
+		    jslStepProperty.setName(jobStepProperty.getName());
+		    jslStepProperty.setValue(jobStepProperty.getPropertyValue());
+		    customStepProperties.put(jobStepProperty.getName(), jslStepProperty);
+		});
 
         return customStepProperties.values();
     }

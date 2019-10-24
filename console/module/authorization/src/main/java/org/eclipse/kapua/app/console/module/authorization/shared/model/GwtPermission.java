@@ -20,41 +20,12 @@ public class GwtPermission extends KapuaBaseModel {
     private static final long serialVersionUID = -7753268319786525424L;
 
     /**
-     * Defines the actions allowed by the {@link GwtPermission}
-     */
-    public enum GwtAction implements IsSerializable, Enum {
-        read, //
-        write, //
-        delete, //
-        connect, //
-        execute,
-
-        ALL;
-
-        @Override
-        public String toString() {
-            return this.name();
-        }
-    }
-
-    @Override
-    @SuppressWarnings({ "unchecked" })
-    public <X> X get(String property) {
-        if ("actionEnum".equals(property)) {
-            return (X) (GwtAction.valueOf(getAction()));
-        } else {
-            return super.get(property);
-        }
-    }
-
-    /**
      * Gwt Permission constructor.
      */
     public GwtPermission() {
-        super();
     }
 
-    /**
+	/**
      * Gwt Permission constructor.
      *
      * @param domainName
@@ -75,7 +46,17 @@ public class GwtPermission extends KapuaBaseModel {
         setForwardable(forwardable);
     }
 
-    /**
+	@Override
+    @SuppressWarnings({ "unchecked" })
+    public <X> X get(String property) {
+        if ("actionEnum".equals(property)) {
+            return (X) (GwtAction.valueOf(getAction()));
+        } else {
+            return super.get(property);
+        }
+    }
+
+	/**
      * Returns the string representation for this {@link GwtPermission} in the following format:
      * <p>
      * {domain}[:{action}[:{targetScopeId]]
@@ -119,7 +100,7 @@ public class GwtPermission extends KapuaBaseModel {
         return sb.toString();
     }
 
-    /**
+	/**
      * @return the domain of this permission
      * @since 1.0.0
      */
@@ -127,11 +108,11 @@ public class GwtPermission extends KapuaBaseModel {
         return get("domain");
     }
 
-    public void setDomain(String domain) {
+	public void setDomain(String domain) {
         set("domain", domain);
     }
 
-    /**
+	/**
      * @return the action of this permission
      * @since 1.0.0
      */
@@ -139,15 +120,15 @@ public class GwtPermission extends KapuaBaseModel {
         return get("action");
     }
 
-    public GwtAction getActionEnum() {
+	public GwtAction getActionEnum() {
         return get("actionEnum");
     }
 
-    public void setAction(String action) {
+	public void setAction(String action) {
         set("action", action);
     }
 
-    /**
+	/**
      * @return the target scope id of this permission
      * @since 1.0.0
      */
@@ -155,11 +136,11 @@ public class GwtPermission extends KapuaBaseModel {
         return get("targetScopeId");
     }
 
-    public void setTargetScopeId(String targetScopeId) {
+	public void setTargetScopeId(String targetScopeId) {
         set("targetScopeId", targetScopeId);
     }
 
-    /**
+	/**
      * @return the group id of this permission
      * @since 1.0.0
      */
@@ -167,16 +148,34 @@ public class GwtPermission extends KapuaBaseModel {
         return get("groupId");
     }
 
-    public void setGroupId(String groupId) {
+	public void setGroupId(String groupId) {
         set("groupId", groupId);
     }
 
-    public boolean getForwardable() {
+	public boolean getForwardable() {
         return get("forwardable");
     }
 
-    public void setForwardable(boolean forwardable) {
+	public void setForwardable(boolean forwardable) {
         set("forwardable", forwardable);
+    }
+
+	/**
+     * Defines the actions allowed by the {@link GwtPermission}
+     */
+    public enum GwtAction implements IsSerializable, Enum {
+        read, //
+        write, //
+        delete, //
+        connect, //
+        execute,
+
+        ALL;
+
+        @Override
+        public String toString() {
+            return this.name();
+        }
     }
 
 }

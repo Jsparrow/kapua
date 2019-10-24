@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.PersistenceException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Entity manager session reference implementation.
@@ -36,13 +37,15 @@ public class EntityManagerSession {
 
     private static final Logger logger = LoggerFactory.getLogger(EntityManagerSession.class);
 
-    private final EntityManagerFactory entityManagerFactory;
-    private static final int MAX_INSERT_ALLOWED_RETRY = SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY);
+	private static final int MAX_INSERT_ALLOWED_RETRY = SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY);
 
-    private TransactionManager transacted = new TransactionManagerTransacted();
-    private TransactionManager notTransacted = new TransactionManagerNotTransacted();
+	private final EntityManagerFactory entityManagerFactory;
 
-    /**
+	private TransactionManager transacted = new TransactionManagerTransacted();
+
+	private TransactionManager notTransacted = new TransactionManagerNotTransacted();
+
+	/**
      * Constructor
      *
      * @param entityManagerFactory
@@ -52,7 +55,7 @@ public class EntityManagerSession {
 
     }
 
-    /**
+	/**
      * Execute the action on a new entity manager.<br>
      * <br>
      * WARNING!<br>
@@ -66,7 +69,7 @@ public class EntityManagerSession {
         internalOnAction(entityManagerActionCallback, notTransacted);
     }
 
-    /**
+	/**
      * Execute the action on a new entity manager.<br>
      * <br>
      * WARNING!<br>
@@ -79,7 +82,7 @@ public class EntityManagerSession {
         internalOnAction(entityManagerActionCallback, transacted);
     }
 
-    private <T> void internalOnAction(EntityManagerActionCallback entityManagerActionCallback, TransactionManager transactionManager) throws KapuaException {
+	private <T> void internalOnAction(EntityManagerActionCallback entityManagerActionCallback, TransactionManager transactionManager) throws KapuaException {
         EntityManager manager = null;
         try {
             manager = entityManagerFactory.createEntityManager();
@@ -103,7 +106,7 @@ public class EntityManagerSession {
         }
     }
 
-    /**
+	/**
      * Return the execution result invoked on a new entity manager.<br>
      * <br>
      * WARNING!<br>
@@ -118,7 +121,7 @@ public class EntityManagerSession {
         return internalOnResult(entityManagerResultCallback, notTransacted);
     }
 
-    /**
+	/**
      * Return the execution result invoked on a new entity manager.<br>
      * <br>
      * WARNING!<br>
@@ -132,7 +135,7 @@ public class EntityManagerSession {
         return internalOnResult(entityManagerResultCallback, transacted);
     }
 
-    private <T> T internalOnResult(EntityManagerResultCallback<T> entityManagerResultCallback, TransactionManager transactionManager) throws KapuaException {
+	private <T> T internalOnResult(EntityManagerResultCallback<T> entityManagerResultCallback, TransactionManager transactionManager) throws KapuaException {
         EntityManager manager = null;
         try {
             manager = entityManagerFactory.createEntityManager();
@@ -157,7 +160,7 @@ public class EntityManagerSession {
         }
     }
 
-    /**
+	/**
      * Return the insert execution result invoked on a new entity manager.<br>
      * This method differs from the onEntityManagerResult because it reiterates the execution if it fails due to {@link KapuaEntityExistsException} for a maximum retry.<br>
      * The maximum allowed retry is set by {@link SystemSettingKey#KAPUA_INSERT_MAX_RETRY}.<br>
@@ -174,7 +177,7 @@ public class EntityManagerSession {
         return internalOnInsert(entityManagerInsertCallback, notTransacted);
     }
 
-    /**
+	/**
      * Return the insert execution result invoked on a new entity manager.<br>
      * This method differs from the onEntityManagerResult because it reiterates the execution if it fails due to {@link KapuaEntityExistsException} for a maximum retry.<br>
      * The maximum allowed retry is set by {@link SystemSettingKey#KAPUA_INSERT_MAX_RETRY}.<br>
@@ -190,7 +193,7 @@ public class EntityManagerSession {
         return internalOnInsert(entityManagerInsertCallback, transacted);
     }
 
-    private <T> T internalOnInsert(EntityManagerInsertCallback<T> entityManagerInsertCallback, TransactionManager transactionManager) throws KapuaException {
+	private <T> T internalOnInsert(EntityManagerInsertCallback<T> entityManagerInsertCallback, TransactionManager transactionManager) throws KapuaException {
         boolean succeeded = false;
         int retry = 0;
         EntityManager manager = entityManagerFactory.createEntityManager();
@@ -235,11 +238,11 @@ public class EntityManagerSession {
         return instance;
     }
 
-    private <T> EventStoreRecord appendKapuaEvent(EntityManager manager) throws KapuaException {
+	private <T> EventStoreRecord appendKapuaEvent(EntityManager manager) throws KapuaException {
         return appendKapuaEvent(null, manager);
     }
 
-    private <T> EventStoreRecord appendKapuaEvent(Object instance, EntityManager em) throws KapuaException {
+	private <T> EventStoreRecord appendKapuaEvent(Object instance, EntityManager em) throws KapuaException {
         EventStoreRecord persistedKapuaEvent = null;
 
         //persist the kapua event only if the instance is not a kapua event instance
@@ -253,7 +256,7 @@ public class EntityManagerSession {
                     //make sense to override the entity id and type without checking for previous empty values?
                     //override only if parameters are not evaluated
                     logger.info("Updating service event entity infos (type, id and scope id) if missing...");
-                    if (serviceEventBus.getEntityType() == null || serviceEventBus.getEntityType().trim().length() <= 0) {
+                    if (serviceEventBus.getEntityType() == null || StringUtils.trim(serviceEventBus.getEntityType()).length() <= 0) {
                         logger.info("Kapua event - update entity type to '{}'", kapuaEntity.getClass().getName());
                         serviceEventBus.setEntityType(kapuaEntity.getClass().getName());
                     }
@@ -284,7 +287,7 @@ public class EntityManagerSession {
         return persistedKapuaEvent;
     }
 
-    private boolean isNewEvent(org.eclipse.kapua.event.ServiceEvent event) {
+	private boolean isNewEvent(org.eclipse.kapua.event.ServiceEvent event) {
         return (event.getId() == null);
     }
 

@@ -25,6 +25,8 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link TransportFacade} API for MQTT transport facade.
@@ -33,7 +35,9 @@ import java.util.List;
  */
 public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttMessage, MqttMessage> {
 
-    /**
+    private static final Logger logger = LoggerFactory.getLogger(MqttFacade.class);
+
+	/**
      * The client to use to make requests.
      *
      * @since 1.0.0
@@ -193,7 +197,8 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
                 mqttClientCallback.wait();
             }
         } catch (InterruptedException e) {
-            Thread.interrupted();
+            logger.error(e.getMessage(), e);
+			Thread.interrupted();
         } finally {
             responseTimeoutTimer.cancel();
         }

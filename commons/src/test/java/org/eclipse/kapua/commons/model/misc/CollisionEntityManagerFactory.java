@@ -19,6 +19,7 @@ import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Collections;
 
 public class CollisionEntityManagerFactory extends AbstractEntityManagerFactory {
 
@@ -27,7 +28,7 @@ public class CollisionEntityManagerFactory extends AbstractEntityManagerFactory 
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-commons-unit-test";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static CollisionEntityManagerFactory instance = new CollisionEntityManagerFactory();
 

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.configuration.CompositeConfiguration;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.StringUtils;
 
 public class EnvFriendlyConfiguration extends CompositeConfiguration {
 
@@ -53,7 +54,7 @@ public class EnvFriendlyConfiguration extends CompositeConfiguration {
     }
 
     private String envKey(String key) {
-        return key.toUpperCase().replaceAll("\\.", "_");
+        return StringUtils.upperCase(key).replaceAll("\\.", "_");
     }
 
 }

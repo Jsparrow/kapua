@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 public class OrPredicateImpl implements OrPredicate {
 
-    private List<StorablePredicate> predicates = new ArrayList<StorablePredicate>();
+    private List<StorablePredicate> predicates = new ArrayList<>();
 
     /**
      * Default constructor

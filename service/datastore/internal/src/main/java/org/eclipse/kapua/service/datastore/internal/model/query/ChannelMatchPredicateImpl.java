@@ -62,7 +62,7 @@ public class ChannelMatchPredicateImpl implements ChannelMatchPredicate {
     @Override
     public ObjectNode toSerializedMap() throws DatamodelMappingException {
         ObjectNode rootNode = SchemaUtil.getObjectNode();
-        ObjectNode expressionNode = SchemaUtil.getField(new KeyValueEntry[] { new KeyValueEntry(field.toString(), (String) expression) });
+        ObjectNode expressionNode = SchemaUtil.getField(new KeyValueEntry[] { new KeyValueEntry(field, (String) expression) });
         rootNode.set(PredicateConstants.PREFIX_KEY, expressionNode);
         return rootNode;
     }

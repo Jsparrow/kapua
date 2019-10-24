@@ -112,6 +112,7 @@ public abstract class ServiceEventModule implements ServiceModule {
                 try {
                     Thread.sleep(WAIT_TIME);
                 } catch (InterruptedException e) {
+					LOGGER.error(e.getMessage(), e);
                     // do nothing
                 }
                 if (waitLoop++ > MAX_WAIT_LOOP_ON_SHUTDOWN) {

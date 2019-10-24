@@ -16,6 +16,7 @@ import org.eclipse.kapua.model.domain.Actions;
 import org.eclipse.kapua.model.id.KapuaId;
 
 import java.math.BigInteger;
+import org.apache.commons.lang3.StringUtils;
 
 public class CucRolePermission {
 
@@ -39,7 +40,7 @@ public class CucRolePermission {
             this.role = new KapuaEid(BigInteger.valueOf(roleId));
         }
         if (this.actionName != null) {
-            switch (actionName.trim().toLowerCase()) {
+            switch (StringUtils.lowerCase(actionName.trim())) {
             case "read":
                 this.action = Actions.read;
                 break;

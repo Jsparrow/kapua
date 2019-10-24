@@ -30,7 +30,8 @@ import org.eclipse.kapua.commons.security.KapuaSession;
  */
 public class KapuaWebFilter extends ShiroFilter {
 
-    protected void executeChain(ServletRequest request, ServletResponse response, FilterChain origChain)
+    @Override
+	protected void executeChain(ServletRequest request, ServletResponse response, FilterChain origChain)
             throws IOException, ServletException {
         // bind kapua session
 

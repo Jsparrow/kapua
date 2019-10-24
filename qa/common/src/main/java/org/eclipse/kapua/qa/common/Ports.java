@@ -14,17 +14,22 @@ package org.eclipse.kapua.qa.common;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class Ports {
 
-    private Ports() {
+    private static final Logger logger = LoggerFactory.getLogger(Ports.class);
+
+	private Ports() {
     }
 
     public static boolean isPortOpen(int port) throws IOException {
         try (final ServerSocket socket = new ServerSocket(port)) {
             return false;
         } catch (BindException e) {
-            return true;
+            logger.error(e.getMessage(), e);
+			return true;
         }
     }
 }

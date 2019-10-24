@@ -57,15 +57,6 @@ public class EndpointInfoImpl extends AbstractKapuaUpdatableEntity implements En
     private Set<EndpointUsageImpl> usages;
 
     /**
-     * Constructor.
-     *
-     * @since 1.0.0
-     */
-    protected EndpointInfoImpl() {
-        super();
-    }
-
-    /**
      * Constructor
      *
      * @param scopeId The scope {@link KapuaId} to set into the {@link EndpointInfo}
@@ -75,7 +66,7 @@ public class EndpointInfoImpl extends AbstractKapuaUpdatableEntity implements En
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param endpointInfo
@@ -92,47 +83,55 @@ public class EndpointInfoImpl extends AbstractKapuaUpdatableEntity implements En
         setUsages(endpointInfo.getUsages());
     }
 
-    @Override
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected EndpointInfoImpl() {
+    }
+
+	@Override
     public String getSchema() {
         return schema;
     }
 
-    @Override
+	@Override
     public void setSchema(String schema) {
         this.schema = schema;
     }
 
-    @Override
+	@Override
     public String getDns() {
         return dns;
     }
 
-    @Override
+	@Override
     public void setDns(String dns) {
         this.dns = dns;
     }
 
-    @Override
+	@Override
     public int getPort() {
         return port;
     }
 
-    @Override
+	@Override
     public void setPort(int port) {
         this.port = port;
     }
 
-    @Override
+	@Override
     public boolean getSecure() {
         return secure;
     }
 
-    @Override
+	@Override
     public void setSecure(boolean secure) {
         this.secure = secure;
     }
 
-    @Override
+	@Override
     public Set<EndpointUsageImpl> getUsages() {
         if (usages == null) {
             usages = new HashSet<>();
@@ -141,7 +140,7 @@ public class EndpointInfoImpl extends AbstractKapuaUpdatableEntity implements En
         return usages;
     }
 
-    @Override
+	@Override
     public void setUsages(Set<EndpointUsage> usages) {
         this.usages = new HashSet<>();
 

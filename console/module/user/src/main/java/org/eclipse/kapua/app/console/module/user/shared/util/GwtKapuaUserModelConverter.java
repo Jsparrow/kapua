@@ -52,41 +52,41 @@ public class GwtKapuaUserModelConverter {
         UserQuery query = userFactory.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtUserQuery.getScopeId()));
 
         AndPredicate predicate = query.andPredicate();
-        if (gwtUserQuery.getName() != null && !gwtUserQuery.getName().isEmpty()) {
+        if (gwtUserQuery.getName() != null && !StringUtils.isEmpty(gwtUserQuery.getName())) {
             predicate.and(query.attributePredicate(UserAttributes.NAME, gwtUserQuery.getName(), Operator.LIKE));
         }
         if (gwtUserQuery.getUserStatus() != null && !gwtUserQuery.getUserStatus().equals(GwtUserStatus.ANY.toString())) {
             predicate.and(query.attributePredicate(UserAttributes.STATUS, convertUserStatus(gwtUserQuery.getUserStatus()), Operator.EQUAL));
         }
-        if (gwtUserQuery.getPhoneNumber() != null && !gwtUserQuery.getPhoneNumber().isEmpty()) {
+        if (gwtUserQuery.getPhoneNumber() != null && !StringUtils.isEmpty(gwtUserQuery.getPhoneNumber())) {
             predicate.and(query.attributePredicate(UserAttributes.PHONE_NUMBER, gwtUserQuery.getPhoneNumber(), Operator.LIKE));
         }
         if (gwtUserQuery.getExpirationDate() != null) {
             predicate.and(query.attributePredicate(UserAttributes.EXPIRATION_DATE, gwtUserQuery.getExpirationDate(), Operator.EQUAL));
         }
-        if (gwtUserQuery.getEmail() != null && !gwtUserQuery.getEmail().isEmpty()) {
+        if (gwtUserQuery.getEmail() != null && !StringUtils.isEmpty(gwtUserQuery.getEmail())) {
             predicate.and(query.attributePredicate(UserAttributes.EMAIL, gwtUserQuery.getEmail(), Operator.LIKE));
         }
-        if (gwtUserQuery.getDisplayName() != null && !gwtUserQuery.getDisplayName().isEmpty()) {
+        if (gwtUserQuery.getDisplayName() != null && !StringUtils.isEmpty(gwtUserQuery.getDisplayName())) {
             predicate.and(query.attributePredicate(UserAttributes.DISPLAY_NAME, gwtUserQuery.getDisplayName(), Operator.LIKE));
         }
         query.setOffset(loadConfig.getOffset());
         query.setLimit(loadConfig.getLimit());
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? UserAttributes.NAME : loadConfig.getSortField();
-        if (sortField.equals("username")) {
+        if ("username".equals(sortField)) {
             sortField = UserAttributes.NAME;
-        } else if (sortField.equals("modifiedByName")) {
+        } else if ("modifiedByName".equals(sortField)) {
             sortField = UserAttributes.MODIFIED_BY;
-        } else if (sortField.equals("expirationDateFormatted")) {
+        } else if ("expirationDateFormatted".equals(sortField)) {
             sortField = UserAttributes.EXPIRATION_DATE;
-        } else if (sortField.equals("modifiedOnFormatted")) {
+        } else if ("modifiedOnFormatted".equals(sortField)) {
             sortField = UserAttributes.MODIFIED_ON;
-        } else if (sortField.equals("createdOnFormatted")) {
+        } else if ("createdOnFormatted".equals(sortField)) {
             sortField = UserAttributes.CREATED_ON;
-        } else if (sortField.equals("createdByName")) {
+        } else if ("createdByName".equals(sortField)) {
             sortField = UserAttributes.CREATED_BY;
         }
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         query.setPredicate(predicate);
         //
         // Return converted

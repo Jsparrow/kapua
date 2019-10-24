@@ -136,7 +136,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService {
                     try {
                         Thread.sleep((long)(Math.random() * MAX_WAIT));
                     } catch (InterruptedException e1) {
-                        logger.warn("Error while waiting {}", e.getMessage(), e);
+                        logger.error(e1.getMessage(), e1);
+						logger.warn("Error while waiting {}", e.getMessage(), e);
                     }
                 }
             }

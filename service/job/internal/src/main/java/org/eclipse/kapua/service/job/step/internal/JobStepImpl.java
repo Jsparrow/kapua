@@ -141,8 +141,6 @@ public class JobStepImpl extends AbstractKapuaNamedEntity implements JobStep {
 
         this.stepProperties = new ArrayList<>();
 
-        for (JobStepProperty sp : jobStepProperties) {
-            this.stepProperties.add(JobStepPropertyImpl.parse(sp));
-        }
+        jobStepProperties.forEach(sp -> this.stepProperties.add(JobStepPropertyImpl.parse(sp)));
     }
 }

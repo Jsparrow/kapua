@@ -192,7 +192,7 @@ public class JbatchDriver {
 
         //
         // Retrieve job XML definition file. Delete it if exist
-        File jobXmlDefinitionFile = new File(jobTempDirectory, jobId.toCompactId().concat("-").concat(String.valueOf(System.currentTimeMillis())).concat(".xml"));
+        File jobXmlDefinitionFile = new File(jobTempDirectory, new StringBuilder().append(jobId.toCompactId()).append("-").append(String.valueOf(System.currentTimeMillis())).append(".xml").toString());
         if (jobXmlDefinitionFile.exists() && !jobXmlDefinitionFile.delete()) {
             throw new CannotCleanJobDefFileDriverException(jobName, jobXmlDefinitionFile.getAbsolutePath());
         }
@@ -228,7 +228,7 @@ public class JbatchDriver {
      * @throws ExecutionNotRunningDriverException when the corresponding job execution is not running.
      * @since 1.0.0
      */
-    public static void stopJob(@NotNull KapuaId scopeId, @NotNull KapuaId jobId, KapuaId toStopJobExecutionId) throws JbatchDriverException, KapuaException {
+    public static void stopJob(@NotNull KapuaId scopeId, @NotNull KapuaId jobId, KapuaId toStopJobExecutionId) throws KapuaException {
 
         String jobName = getJbatchJobName(scopeId, jobId);
 
@@ -252,9 +252,7 @@ public class JbatchDriver {
         //
         // Do stop
         try {
-            runningExecutions.forEach((runningExecution -> {
-                JOB_OPERATOR.stop(runningExecution.getExecutionId());
-            }));
+            runningExecutions.forEach((runningExecution -> JOB_OPERATOR.stop(runningExecution.getExecutionId())));
         } catch (NoSuchJobExecutionException e) {
             throw new ExecutionNotFoundDriverException(e, jobName);
         } catch (JobExecutionNotRunningException e) {
@@ -262,7 +260,7 @@ public class JbatchDriver {
         }
     }
 
-    public static void resumeJob(@NotNull KapuaId scopeId, @NotNull KapuaId jobId, @NotNull KapuaId toResumeJobExecutionId) throws JbatchDriverException, KapuaException {
+    public static void resumeJob(@NotNull KapuaId scopeId, @NotNull KapuaId jobId, @NotNull KapuaId toResumeJobExecutionId) throws KapuaException {
 
         String jobName = getJbatchJobName(scopeId, jobId);
 

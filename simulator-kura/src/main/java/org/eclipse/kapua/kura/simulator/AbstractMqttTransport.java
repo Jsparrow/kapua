@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractMqttTransport implements Transport {
 
@@ -40,7 +41,7 @@ public abstract class AbstractMqttTransport implements Transport {
             result.setAutomaticReconnect(true);
 
             final String ui = u.getUserInfo();
-            if (ui != null && !ui.isEmpty()) {
+            if (ui != null && !StringUtils.isEmpty(ui)) {
                 final String[] toks = ui.split("\\:", 2);
                 if (toks.length == 2) {
                     result.setUserName(toks[0]);

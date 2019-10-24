@@ -34,7 +34,7 @@ import java.util.List;
 @XmlType(factoryClass = DeviceManagementOperationXmlRegistry.class, factoryMethod = "newDeviceManagementOperation")
 public interface DeviceManagementOperation extends KapuaUpdatableEntity {
 
-    static final String TYPE = "deviceManagementOperation";
+    String TYPE = "deviceManagementOperation";
 
     @Override
     default String getType() {

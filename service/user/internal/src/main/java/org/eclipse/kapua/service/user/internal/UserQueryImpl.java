@@ -25,18 +25,17 @@ public class UserQueryImpl extends AbstractKapuaQuery<User> implements UserQuery
 
     /**
      * Constructor
-     */
-    private UserQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public UserQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private UserQueryImpl() {
     }
 }

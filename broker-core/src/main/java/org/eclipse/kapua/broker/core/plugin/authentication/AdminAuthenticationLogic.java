@@ -50,8 +50,9 @@ public class AdminAuthenticationLogic extends AuthenticationLogic {
         return !stealingLinkDetected && !kcc.isMissing();
     }
 
-    protected List<AuthorizationEntry> buildAuthorizationMap(KapuaConnectionContext kcc) {
-        ArrayList<AuthorizationEntry> ael = new ArrayList<AuthorizationEntry>();
+    @Override
+	protected List<AuthorizationEntry> buildAuthorizationMap(KapuaConnectionContext kcc) {
+        ArrayList<AuthorizationEntry> ael = new ArrayList<>();
         ael.add(createAuthorizationEntry(kcc, Acl.ALL, aclHash));
         ael.add(createAuthorizationEntry(kcc, Acl.WRITE_ADMIN, aclAdvisory));
         kcc.logAuthDestinationToLog();

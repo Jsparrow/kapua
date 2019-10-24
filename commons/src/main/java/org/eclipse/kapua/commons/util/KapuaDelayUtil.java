@@ -11,18 +11,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class KapuaDelayUtil {
 
-    public static void executeDelay(){
+    private static final Logger logger = LoggerFactory.getLogger(KapuaDelayUtil.class);
+
+	private KapuaDelayUtil() {
+    }
+
+	public static void executeDelay(){
             try {
                 Thread.sleep((long) (Math.random()*1000));
             } catch (InterruptedException e) {
-                //Restore the interupted status
+                logger.error(e.getMessage(), e);
+				//Restore the interupted status
                 Thread.currentThread().interrupt();
             }
         }
-
-    private KapuaDelayUtil() {
-        super();
-    }
 }

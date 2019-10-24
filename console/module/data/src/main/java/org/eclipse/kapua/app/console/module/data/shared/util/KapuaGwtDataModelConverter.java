@@ -22,6 +22,7 @@ import org.eclipse.kapua.service.datastore.model.DatastoreMessage;
 import org.eclipse.kapua.service.datastore.model.MetricInfo;
 
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaGwtDataModelConverter {
 
@@ -32,7 +33,7 @@ public class KapuaGwtDataModelConverter {
     }
 
     public static GwtDatastoreAsset convertToAssets(ChannelInfo channelInfo) {
-        return new GwtDatastoreAsset(channelInfo.getName().substring(6), channelInfo.getName(), channelInfo.getName(), channelInfo.getLastMessageOn());
+        return new GwtDatastoreAsset(StringUtils.substring(channelInfo.getName(), 6), channelInfo.getName(), channelInfo.getName(), channelInfo.getLastMessageOn());
     }
 
     public static GwtHeader convertToHeader(MetricInfo metric) {

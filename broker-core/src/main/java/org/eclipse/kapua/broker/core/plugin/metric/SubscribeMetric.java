@@ -24,10 +24,6 @@ public class SubscribeMetric {
     private Counter notAllowedMessages;
     private Timer time;
 
-    public static SubscribeMetric getInstance() {
-        return SUBSCRIBE_METRIC;
-    }
-
     private SubscribeMetric() {
         MetricsService metricsService = MetricServiceFactory.getInstance();
         allowedMessages = metricsService.getCounter("security", "subscribe", "allowed", "count");
@@ -35,15 +31,19 @@ public class SubscribeMetric {
         time = metricsService.getTimer("security", "subscribe", "time", "s");
     }
 
-    public Counter getAllowedMessages() {
+	public static SubscribeMetric getInstance() {
+        return SUBSCRIBE_METRIC;
+    }
+
+	public Counter getAllowedMessages() {
         return allowedMessages;
     }
 
-    public Counter getNotAllowedMessages() {
+	public Counter getNotAllowedMessages() {
         return notAllowedMessages;
     }
 
-    public Timer getTime() {
+	public Timer getTime() {
         return time;
     }
 

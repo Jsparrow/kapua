@@ -15,7 +15,7 @@ import org.eclipse.kapua.app.console.module.api.shared.model.GwtUpdatableEntityM
 
 import java.io.Serializable;
 
-public class GwtChannel extends GwtUpdatableEntityModel implements Serializable {
+public class GwtChannel extends GwtUpdatableEntityModel {
 
     /**
      * 

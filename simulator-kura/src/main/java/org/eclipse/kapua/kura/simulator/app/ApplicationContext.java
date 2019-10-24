@@ -26,5 +26,5 @@ public interface ApplicationContext {
      *            The fully qualified topic, the topic may be un-expanded
      * @return a new sender, never {@code null}
      */
-    public Sender sender(Topic topic);
+    Sender sender(Topic topic);
 }

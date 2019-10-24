@@ -105,11 +105,11 @@ public class TranslatorAppAssetKapuaKura extends AbstractTranslatorKapuaKura<Ass
         }
 
         KuraAssets kuraAssets = new KuraAssets();
-        for (DeviceAsset deviceAsset : deviceAssets.getAssets()) {
+        deviceAssets.getAssets().forEach(deviceAsset -> {
             KuraAsset kuraAsset = new KuraAsset();
             kuraAsset.setName(deviceAsset.getName());
 
-            for (DeviceAssetChannel deviceAssetChannel : deviceAsset.getChannels()) {
+            deviceAsset.getChannels().forEach(deviceAssetChannel -> {
                 KuraAssetChannel kuraAssetChannel = new KuraAssetChannel();
                 kuraAssetChannel.setName(deviceAssetChannel.getName());
                 kuraAssetChannel.setType(deviceAssetChannel.getType());
@@ -119,10 +119,10 @@ public class TranslatorAppAssetKapuaKura extends AbstractTranslatorKapuaKura<Ass
                 kuraAssetChannel.setTimestamp(timestamp != null ? timestamp.getTime() : null);
 
                 kuraAsset.getChannels().add(kuraAssetChannel);
-            }
+            });
 
             kuraAssets.getAssets().add(kuraAsset);
-        }
+        });
 
         KuraRequestPayload kuraRequestPayload = new KuraRequestPayload();
         try {

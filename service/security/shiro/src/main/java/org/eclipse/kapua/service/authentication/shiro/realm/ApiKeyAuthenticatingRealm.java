@@ -71,8 +71,7 @@ public class ApiKeyAuthenticatingRealm extends AuthenticatingRealm {
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
-            throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
         //
         // Extract credentials
         ApiKeyCredentialsImpl token = (ApiKeyCredentialsImpl) authenticationToken;
@@ -110,7 +109,7 @@ public class ApiKeyAuthenticatingRealm extends AuthenticatingRealm {
         }
 
         // Check credential disabled
-        if (CredentialStatus.DISABLED.equals(credential.getStatus())) {
+        if (CredentialStatus.DISABLED == credential.getStatus()) {
             throw new DisabledAccountException();
         }
 
@@ -136,7 +135,7 @@ public class ApiKeyAuthenticatingRealm extends AuthenticatingRealm {
         }
 
         // Check disabled
-        if (UserStatus.DISABLED.equals(user.getStatus())) {
+        if (UserStatus.DISABLED == user.getStatus()) {
             throw new DisabledAccountException();
         }
 
@@ -167,7 +166,7 @@ public class ApiKeyAuthenticatingRealm extends AuthenticatingRealm {
         }
 
         // Check credential disabled
-        if (CredentialStatus.DISABLED.equals(credential.getStatus())) {
+        if (CredentialStatus.DISABLED == credential.getStatus()) {
             throw new DisabledAccountException();
         }
 
@@ -201,8 +200,7 @@ public class ApiKeyAuthenticatingRealm extends AuthenticatingRealm {
     }
 
     @Override
-    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info)
-            throws AuthenticationException {
+    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info) {
         LoginAuthenticationInfo kapuaInfo = (LoginAuthenticationInfo) info;
         CredentialService credentialService = LOCATOR.getService(CredentialService.class);
         try {

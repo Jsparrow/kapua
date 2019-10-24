@@ -22,7 +22,7 @@ import javax.batch.runtime.context.JobContext;
 import javax.batch.runtime.context.StepContext;
 import javax.inject.Inject;
 
-public class TestProcessor extends AbstractTargetProcessor implements TargetProcessor {
+public class TestProcessor extends AbstractTargetProcessor {
 
     @Inject
     JobContext jobContext;

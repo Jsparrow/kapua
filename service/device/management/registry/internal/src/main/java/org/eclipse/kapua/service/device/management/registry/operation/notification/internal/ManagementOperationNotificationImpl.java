@@ -62,7 +62,6 @@ public class ManagementOperationNotificationImpl extends AbstractKapuaEntity imp
      * @since 1.0.0
      */
     public ManagementOperationNotificationImpl() {
-        super();
     }
 
     /**

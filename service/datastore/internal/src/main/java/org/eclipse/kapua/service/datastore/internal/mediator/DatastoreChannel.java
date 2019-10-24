@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Models a topic for messages posted to the Kapua platform.<br>
@@ -63,15 +64,14 @@ public class DatastoreChannel {
         }
 
         // Check if there is one single level wild card or if the multi level wild card is present more than once or not at the end of the topic
-        if (channel.indexOf(SINGLE_LEVEL_WCARD) != -1) {
+        if (StringUtils.contains(channel, SINGLE_LEVEL_WCARD)) {
             throw new InvalidChannelException(String.format("Invalid channel [%s]. The channel cannot contain [%s] wildcard!", channel, SINGLE_LEVEL_WCARD));
         }
-        int indexOfMultiLevelWildCard = channel.indexOf(MULTI_LEVEL_WCARD);
-        if (indexOfMultiLevelWildCard != -1) {
-            if (indexOfMultiLevelWildCard < channel.length() - 1) {
-                throw new InvalidChannelException(String.format("Invalid channel [%s]. The channel [%s] wildcard is allowed only at the end of the channel!", channel, MULTI_LEVEL_WCARD));
-            }
-        }
+        int indexOfMultiLevelWildCard = StringUtils.indexOf(channel, MULTI_LEVEL_WCARD);
+        boolean condition = indexOfMultiLevelWildCard != -1 && indexOfMultiLevelWildCard < channel.length() - 1;
+		if (condition) {
+		    throw new InvalidChannelException(String.format("Invalid channel [%s]. The channel [%s] wildcard is allowed only at the end of the channel!", channel, MULTI_LEVEL_WCARD));
+		}
 
         this.channel = channel;
         channelParts = this.channel.split(TOPIC_SEPARATOR);
@@ -86,7 +86,7 @@ public class DatastoreChannel {
         if (isAnyChannel()) {
             return "";
         } else if (isWildcardChannel()) {
-            return channel.substring(0, channel.length() - 1);
+            return StringUtils.substring(channel, 0, channel.length() - 1);
         } else {
             return channel;
         }
@@ -121,7 +121,7 @@ public class DatastoreChannel {
      * @since 1.0.0
      */
     public boolean isWildcardChannel() {
-        return channel != null && channel.endsWith(MULTI_LEVEL_SEPARATOR_WCARD);
+        return channel != null && StringUtils.endsWith(channel, MULTI_LEVEL_SEPARATOR_WCARD);
     }
 
     /**
@@ -163,7 +163,7 @@ public class DatastoreChannel {
      */
     public String getParentTopic() {
         int iLastSlash = channel.lastIndexOf(TOPIC_SEPARATOR);
-        return iLastSlash != -1 ? channel.substring(0, iLastSlash) : null;
+        return iLastSlash != -1 ? StringUtils.substring(channel, 0, iLastSlash) : null;
     }
 
     /**
@@ -176,7 +176,7 @@ public class DatastoreChannel {
         String parentTopic = getParentTopic();
         if (parentTopic != null) {
             int iLastSlash = parentTopic.lastIndexOf(TOPIC_SEPARATOR);
-            return iLastSlash != -1 ? parentTopic.substring(0, iLastSlash) : null;
+            return iLastSlash != -1 ? StringUtils.substring(parentTopic, 0, iLastSlash) : null;
         } else {
             return null;
         }

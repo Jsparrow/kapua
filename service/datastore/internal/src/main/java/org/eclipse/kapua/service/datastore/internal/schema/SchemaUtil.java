@@ -91,8 +91,8 @@ public class SchemaUtil {
      */
     public static ObjectNode getField(KeyValueEntry[] entries) throws DatamodelMappingException {
         ObjectNode rootNode = FACTORY.objectNode();
-        for (int i = 0; i < entries.length; i++) {
-            appendField(rootNode, entries[i].getKey(), entries[i].getValue());
+        for (KeyValueEntry entrie : entries) {
+            appendField(rootNode, entrie.getKey(), entrie.getValue());
         }
         return rootNode;
     }

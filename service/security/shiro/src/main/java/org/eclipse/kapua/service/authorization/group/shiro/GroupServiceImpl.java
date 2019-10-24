@@ -203,11 +203,11 @@ public class GroupServiceImpl extends AbstractKapuaConfigurableResourceLimitedSe
 
         LOG.info("GroupService: received kapua event from {}, operation {}", kapuaEvent.getService(), kapuaEvent.getOperation());
         if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteGroupByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteGroupByAccountId(kapuaEvent.getEntityId());
         }
     }
 
-    private void deleteGroupByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteGroupByAccountId(KapuaId accountId) throws KapuaException {
         GroupQuery query = new GroupQueryImpl(accountId);
 
         GroupListResult groupsToDelete = query(query);

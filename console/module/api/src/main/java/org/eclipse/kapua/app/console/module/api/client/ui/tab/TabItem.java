@@ -19,7 +19,6 @@ public class TabItem extends com.extjs.gxt.ui.client.widget.TabItem {
     private KapuaIcon icon;
 
     public TabItem(String text, KapuaIcon icon) {
-        super();
         setText(text);
         setIcon(icon);
     }

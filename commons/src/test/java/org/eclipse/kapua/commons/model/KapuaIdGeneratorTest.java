@@ -78,7 +78,8 @@ public class KapuaIdGeneratorTest extends AbstractCommonServiceTest {
             collisionServiceImpl.insert("Collision - second record");
             Assert.fail("The insert should throws exception!");
         } catch (KapuaException e) {
-            Assert.assertEquals("The generated random identifiers count is wrong!", SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY) + 1,
+            LOGGER.error(e.getMessage(), e);
+			Assert.assertEquals("The generated random identifiers count is wrong!", SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY) + 1,
                     collisionIdGenerator.getGeneretedValuesCount());
         }
     }
@@ -101,7 +102,8 @@ public class KapuaIdGeneratorTest extends AbstractCommonServiceTest {
             Assert.assertEquals("The generated random identifiers count is wrong!", SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY) + 1,
                     collisionIdGenerator.getGeneretedValuesCount());
         } catch (KapuaException e) {
-            Assert.fail("The insert shouldn't throws exception!");
+            LOGGER.error(e.getMessage(), e);
+			Assert.fail("The insert shouldn't throws exception!");
         }
     }
 
@@ -124,7 +126,8 @@ public class KapuaIdGeneratorTest extends AbstractCommonServiceTest {
             collisionServiceImpl.insert("NoKeyCollision - third record");
             Assert.fail("The insert should throws exception!");
         } catch (KapuaException e) {
-            Assert.assertEquals("The generated random identifiers count is wrong!", SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY) + 3,
+            LOGGER.error(e.getMessage(), e);
+			Assert.assertEquals("The generated random identifiers count is wrong!", SystemSetting.getInstance().getInt(SystemSettingKey.KAPUA_INSERT_MAX_RETRY) + 3,
                     collisionIdGenerator.getGeneretedValuesCount());
         }
     }

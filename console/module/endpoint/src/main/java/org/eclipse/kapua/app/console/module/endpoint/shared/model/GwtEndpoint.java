@@ -17,13 +17,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class GwtEndpoint extends GwtUpdatableEntityModel {
 
-    public enum GwtEndpointSecure implements IsSerializable {
-        ANY, TRUE, FALSE;
-
-        private GwtEndpointSecure() {
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public <X> X get(String property) {
@@ -34,44 +27,51 @@ public class GwtEndpoint extends GwtUpdatableEntityModel {
         }
     }
 
-    public String getSchema() {
+	public String getSchema() {
         return get("schema");
     }
 
-    public void setSchema(String schema) {
+	public void setSchema(String schema) {
         set("schema", schema);
     }
 
-    public String getDns() {
+	public String getDns() {
         return get("dns");
     }
 
-    public void setDns(String dns) {
+	public void setDns(String dns) {
         set("dns", dns);
     }
 
-    public Number getPort() {
+	public Number getPort() {
         return get("port");
     }
 
-    public void setPort(Number port) {
+	public void setPort(Number port) {
         set("port", port);
     }
 
-    public boolean getSecure() {
+	public boolean getSecure() {
         return get("secure");
     }
 
-    public void setSecure(boolean secure) {
+	public void setSecure(boolean secure) {
         set("secure", secure);
     }
 
-    public GwtEndpointSecure gwtEndpointSecureEnum() {
+	public GwtEndpointSecure gwtEndpointSecureEnum() {
         return (GwtEndpointSecure) get("secureEnum");
     }
 
-    @Override
+	@Override
     public String toString() {
-        return getSchema() + "://" + getDns() + ":" + getPort();
+        return new StringBuilder().append(getSchema()).append("://").append(getDns()).append(":").append(getPort()).toString();
+    }
+
+	public enum GwtEndpointSecure implements IsSerializable {
+        ANY, TRUE, FALSE;
+
+        private GwtEndpointSecure() {
+        }
     }
 }

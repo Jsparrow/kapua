@@ -22,11 +22,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("settings")
 public interface GwtSettingsService extends RemoteService {
 
-    public GwtProductInformation getProductInformation();
+    GwtProductInformation getProductInformation();
 
-    public String getSsoLoginUri();
+    String getSsoLoginUri();
 
-    public String getHomeUri();
+    String getHomeUri();
 
-    public boolean getSsoEnabled();
+    boolean getSsoEnabled();
 }

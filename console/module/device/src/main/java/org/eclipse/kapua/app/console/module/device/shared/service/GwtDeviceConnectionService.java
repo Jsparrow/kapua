@@ -34,7 +34,7 @@ public interface GwtDeviceConnectionService extends RemoteService {
      * @param connectionId
      * @return
      */
-    public GwtDeviceConnection find(String scopeId, String connectionId)
+    GwtDeviceConnection find(String scopeId, String connectionId)
         throws GwtKapuaException;
 
     /**
@@ -44,7 +44,7 @@ public interface GwtDeviceConnectionService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtGroupedNVPair> getConnectionInfo(String scopeIdString, String gwtDeviceConnectionId)
+    ListLoadResult<GwtGroupedNVPair> getConnectionInfo(String scopeIdString, String gwtDeviceConnectionId)
         throws GwtKapuaException;
 
     /**

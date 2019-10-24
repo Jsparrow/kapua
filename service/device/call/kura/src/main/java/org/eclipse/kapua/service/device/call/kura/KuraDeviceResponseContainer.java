@@ -29,7 +29,6 @@ public class KuraDeviceResponseContainer extends ArrayList<KuraResponseMessage> 
      * Constructor
      */
     public KuraDeviceResponseContainer() {
-        super();
     }
 
     @Override

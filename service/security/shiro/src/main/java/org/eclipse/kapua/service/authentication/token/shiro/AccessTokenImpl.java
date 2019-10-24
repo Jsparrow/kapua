@@ -74,7 +74,6 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
      * @since 1.0.0
      */
     public AccessTokenImpl() {
-        super();
     }
 
     /**

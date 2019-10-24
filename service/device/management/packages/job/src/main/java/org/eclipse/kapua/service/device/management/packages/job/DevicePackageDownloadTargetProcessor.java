@@ -34,7 +34,7 @@ import javax.inject.Inject;
  *
  * @since 1.0.0
  */
-public class DevicePackageDownloadTargetProcessor extends AbstractDevicePackageTargetProcessor implements TargetProcessor {
+public class DevicePackageDownloadTargetProcessor extends AbstractDevicePackageTargetProcessor {
 
     private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
 
@@ -55,7 +55,7 @@ public class DevicePackageDownloadTargetProcessor extends AbstractDevicePackageT
     @Override
     public void processTarget(JobTarget jobTarget) throws KapuaException {
 
-        if (JobTargetStatus.AWAITING_COMPLETION.equals(jobTarget.getStatus()) || JobTargetStatus.NOTIFIED_COMPLETION.equals(jobTarget.getStatus())) {
+        if (JobTargetStatus.AWAITING_COMPLETION == jobTarget.getStatus() || JobTargetStatus.NOTIFIED_COMPLETION == jobTarget.getStatus()) {
             return;
         }
 
@@ -81,7 +81,7 @@ public class DevicePackageDownloadTargetProcessor extends AbstractDevicePackageT
 
     @Override
     protected JobTargetStatus getCompletedStatus(JobTarget jobTarget) {
-        if (JobTargetStatus.NOTIFIED_COMPLETION.equals(jobTarget.getStatus())) {
+        if (JobTargetStatus.NOTIFIED_COMPLETION == jobTarget.getStatus()) {
             return super.getCompletedStatus(jobTarget);
         }
 

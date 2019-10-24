@@ -25,7 +25,6 @@ public class GwtRoleCreator extends GwtEntityCreator {
     private List<GwtPermission> permissions;
 
     public GwtRoleCreator() {
-        super();
     }
 
     public String getName() {

@@ -92,15 +92,6 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent 
     /**
      * Constructor
      *
-     * @since 1.0.0
-     */
-    protected DeviceEventImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
-     *
      * @param scopeId The scope {@link KapuaId} to set into the {@link DeviceEvent}
      * @since 1.0.0
      */
@@ -108,7 +99,7 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent 
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param deviceEvent
@@ -127,42 +118,50 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent 
         setEventMessage(deviceEvent.getEventMessage());
     }
 
-    @Override
+	/**
+     * Constructor
+     *
+     * @since 1.0.0
+     */
+    protected DeviceEventImpl() {
+    }
+
+	@Override
     public KapuaId getDeviceId() {
         return deviceId;
     }
 
-    @Override
+	@Override
     public void setDeviceId(KapuaId deviceId) {
         this.deviceId = KapuaEid.parseKapuaId(deviceId);
     }
 
-    @Override
+	@Override
     public Date getSentOn() {
         return sentOn;
     }
 
-    @Override
+	@Override
     public void setSentOn(Date sentOn) {
         this.sentOn = sentOn;
     }
 
-    @Override
+	@Override
     public Date getReceivedOn() {
         return receivedOn;
     }
 
-    @Override
+	@Override
     public void setReceivedOn(Date receivedOn) {
         this.receivedOn = receivedOn;
     }
 
-    @Override
+	@Override
     public KapuaPosition getPosition() {
         return position;
     }
 
-    @Override
+	@Override
     public void setPosition(KapuaPosition position) {
         if (position != null) {
             this.position = new KapuaPositionImpl();
@@ -181,42 +180,42 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent 
         }
     }
 
-    @Override
+	@Override
     public String getResource() {
         return resource;
     }
 
-    @Override
+	@Override
     public void setResource(String resource) {
         this.resource = resource;
     }
 
-    @Override
+	@Override
     public KapuaMethod getAction() {
         return action;
     }
 
-    @Override
+	@Override
     public void setAction(KapuaMethod action) {
         this.action = action;
     }
 
-    @Override
+	@Override
     public KapuaResponseCode getResponseCode() {
         return responseCode;
     }
 
-    @Override
+	@Override
     public void setResponseCode(KapuaResponseCode responseCode) {
         this.responseCode = responseCode;
     }
 
-    @Override
+	@Override
     public String getEventMessage() {
         return eventMessage;
     }
 
-    @Override
+	@Override
     public void setEventMessage(String eventMessage) {
         this.eventMessage = eventMessage;
     }

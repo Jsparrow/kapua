@@ -20,7 +20,6 @@ public abstract class GwtEntityModel extends KapuaBaseModel {
     private static final long serialVersionUID = -1718291615353609658L;
 
     public GwtEntityModel() {
-        super();
     }
 
     @Override

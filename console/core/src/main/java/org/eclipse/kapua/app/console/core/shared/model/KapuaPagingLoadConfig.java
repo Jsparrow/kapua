@@ -18,7 +18,7 @@ import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBasePagingCurs
 
 public interface KapuaPagingLoadConfig extends PagingLoadConfig {
 
-    public void setLastOffset(int lastOffset);
+    void setLastOffset(int lastOffset);
 
-    public Stack<KapuaBasePagingCursor> getOffsetCursors();
+    Stack<KapuaBasePagingCursor> getOffsetCursors();
 }

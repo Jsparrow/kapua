@@ -19,6 +19,7 @@ import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.SimpleSqlScriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Configurable service database schema utilities.
@@ -28,15 +29,14 @@ import org.slf4j.LoggerFactory;
 public class KapuaConfigurableServiceSchemaUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(KapuaConfigurableServiceSchemaUtils.class);
+	public static final String DEFAULT_PATH = "src/main/sql/H2";
+	public static final String DEFAULT_FILTER = "sys_*.sql";
+	public static final String DROP_FILTER = "sys_*_drop.sql";
 
-    private KapuaConfigurableServiceSchemaUtils() {
+	private KapuaConfigurableServiceSchemaUtils() {
     }
 
-    public static final String DEFAULT_PATH = "src/main/sql/H2";
-    public static final String DEFAULT_FILTER = "sys_*.sql";
-    public static final String DROP_FILTER = "sys_*_drop.sql";
-
-    /**
+	/**
      * Executes the database scripts in the specified path matching the specified filter
      *
      * @param path
@@ -72,7 +72,7 @@ public class KapuaConfigurableServiceSchemaUtils {
 
     }
 
-    /**
+	/**
      * Executes the create schema files contained in the path
      *
      * @param path
@@ -81,18 +81,18 @@ public class KapuaConfigurableServiceSchemaUtils {
     public static void createSchemaObjects(String path)
             throws KapuaException {
         String pathSep = String.valueOf(File.separatorChar);
-        String sep = path.endsWith(pathSep) ? "" : pathSep;
-        scriptSession(path + sep + DEFAULT_PATH, DEFAULT_FILTER);
+        String sep = StringUtils.endsWith(path, pathSep) ? "" : pathSep;
+        scriptSession(new StringBuilder().append(path).append(sep).append(DEFAULT_PATH).toString(), DEFAULT_FILTER);
     }
 
-    /**
+	/**
      * Executes the drop schema files contained in the path
      *
      * @param path
      */
     public static void dropSchemaObjects(String path) {
         String pathSep = String.valueOf(File.separatorChar);
-        String sep = path.endsWith(pathSep) ? "" : pathSep;
-        scriptSession(path + sep + DEFAULT_PATH, DROP_FILTER);
+        String sep = StringUtils.endsWith(path, pathSep) ? "" : pathSep;
+        scriptSession(new StringBuilder().append(path).append(sep).append(DEFAULT_PATH).toString(), DROP_FILTER);
     }
 }

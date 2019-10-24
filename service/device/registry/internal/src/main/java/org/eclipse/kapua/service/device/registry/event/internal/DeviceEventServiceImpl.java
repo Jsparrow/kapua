@@ -100,7 +100,8 @@ public class DeviceEventServiceImpl extends AbstractKapuaService implements Devi
                 try {
                     Thread.sleep((long)(Math.random() * MAX_WAIT));
                 } catch (InterruptedException e1) {
-                    LOG.warn("Error while waiting {}", e.getMessage());
+                    LOG.error(e1.getMessage(), e1);
+					LOG.warn("Error while waiting {}", e.getMessage());
                 }
             }
         }

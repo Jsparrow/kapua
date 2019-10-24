@@ -34,7 +34,7 @@ import javax.inject.Inject;
  *
  * @since 1.0.0
  */
-public class DevicePackageUninstallTargetProcessor extends AbstractDevicePackageTargetProcessor implements TargetProcessor {
+public class DevicePackageUninstallTargetProcessor extends AbstractDevicePackageTargetProcessor {
 
     private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
 
@@ -78,7 +78,7 @@ public class DevicePackageUninstallTargetProcessor extends AbstractDevicePackage
     @Override
     protected JobTargetStatus getCompletedStatus(JobTarget jobTarget) {
 
-        if (JobTargetStatus.PROCESS_AWAITING.equals(jobTarget.getStatus())) {
+        if (JobTargetStatus.PROCESS_AWAITING == jobTarget.getStatus()) {
             return JobTargetStatus.AWAITING_COMPLETION;
         }
 

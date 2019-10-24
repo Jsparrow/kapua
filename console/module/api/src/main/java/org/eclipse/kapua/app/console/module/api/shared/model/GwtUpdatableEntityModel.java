@@ -20,7 +20,6 @@ public abstract class GwtUpdatableEntityModel extends GwtEntityModel {
     private static final long serialVersionUID = -8268981197541435575L;
 
     public GwtUpdatableEntityModel() {
-        super();
     }
 
     @Override

@@ -56,12 +56,7 @@ public class ParentEndPoint implements EndPoint {
     @Override
     @XmlTransient
     public String getEndpoint(Exchange exchange, Object value, String previous, Map<String, Object> properties) {
-        for (EndPoint endPoint : endPoints) {
-            if (endPoint.matches(exchange, value, previous, properties)) {
-                return endPoint.getEndpoint(exchange, value, previous, properties);
-            }
-        }
-        return null;
+        return endPoints.stream().filter(endPoint -> endPoint.matches(exchange, value, previous, properties)).findFirst().map(endPoint -> endPoint.getEndpoint(exchange, value, previous, properties)).orElse(null);
     }
 
     public String getRegex() {

@@ -45,17 +45,11 @@ import org.eclipse.kapua.commons.util.ThrowingRunnable;
  */
 public class Suppressed<X extends Exception> implements AutoCloseable {
 
-    @FunctionalInterface
-    public static interface ExceptionSupplier<X> {
-
-        public X createNew(Throwable cause) throws Exception;
-    }
-
     private final Class<X> clazz;
-    private final ExceptionSupplier<X> supplier;
-    private LinkedList<Throwable> errors;
+	private final ExceptionSupplier<X> supplier;
+	private LinkedList<Throwable> errors;
 
-    public Suppressed(final Class<X> clazz) {
+	public Suppressed(final Class<X> clazz) {
         this.clazz = clazz;
         this.supplier = cause -> {
             Constructor<X> ctor = clazz.getConstructor(Throwable.class);
@@ -63,12 +57,12 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         };
     }
 
-    public Suppressed(final Class<X> clazz, final ExceptionSupplier<X> supplier) {
+	public Suppressed(final Class<X> clazz, final ExceptionSupplier<X> supplier) {
         this.clazz = clazz;
         this.supplier = supplier;
     }
 
-    public void closeSuppressed(AutoCloseable autoCloseable) {
+	public void closeSuppressed(AutoCloseable autoCloseable) {
         if (autoCloseable == null) {
             return;
         }
@@ -76,7 +70,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         run(autoCloseable::close);
     }
 
-    public void run(final ThrowingRunnable runnable) {
+	public void run(final ThrowingRunnable runnable) {
         if (runnable == null) {
             return;
         }
@@ -88,7 +82,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         }
     }
 
-    public void call(final Callable<?> callable) {
+	public void call(final Callable<?> callable) {
         if (callable == null) {
             return;
         }
@@ -100,7 +94,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         }
     }
 
-    public void add(Throwable e) {
+	public void add(Throwable e) {
         if (e == null) {
             return;
         }
@@ -111,7 +105,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         errors.add(e);
     }
 
-    @Override
+	@Override
     public void close() throws X {
         if (errors == null || errors.isEmpty()) {
             // no recorded errors
@@ -134,7 +128,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         throw result;
     }
 
-    private X newException(final Throwable cause) {
+	private X newException(final Throwable cause) {
         try {
             return supplier.createNew(cause);
         } catch (Exception e) {
@@ -142,15 +136,15 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         }
     }
 
-    public static Suppressed<Exception> withException() {
+	public static Suppressed<Exception> withException() {
         return new Suppressed<>(Exception.class, Exception::new);
     }
 
-    public static Suppressed<RuntimeException> withRuntimeException() {
+	public static Suppressed<RuntimeException> withRuntimeException() {
         return new Suppressed<>(RuntimeException.class, RuntimeException::new);
     }
 
-    public static void closeAll(Collection<? extends AutoCloseable> list) {
+	public static void closeAll(Collection<? extends AutoCloseable> list) {
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -158,7 +152,7 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         closeAll(list.stream());
     }
 
-    public static void closeAll(Stream<? extends AutoCloseable> list) {
+	public static void closeAll(Stream<? extends AutoCloseable> list) {
         if (list == null) {
             return;
         }
@@ -166,6 +160,12 @@ public class Suppressed<X extends Exception> implements AutoCloseable {
         try (final Suppressed<RuntimeException> s = withRuntimeException()) {
             list.forEach(s::closeSuppressed);
         }
+    }
+
+	@FunctionalInterface
+    public static interface ExceptionSupplier<X> {
+
+        X createNew(Throwable cause) throws Exception;
     }
 
 }

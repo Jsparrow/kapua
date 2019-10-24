@@ -29,5 +29,5 @@ public interface JAXBContextProvider {
      * @return
      * @throws KapuaException
      */
-    public JAXBContext getJAXBContext() throws KapuaException;
+    JAXBContext getJAXBContext() throws KapuaException;
 }

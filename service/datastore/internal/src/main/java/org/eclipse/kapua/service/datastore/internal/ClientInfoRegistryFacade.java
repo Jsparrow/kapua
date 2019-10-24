@@ -170,7 +170,6 @@ public class ClientInfoRegistryFacade {
     public ClientInfo find(KapuaId scopeId, StorableId id)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(scopeId, "scopeId");
         ArgumentValidator.notNull(id, "id");
@@ -199,7 +198,6 @@ public class ClientInfoRegistryFacade {
     public ClientInfoListResult query(ClientInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -230,7 +228,6 @@ public class ClientInfoRegistryFacade {
     public long count(ClientInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -262,7 +259,6 @@ public class ClientInfoRegistryFacade {
     public void delete(ClientInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");

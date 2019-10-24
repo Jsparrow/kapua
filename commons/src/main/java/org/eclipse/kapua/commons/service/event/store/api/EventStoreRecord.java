@@ -46,74 +46,64 @@ import org.eclipse.kapua.model.xml.DateXmlAdapter;
         factoryMethod = "newEventStoreRecord")
 public interface EventStoreRecord extends KapuaUpdatableEntity {
 
-    public static final String TYPE = "eventStoreRecord";
+    String TYPE = "eventStoreRecord";
 
-    public default String getType() {
+    @Override
+	default String getType() {
         return TYPE;
     }
 
-    @XmlElement(name = "contextId")
-    public String getContextId();
+    @XmlElement(name = "contextId") String getContextId();
 
-    public void setContextId(String contextId);
+    void setContextId(String contextId);
 
     @XmlElement(name = "timestamp")
-    @XmlJavaTypeAdapter(DateXmlAdapter.class)
-    public Date getTimestamp();
+    @XmlJavaTypeAdapter(DateXmlAdapter.class) Date getTimestamp();
 
-    public void setTimestamp(Date timestamp);
+    void setTimestamp(Date timestamp);
 
     @XmlElement(name = "userId")
-    @XmlJavaTypeAdapter(KapuaIdAdapter.class)
-    public KapuaId getUserId();
+    @XmlJavaTypeAdapter(KapuaIdAdapter.class) KapuaId getUserId();
 
-    public void setUserId(KapuaId userId);
+    void setUserId(KapuaId userId);
 
-    @XmlElement(name = "service")
-    public String getService();
+    @XmlElement(name = "service") String getService();
 
-    public void setService(String service);
+    void setService(String service);
 
-    @XmlElement(name = "entityType")
-    public String getEntityType();
+    @XmlElement(name = "entityType") String getEntityType();
 
-    public void setEntityType(String entityType);
+    void setEntityType(String entityType);
 
-    @XmlElement(name = "scopeId")
-    @XmlJavaTypeAdapter(KapuaIdAdapter.class)
-    public KapuaId getScopeId();
+    @Override
+	@XmlElement(name = "scopeId")
+    @XmlJavaTypeAdapter(KapuaIdAdapter.class) KapuaId getScopeId();
 
-    public void setScopeId(KapuaId scopeId);
+    @Override void setScopeId(KapuaId scopeId);
 
     @XmlElement(name = "entityId")
-    @XmlJavaTypeAdapter(KapuaIdAdapter.class)
-    public KapuaId getEntityId();
+    @XmlJavaTypeAdapter(KapuaIdAdapter.class) KapuaId getEntityId();
 
-    public void setEntityId(KapuaId entityId);
+    void setEntityId(KapuaId entityId);
 
-    @XmlElement(name = "operation")
-    public String getOperation();
+    @XmlElement(name = "operation") String getOperation();
 
-    public void setOperation(String operation);
+    void setOperation(String operation);
 
-    @XmlElement(name = "inputs")
-    public String getInputs();
+    @XmlElement(name = "inputs") String getInputs();
 
-    public void setInputs(String inputs);
+    void setInputs(String inputs);
 
-    @XmlElement(name = "outputs")
-    public String getOutputs();
+    @XmlElement(name = "outputs") String getOutputs();
 
-    public void setOutputs(String outputs);
+    void setOutputs(String outputs);
 
-    @XmlElement(name = "status")
-    public EventStatus getStatus();
+    @XmlElement(name = "status") EventStatus getStatus();
 
-    public void setStatus(EventStatus status);
+    void setStatus(EventStatus status);
 
-    @XmlElement(name = "note")
-    public String getNote();
+    @XmlElement(name = "note") String getNote();
 
-    public void setNote(String note);
+    void setNote(String note);
 
 }

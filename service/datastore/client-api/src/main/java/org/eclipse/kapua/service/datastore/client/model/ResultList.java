@@ -31,7 +31,7 @@ public class ResultList<T> {
      * @param totalCount
      */
     public ResultList(long totalCount) {
-        result = new ArrayList<T>();
+        result = new ArrayList<>();
         this.totalCount = totalCount;
     }
 

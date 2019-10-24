@@ -37,7 +37,6 @@ public abstract class AbstractKapuaEntityCreator<E extends KapuaEntity> implemen
      * @param scopeId
      */
     protected AbstractKapuaEntityCreator(KapuaId scopeId) {
-        super();
         setScopeId(scopeId);
     }
 

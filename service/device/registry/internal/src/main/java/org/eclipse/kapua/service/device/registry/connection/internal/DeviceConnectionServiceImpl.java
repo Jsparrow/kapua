@@ -217,11 +217,11 @@ public class DeviceConnectionServiceImpl extends
         }
         LOGGER.info("DeviceConnectionService: received kapua event from {}, operation {}", kapuaEvent.getService(), kapuaEvent.getOperation());
         if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteConnectionByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteConnectionByAccountId(kapuaEvent.getEntityId());
         }
     }
 
-    private void deleteConnectionByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteConnectionByAccountId(KapuaId accountId) throws KapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceConnectionFactory deviceConnectionFactory = locator.getFactory(DeviceConnectionFactory.class);
 

@@ -33,26 +33,26 @@ public class ConnectorDescriptorTest {
 
     private static final String BROKER_IP_RESOLVER_CLASS_NAME;
 
-    private KapuaBrokerJAXBContextLoader kapuaBrokerJAXBContextLoader;
-
     static {
         BrokerSetting config = BrokerSetting.getInstance();
         BROKER_IP_RESOLVER_CLASS_NAME = config.getString(BrokerSettingKey.BROKER_IP_RESOLVER_CLASS_NAME);
     }
 
-    @Before
+	private KapuaBrokerJAXBContextLoader kapuaBrokerJAXBContextLoader;
+
+	@Before
     public void resetSettings() throws KapuaException {
         kapuaBrokerJAXBContextLoader = new KapuaBrokerJAXBContextLoader();
         kapuaBrokerJAXBContextLoader.init();
         BrokerSetting.resetInstance();
     }
 
-    @After
+	@After
     public void resetJAXBContext() {
         kapuaBrokerJAXBContextLoader.reset();
     }
 
-    /**
+	/**
      * A simple test to get a default descriptor
      */
     @Test
@@ -61,7 +61,7 @@ public class ConnectorDescriptorTest {
         Assert.assertNotNull(provider);
     }
 
-    /**
+	/**
      * A simple test to get a descriptor
      */
     @Test
@@ -71,7 +71,7 @@ public class ConnectorDescriptorTest {
         Assert.assertNotNull(descriptor);
     }
 
-    /**
+	/**
      * A simple test to get a descriptor
      */
     @Test
@@ -79,7 +79,7 @@ public class ConnectorDescriptorTest {
         Assert.assertNotNull(ConnectorDescriptorProviders.getDescriptor("foo"));
     }
 
-    /**
+	/**
      * Use a default provider, disabling the default descriptor
      * <p>
      * The result has to be a {@code null} descriptor
@@ -97,7 +97,7 @@ public class ConnectorDescriptorTest {
         });
     }
 
-    /**
+	/**
      * Use a default provider, configuring a file which does not exist
      */
     @Test(expected = Exception.class)
@@ -108,7 +108,7 @@ public class ConnectorDescriptorTest {
         Tests.runWithProperties(properties, DefaultConnectorDescriptionProvider::new);
     }
 
-    /**
+	/**
      * Use a default provider, configuring a file which does exist, but allow default fallback
      */
     @Test
@@ -123,7 +123,7 @@ public class ConnectorDescriptorTest {
         });
     }
 
-    /**
+	/**
      * Use a default provider, configuring an empty file, disabling default
      */
     @Test
@@ -139,7 +139,7 @@ public class ConnectorDescriptorTest {
         });
     }
 
-    /**
+	/**
      * Use a default provider, configuring a non-empty configuration
      */
     @Test
@@ -163,7 +163,7 @@ public class ConnectorDescriptorTest {
         });
     }
 
-    /**
+	/**
      * Use a default provider, configuring a non-empty, invalid configuration
      */
     @Test(expected = Exception.class)
@@ -175,7 +175,7 @@ public class ConnectorDescriptorTest {
         Tests.runWithProperties(properties, DefaultConnectorDescriptionProvider::new);
     }
 
-    /**
+	/**
      * Empty configuration URL
      */
     @Test
@@ -186,7 +186,7 @@ public class ConnectorDescriptorTest {
         Tests.runWithProperties(properties, DefaultConnectorDescriptionProvider::new);
     }
 
-    @Test
+	@Test
     public void testBrokerIpOrHostNameConfigFile() throws Exception {
         System.clearProperty("broker.ip");
         System.setProperty("kapua.config.url", "broker.setting/kapua-broker-setting-1.properties");
@@ -196,7 +196,7 @@ public class ConnectorDescriptorTest {
         Assert.assertEquals("192.168.33.10", ipOrHostName);
     }
 
-    @Test
+	@Test
     public void testBrokerIpOrHostNameEnvProperty() throws Exception {
         System.clearProperty("kapua.config.url");
         System.setProperty("broker.ip", "192.168.33.10");
@@ -206,7 +206,7 @@ public class ConnectorDescriptorTest {
         Assert.assertEquals("192.168.33.10", ipOrHostName);
     }
 
-    @Test
+	@Test
     public void testBrokerIpOrHostNameEmptyConfigFile() throws Exception {
         System.clearProperty("broker.ip");
         System.setProperty("kapua.config.url", "broker.setting/kapua-broker-setting-2.properties");
@@ -216,7 +216,7 @@ public class ConnectorDescriptorTest {
         Assert.assertEquals("192.168.33.10", ipOrHostName);
     }
 
-    @Test(expected = Exception.class)
+	@Test(expected = Exception.class)
     public void testBrokerIpOrHostNameNoEnvProperty() throws Exception {
         System.clearProperty("broker.ip");
         System.setProperty("kapua.config.url", "broker.setting/kapua-broker-setting-3.properties");
@@ -225,7 +225,7 @@ public class ConnectorDescriptorTest {
         brokerIpResolver.getBrokerIpOrHostName();
     }
 
-    /**
+	/**
      * Code reused form KapuaSecurityBrokerFilter for instantiating broker ip resolver class.
      *
      * @param clazz           class that instantiates broker ip resolver

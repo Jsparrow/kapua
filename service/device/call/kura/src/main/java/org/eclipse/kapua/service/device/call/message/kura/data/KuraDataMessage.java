@@ -26,7 +26,6 @@ public class KuraDataMessage extends KuraMessage<KuraDataChannel, KuraDataPayloa
      * Constructor
      */
     public KuraDataMessage() {
-        super();
     }
 
     /**

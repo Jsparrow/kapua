@@ -25,18 +25,17 @@ public class AccessTokenQueryImpl extends AbstractKapuaQuery<AccessToken> implem
 
     /**
      * Constructor
-     */
-    private AccessTokenQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public AccessTokenQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private AccessTokenQueryImpl() {
     }
 }

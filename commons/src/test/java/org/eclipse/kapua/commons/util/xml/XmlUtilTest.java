@@ -18,11 +18,15 @@ import org.junit.experimental.categories.Category;
 
 import javax.xml.bind.JAXBException;
 import java.lang.reflect.Constructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class XmlUtilTest extends Assert {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(XmlUtilTest.class);
+
+	@Test
     public void testConstructor() throws Exception {
         Constructor<XmlUtil> xmlUtilConstruct = XmlUtil.class.getDeclaredConstructor();
         xmlUtilConstruct.setAccessible(true);
@@ -47,6 +51,7 @@ public class XmlUtilTest extends Assert {
                 Assert.assertNotNull(XmlUtil.marshal(jaxbElements[i]));
                 fail("Exception expected for: " + jaxbElements[i]);
             } catch (JAXBException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -56,6 +61,7 @@ public class XmlUtilTest extends Assert {
                 XmlUtil.marshal(jaxbElementsFalse[i]);
                 fail("Exception expected for: " + jaxbElementsFalse[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // expected
             }
         }
@@ -70,6 +76,7 @@ public class XmlUtilTest extends Assert {
                 Assert.assertNotNull(XmlUtil.unmarshal(listOfStrings[i], Integer.class));
                 fail("Exception expected for: " + listOfStrings[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }

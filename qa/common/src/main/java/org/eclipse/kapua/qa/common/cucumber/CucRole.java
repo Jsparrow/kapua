@@ -18,6 +18,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 public class CucRole {
 
@@ -31,33 +32,34 @@ public class CucRole {
         if (scopeId != null) {
             id = new KapuaEid(BigInteger.valueOf(scopeId));
         }
-        if (actions != null) {
-            String tmpAct = actions.trim().toLowerCase();
-            if (tmpAct.length() != 0) {
-                actionSet = new HashSet<>();
-                String[] tmpList = actions.split(",");
+        if (actions == null) {
+			return;
+		}
+		String tmpAct = StringUtils.lowerCase(actions.trim());
+		if (tmpAct.length() != 0) {
+		    actionSet = new HashSet<>();
+		    String[] tmpList = actions.split(",");
 
-                for (String tmpS : tmpList) {
-                    switch (tmpS.trim().toLowerCase()) {
-                    case "read":
-                        actionSet.add(Actions.read);
-                        break;
-                    case "write":
-                        actionSet.add(Actions.write);
-                        break;
-                    case "delete":
-                        actionSet.add(Actions.delete);
-                        break;
-                    case "connect":
-                        actionSet.add(Actions.connect);
-                        break;
-                    case "execute":
-                        actionSet.add(Actions.execute);
-                        break;
-                    }
-                }
-            }
-        }
+		    for (String tmpS : tmpList) {
+		        switch (StringUtils.lowerCase(tmpS.trim())) {
+		        case "read":
+		            actionSet.add(Actions.read);
+		            break;
+		        case "write":
+		            actionSet.add(Actions.write);
+		            break;
+		        case "delete":
+		            actionSet.add(Actions.delete);
+		            break;
+		        case "connect":
+		            actionSet.add(Actions.connect);
+		            break;
+		        case "execute":
+		            actionSet.add(Actions.execute);
+		            break;
+		        }
+		    }
+		}
     }
 
     public String getName() {

@@ -15,7 +15,7 @@ import java.io.Serializable;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
 
-public class KapuaBasePagingCursor extends BaseModel implements Serializable {
+public class KapuaBasePagingCursor extends BaseModel {
 
     private static final long serialVersionUID = 5814738657797246416L;
 

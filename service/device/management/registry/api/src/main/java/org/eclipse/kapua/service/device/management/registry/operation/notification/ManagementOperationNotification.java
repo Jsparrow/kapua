@@ -31,7 +31,7 @@ import java.util.Date;
 @XmlType(factoryClass = ManagementOperationNotificationXmlRegistry.class, factoryMethod = "newManagementOperationNotification")
 public interface ManagementOperationNotification extends KapuaEntity {
 
-    static final String TYPE = "managementOperationNotification";
+    String TYPE = "managementOperationNotification";
 
     @Override
     default String getType() {

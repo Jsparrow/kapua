@@ -98,7 +98,7 @@ public class LocalCache<K, V> implements Cache<K, V> {
      * @return
      */
     public List<K> getAllKeys() {
-        ArrayList<K> keys = new ArrayList<K>();
+        ArrayList<K> keys = new ArrayList<>();
         if (cache != null) {
             keys.addAll(cache.asMap().keySet());
         }

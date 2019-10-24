@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
 
@@ -60,24 +61,23 @@ public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
             throws GwtKapuaException {
         HttpSession session = req.getSession();
 
-        if (!isValidXSRFToken(session, userToken)) {
-            if (session != null) {
-                logger.info("XSRF token is NOT VALID - Token={}", userToken.getToken());
-                logger.debug("\tSender IP: {}", req.getRemoteAddr());
-                logger.debug("\tSender Host: {}", req.getRemoteHost());
-                logger.debug("\tSender Port: {}", req.getRemotePort());
-                logger.debug("\tFull Request URL\n {}?{}\n\n",
-                        req.getRequestURL().toString(),
-                        req.getQueryString());
+        if (isValidXSRFToken(session, userToken)) {
+			return;
+		}
+		if (session != null) {
+		    logger.info("XSRF token is NOT VALID - Token={}", userToken.getToken());
+		    logger.debug("\tSender IP: {}", req.getRemoteAddr());
+		    logger.debug("\tSender Host: {}", req.getRemoteHost());
+		    logger.debug("\tSender Port: {}", req.getRemotePort());
+		    logger.debug("\tFull Request URL\n {}?{}\n\n",
+		            req.getRequestURL().toString(),
+		            req.getQueryString());
 
-                // forcing the console log out
-                session.invalidate();
-            }
-
-            logger.debug("Session invalidated.");
-
-            throw new GwtKapuaException(GwtKapuaErrorCode.XSRF_INVALID_TOKEN, null, "Invalid XSRF token");
-        }
+		    // forcing the console log out
+		    session.invalidate();
+		}
+		logger.debug("Session invalidated.");
+		throw new GwtKapuaException(GwtKapuaErrorCode.XSRF_INVALID_TOKEN, null, "Invalid XSRF token");
     }
 
     /**
@@ -104,24 +104,21 @@ public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
         if (serverXSRFToken != null) {
             String serverToken = serverXSRFToken.getToken();
 
-            // Checking the XSRF validity on the serverToken
-            if (isValidStringToken(serverToken)) {
-                if (isValidStringToken(userToken.getToken())) {
-                    if (serverToken.equals(userToken.getToken())) {
-                        // Checking expire date
-                        if (new Date().before(userToken.getExpiresOn())) {
-                            logger.debug("XSRF Token is VALID - {}", userToken.getToken());
+            boolean condition = isValidStringToken(serverToken) && isValidStringToken(userToken.getToken()) && serverToken.equals(userToken.getToken());
+			// Checking the XSRF validity on the serverToken
+            if (condition) {
+			    // Checking expire date
+			    if (new Date().before(userToken.getExpiresOn())) {
+			        logger.debug("XSRF Token is VALID - {}", userToken.getToken());
 
-                            // Reset used token
-                            session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
-                            return true;
-                        } else {
-                            session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
-                            logger.error("XSRF Token is EXPIRED - {}", userToken.getToken());
-                        }
-                    }
-                }
-            }
+			        // Reset used token
+			        session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
+			        return true;
+			    } else {
+			        session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
+			        logger.error("XSRF Token is EXPIRED - {}", userToken.getToken());
+			    }
+			}
         }
 
         logger.debug("XSRF Token is NOT VALID - {}", userToken.getToken());
@@ -136,11 +133,10 @@ public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
      * @return boolean
      */
     private static boolean isValidStringToken(String token) {
-        if (token != null) {
-            if (!token.isEmpty()) {
-                return true;
-            }
-        }
+        boolean condition = token != null && !StringUtils.isEmpty(token);
+		if (condition) {
+		    return true;
+		}
         return false;
     }
 
@@ -161,10 +157,7 @@ public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
         ServletFileUpload upload = new ServletFileUpload();
         List<FileItem> items = upload.parseRequest(req);
 
-        // Process the uploaded items
-        Iterator<FileItem> iter = items.iterator();
-        while (iter.hasNext()) {
-            FileItem item = iter.next();
+        for (FileItem item : items) {
             if (item.isFormField()) {
                 String name = item.getFieldName();
 
@@ -178,7 +171,7 @@ public abstract class KapuaRemoteServiceServlet extends RemoteServiceServlet {
         return fieldValue;
     }
 
-    static public void checkXSRFToken(HttpServletRequest req, GwtXSRFToken token)
+    public static void checkXSRFToken(HttpServletRequest req, GwtXSRFToken token)
             throws Exception {
         performXSRFTokenValidation(req, token);
     }

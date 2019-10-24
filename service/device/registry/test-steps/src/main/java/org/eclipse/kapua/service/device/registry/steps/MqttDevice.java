@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Device that connects to MQTT broker and listens for messages as kapua-sys user
@@ -121,7 +122,7 @@ public class MqttDevice {
             subscribedClient.connect(subscriberOpts);
             subscribedClient.subscribe(NO_TOPIC_FILTER, DEFAULT_QOS);
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         subscribedClient.setCallback(new MqttCallback() {
@@ -137,7 +138,7 @@ public class MqttDevice {
                 // this messages can be received by this callback before the listenerReceivedMqttMessage is properly initialized. So a check for null should be performed
                 // TODO manage this client in a better way, so the list of the received messages should be internal and exposed as getter to the caller.
                 if (listenerReceivedMqttMessage != null) {
-                    if (!topic.contains("MQTT/CONNECT") || topic.contains("MQTT/DISCONNECT")) {
+                    if (!StringUtils.contains(topic, "MQTT/CONNECT") || StringUtils.contains(topic, "MQTT/DISCONNECT")) {
                         listenerReceivedMqttMessage.clear();
                         listenerReceivedMqttMessage.put(topic, new String(mqttMessage.getPayload()));
                     } else {
@@ -224,7 +225,7 @@ public class MqttDevice {
      */
     public void mqttClientsDisconnect() {
         logger.info("(Client {}) - Disconnecting", clientId);
-        for (Map.Entry<String, MqttClient> mqttClient : mqttClients.entrySet()) {
+        mqttClients.entrySet().forEach(mqttClient -> {
             try {
                 try (final Suppressed<Exception> s = Suppressed.withException()) {
                     s.run(mqttClient.getValue()::disconnect);
@@ -233,7 +234,7 @@ public class MqttDevice {
             } catch (final Exception e) {
                 logger.warn("Failed during cleanup of client Paho resources", e);
             }
-        }
+        });
     }
 
     /**
@@ -256,7 +257,7 @@ public class MqttDevice {
         try {
             mqttClient.publish(topic, payload.getBytes(), DEFAULT_QOS, DEFAULT_RETAIN);
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

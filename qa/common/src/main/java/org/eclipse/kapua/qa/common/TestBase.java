@@ -27,71 +27,79 @@ import java.util.Random;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public class TestBase extends Assert {
 
-    /**
+    private static final Logger logger = LoggerFactory.getLogger(TestBase.class);
+
+	/**
+     * Commonly used constants
+     */
+    protected static final KapuaId SYS_SCOPE_ID = KapuaId.ONE;
+
+	protected static final KapuaId SYS_USER_ID = new KapuaEid(BigInteger.ONE);
+
+	protected static final int DEFAULT_SCOPE_ID = 42;
+
+	protected static final KapuaId DEFAULT_ID = new KapuaEid(BigInteger.valueOf(DEFAULT_SCOPE_ID));
+
+	/**
      * Common locator instance
      */
     public KapuaLocator locator;
 
-    /**
+	/**
      * Inter step data scratchpad.
      */
     public StepData stepData;
 
-    /**
+	/**
      * Common database helper
      */
     public DBHelper database;
 
-    /**
+	/**
      * Current scenario scope
      */
     public Scenario scenario;
 
-    /**
+	/**
      * Current test type
      * Either unit or integration
      */
     private String testType;
 
-    /**
+	/**
      * Random number generator
      */
     public Random random = new Random();
 
-    /**
-     * Commonly used constants
-     */
-    protected static final KapuaId SYS_SCOPE_ID = KapuaId.ONE;
-    protected static final KapuaId SYS_USER_ID = new KapuaEid(BigInteger.ONE);
-    protected static final int DEFAULT_SCOPE_ID = 42;
-    protected static final KapuaId DEFAULT_ID = new KapuaEid(BigInteger.valueOf(DEFAULT_SCOPE_ID));
-
-    public TestBase() {
+	public TestBase() {
 
         testType = System.getProperty("test.type");
         if (testType != null) {
-            testType = testType.trim().toLowerCase();
+            testType = StringUtils.lowerCase(testType.trim());
         } else {
             testType = "";
         }
     }
 
-    public KapuaId getKapuaId() {
+	public KapuaId getKapuaId() {
         return new KapuaEid(BigInteger.valueOf(random.nextLong()).abs());
     }
 
-    public KapuaId getKapuaId(int id) {
+	public KapuaId getKapuaId(int id) {
         return new KapuaEid(BigInteger.valueOf(id));
     }
 
-    public KapuaId getKapuaId(String id) {
+	public KapuaId getKapuaId(String id) {
         return new KapuaEid(new BigInteger(id));
     }
 
-    public KapuaId getCurrentScopeId() {
+	public KapuaId getCurrentScopeId() {
 
         if (stepData.contains("LastAccountId")) {
             return (KapuaId) stepData.get("LastAccountId");
@@ -102,7 +110,7 @@ public class TestBase extends Assert {
         }
     }
 
-    public KapuaId getCurrentParentId() {
+	public KapuaId getCurrentParentId() {
 
         if (stepData.get("LastAccount") != null) {
             return ((Account)stepData.get("LastAccount")).getScopeId();
@@ -111,7 +119,7 @@ public class TestBase extends Assert {
         }
     }
 
-    public KapuaId getCurrentUserId() {
+	public KapuaId getCurrentUserId() {
 
         if (stepData.contains("LastUserId")) {
             return (KapuaId) stepData.get("LastUserId");
@@ -122,20 +130,20 @@ public class TestBase extends Assert {
         }
     }
 
-    public boolean isUnitTest() {
-        return testType.equals("unit");
+	public boolean isUnitTest() {
+        return "unit".equals(testType);
     }
 
-    public boolean isIntegrationTest() {
-        return testType.isEmpty() || testType.equals("integration");
+	public boolean isIntegrationTest() {
+        return StringUtils.isEmpty(testType) || "integration".equals(testType);
     }
 
-    public void primeException() {
+	public void primeException() {
         stepData.put("ExceptionCaught", false);
         stepData.remove("Exception");
     }
 
-    /**
+	/**
      * Check the exception that was caught. In case the exception was expected the type and message is shown in the cucumber logs.
      * Otherwise the exception is rethrown failing the test and dumping the stack trace to help resolving problems.
      */
@@ -143,42 +151,41 @@ public class TestBase extends Assert {
             throws Exception {
 
         boolean exceptionExpected = stepData.contains("ExceptionExpected") ? (boolean)stepData.get("ExceptionExpected") : false;
-        String exceptionName = stepData.contains("ExceptionName") ? ((String)stepData.get("ExceptionName")).trim() : "";
-        String exceptionMessage = stepData.contains("ExceptionMessage") ? ((String)stepData.get("ExceptionMessage")).trim() : "";
+        String exceptionName = stepData.contains("ExceptionName") ? StringUtils.trim(((String) stepData.get("ExceptionName"))) : "";
+        String exceptionMessage = stepData.contains("ExceptionMessage") ? StringUtils.trim(((String) stepData.get("ExceptionMessage"))) : "";
 
         if (!exceptionExpected ||
-                (!exceptionName.isEmpty() && !ex.getClass().toGenericString().contains(exceptionName)) ||
-                (!exceptionMessage.isEmpty() && !exceptionMessage.trim().contentEquals("*") && !ex.getMessage().contains(exceptionMessage))) {
+                (!StringUtils.isEmpty(exceptionName) && !StringUtils.contains(ex.getClass().toGenericString(), exceptionName)) ||
+                (!StringUtils.isEmpty(exceptionMessage) && !StringUtils.trim(exceptionMessage).contentEquals("*") && !StringUtils.contains(ex.getMessage(), exceptionMessage))) {
             scenario.write("An unexpected exception was raised!");
             throw(ex);
         }
 
-        scenario.write("Exception raised as expected: " + ex.getClass().getCanonicalName() + ", " + ex.getMessage());
+        scenario.write(new StringBuilder().append("Exception raised as expected: ").append(ex.getClass().getCanonicalName()).append(", ").append(ex.getMessage()).toString());
         stepData.put("ExceptionCaught", true);
         stepData.put("Exception", ex);
     }
 
-    public void verifyAssertionError(AssertionError assetError)
+	public void verifyAssertionError(AssertionError assetError)
             throws AssertionError {
 
         boolean assertErrorExpected = stepData.contains("AssertErrorExpected") ? (boolean)stepData.get("AssertErrorExpected") : false;
-        String assertErrorName = stepData.contains("AssertErrorName") ? ((String)stepData.get("AssertErrorName")).trim() : "";
-        String assertErrorMessage = stepData.contains("AssertErrorMessage") ? ((String)stepData.get("AssertErrorMessage")).trim() : "";
+        String assertErrorName = stepData.contains("AssertErrorName") ? StringUtils.trim(((String) stepData.get("AssertErrorName"))) : "";
+        String assertErrorMessage = stepData.contains("AssertErrorMessage") ? StringUtils.trim(((String) stepData.get("AssertErrorMessage"))) : "";
 
         if (!assertErrorExpected ||
-                (!assertErrorName.isEmpty() && !assetError.getClass().toGenericString().contains(assertErrorName)) ||
-                (!assertErrorMessage.isEmpty() && !assertErrorMessage.trim().contentEquals("*") && !assetError.getMessage().contains(assertErrorMessage))) {
+                (!StringUtils.isEmpty(assertErrorName) && !StringUtils.contains(assetError.getClass().toGenericString(), assertErrorName)) ||
+                (!StringUtils.isEmpty(assertErrorMessage) && !StringUtils.trim(assertErrorMessage).contentEquals("*") && !StringUtils.contains(assetError.getMessage(), assertErrorMessage))) {
             scenario.write("An unexpected assert error was raised!");
             throw(assetError);
         }
 
-        scenario.write("Assert error raised as expected: " + assetError.getClass().getCanonicalName() + ", " + assetError.getMessage());
+        scenario.write(new StringBuilder().append("Assert error raised as expected: ").append(assetError.getClass().getCanonicalName()).append(", ").append(assetError.getMessage()).toString());
         stepData.put("AssertErrorCaught", true);
         stepData.put("AssertError", assetError);
     }
 
-
-    public Date parseDateString(String date) {
+	public Date parseDateString(String date) {
         DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
         Date expDate = null;
         Instant now = Instant.now();
@@ -187,7 +194,7 @@ public class TestBase extends Assert {
             return null;
         }
         // Special keywords for date
-        switch (date.trim().toLowerCase()) {
+        switch (StringUtils.lowerCase(date.trim())) {
             case "yesterday":
                 expDate = Date.from(now.minus(Duration.ofDays(1)));
                 break;
@@ -203,15 +210,16 @@ public class TestBase extends Assert {
 
         // Not one of the special cases. Just parse the date.
         try {
-            expDate = df.parse(date.trim().toLowerCase());
+            expDate = df.parse(StringUtils.lowerCase(date.trim()));
         } catch (ParseException | NullPointerException e) {
+			logger.error(e.getMessage(), e);
             // skip, leave date null
         }
 
         return expDate;
     }
 
-    public String getRandomString() {
+	public String getRandomString() {
 
         return String.valueOf(random.nextInt());
     }

@@ -13,5 +13,5 @@ package org.eclipse.kapua.app.console.module.api.client.ui.validator;
 
 public interface GwtValidationRegex {
 
-    public String getRegex();
+    String getRegex();
 }

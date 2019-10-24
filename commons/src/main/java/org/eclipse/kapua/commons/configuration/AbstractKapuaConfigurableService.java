@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Configurable service definition abstract reference implementation.
@@ -90,61 +91,55 @@ public abstract class AbstractKapuaConfigurableService extends AbstractKapuaServ
      * @param parentId
      * @throws KapuaException
      */
-    private void validateConfigurations(String pid, KapuaTocd ocd, Map<String, Object> updatedProps, KapuaId scopeId, KapuaId parentId)
+    private void validateConfigurations(KapuaTocd ocd, Map<String, Object> updatedProps, KapuaId scopeId, KapuaId parentId)
             throws KapuaException {
-        if (ocd != null) {
+        if (ocd == null) {
+			return;
+		}
+		// build a map of all the attribute definitions
+		Map<String, KapuaTad> attrDefs = new HashMap<>();
+		List<KapuaTad> defs = ocd.getAD();
+		defs.forEach(def -> attrDefs.put(def.getId(), def));
+		// loop over the proposed property values
+		// and validate them against the definition
+		for (Entry<String, Object> property : updatedProps.entrySet()) {
 
-            // build a map of all the attribute definitions
-            Map<String, KapuaTad> attrDefs = new HashMap<>();
-            List<KapuaTad> defs = ocd.getAD();
-            for (KapuaTad def : defs) {
-                attrDefs.put(def.getId(), def);
-            }
+		    String key = property.getKey();
+		    KapuaTad attrDef = attrDefs.get(key);
 
-            // loop over the proposed property values
-            // and validate them against the definition
-            for (Entry<String, Object> property : updatedProps.entrySet()) {
+		    // is attribute undefined?
+		    if (attrDef == null) {
+		        // we do not have an attribute descriptor to the validation
+		        // against
+		        // As OSGI insert attributes at runtime like service.pid,
+		        // component.name,
+		        // for the attribute for which we do not have a definition,
+		        // just accept them.
+		        continue;
+		    }
 
-                String key = property.getKey();
-                KapuaTad attrDef = attrDefs.get(key);
-
-                // is attribute undefined?
-                if (attrDef == null) {
-                    // we do not have an attribute descriptor to the validation
-                    // against
-                    // As OSGI insert attributes at runtime like service.pid,
-                    // component.name,
-                    // for the attribute for which we do not have a definition,
-                    // just accept them.
-                    continue;
-                }
-
-                // validate the attribute value
-                Object objectValue = property.getValue();
-                String stringValue = StringUtil.valueToString(objectValue);
-                if (stringValue != null) {
-                    ValueTokenizer tokenizer = new ValueTokenizer(stringValue);
-                    String result = tokenizer.validate(attrDef);
-                    if (result != null && !result.isEmpty()) {
-                        throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.ATTRIBUTE_INVALID, attrDef.getId() + ": " + result);
-                    }
-                }
-            }
-
-            // make sure all required properties are set
-            for (KapuaTad attrDef : ocd.getAD()) {
-                // to the required attributes make sure a value is defined.
-                if (attrDef.isRequired()) {
-                    if (updatedProps.get(attrDef.getId()) == null) {
-                        // if the default one is not defined, throw
-                        // exception.
-                        throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.REQUIRED_ATTRIBUTE_MISSING, attrDef.getId());
-                    }
-                }
-            }
-
-            validateNewConfigValuesCoherence(ocd, updatedProps, scopeId, parentId);
-        }
+		    // validate the attribute value
+		    Object objectValue = property.getValue();
+		    String stringValue = StringUtil.valueToString(objectValue);
+		    if (stringValue != null) {
+		        ValueTokenizer tokenizer = new ValueTokenizer(stringValue);
+		        String result = tokenizer.validate(attrDef);
+		        if (result != null && !StringUtils.isEmpty(result)) {
+		            throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.ATTRIBUTE_INVALID, new StringBuilder().append(attrDef.getId()).append(": ").append(result).toString());
+		        }
+		    }
+		}
+		// make sure all required properties are set
+		for (KapuaTad attrDef : ocd.getAD()) {
+		    boolean condition = attrDef.isRequired() && updatedProps.get(attrDef.getId()) == null;
+			// to the required attributes make sure a value is defined.
+		    if (condition) {
+			    // if the default one is not defined, throw
+			    // exception.
+			    throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.REQUIRED_ATTRIBUTE_MISSING, attrDef.getId());
+			}
+		}
+		validateNewConfigValuesCoherence(ocd, updatedProps, scopeId, parentId);
     }
 
     protected boolean validateNewConfigValuesCoherence(KapuaTocd ocd, Map<String, Object> updatedProps, KapuaId scopeId, KapuaId parentId) throws KapuaException {
@@ -159,11 +154,7 @@ public abstract class AbstractKapuaConfigurableService extends AbstractKapuaServ
      */
     private static Properties toProperties(Map<String, Object> values) {
         Properties props = new Properties();
-        for (Entry<String, Object> entry : values.entrySet()) {
-            if (entry.getValue() != null) {
-                props.setProperty(entry.getKey(), StringUtil.valueToString(entry.getValue()));
-            }
-        }
+        values.entrySet().stream().filter(entry -> entry.getValue() != null).forEach(entry -> props.setProperty(entry.getKey(), StringUtil.valueToString(entry.getValue())));
 
         return props;
     }
@@ -289,7 +280,7 @@ public abstract class AbstractKapuaConfigurableService extends AbstractKapuaServ
         authorizationService.checkPermission(permissionFactory.newPermission(domain, Actions.write, scopeId));
 
         KapuaTocd ocd = getConfigMetadata(scopeId);
-        validateConfigurations(pid, ocd, values, scopeId, parentId);
+        validateConfigurations(ocd, values, scopeId, parentId);
 
         ServiceConfigQueryImpl query = new ServiceConfigQueryImpl(scopeId);
         query.setPredicate(

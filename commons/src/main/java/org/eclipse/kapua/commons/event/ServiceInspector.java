@@ -25,6 +25,7 @@ import org.eclipse.kapua.event.ServiceEvent;
 import org.eclipse.kapua.service.KapuaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public class ServiceInspector {
 
@@ -57,7 +58,8 @@ public class ServiceInspector {
                         raiseAnnotations = matchingMethod.getAnnotationsByType(RaiseServiceEvent.class);
                     }
                 } catch (NoSuchMethodException e) {                 
-                    LOGGER.debug("Method not found in superclass: {}", method);
+                    LOGGER.error(e.getMessage(), e);
+					LOGGER.debug("Method not found in superclass: {}", method);
                 }
             }
             if (!isNullOrEmpty(listenAnnotations) && !isNullOrEmpty(raiseAnnotations)) {
@@ -167,7 +169,7 @@ public class ServiceInspector {
 
     private static boolean isEnhancedClass(Object obj) {
         String canonicalName = obj.getClass().getCanonicalName();
-        boolean isEnhanced = canonicalName.contains(GUICE_ENHANCER_TAG);
+        boolean isEnhanced = StringUtils.contains(canonicalName, GUICE_ENHANCER_TAG);
         return isEnhanced;
     }
 

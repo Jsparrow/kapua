@@ -21,13 +21,13 @@ public interface Transport {
     /**
      * Connect
      */
-    public void connect();
+    void connect();
 
     /**
      * Disconnect gracefully <br>
      * A later call to {@link #connect()} must be possible.
      */
-    public void disconnect();
+    void disconnect();
 
     /**
      * Set the runnable which will be called when a connection was established
@@ -36,12 +36,12 @@ public interface Transport {
      * this method won't be called again.
      * </p>
      */
-    public void whenConnected(Runnable runnable);
+    void whenConnected(Runnable runnable);
 
     /**
      * Set the runnable which will be called when a connection was lost
      */
-    public void whenDisconnected(Runnable runnable);
+    void whenDisconnected(Runnable runnable);
 
     /**
      * Subscribe to a topic or topic pattern
@@ -51,7 +51,7 @@ public interface Transport {
      * @param consumer
      *            the consumer to call when a message was received
      */
-    public void subscribe(Topic topic, Consumer<Message> consumer);
+    void subscribe(Topic topic, Consumer<Message> consumer);
 
     /**
      * Unsubscribe from a topic or topic pattern
@@ -59,7 +59,7 @@ public interface Transport {
      * @param topic
      *            to unsubscribe from
      */
-    public void unsubscribe(Topic topic);
+    void unsubscribe(Topic topic);
 
     /**
      * Send a message to a topic
@@ -69,5 +69,5 @@ public interface Transport {
      * @param payload
      *            the payload to send
      */
-    public void sendMessage(Topic topic, byte[] payload);
+    void sendMessage(Topic topic, byte[] payload);
 }

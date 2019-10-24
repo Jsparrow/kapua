@@ -17,7 +17,7 @@ import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 /**
  * {@link DeviceChannel} {@link org.eclipse.kapua.service.device.call.kura.Kura} implementation.
  */
-public class KuraUnmatchedChannel extends KuraChannel implements DeviceChannel {
+public class KuraUnmatchedChannel extends KuraChannel {
 
     /**
      * Constructor

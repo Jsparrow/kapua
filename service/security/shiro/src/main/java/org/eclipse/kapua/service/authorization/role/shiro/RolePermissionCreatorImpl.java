@@ -39,20 +39,24 @@ public class RolePermissionCreatorImpl extends AbstractKapuaEntityCreator<RolePe
         super(scopeId);
     }
 
-    public KapuaId getRoleId() {
+    @Override
+	public KapuaId getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(KapuaId roleId) {
+    @Override
+	public void setRoleId(KapuaId roleId) {
         this.roleId = roleId;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Permission getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+    @Override
+	public void setPermission(Permission permission) {
         this.permission = permission;
     }
 }

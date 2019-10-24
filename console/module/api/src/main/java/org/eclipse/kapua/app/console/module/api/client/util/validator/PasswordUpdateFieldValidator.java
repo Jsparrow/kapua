@@ -32,12 +32,11 @@ public class PasswordUpdateFieldValidator extends PasswordFieldValidator {
     @Override
     public String validate(Field<?> field, String value) {
 
-        if (value == null || value.equals("")) {
-            textField.setRegex(null);
-            return null;
-        }
-
-        return super.validate(field, value);
+        if (!(value == null || "".equals(value))) {
+			return super.validate(field, value);
+		}
+		textField.setRegex(null);
+		return null;
     }
 
 }

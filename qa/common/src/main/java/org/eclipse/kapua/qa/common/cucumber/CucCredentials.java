@@ -19,13 +19,17 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data object used in Gherkin to transfer Credentials data.
  */
 public class CucCredentials {
 
-    private String name;
+    private static final Logger logger = LoggerFactory.getLogger(CucCredentials.class);
+
+	private String name;
 
     private String password;
 
@@ -89,6 +93,7 @@ public class CucCredentials {
         try {
             expDate = df.parse(expirationDate);
         } catch (ParseException | NullPointerException e) {
+			logger.error(e.getMessage(), e);
             // skip, leave date null
         }
 

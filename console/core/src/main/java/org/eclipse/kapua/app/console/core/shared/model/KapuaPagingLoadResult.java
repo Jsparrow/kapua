@@ -18,11 +18,11 @@ import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBasePagingCurs
 
 public interface KapuaPagingLoadResult<Data> extends PagingLoadResult<Data> {
 
-    public int getVirtualOffset();
+    int getVirtualOffset();
 
-    public void setVirtualOffset(int offset);
+    void setVirtualOffset(int offset);
 
-    public Stack<KapuaBasePagingCursor> getCursorOffset();
+    Stack<KapuaBasePagingCursor> getCursorOffset();
 
-    public int getLastOffset();
+    int getLastOffset();
 }

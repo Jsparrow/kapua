@@ -41,7 +41,7 @@ public interface GwtAccountService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtAccount create(GwtXSRFToken xsfrToken, GwtAccountCreator gwtAccountCreator)
+    GwtAccount create(GwtXSRFToken xsfrToken, GwtAccountCreator gwtAccountCreator)
             throws GwtKapuaException;
 
     /**
@@ -50,7 +50,7 @@ public interface GwtAccountService extends RemoteService {
      * @param accountId
      * @return
      */
-    public GwtAccount find(String accountId)
+    GwtAccount find(String accountId)
             throws GwtKapuaException;
 
     /**
@@ -59,7 +59,7 @@ public interface GwtAccountService extends RemoteService {
      * @param accountName
      * @return GwtAccount
      */
-    public GwtAccount findByAccountName(String accountName)
+    GwtAccount findByAccountName(String accountName)
             throws GwtKapuaException;
 
     /**
@@ -69,7 +69,7 @@ public interface GwtAccountService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtGroupedNVPair> getAccountInfo(String gwtScopeId, String gwtAccountId)
+    ListLoadResult<GwtGroupedNVPair> getAccountInfo(String gwtScopeId, String gwtAccountId)
             throws GwtKapuaException;
 
     /**
@@ -80,7 +80,7 @@ public interface GwtAccountService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtAccount updateAccountProperties(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
+    GwtAccount updateAccountProperties(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
             throws GwtKapuaException;
 
     /**
@@ -91,7 +91,7 @@ public interface GwtAccountService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtAccount update(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
+    GwtAccount update(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
             throws GwtKapuaException;
 
     /**
@@ -101,7 +101,7 @@ public interface GwtAccountService extends RemoteService {
      * @param gwtAccount
      * @throws GwtKapuaException
      */
-    public void delete(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
+    void delete(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
             throws GwtKapuaException;
 
     /**
@@ -111,7 +111,7 @@ public interface GwtAccountService extends RemoteService {
      *
      * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtAccount> findAll(String scopeId)
+    ListLoadResult<GwtAccount> findAll(String scopeId)
             throws GwtKapuaException;
 
     /**
@@ -133,7 +133,7 @@ public interface GwtAccountService extends RemoteService {
      * @param scopeId
      * @return
      */
-    public List<GwtConfigComponent> findServiceConfigurations(String scopeId)
+    List<GwtConfigComponent> findServiceConfigurations(String scopeId)
             throws GwtKapuaException;
 
     /**

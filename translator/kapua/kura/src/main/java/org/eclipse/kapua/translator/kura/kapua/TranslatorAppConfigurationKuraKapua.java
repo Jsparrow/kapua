@@ -149,7 +149,7 @@ public class TranslatorAppConfigurationKuraKapua extends AbstractSimpleTranslato
             throws TranslatorException {
         try {
             DeviceConfigurationImpl deviceConfiguration = new DeviceConfigurationImpl();
-            for (KuraDeviceComponentConfiguration kuraDeviceCompConf : kuraDeviceConfiguration.getConfigurations()) {
+            kuraDeviceConfiguration.getConfigurations().forEach(kuraDeviceCompConf -> {
 
                 String componentId = kuraDeviceCompConf.getComponentId();
                 DeviceComponentConfigurationImpl deviceComponentConfiguration = new DeviceComponentConfigurationImpl(componentId);
@@ -162,7 +162,7 @@ public class TranslatorAppConfigurationKuraKapua extends AbstractSimpleTranslato
 
                 // Add to kapua configuration
                 deviceConfiguration.getComponentConfigurations().add(deviceComponentConfiguration);
-            }
+            });
 
             StringWriter sw = new StringWriter();
 
@@ -184,7 +184,7 @@ public class TranslatorAppConfigurationKuraKapua extends AbstractSimpleTranslato
         definition.setName(kuraDefinition.getName());
         definition.setDescription(kuraDefinition.getDescription());
 
-        for (KapuaTad kuraAd : kuraDefinition.getAD()) {
+        kuraDefinition.getAD().forEach(kuraAd -> {
             TadImpl ad = new TadImpl();
             ad.setCardinality(kuraAd.getCardinality());
             ad.setDefault(ad.getDefault());
@@ -196,46 +196,38 @@ public class TranslatorAppConfigurationKuraKapua extends AbstractSimpleTranslato
             ad.setType(kuraAd.getType());
             ad.setRequired(kuraAd.isRequired());
 
-            for (KapuaToption kuraToption : kuraAd.getOption()) {
+            kuraAd.getOption().forEach(kuraToption -> {
                 ToptionImpl kapuaToption = new ToptionImpl();
 
                 kapuaToption.setLabel(kuraToption.getLabel());
                 kapuaToption.setValue(kuraToption.getValue());
 
                 ad.addOption(kapuaToption);
-            }
+            });
 
-            for (Entry<QName, String> entry : kuraAd.getOtherAttributes().entrySet()) {
-                ad.putOtherAttribute(entry.getKey(),
-                        entry.getValue());
-            }
+            kuraAd.getOtherAttributes().entrySet().forEach(entry -> ad.putOtherAttribute(entry.getKey(), entry.getValue()));
 
             definition.addAD(ad);
-        }
+        });
 
-        for (KapuaTicon kuraIcon : kuraDefinition.getIcon()) {
+        kuraDefinition.getIcon().forEach(kuraIcon -> {
             KapuaTicon icon = new TiconImpl();
             icon.setResource(kuraIcon.getResource());
             icon.setSize(kuraIcon.getSize());
 
             definition.addIcon(icon);
-        }
+        });
 
-        for (Object kuraAny : kuraDefinition.getAny()) {
-            definition.addAny(kuraAny);
-        }
+        kuraDefinition.getAny().forEach(definition::addAny);
 
-        for (Entry<QName, String> entry : kuraDefinition.getOtherAttributes().entrySet()) {
-            definition.putOtherAttribute(entry.getKey(),
-                    entry.getValue());
-        }
+        kuraDefinition.getOtherAttributes().entrySet().forEach(entry -> definition.putOtherAttribute(entry.getKey(), entry.getValue()));
 
         return definition;
     }
 
     private Map<String, Object> translate(Map<String, Object> kuraProperties) {
         Map<String, Object> properties = new HashMap<>();
-        for (Entry<String, Object> entry : kuraProperties.entrySet()) {
+        kuraProperties.entrySet().forEach(entry -> {
 
             Object value = entry.getValue();
 
@@ -258,7 +250,7 @@ public class TranslatorAppConfigurationKuraKapua extends AbstractSimpleTranslato
             //
             // Set property
             properties.put(entry.getKey(), value);
-        }
+        });
         return properties;
     }
 }

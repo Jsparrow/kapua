@@ -16,7 +16,7 @@ import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 import java.io.Serializable;
 import java.util.List;
 
-public class GwtDeploymentPackage extends KapuaBaseModel implements Serializable {
+public class GwtDeploymentPackage extends KapuaBaseModel {
 
     private static final long serialVersionUID = -7648638193931336835L;
 

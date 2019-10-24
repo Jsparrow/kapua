@@ -22,11 +22,89 @@ public class DownloadSimulator implements AutoCloseable {
     private Job job;
     private final long bytesPerSecond;
 
-    public static enum JobState {
+    public DownloadSimulator(final ScheduledExecutorService executor, final long bytesPerSecond) {
+        this.executor = executor;
+        this.bytesPerSecond = bytesPerSecond;
+    }
+
+	public synchronized boolean startDownload(final long jobId, final long totalBytes,
+            final Consumer<DownloadState> consumer, final Runnable whenCompleted) {
+
+        if (job != null) {
+            // only one job can run at a time
+            return false;
+        }
+
+        job = new Job(executor.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS), totalBytes, jobId,
+                consumer, whenCompleted);
+
+        return true;
+    }
+
+	public boolean cancelDownload() {
+        DownloadState state;
+        Job job;
+
+        synchronized (this) {
+            if (this.job == null) {
+                return false;
+            }
+
+            this.job.cancel();
+            state = this.job.getState();
+            job = this.job;
+            this.job = null;
+        }
+
+        if (job.consumer != null) {
+            job.consumer.accept(state);
+        }
+
+        return true;
+    }
+
+	protected void tick() {
+        final DownloadState state;
+        synchronized (this) {
+            if (job == null) {
+                // this should never happen ;)
+                return;
+            }
+
+            job.tick();
+
+            state = job.getState();
+        }
+
+        if (job.consumer != null) {
+            job.consumer.accept(state);
+        }
+    }
+
+	@Override
+    public synchronized void close() {
+        // we don't stop the executor ... it was not created by us
+
+        if (job == null) {
+			return;
+		}
+		job.cancel();
+		job = null;
+    }
+
+	public synchronized DownloadState getState() {
+        if (job == null) {
+            return DownloadState.DONE;
+        }
+
+        return job.getState();
+    }
+
+	public static enum JobState {
         RUNNING, COMPLETED, CANCELED, FAILED;
     }
 
-    private class Job {
+	private class Job {
 
         private final long totalBytes;
         private long currentBytes;
@@ -51,15 +129,16 @@ public class DownloadSimulator implements AutoCloseable {
             }
 
             currentBytes += bytesPerSecond;
-            if (currentBytes >= totalBytes) {
-                currentBytes = totalBytes;
-                future.cancel(false);
-                state = JobState.COMPLETED;
-                if (whenCompleted != null) {
-                    // run outside of sync lock
-                    executor.execute(whenCompleted);
-                }
-            }
+            if (currentBytes < totalBytes) {
+				return;
+			}
+			currentBytes = totalBytes;
+			future.cancel(false);
+			state = JobState.COMPLETED;
+			if (whenCompleted != null) {
+			    // run outside of sync lock
+			    executor.execute(whenCompleted);
+			}
         }
 
         public void cancel() {
@@ -86,82 +165,5 @@ public class DownloadSimulator implements AutoCloseable {
         private double getCompletion() {
             return (double) currentBytes / (double) totalBytes;
         }
-    }
-
-    public DownloadSimulator(final ScheduledExecutorService executor, final long bytesPerSecond) {
-        this.executor = executor;
-        this.bytesPerSecond = bytesPerSecond;
-    }
-
-    public synchronized boolean startDownload(final long jobId, final long totalBytes,
-            final Consumer<DownloadState> consumer, final Runnable whenCompleted) {
-
-        if (job != null) {
-            // only one job can run at a time
-            return false;
-        }
-
-        job = new Job(executor.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS), totalBytes, jobId,
-                consumer, whenCompleted);
-
-        return true;
-    }
-
-    public boolean cancelDownload() {
-        DownloadState state;
-        Job job;
-
-        synchronized (this) {
-            if (this.job == null) {
-                return false;
-            }
-
-            this.job.cancel();
-            state = this.job.getState();
-            job = this.job;
-            this.job = null;
-        }
-
-        if (job.consumer != null) {
-            job.consumer.accept(state);
-        }
-
-        return true;
-    }
-
-    protected void tick() {
-        final DownloadState state;
-        synchronized (this) {
-            if (job == null) {
-                // this should never happen ;)
-                return;
-            }
-
-            job.tick();
-
-            state = job.getState();
-        }
-
-        if (job.consumer != null) {
-            job.consumer.accept(state);
-        }
-    }
-
-    @Override
-    public synchronized void close() {
-        // we don't stop the executor ... it was not created by us
-
-        if (job != null) {
-            job.cancel();
-            job = null;
-        }
-    }
-
-    public synchronized DownloadState getState() {
-        if (job == null) {
-            return DownloadState.DONE;
-        }
-
-        return job.getState();
     }
 }

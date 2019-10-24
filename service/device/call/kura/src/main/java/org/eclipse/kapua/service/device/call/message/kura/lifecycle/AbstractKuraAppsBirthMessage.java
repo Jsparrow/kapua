@@ -22,7 +22,6 @@ public class AbstractKuraAppsBirthMessage<C extends AbstractKuraAppsBirthChannel
      * Constructor
      */
     public AbstractKuraAppsBirthMessage() {
-        super();
     }
 
     /**

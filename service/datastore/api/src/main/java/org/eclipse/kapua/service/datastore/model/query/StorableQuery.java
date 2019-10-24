@@ -36,8 +36,7 @@ public interface StorableQuery<S extends Object> {
      * @return The fetch attribute names list.
      */
     @XmlElementWrapper(name = "fetchAttributeName")
-    @XmlElement(name = "fetchAttributeName")
-    public List<String> getFetchAttributes();
+    @XmlElement(name = "fetchAttributeName") List<String> getFetchAttributes();
 
     /**
      * Adds an attribute to the fetch attribute names list
@@ -45,7 +44,7 @@ public interface StorableQuery<S extends Object> {
      * @param fetchAttribute The fetch attribute to add to the list.
      * @since 1.0.0
      */
-    public void addFetchAttributes(String fetchAttribute);
+    void addFetchAttributes(String fetchAttribute);
 
     /**
      * Sets the fetch attribute names list.<br>
@@ -54,7 +53,7 @@ public interface StorableQuery<S extends Object> {
      * @param fetchAttributeNames The fetch attribute names list.
      * @since 1.0.0
      */
-    public void setFetchAttributes(List<String> fetchAttributeNames);
+    void setFetchAttributes(List<String> fetchAttributeNames);
 
     /**
      * Gets the scope id

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Setting reference abstract implementation.
@@ -90,14 +91,14 @@ public abstract class AbstractKapuaSetting<K extends SettingKey> extends Abstrac
      */
     private static void loadConfigResources(CompositeConfiguration compositeConfig, String configResourceDirName) throws KapuaSettingException {
 
-        if (!configResourceDirName.endsWith("/")) {
-            configResourceDirName = configResourceDirName.concat("/");
+        if (!StringUtils.endsWith(configResourceDirName, "/")) {
+            configResourceDirName = configResourceDirName + "/";
         }
 
         File configsDir = new File(configResourceDirName);
         if (configsDir.exists() || configsDir.isDirectory()) {
             // Exclude hidden files
-            String[] configFileNames = configsDir.list((dir, name) -> !name.startsWith("."));
+            String[] configFileNames = configsDir.list((dir, name) -> !StringUtils.startsWith(name, "."));
 
             if (configFileNames != null && configFileNames.length > 0) {
                 for (String configFileName : configFileNames) {
@@ -105,7 +106,7 @@ public abstract class AbstractKapuaSetting<K extends SettingKey> extends Abstrac
                     String fileFullPath = String.join("", "file://", configResourceDirName, configFileName);
 
                     // Ignore files that arent named '*.properties'
-                    if (fileFullPath.endsWith(".properties")) {
+                    if (StringUtils.endsWith(fileFullPath, ".properties")) {
                         loadConfigResource(compositeConfig, fileFullPath);
                     } else {
                         LOG.warn("Ignored file: '{}'", fileFullPath);

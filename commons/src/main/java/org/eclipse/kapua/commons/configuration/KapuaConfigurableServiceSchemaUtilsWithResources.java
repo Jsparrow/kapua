@@ -47,7 +47,7 @@ public class KapuaConfigurableServiceSchemaUtilsWithResources {
             em.beginTransaction();
 
             ResourceSqlScriptExecutor sqlScriptExecutor = new ResourceSqlScriptExecutor();
-            sqlScriptExecutor.addQuery(path + "/" + filename);
+            sqlScriptExecutor.addQuery(new StringBuilder().append(path).append("/").append(filename).toString());
             sqlScriptExecutor.executeUpdate(em);
 
             em.commit();

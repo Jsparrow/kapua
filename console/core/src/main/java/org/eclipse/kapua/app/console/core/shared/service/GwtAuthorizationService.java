@@ -32,7 +32,7 @@ public interface GwtAuthorizationService extends RemoteService {
      * @throws GwtKapuaException If credentials are not valid.
      * @since 1.0.0
      */
-    public GwtSession login(GwtLoginCredential gwtLoginCredentials) throws GwtKapuaException;
+    GwtSession login(GwtLoginCredential gwtLoginCredentials) throws GwtKapuaException;
 
     /**
      * Logins a session based on the given access token. If the access token is correct a session is established and returned
@@ -42,7 +42,7 @@ public interface GwtAuthorizationService extends RemoteService {
      * @throws GwtKapuaException If the access token is not valid.
      * @since 1.0.0
      */
-    public GwtSession login(GwtJwtCredential gwtAccessTokenCredentials) throws GwtKapuaException;
+    GwtSession login(GwtJwtCredential gwtAccessTokenCredentials) throws GwtKapuaException;
 
     /**
      * Return the currently authenticated user or null if no session has been established.
@@ -51,7 +51,7 @@ public interface GwtAuthorizationService extends RemoteService {
      * @throws GwtKapuaException FIXME: document this
      * @since 1.0.0
      */
-    public GwtSession getCurrentSession()
+    GwtSession getCurrentSession()
             throws GwtKapuaException;
 
     /**
@@ -60,7 +60,7 @@ public interface GwtAuthorizationService extends RemoteService {
      * @throws GwtKapuaException FIXME: document this
      * @since 1.0.0
      */
-    public void logout()
+    void logout()
             throws GwtKapuaException;
 
 }

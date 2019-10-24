@@ -97,7 +97,7 @@ public class AuthenticationUtils {
 
             //
             // Return value
-            return salt + ":" + hashedValue;
+            return new StringBuilder().append(salt).append(":").append(hashedValue).toString();
         } catch (NoSuchAlgorithmException e) {
             throw new KapuaRuntimeException(KapuaAuthenticationErrorCodes.CREDENTIAL_CRYPT_ERROR, e);
         }

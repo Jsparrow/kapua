@@ -30,11 +30,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class GuiceLocatorImplTest {
 
-    private KapuaLocator locator = GuiceLocatorImpl.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(GuiceLocatorImplTest.class);
+	private KapuaLocator locator = GuiceLocatorImpl.getInstance();
 
     @Ignore
     @Test
@@ -78,7 +81,8 @@ public class GuiceLocatorImplTest {
         } catch (KapuaRuntimeException e) {
             Assert.assertEquals(KapuaLocatorErrorCodes.FACTORY_UNAVAILABLE, e.getCode());
         } catch (Throwable e) {
-            Assert.fail("Exception must be of type: " + KapuaRuntimeException.class.getName());
+            logger.error(e.getMessage(), e);
+			Assert.fail("Exception must be of type: " + KapuaRuntimeException.class.getName());
         }
     }
 

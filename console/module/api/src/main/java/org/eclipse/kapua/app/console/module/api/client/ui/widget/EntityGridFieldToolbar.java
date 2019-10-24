@@ -47,10 +47,11 @@ public abstract class EntityGridFieldToolbar<M extends GwtEntityModel> extends E
             @Override
             public void componentSelected(ButtonEvent ce) {
                 M selectedModel = entityGridField.getSelectionModel().getSelectedItem();
-                if (selectedModel != null) {
-                    ListStore<M> gridStore = entityGridField.getStore();
-                    gridStore.remove(selectedModel);
-                }
+                if (selectedModel == null) {
+					return;
+				}
+				ListStore<M> gridStore = entityGridField.getStore();
+				gridStore.remove(selectedModel);
             }
         };
     }

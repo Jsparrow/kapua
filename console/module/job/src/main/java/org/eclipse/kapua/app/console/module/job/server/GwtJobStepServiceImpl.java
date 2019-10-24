@@ -83,15 +83,13 @@ public class GwtJobStepServiceImpl extends KapuaRemoteServiceServlet implements 
 
     @Override
     public PagingLoadResult<GwtJobStep> findByJobId(PagingLoadConfig loadConfig, String scopeId, String jobId) throws GwtKapuaException {
-        if (jobId != null) {
-            GwtJobStepQuery gwtJobStepQuery = new GwtJobStepQuery();
-            gwtJobStepQuery.setScopeId(scopeId);
-            gwtJobStepQuery.setJobId(jobId);
-
-            return query(loadConfig, gwtJobStepQuery);
-        } else {
-            return new BasePagingLoadResult<GwtJobStep>(new ArrayList<GwtJobStep>(), 0, 0);
-        }
+        if (jobId == null) {
+			return new BasePagingLoadResult<GwtJobStep>(new ArrayList<GwtJobStep>(), 0, 0);
+		}
+		GwtJobStepQuery gwtJobStepQuery = new GwtJobStepQuery();
+		gwtJobStepQuery.setScopeId(scopeId);
+		gwtJobStepQuery.setJobId(jobId);
+		return query(loadConfig, gwtJobStepQuery);
     }
 
     @Override

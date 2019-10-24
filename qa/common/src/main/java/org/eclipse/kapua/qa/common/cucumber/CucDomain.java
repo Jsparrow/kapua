@@ -15,6 +15,7 @@ import org.eclipse.kapua.model.domain.Actions;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 public class CucDomain {
 
@@ -23,30 +24,30 @@ public class CucDomain {
     private Set<Actions> actionSet;
 
     public void doParse() {
-        if (this.actions != null) {
-            String[] tmpList = this.actions.split(",");
-            this.actionSet = new HashSet<>();
-
-            for (String tmpS : tmpList) {
-                switch (tmpS.trim().toLowerCase()) {
-                case "read":
-                    this.actionSet.add(Actions.read);
-                    break;
-                case "write":
-                    this.actionSet.add(Actions.write);
-                    break;
-                case "delete":
-                    this.actionSet.add(Actions.delete);
-                    break;
-                case "connect":
-                    this.actionSet.add(Actions.connect);
-                    break;
-                case "execute":
-                    this.actionSet.add(Actions.execute);
-                    break;
-                }
-            }
-        }
+        if (this.actions == null) {
+			return;
+		}
+		String[] tmpList = this.actions.split(",");
+		this.actionSet = new HashSet<>();
+		for (String tmpS : tmpList) {
+		    switch (StringUtils.lowerCase(tmpS.trim())) {
+		    case "read":
+		        this.actionSet.add(Actions.read);
+		        break;
+		    case "write":
+		        this.actionSet.add(Actions.write);
+		        break;
+		    case "delete":
+		        this.actionSet.add(Actions.delete);
+		        break;
+		    case "connect":
+		        this.actionSet.add(Actions.connect);
+		        break;
+		    case "execute":
+		        this.actionSet.add(Actions.execute);
+		        break;
+		    }
+		}
     }
 
     public String getName() {

@@ -104,12 +104,13 @@ public class EsEmbeddedEngine {
     }
 
     public void close() throws IOException {
-        if (node != null) {
-            LOG.info("Closing Elasticsearch embedded node...");
-            node.close();
-            node = null;
-            LOG.info("Closing Elasticsearch embedded node... DONE");
-        }
+        if (node == null) {
+			return;
+		}
+		LOG.info("Closing Elasticsearch embedded node...");
+		node.close();
+		node = null;
+		LOG.info("Closing Elasticsearch embedded node... DONE");
     }
 
     private class PluggableNode extends Node {

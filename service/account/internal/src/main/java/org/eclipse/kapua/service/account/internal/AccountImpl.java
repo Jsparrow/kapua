@@ -82,13 +82,6 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
     protected Date expirationDate;
 
     /**
-     * Constructor
-     */
-    protected AccountImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId
@@ -100,7 +93,7 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
         setParentAccountPath("");
     }
 
-    /**
+	/**
      * Constructor
      *
      * @param scopeId
@@ -113,7 +106,7 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
         setParentAccountPath("");
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @throws KapuaException
@@ -128,27 +121,33 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
         setExpirationDate(account.getExpirationDate());
     }
 
-    @Override
+	/**
+     * Constructor
+     */
+    protected AccountImpl() {
+    }
+
+	@Override
     public Organization getOrganization() {
         return organization;
     }
 
-    @Override
+	@Override
     public void setOrganization(Organization organization) {
         this.organization = (OrganizationImpl) organization;
     }
 
-    @Override
+	@Override
     public String getParentAccountPath() {
         return parentAccountPath;
     }
 
-    @Override
+	@Override
     public void setParentAccountPath(String parentAccountPath) {
         this.parentAccountPath = parentAccountPath;
     }
 
-    @Override
+	@Override
     public List<Account> getChildAccounts() {
         if (childAccounts == null) {
             childAccounts = new ArrayList<>();
@@ -157,7 +156,7 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
         return new ArrayList<>(childAccounts);
     }
 
-    private void setChildAccounts(List<Account> childAccounts) throws KapuaException {
+	private void setChildAccounts(List<Account> childAccounts) throws KapuaException {
         List<AccountImpl> accounts = new ArrayList<>();
 
         for (Account a : childAccounts) {
@@ -167,12 +166,12 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account {
         this.childAccounts = accounts;
     }
 
-    @Override
+	@Override
     public Date getExpirationDate() {
         return expirationDate;
     }
 
-    @Override
+	@Override
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }

@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import java.util.Collections;
 
 /**
  * Entity manager factory for the device module.
@@ -27,7 +28,7 @@ public class DeviceEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-device";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONSTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONSTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static DeviceEntityManagerFactory instance = new DeviceEntityManagerFactory();
 

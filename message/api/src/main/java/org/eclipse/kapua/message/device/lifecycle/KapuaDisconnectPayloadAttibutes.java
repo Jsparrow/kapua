@@ -20,16 +20,16 @@ package org.eclipse.kapua.message.device.lifecycle;
  */
 public class KapuaDisconnectPayloadAttibutes {
 
-    private KapuaDisconnectPayloadAttibutes() {
-    }
-
     /**
      * @since 1.0.0
      */
     public static final String UPTIME = "uptime";
 
-    /**
+	/**
      * @since 1.0.0
      */
     public static final String DISPLAY_NAME = "displayName";
+
+	private KapuaDisconnectPayloadAttibutes() {
+    }
 }

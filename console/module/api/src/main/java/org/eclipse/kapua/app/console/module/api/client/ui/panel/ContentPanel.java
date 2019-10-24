@@ -21,7 +21,6 @@ public class ContentPanel extends com.extjs.gxt.ui.client.widget.ContentPanel {
     private KapuaIcon icon;
 
     public ContentPanel() {
-        super();
     }
 
     public ContentPanel(Layout layout) {
@@ -40,7 +39,7 @@ public class ContentPanel extends com.extjs.gxt.ui.client.widget.ContentPanel {
     }
 
     public void setIcon(KapuaIcon icon) {
-        super.setHeading(icon.getInlineHTML() + "&nbsp;&nbsp;" + originalHeading);
+        super.setHeading(new StringBuilder().append(icon.getInlineHTML()).append("&nbsp;&nbsp;").append(originalHeading).toString());
         this.icon = icon;
     }
 

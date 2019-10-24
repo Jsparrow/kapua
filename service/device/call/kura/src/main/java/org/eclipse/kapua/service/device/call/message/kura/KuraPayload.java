@@ -173,7 +173,7 @@ public class KuraPayload implements DevicePayload {
                 Object value = getProtoKuraMetricValue(kuraMetric, kuraMetric.getType());
                 metrics.put(kuraMetric.getName(), value);
             } catch (MessageException ihte) {
-                LOG.warn("During deserialization, ignoring metric named: " + kuraMetric.getName() + ". Unrecognized value type: " + kuraMetric.getType(), ihte);
+                LOG.warn(new StringBuilder().append("During deserialization, ignoring metric named: ").append(kuraMetric.getName()).append(". Unrecognized value type: ").append(kuraMetric.getType()).toString(), ihte);
             }
         });
 

@@ -128,7 +128,7 @@ public class JobDeviceManagementTriggerManagerServiceImpl implements JobDeviceMa
 
                 long jobStepCount = JOB_STEP_SERVICE.count(jobStepQuery);
 
-                if (JobTargetStatus.PROCESS_OK.equals(jt.getStatus()) && jobStepCount <= jt.getStepIndex() + 1) {
+                if (JobTargetStatus.PROCESS_OK == jt.getStatus() && jobStepCount <= jt.getStepIndex() + 1) {
                     // The target is at the end of the job step processing
                     continue;
                 }
@@ -162,7 +162,8 @@ public class JobDeviceManagementTriggerManagerServiceImpl implements JobDeviceMa
             }
 
         } catch (Exception e) {
-            throw new ProcessOnConnectException(scopeId, deviceId);
+            LOG.error(e.getMessage(), e);
+			throw new ProcessOnConnectException(scopeId, deviceId);
         }
     }
 }

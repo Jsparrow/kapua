@@ -22,7 +22,6 @@ public class EventStoreQueryImpl extends AbstractKapuaQuery<EventStoreRecord> im
      * Constructor
      */
     public EventStoreQueryImpl() {
-        super();
     }
 
     /**

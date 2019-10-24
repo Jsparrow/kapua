@@ -16,7 +16,7 @@ import java.io.Serializable;
 import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 import org.eclipse.kapua.app.console.module.device.shared.model.GwtDeviceConnection.GwtConnectionUserCouplingMode;
 
-public class GwtDeviceCreator extends KapuaBaseModel implements Serializable {
+public class GwtDeviceCreator extends KapuaBaseModel {
 
     private static final long serialVersionUID = -6479267588650553114L;
 

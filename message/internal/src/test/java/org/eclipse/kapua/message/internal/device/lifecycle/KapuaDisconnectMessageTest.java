@@ -22,9 +22,7 @@ import org.junit.experimental.categories.Category;
 @Category(JUnitTests.class)
 public class KapuaDisconnectMessageTest extends Assert {
 
-    private static final String PAYLOAD_DISPLAY_STR = "" +
-            "displayName=A display name" +
-            "~~uptime=12";
+    private static final String PAYLOAD_DISPLAY_STR = new StringBuilder().append("").append("displayName=A display name").append("~~uptime=12").toString();
 
     @Test
     public void kapuaDisconnectPayloadInitConstructor() {

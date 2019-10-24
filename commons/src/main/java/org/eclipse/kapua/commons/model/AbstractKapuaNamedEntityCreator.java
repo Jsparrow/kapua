@@ -26,7 +26,11 @@ public abstract class AbstractKapuaNamedEntityCreator<E extends KapuaEntity> ext
     protected String name;
     protected String description;
 
-    /**
+    public AbstractKapuaNamedEntityCreator(KapuaId scopeId) {
+        super(scopeId);
+    }
+
+	/**
      * Constructor
      *
      * @param scopeId the scope {@link KapuaId}
@@ -39,26 +43,22 @@ public abstract class AbstractKapuaNamedEntityCreator<E extends KapuaEntity> ext
         setName(name);
     }
 
-    public AbstractKapuaNamedEntityCreator(KapuaId scopeId) {
-        super(scopeId);
-    }
-
-    @Override
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getDescription() {
         return description;
     }
 
-    @Override
+	@Override
     public void setDescription(String description) {
         this.description = description;
     }

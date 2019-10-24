@@ -19,17 +19,11 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface Generator {
 
-    public Payload update(Instant timestamp);
+    Payload update(Instant timestamp);
 
-    public static Generator onlyMetrics(final Function<Instant, Map<String, Object>> metrics) {
+    static Generator onlyMetrics(final Function<Instant, Map<String, Object>> metrics) {
         Objects.requireNonNull(metrics);
 
-        return new Generator() {
-
-            @Override
-            public Payload update(final Instant timestamp) {
-                return new Payload(metrics.apply(timestamp));
-            }
-        };
+        return (final Instant timestamp) -> new Payload(metrics.apply(timestamp));
     }
 }

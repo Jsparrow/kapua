@@ -20,7 +20,6 @@ public class GwtEntityCreator implements Serializable {
     private String scopeId;
 
     public GwtEntityCreator() {
-        super();
     }
 
     public String getScopeId() {

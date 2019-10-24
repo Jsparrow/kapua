@@ -44,21 +44,11 @@ import javax.inject.Inject;
 @ScenarioScoped
 public class EndpointServiceSteps extends TestBase {
 
-    private EndpointInfoService endpointInfoService;
-    private EndpointInfoFactory endpointInfoFactory;
-
-
-// ****************************************************************************************
-// * Implementation of Gherkin steps used in JobService.feature scenarios.                *
-// *                                                                                      *
-// * MockedLocator is used for Location Service. Mockito is used to mock other            *
-// * services that the Account services dependent on. Dependent services are:             *
-// * - Authorization Service                                                              *
-// ****************************************************************************************
-
     private static final Logger LOGGER = LoggerFactory.getLogger(EndpointServiceSteps.class);
+	private EndpointInfoService endpointInfoService;
+	private EndpointInfoFactory endpointInfoFactory;
 
-    // Default constructor
+	// Default constructor
     @Inject
     public EndpointServiceSteps(StepData stepData, DBHelper dbHelper) {
 
@@ -66,17 +56,7 @@ public class EndpointServiceSteps extends TestBase {
         this.database = dbHelper;
     }
 
-    // ************************************************************************************
-    // ************************************************************************************
-    // * Definition of Cucumber scenario steps                                            *
-    // ************************************************************************************
-    // ************************************************************************************
-
-    // ************************************************************************************
-    // * Setup and tear-down steps                                                        *
-    // ************************************************************************************
-
-    @Before
+	@Before
     public void beforeScenario(Scenario scenario) {
 
         this.scenario = scenario;
@@ -99,7 +79,7 @@ public class EndpointServiceSteps extends TestBase {
         XmlUtil.setContextProvider(new TestJAXBContextProvider());
     }
 
-    @After
+	@After
     public void afterScenario() {
 
         // ************************************************************************************
@@ -120,11 +100,7 @@ public class EndpointServiceSteps extends TestBase {
         }
     }
 
-    // ************************************************************************************
-    // * The Cucumber test steps                                                          *
-    // ************************************************************************************
-
-    @And("^I create endpoint with schema \"([^\"]*)\", dns \"([^\"]*)\" and port (\\d+)$")
+	@And("^I create endpoint with schema \"([^\"]*)\", dns \"([^\"]*)\" and port (\\d+)$")
     public void iCreateEndpointWithSchemaDnsAndPort(String schema, String dns, int port) throws Exception {
         EndpointInfoCreator endpointInfoCreator = endpointInfoFactory.newCreator(getCurrentScopeId());
         endpointInfoCreator.setSchema(schema);
@@ -138,7 +114,7 @@ public class EndpointServiceSteps extends TestBase {
         }
     }
 
-    @And("^I try to find endpoint with schema \"([^\"]*)\"$")
+	@And("^I try to find endpoint with schema \"([^\"]*)\"$")
     public void iFoundEndpointWithSchema(String schema) throws Exception {
         primeException();
 
@@ -154,14 +130,14 @@ public class EndpointServiceSteps extends TestBase {
         }
     }
 
-    @Then("^I found endpoint with schema \"([^\"]*)\"$")
+	@Then("^I found endpoint with schema \"([^\"]*)\"$")
     public void iFoundEndpoint(String endpointSchema) {
         EndpointInfo endpointInfo = (EndpointInfo) stepData.get("EndpointInfo");
 
         assertEquals(endpointSchema, endpointInfo.getSchema());
     }
 
-    @And("^I delete the last created endpoint$")
+	@And("^I delete the last created endpoint$")
     public void iDeleteTheLastCreatedEndpoint() throws Exception {
 
         try {
@@ -172,7 +148,7 @@ public class EndpointServiceSteps extends TestBase {
         }
     }
 
-    @When("^I delete endpoint with schema \"([^\"]*)\"$")
+	@When("^I delete endpoint with schema \"([^\"]*)\"$")
     public void iDeleteEndpointWithSchema(String schema) throws Throwable {
         primeException();
 
@@ -186,5 +162,34 @@ public class EndpointServiceSteps extends TestBase {
             verifyException(ex);
         }
     }
+
+
+// ****************************************************************************************
+// * Implementation of Gherkin steps used in JobService.feature scenarios.                *
+// *                                                                                      *
+// * MockedLocator is used for Location Service. Mockito is used to mock other            *
+// * services that the Account services dependent on. Dependent services are:             *
+// * - Authorization Service                                                              *
+// ****************************************************************************************
+
+    
+
+    // ************************************************************************************
+    // ************************************************************************************
+    // * Definition of Cucumber scenario steps                                            *
+    // ************************************************************************************
+    // ************************************************************************************
+
+    // ************************************************************************************
+    // * Setup and tear-down steps                                                        *
+    // ************************************************************************************
+
+    
+
+    // ************************************************************************************
+    // * The Cucumber test steps                                                          *
+    // ************************************************************************************
+
+    
 }
 

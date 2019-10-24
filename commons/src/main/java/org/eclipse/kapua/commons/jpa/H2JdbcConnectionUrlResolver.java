@@ -32,7 +32,7 @@ public class H2JdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
         SystemSetting config = SystemSetting.getInstance();
         String schema = MoreObjects.firstNonNull(config.getString(SystemSettingKey.DB_SCHEMA_ENV), config.getString(SystemSettingKey.DB_SCHEMA));
         if (schema != null) {
-            connectionUrl += ";INIT=CREATE SCHEMA IF NOT EXISTS " + schema + "\\;SET SCHEMA " + schema;
+            connectionUrl += new StringBuilder().append(";INIT=CREATE SCHEMA IF NOT EXISTS ").append(schema).append("\\;SET SCHEMA ").append(schema).toString();
         }
         String additionalOptions = config.getString(SystemSettingKey.DB_CONNECTION_ADDITIONAL_OPTIONS);
         if (StringUtils.isNotBlank(additionalOptions)) {

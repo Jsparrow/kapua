@@ -106,6 +106,26 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
     private QueryConverter queryConverter;
 
     /**
+     * Default constructor
+     * Initialize the client provider ({@link ClientProvider}) as singleton.
+     * 
+     * @throws ClientUnavailableException
+     */
+    private TransportDatastoreClient() throws ClientUnavailableException {
+        // lazy synchronization
+        if (instance == null) {
+            synchronized (TransportDatastoreClient.class) {
+                if (instance == null) {
+                    if (esClientProvider != null) {
+                        cleanupClient(true);
+                    }
+                    initClientProvider();
+                }
+            }
+        }
+    }
+
+	/**
      * Get the {@link TransportDatastoreClient} instance
      *
      * @return
@@ -129,37 +149,17 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return instance;
     }
 
-    /**
-     * Default constructor
-     * Initialize the client provider ({@link ClientProvider}) as singleton.
-     * 
-     * @throws ClientUnavailableException
-     */
-    private TransportDatastoreClient() throws ClientUnavailableException {
-        // lazy synchronization
-        if (instance == null) {
-            synchronized (TransportDatastoreClient.class) {
-                if (instance == null) {
-                    if (esClientProvider != null) {
-                        cleanupClient(true);
-                    }
-                    initClientProvider();
-                }
-            }
-        }
-    }
-
-    private void initClientProvider() throws ClientUnavailableException {
+	private void initClientProvider() throws ClientUnavailableException {
         logger.info("Starting Elasticsearch transport client...");
         esClientProvider = EsTransportClientProvider.init();
         logger.info("Starting Elasticsearch transport client... DONE");
     }
 
-    private ClientProvider<Client> getClientProvider() {
+	private ClientProvider<Client> getClientProvider() {
         return esClientProvider;
     }
 
-    @Override
+	@Override
     public void close() throws ClientUnavailableException {
         synchronized (TransportDatastoreClient.class) {
             if (instance != null) {
@@ -178,7 +178,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    private void cleanupClient(boolean raiseException) throws ClientUnavailableException {
+	private void cleanupClient(boolean raiseException) throws ClientUnavailableException {
         Throwable cause = null;
         try {
             if (esClientProvider != null && esClientProvider.getClient() != null) {
@@ -198,17 +198,17 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public void setModelContext(ModelContext modelContext) {
         this.modelContext = modelContext;
     }
 
-    @Override
+	@Override
     public void setQueryConverter(QueryConverter queryConverter) {
         this.queryConverter = queryConverter;
     }
 
-    @Override
+	@Override
     public InsertResponse insert(InsertRequest insertRequest) throws ClientException {
         checkClient();
         Map<String, Object> storableMap = modelContext.marshal(insertRequest.getStorable());
@@ -221,7 +221,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return new InsertResponse(response.getId(), insertRequest.getTypeDescriptor());
     }
 
-    @Override
+	@Override
     public UpdateResponse upsert(UpdateRequest upsertRequest) throws ClientException {
         checkClient();
         Map<String, Object> storableMap = modelContext.marshal(upsertRequest.getStorable());
@@ -233,7 +233,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return new UpdateResponse(response.getId(), upsertRequest.getTypeDescriptor());
     }
 
-    @Override
+	@Override
     public BulkUpdateResponse upsert(BulkUpdateRequest bulkUpsertRequest) throws ClientException {
         checkClient();
         BulkRequest bulkRequest = new BulkRequest();
@@ -272,7 +272,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return response;
     }
 
-    @Override
+	@Override
     public <T> T find(TypeDescriptor typeDescriptor, Object query, Class<T> clazz) throws ClientException {
         ResultList<T> result = query(typeDescriptor, query, clazz);
         if (result.getTotalCount() == 0) {
@@ -282,7 +282,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public <T> ResultList<T> query(TypeDescriptor typeDescriptor, Object query, Class<T> clazz) throws ClientException {
         checkClient();
         JsonNode queryMap = queryConverter.convertQuery(query);
@@ -310,12 +310,13 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
                 throw new RuntimeException("Total hits exceeds integer max value");
             }
         } catch (IndexNotFoundException infe) {
-            logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
+            logger.error(infe.getMessage(), infe);
+			logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
         } catch (SearchPhaseExecutionException spee) {
             logger.warn("Generic search error {}", spee.getMessage(), spee);
         }
 
-        ResultList<T> result = new ResultList<T>(totalCount);
+        ResultList<T> result = new ResultList<>(totalCount);
         if (searchHits != null) {
             for (SearchHit searchHit : searchHits) {
                 Map<String, Object> object = searchHit.getSource();
@@ -328,7 +329,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return result;
     }
 
-    @Override
+	@Override
     public long count(TypeDescriptor typeDescriptor, Object query) throws ClientException {
         checkClient();
         // TODO check for fetch none
@@ -342,7 +343,8 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
                     .actionGet(getQueryTimeout());
             searchHits = response.getHits();
         } catch (IndexNotFoundException infe) {
-            logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
+            logger.error(infe.getMessage(), infe);
+			logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
         } catch (SearchPhaseExecutionException spee) {
             logger.warn("Generic search error {}", spee.getMessage(), spee);
         }
@@ -352,7 +354,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return searchHits.getTotalHits();
     }
 
-    @Override
+	@Override
     public void delete(TypeDescriptor typeDescriptor, String id) throws ClientException {
         checkClient();
         try {
@@ -368,7 +370,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public void deleteByQuery(TypeDescriptor typeDescriptor, Object query) throws ClientException {
         checkClient();
         JsonNode queryMap = queryConverter.convertQuery(query);
@@ -387,7 +389,8 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
                     .setSource(toSearchSourceBuilder(queryMap))
                     .get(queryTimeout);
         } catch (IndexNotFoundException infe) {
-            logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
+            logger.error(infe.getMessage(), infe);
+			logger.warn("Cannot find index '{}'", typeDescriptor.getIndex());
         } catch (SearchPhaseExecutionException spee) {
             logger.warn("Generic search error {}", spee.getMessage(), spee);
         }
@@ -419,7 +422,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public IndexResponse isIndexExists(IndexRequest indexRequest) throws ClientException {
         checkClient();
         IndicesExistsResponse response = esClientProvider.getClient().admin().indices()
@@ -428,7 +431,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return new IndexResponse(response.isExists());
     }
 
-    @Override
+	@Override
     public IndexResponse findIndexes(IndexRequest indexRequest) throws ClientException {
         checkClient();
         try {
@@ -439,11 +442,12 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
             return new IndexResponse(list.toArray(new String[list.size()]));
         }
         catch (IndexNotFoundException e) {
-            return new IndexResponse(new String[0]);
+            logger.error(e.getMessage(), e);
+			return new IndexResponse(new String[0]);
         }
     }
 
-    @Override
+	@Override
     public void createIndex(String indexName, ObjectNode indexSettings) throws ClientException {
         checkClient();
         esClientProvider.getClient().admin()
@@ -454,7 +458,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
                 .actionGet(getQueryTimeout());
     }
 
-    @Override
+	@Override
     public boolean isMappingExists(TypeDescriptor typeDescriptor) throws ClientException {
         checkClient();
         GetMappingsRequest mappingsRequest = new GetMappingsRequest().indices(typeDescriptor.getIndex());
@@ -465,7 +469,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return metadata != null;
     }
 
-    @Override
+	@Override
     public void putMapping(TypeDescriptor typeDescriptor, JsonNode mapping) throws ClientException {
         checkClient();
         // Check message type mapping
@@ -484,7 +488,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    private String[] toIncludedExcludedFields(JsonNode queryMap) throws ClientException {
+	private String[] toIncludedExcludedFields(JsonNode queryMap) throws ClientException {
         if (queryMap instanceof ArrayNode) {
             ArrayNode arrayNode = (ArrayNode) queryMap;
             String[] fields = new String[arrayNode.size()];
@@ -498,7 +502,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    private SearchSourceBuilder toSearchSourceBuilder(JsonNode queryMap) throws ClientException {
+	private SearchSourceBuilder toSearchSourceBuilder(JsonNode queryMap) throws ClientException {
         SearchSourceBuilder searchSourceBuilder = null;
         try {
             String content = queryMap.toString();
@@ -514,7 +518,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public void deleteAllIndexes() throws ClientException {
         final DeleteIndexRequest request = DeleteIndexAction.INSTANCE.newRequestBuilder(esClientProvider.getClient()).request();
         request.indices(INDEXES_ALL);
@@ -528,7 +532,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    @Override
+	@Override
     public void deleteIndexes(String... indexes) throws ClientException {
         final DeleteIndexRequest request = DeleteIndexAction.INSTANCE.newRequestBuilder(esClientProvider.getClient()).request();
         for (String index : indexes) {
@@ -543,7 +547,8 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
             } catch (IllegalStateException e) {
                 throw new ClientException(ClientErrorCodes.ACTION_ERROR, e, CLIENT_CANNOT_DELETE_INDEX_ERROR_MSG);
             } catch (IndexNotFoundException e) {
-                // do nothing it's not an error
+                logger.error(e.getMessage(), e);
+				// do nothing it's not an error
                 // switch the log level to debug?
                 logger.debug("Deleting index {} : index does not exist!", index);
             }
@@ -551,7 +556,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
 
     }
 
-    @Override
+	@Override
     public void refreshAllIndexes() throws ClientException {
         // final RefreshRequest request = new RefreshRequestBuilder(client, action).request();//DeleteIndexAction.INSTANCE.newRequestBuilder(esClientProvider.getClient()).request();
         final RefreshRequest request = RefreshAction.INSTANCE.newRequestBuilder(esClientProvider.getClient()).request();
@@ -566,13 +571,13 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         }
     }
 
-    private void checkClient() throws ClientUndefinedException {
+	private void checkClient() throws ClientUndefinedException {
         if (esClientProvider.getClient() == null) {
             throw new ClientUndefinedException(CLIENT_UNDEFINED_MSG);
         }
     }
 
-    /**
+	/**
      * Get the scroll timeout (default value)
      * 
      * @return
@@ -581,7 +586,7 @@ public class TransportDatastoreClient implements org.eclipse.kapua.service.datas
         return TimeValue.timeValueMillis(ClientSettings.getInstance().getLong(ClientSettingsKey.SCROLL_TIMEOUT, 60000));
     }
 
-    /**
+	/**
      * Get the query timeout
      *
      * @return

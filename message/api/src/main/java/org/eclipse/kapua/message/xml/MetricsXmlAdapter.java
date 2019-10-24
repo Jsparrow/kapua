@@ -27,17 +27,15 @@ public class MetricsXmlAdapter extends XmlAdapter<XmlAdaptedMetrics, Map<String,
 
         List<XmlAdaptedMetric> adaptedMapItems = new ArrayList<>();
 
-        for (Entry<String, Object> sourceEntry : sourceMap.entrySet()) {
-            if (sourceEntry.getValue() != null) {
-                XmlAdaptedMetric adaptedMapItem = new XmlAdaptedMetric();
+        sourceMap.entrySet().stream().filter(sourceEntry -> sourceEntry.getValue() != null).forEach(sourceEntry -> {
+		    XmlAdaptedMetric adaptedMapItem = new XmlAdaptedMetric();
 
-                adaptedMapItem.setName(sourceEntry.getKey());
-                adaptedMapItem.setValueType(sourceEntry.getValue().getClass());
-                adaptedMapItem.setValue(ObjectValueConverter.toString(sourceEntry.getValue()));
+		    adaptedMapItem.setName(sourceEntry.getKey());
+		    adaptedMapItem.setValueType(sourceEntry.getValue().getClass());
+		    adaptedMapItem.setValue(ObjectValueConverter.toString(sourceEntry.getValue()));
 
-                adaptedMapItems.add(adaptedMapItem);
-            }
-        }
+		    adaptedMapItems.add(adaptedMapItem);
+		});
 
         return new XmlAdaptedMetrics(adaptedMapItems);
     }
@@ -51,12 +49,12 @@ public class MetricsXmlAdapter extends XmlAdapter<XmlAdaptedMetrics, Map<String,
 
         Map<String, Object> map = new HashMap<>();
 
-        for (XmlAdaptedMetric sourceItem : sourceAdapter.getAdaptedMetrics()) {
+        sourceAdapter.getAdaptedMetrics().forEach(sourceItem -> {
             String name = sourceItem.getName();
             Object value = ObjectValueConverter.fromString(sourceItem.getValue(), sourceItem.getValueType());
 
             map.put(name, value);
-        }
+        });
 
         return map;
     }

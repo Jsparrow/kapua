@@ -152,10 +152,10 @@ public class DeviceSnapshotManagementServiceImpl extends AbstractDeviceManagemen
         // Create event
         createDeviceEvent(scopeId, deviceId, snapshotRequestMessage, responseMessage);
 
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new SnapshotGetManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
-        }
+        if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new SnapshotGetManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
     }
 }

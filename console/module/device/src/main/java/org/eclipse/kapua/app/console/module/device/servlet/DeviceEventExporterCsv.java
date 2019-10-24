@@ -51,7 +51,7 @@ public class DeviceEventExporterCsv extends DeviceEventExporter {
 
         response.setContentType("text/csv");
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + URLEncoder.encode(clientId, "UTF-8") + "_device_events.csv");
+        response.setHeader("Content-Disposition", new StringBuilder().append("attachment; filename*=UTF-8''").append(URLEncoder.encode(clientId, "UTF-8")).append("_device_events.csv").toString());
         response.setHeader("Cache-Control", "no-transform, max-age=0");
 
         OutputStreamWriter osw = new OutputStreamWriter(response.getOutputStream(), Charset.forName("UTF-8"));

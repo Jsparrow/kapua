@@ -19,24 +19,22 @@ import java.util.HashMap;
 public class PlaceholderReplacer {
 
     private static final String REGEX_REPLACEMENT_CHARS = "([\\\\\\.\\)\\]\\}\\(‌​\\[\\{\\*\\+\\?\\^\\$\\|])";
+	private static HashMap<String, String> replacingMap;
 
-    enum CAMEL_ROUTER_PLACEHOLDER {
-        CLASSIFIER
-    }
-
-    private static HashMap<String, String> replacingMap;
-
-    static {
+	static {
         replacingMap = new HashMap<>();
-        replacingMap.put(CAMEL_ROUTER_PLACEHOLDER.CLASSIFIER.name(), "^" +
-                SystemSetting.getInstance().getMessageClassifier().replaceAll(REGEX_REPLACEMENT_CHARS, "\\\\$0") + "\\.");
+        replacingMap.put(CAMEL_ROUTER_PLACEHOLDER.CLASSIFIER.name(), new StringBuilder().append("^").append(SystemSetting.getInstance().getMessageClassifier().replaceAll(REGEX_REPLACEMENT_CHARS, "\\\\$0")).append("\\.").toString());
     }
 
-    private PlaceholderReplacer() {
+	private PlaceholderReplacer() {
     }
 
-    public static String replace(String str) {
+	public static String replace(String str) {
         return StrSubstitutor.replace(str, replacingMap);
+    }
+
+	enum CAMEL_ROUTER_PLACEHOLDER {
+        CLASSIFIER
     }
 
 }

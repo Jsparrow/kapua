@@ -39,13 +39,6 @@ public class JobStepPropertyImpl implements JobStepProperty {
     public JobStepPropertyImpl() {
     }
 
-    private JobStepPropertyImpl(JobStepProperty jobStepProperty) {
-        setName(jobStepProperty.getName());
-        setPropertyType(jobStepProperty.getPropertyType());
-        setPropertyValue(jobStepProperty.getPropertyValue());
-        setExampleValue(jobStepProperty.getExampleValue());
-    }
-
     public JobStepPropertyImpl(String name, String propertyType, String propertyValue, String propertyExampleValue) {
         setName(name);
         setPropertyType(propertyType);
@@ -53,47 +46,54 @@ public class JobStepPropertyImpl implements JobStepProperty {
         setExampleValue(propertyExampleValue);
     }
 
-    @Override
+	private JobStepPropertyImpl(JobStepProperty jobStepProperty) {
+        setName(jobStepProperty.getName());
+        setPropertyType(jobStepProperty.getPropertyType());
+        setPropertyValue(jobStepProperty.getPropertyValue());
+        setExampleValue(jobStepProperty.getExampleValue());
+    }
+
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getPropertyType() {
         return propertyType;
     }
 
-    @Override
+	@Override
     public void setPropertyType(String propertyType) {
         this.propertyType = propertyType;
     }
 
-    @Override
+	@Override
     public String getPropertyValue() {
         return propertyValue;
     }
 
-    @Override
+	@Override
     public void setPropertyValue(String propertyValue) {
         this.propertyValue = propertyValue;
     }
 
-    @Override
+	@Override
     public String getExampleValue() {
         return propertyExampleValue;
     }
 
-    @Override
+	@Override
     public void setExampleValue(String exampleValue) {
         this.propertyExampleValue = exampleValue;
     }
 
-    public static JobStepPropertyImpl parse(JobStepProperty jobStepProperty) {
+	public static JobStepPropertyImpl parse(JobStepProperty jobStepProperty) {
         return jobStepProperty != null ? (jobStepProperty instanceof JobStepPropertyImpl ? (JobStepPropertyImpl) jobStepProperty : new JobStepPropertyImpl(jobStepProperty)) : null;
     }
 }

@@ -18,13 +18,18 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Data object used in Gherkin to transfer Account data.
  */
 public class CucAccount {
 
-    private String name;
+    private static final Logger logger = LoggerFactory.getLogger(CucAccount.class);
+
+	private String name;
 
     private BigInteger scopeId;
 
@@ -59,7 +64,7 @@ public class CucAccount {
             return null;
         }
         // Special keywords for date
-        switch (expirationDate.trim().toLowerCase()) {
+        switch (StringUtils.lowerCase(expirationDate.trim())) {
             case "yesterday":
                 expDate = Date.from(now.minus(Duration.ofDays(1)));
                 break;
@@ -72,8 +77,9 @@ public class CucAccount {
         }
         // Just parse date
         try {
-            expDate = df.parse(expirationDate.trim().toLowerCase());
+            expDate = df.parse(StringUtils.lowerCase(expirationDate.trim()));
         } catch (ParseException | NullPointerException e) {
+			logger.error(e.getMessage(), e);
             // skip, leave date null
         }
 

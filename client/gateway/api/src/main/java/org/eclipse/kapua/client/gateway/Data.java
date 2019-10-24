@@ -36,7 +36,7 @@ public interface Data extends Sender {
      * @throws Exception
      *             if anything goes wrong on the subscription process
      */
-    public default CompletionStage<?> subscribe(final MessageHandler handler) throws Exception {
+    default CompletionStage<?> subscribe(final MessageHandler handler) throws Exception {
         return subscribe(handler, Errors::ignore);
     }
 
@@ -55,5 +55,5 @@ public interface Data extends Sender {
      * @throws Exception
      *             if anything goes wrong on the subscription process
      */
-    public CompletionStage<?> subscribe(MessageHandler handler, ErrorHandler<? extends Throwable> errorHandler) throws Exception;
+    CompletionStage<?> subscribe(MessageHandler handler, ErrorHandler<? extends Throwable> errorHandler) throws Exception;
 }

@@ -86,11 +86,13 @@ public class DeviceCreatorImpl extends AbstractKapuaUpdatableEntityCreator<Devic
         this.clientId = clientId;
     }
 
-    public DeviceStatus getStatus() {
+    @Override
+	public DeviceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(DeviceStatus status) {
+    @Override
+	public void setStatus(DeviceStatus status) {
         this.status = status;
     }
 

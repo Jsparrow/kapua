@@ -14,6 +14,7 @@ package org.eclipse.persistence.logging.slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Log levels for EclipseLink logging.
@@ -74,12 +75,12 @@ public enum LogLevel {
     public static final int length = LogLevel.values().length;
 
     /** {@link Map} for {@link String} to {@link LogLevel} case insensitive lookup. */
-    private static final Map<String, LogLevel> stringValuesMap = new HashMap<String, LogLevel>(2 * length);
+    private static final Map<String, LogLevel> stringValuesMap = new HashMap<>(2 * length);
 
     // Initialize String to LogLevel case insensitive lookup Map.
     static {
         for (LogLevel logLevel : LogLevel.values()) {
-            stringValuesMap.put(logLevel.name.toUpperCase(), logLevel);
+            stringValuesMap.put(StringUtils.upperCase(logLevel.name), logLevel);
         }
     }
 
@@ -100,7 +101,7 @@ public enum LogLevel {
      *         there exists no corresponding {@link LogLevel} object to provided argument value.
      */
     public static final LogLevel toValue(final String name) {
-        return name != null ? stringValuesMap.get(name.toUpperCase()) : null;
+        return name != null ? stringValuesMap.get(StringUtils.upperCase(name)) : null;
     }
 
     /**
@@ -112,7 +113,7 @@ public enum LogLevel {
     public static final LogLevel toValue(final int id) {
         if (id < 0 || id >= length) {
             throw new IllegalArgumentException(
-                    "Log level ID " + id + "is out of range <0, " + Integer.toString(length) + ">.");
+                    new StringBuilder().append("Log level ID ").append(id).append("is out of range <0, ").append(Integer.toString(length)).append(">.").toString());
         }
         return idValues[id];
     }

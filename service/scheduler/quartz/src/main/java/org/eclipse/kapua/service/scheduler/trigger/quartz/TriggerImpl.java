@@ -75,15 +75,6 @@ public class TriggerImpl extends AbstractKapuaNamedEntity implements Trigger {
     /**
      * Constructor.
      *
-     * @since 1.0.0
-     */
-    protected TriggerImpl() {
-        super();
-    }
-
-    /**
-     * Constructor.
-     *
      * @param scopeId The scope {@link KapuaId} to set into the {@link Trigger}
      * @since 1.0.0
      */
@@ -91,7 +82,7 @@ public class TriggerImpl extends AbstractKapuaNamedEntity implements Trigger {
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param trigger The {@link Trigger} to clone.
@@ -108,57 +99,65 @@ public class TriggerImpl extends AbstractKapuaNamedEntity implements Trigger {
         setTriggerProperties(trigger.getTriggerProperties());
     }
 
-    @Override
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected TriggerImpl() {
+    }
+
+	@Override
     public Date getStartsOn() {
         return startsOn;
     }
 
-    @Override
+	@Override
     public void setStartsOn(Date startsOn) {
         this.startsOn = startsOn;
     }
 
-    @Override
+	@Override
     public Date getEndsOn() {
         return endsOn;
     }
 
-    @Override
+	@Override
     public void setEndsOn(Date endsOn) {
         this.endsOn = endsOn;
     }
 
-    @Override
+	@Override
     public String getCronScheduling() {
         return cronScheduling;
     }
 
-    @Override
+	@Override
     public void setCronScheduling(String cronScheduling) {
         this.cronScheduling = cronScheduling;
     }
 
-    @Override
+	@Override
     public Long getRetryInterval() {
         return retryInterval;
     }
 
-    @Override
+	@Override
     public void setRetryInterval(Long retryInterval) {
         this.retryInterval = retryInterval;
     }
 
-    @Override
+	@Override
     public KapuaId getTriggerDefinitionId() {
         return triggerDefinitionId;
     }
 
-    @Override
+	@Override
     public void setTriggerDefinitionId(KapuaId triggerDefinitionId) {
         this.triggerDefinitionId = KapuaEid.parseKapuaId(triggerDefinitionId);
     }
 
-    @Override
+	@Override
     public List<TriggerProperty> getTriggerProperties() {
         if (triggerProperties == null) {
             triggerProperties = new ArrayList<>();
@@ -167,7 +166,7 @@ public class TriggerImpl extends AbstractKapuaNamedEntity implements Trigger {
         return Lists.newArrayList(triggerProperties);
     }
 
-    @Override
+	@Override
     public void setTriggerProperties(List<TriggerProperty> triggerProperties) {
         this.triggerProperties = new ArrayList<>();
 

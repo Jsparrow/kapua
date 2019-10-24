@@ -42,15 +42,6 @@ public class AccessInfoImpl extends AbstractKapuaUpdatableEntity implements Acce
     private KapuaEid userId;
 
     /**
-     * Empty constructor required by JPA.
-     *
-     * @since 1.0.0
-     */
-    protected AccessInfoImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scope id to set for this {@link AccessInfo}.
@@ -60,7 +51,7 @@ public class AccessInfoImpl extends AbstractKapuaUpdatableEntity implements Acce
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param accessInfo The {@link AccessInfo} object to clone into this {@link AccessInfo}.
@@ -73,12 +64,20 @@ public class AccessInfoImpl extends AbstractKapuaUpdatableEntity implements Acce
         setUserId(accessInfo.getUserId());
     }
 
-    @Override
+	/**
+     * Empty constructor required by JPA.
+     *
+     * @since 1.0.0
+     */
+    protected AccessInfoImpl() {
+    }
+
+	@Override
     public void setUserId(KapuaId userId) {
         this.userId = KapuaEid.parseKapuaId(userId);
     }
 
-    @Override
+	@Override
     public KapuaId getUserId() {
         return userId;
     }

@@ -15,6 +15,7 @@ import java.net.URI;
 
 import org.eclipse.kapua.app.console.module.api.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.module.api.setting.ConsoleSettingKeys;
+import org.apache.commons.lang3.StringUtils;
 
 public final class SsoHelper {
 
@@ -31,12 +32,12 @@ public final class SsoHelper {
 
     public static URI getRedirectUri() {
         String result = getSettings().getString(ConsoleSettingKeys.SSO_REDIRECT_URI);
-        if (result != null && !result.isEmpty()) {
+        if (result != null && !StringUtils.isEmpty(result)) {
             return URI.create(result);
         }
 
         result = getHomeUri();
-        if (result != null && !result.isEmpty()) {
+        if (result != null && !StringUtils.isEmpty(result)) {
             return URI.create(result + "/sso/callback");
         }
 

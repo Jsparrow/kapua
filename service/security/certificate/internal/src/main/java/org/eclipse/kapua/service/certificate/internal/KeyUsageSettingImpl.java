@@ -22,50 +22,50 @@ public class KeyUsageSettingImpl implements KeyUsageSetting {
     private boolean allowed;
     private Boolean kapuaAllowed;
 
-    protected KeyUsageSettingImpl() {
-    }
-
     public KeyUsageSettingImpl(KeyUsageSetting keyUsageSetting) {
         setKeyUsage(keyUsageSetting.getKeyUsage());
         setAllowed(keyUsageSetting.getAllowed());
         setKapuaAllowed(keyUsageSetting.getKapuaAllowed());
     }
 
-    @Override
+	protected KeyUsageSettingImpl() {
+    }
+
+	@Override
     public KeyUsage getKeyUsage() {
         return keyUsage;
     }
 
-    @Override
+	@Override
     public void setKeyUsage(KeyUsage keyUsage) {
         this.keyUsage = keyUsage;
     }
 
-    @Override
+	@Override
     public boolean getAllowed() {
         return allowed;
     }
 
-    @Override
+	@Override
     public void setAllowed(boolean allowed) {
         this.allowed = allowed;
     }
 
-    @Override
+	@Override
     public Boolean getKapuaAllowed() {
         return kapuaAllowed;
     }
 
-    @Override
+	@Override
     public void setKapuaAllowed(Boolean allowed) {
         this.allowed = allowed;
     }
 
-    public static KeyUsageSettingImpl parse(KeyUsageSetting keyUsageSetting) {
+	public static KeyUsageSettingImpl parse(KeyUsageSetting keyUsageSetting) {
         return keyUsageSetting != null ? keyUsageSetting instanceof KeyUsageSettingImpl ? (KeyUsageSettingImpl) keyUsageSetting : new KeyUsageSettingImpl(keyUsageSetting) : null;
     }
 
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -77,7 +77,7 @@ public class KeyUsageSettingImpl implements KeyUsageSetting {
         return keyUsage == that.keyUsage;
     }
 
-    @Override
+	@Override
     public int hashCode() {
         return Objects.hash(keyUsage);
     }

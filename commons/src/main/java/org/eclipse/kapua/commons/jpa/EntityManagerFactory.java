@@ -26,5 +26,5 @@ public interface EntityManagerFactory {
      * @return
      * @throws KapuaException
      */
-    public EntityManager createEntityManager() throws KapuaException;
+    EntityManager createEntityManager() throws KapuaException;
 }

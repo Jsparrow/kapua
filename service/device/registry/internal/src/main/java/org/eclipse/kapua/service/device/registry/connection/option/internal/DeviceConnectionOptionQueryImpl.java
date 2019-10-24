@@ -25,18 +25,17 @@ public class DeviceConnectionOptionQueryImpl extends AbstractKapuaQuery<DeviceCo
 
     /**
      * Constructor
-     */
-    private DeviceConnectionOptionQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public DeviceConnectionOptionQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private DeviceConnectionOptionQueryImpl() {
     }
 }

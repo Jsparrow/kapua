@@ -30,12 +30,6 @@ public final class Errors {
     }
 
     public static ErrorHandler<RuntimeException> handle(final BiConsumer<Throwable, Optional<Payload>> handler) {
-        return new ErrorHandler<RuntimeException>() {
-
-            @Override
-            public void handleError(final Throwable e, final Optional<Payload> payload) throws RuntimeException {
-                handler.accept(e, payload);
-            }
-        };
+        return handler::accept;
     }
 }

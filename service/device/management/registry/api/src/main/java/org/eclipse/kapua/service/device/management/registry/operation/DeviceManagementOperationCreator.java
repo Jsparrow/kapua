@@ -35,8 +35,7 @@ import java.util.List;
 public interface DeviceManagementOperationCreator extends KapuaEntityCreator<DeviceManagementOperation> {
 
     @XmlElement(name = "startedOn")
-    @XmlJavaTypeAdapter(DateXmlAdapter.class)
-    public Date getStartedOn();
+    @XmlJavaTypeAdapter(DateXmlAdapter.class) Date getStartedOn();
 
     void setStartedOn(Date startedOn);
 

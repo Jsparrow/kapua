@@ -30,7 +30,7 @@ public class TopicTest {
     @Test
     public void test1() {
         final Topic topic = Topic.of("foo");
-        Assert.assertEquals(Arrays.asList("foo"), topic.getSegments());
+        Assert.assertEquals(Collections.singletonList("foo"), topic.getSegments());
     }
 
     @Test

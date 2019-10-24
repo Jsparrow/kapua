@@ -42,7 +42,8 @@ public enum KapuaAccountSettingKeys implements SettingKey {
      * Gets the key for this {@link KapuaAccountSettingKeys}
      * 
      */
-    public String key() {
+    @Override
+	public String key() {
         return key;
     }
 }

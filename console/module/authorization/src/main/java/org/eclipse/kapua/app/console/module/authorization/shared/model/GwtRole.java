@@ -22,7 +22,6 @@ public class GwtRole extends GwtUpdatableEntityModel {
     Set<GwtRolePermission> rolePermissions;
 
     public GwtRole() {
-        super();
     }
 
     public String getName() {

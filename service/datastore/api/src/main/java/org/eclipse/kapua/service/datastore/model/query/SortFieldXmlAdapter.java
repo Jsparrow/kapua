@@ -19,18 +19,15 @@ public class SortFieldXmlAdapter extends XmlAdapter<XmlAdaptedSortFields, List<S
     @Override
     public List<SortField> unmarshal(XmlAdaptedSortFields v) throws Exception {
         List<SortField> sortFields = new ArrayList<>();
-        for (XmlAdaptedSortField xmlAdaptedSortField : v.getAdaptedSortFields()) {
-            sortFields.add(SortField.of(xmlAdaptedSortField.getDirection(), xmlAdaptedSortField.getField()));
-        }
+        v.getAdaptedSortFields().forEach(xmlAdaptedSortField -> sortFields.add(SortField.of(xmlAdaptedSortField.getDirection(), xmlAdaptedSortField.getField())));
         return sortFields;
     }
 
     @Override
     public XmlAdaptedSortFields marshal(List<SortField> v) throws Exception {
         XmlAdaptedSortFields xmlAdaptedSortFields = new XmlAdaptedSortFields();
-        for (SortField sortField : v) {
-            xmlAdaptedSortFields.getAdaptedSortFields().add(new XmlAdaptedSortField(sortField.getSortDirection(), sortField.getField()));
-        }
+        v.forEach(sortField -> xmlAdaptedSortFields.getAdaptedSortFields()
+				.add(new XmlAdaptedSortField(sortField.getSortDirection(), sortField.getField())));
         return xmlAdaptedSortFields;
     }
 }

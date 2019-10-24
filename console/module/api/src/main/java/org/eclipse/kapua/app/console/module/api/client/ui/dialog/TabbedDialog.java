@@ -20,7 +20,6 @@ public abstract class TabbedDialog extends ActionDialog {
     protected TabPanel tabsPanel;
 
     public TabbedDialog() {
-        super();
     }
 
     @Override

@@ -27,7 +27,7 @@ public interface TransportClientConnectOptions {
      * @return The id to use.
      * @since 1.0.0
      */
-    public String getClientId();
+    String getClientId();
 
     /**
      * Sets the id to be used for connection in the transport layer.
@@ -35,7 +35,7 @@ public interface TransportClientConnectOptions {
      * @param clientId The id to use.
      * @since 1.0.0
      */
-    public void setClientId(String clientId);
+    void setClientId(String clientId);
 
     /**
      * Gets the username to use for the connection in the transport layer.
@@ -43,7 +43,7 @@ public interface TransportClientConnectOptions {
      * @return The username to use.
      * @since 1.0.0
      */
-    public String getUsername();
+    String getUsername();
 
     /**
      * Sets the username to be used for the connection in the transport layer.
@@ -51,7 +51,7 @@ public interface TransportClientConnectOptions {
      * @param username The username to use.
      * @since 1.0.0
      */
-    public void setUsername(String username);
+    void setUsername(String username);
 
     /**
      * Gets the password to user for the connection in the transport layer.
@@ -59,7 +59,7 @@ public interface TransportClientConnectOptions {
      * @return The password to use.
      * @since 1.0.0
      */
-    public char[] getPassword();
+    char[] getPassword();
 
     /**
      * Sets the password to be used for the connection in the transport layer.
@@ -67,7 +67,7 @@ public interface TransportClientConnectOptions {
      * @param password The password to use.
      * @since 1.0.0
      */
-    public void setPassword(char[] password);
+    void setPassword(char[] password);
 
     /**
      * Gets the endpoint URI to use for the connection in the transport layer.
@@ -75,7 +75,7 @@ public interface TransportClientConnectOptions {
      * @return The endpoint URI to use.
      * @since 1.0.0
      */
-    public URI getEndpointURI();
+    URI getEndpointURI();
 
     /**
      * Sets the endpint URI to be use for the connection in the transport layer.
@@ -83,5 +83,5 @@ public interface TransportClientConnectOptions {
      * @param endpontURI The endpoint URI to use.
      * @since 1.0.0
      */
-    public void setEndpointURI(URI endpontURI);
+    void setEndpointURI(URI endpontURI);
 }

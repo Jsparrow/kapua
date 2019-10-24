@@ -33,16 +33,16 @@ import com.google.protobuf.ByteString;
 
 public final class Metrics {
 
-    private Metrics() {
+    public static final String KEY_REQUESTER_CLIENT_ID = "requester.client.id";
+	public static final String KEY_REQUEST_ID = "request.id";
+	public static final String KEY_RESPONSE_CODE = "response.code";
+	public static final String KEY_RESPONSE_EXCEPTION_MESSAGE = "response.exception.message";
+	public static final String KEY_RESPONSE_EXCEPTION_STACKTRACE = "response.exception.stack";
+
+	private Metrics() {
     }
 
-    public static final String KEY_REQUESTER_CLIENT_ID = "requester.client.id";
-    public static final String KEY_REQUEST_ID = "request.id";
-    public static final String KEY_RESPONSE_CODE = "response.code";
-    public static final String KEY_RESPONSE_EXCEPTION_MESSAGE = "response.exception.message";
-    public static final String KEY_RESPONSE_EXCEPTION_STACKTRACE = "response.exception.stack";
-
-    /**
+	/**
      * Convert plain key value map into a Kura metric structure <br>
      * Only the supported Kura values types must be used (String, boolean, int,
      * long, float, double, byte[])
@@ -62,7 +62,7 @@ public final class Metrics {
         }
     }
 
-    public static KuraPayload toKuraPayload(final Payload payload) {
+	public static KuraPayload toKuraPayload(final Payload payload) {
         if (payload == null) {
             return null;
         }
@@ -72,7 +72,7 @@ public final class Metrics {
         return result.build();
     }
 
-    public static void buildPayload(final KuraPayload.Builder builder, final Payload payload) {
+	public static void buildPayload(final KuraPayload.Builder builder, final Payload payload) {
         Objects.requireNonNull(builder);
         Objects.requireNonNull(payload);
 
@@ -81,7 +81,7 @@ public final class Metrics {
         buildMetrics(builder, payload.getMetrics());
     }
 
-    public static void buildPosition(final KuraPayload.Builder builder, final Position position) {
+	public static void buildPosition(final KuraPayload.Builder builder, final Position position) {
         if (position == null) {
             return;
         }
@@ -125,7 +125,7 @@ public final class Metrics {
         builder.setPosition(result);
     }
 
-    public static void buildBody(final KuraPayload.Builder builder, final ByteBuffer body) {
+	public static void buildBody(final KuraPayload.Builder builder, final ByteBuffer body) {
         if (body == null) {
             return;
         }
@@ -135,7 +135,7 @@ public final class Metrics {
         builder.setBody(ByteString.copyFrom(body));
     }
 
-    public static void addMetric(final KuraPayload.Builder builder, final String key, final Object value) {
+	public static void addMetric(final KuraPayload.Builder builder, final String key, final Object value) {
         final KuraMetric.Builder b = KuraMetric.newBuilder();
         b.setName(key);
 
@@ -169,14 +169,14 @@ public final class Metrics {
         builder.addMetric(b);
     }
 
-    public static Map<String, Object> extractMetrics(final KuraPayload payload) {
+	public static Map<String, Object> extractMetrics(final KuraPayload payload) {
         if (payload == null) {
             return null;
         }
         return extractMetrics(payload.getMetricList());
     }
 
-    public static Map<String, Object> extractMetrics(final List<KuraMetric> metricList) {
+	public static Map<String, Object> extractMetrics(final List<KuraMetric> metricList) {
         if (metricList == null) {
             return null;
         }
@@ -216,11 +216,11 @@ public final class Metrics {
         return result;
     }
 
-    public static String getAsString(final Map<String, Object> metrics, final String key) {
+	public static String getAsString(final Map<String, Object> metrics, final String key) {
         return getAsString(metrics, key, null);
     }
 
-    public static String getAsString(final Map<String, Object> metrics, final String key, final String defaultValue) {
+	public static String getAsString(final Map<String, Object> metrics, final String key, final String defaultValue) {
         final Object value = metrics.get(key);
         if (value == null) {
             return defaultValue;
@@ -231,7 +231,7 @@ public final class Metrics {
         return defaultValue;
     }
 
-    public static <T> T readFrom(final T object, final Map<String, Object> metrics) {
+	public static <T> T readFrom(final T object, final Map<String, Object> metrics) {
         Objects.requireNonNull(object);
 
         for (final Field field : FieldUtils.getFieldsListWithAnnotation(object.getClass(), Metric.class)) {

@@ -20,6 +20,7 @@ import org.eclipse.kapua.broker.core.listener.CamelConstants;
 import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Camel utility methods
@@ -48,7 +49,7 @@ public class CamelUtil {
             ActiveMQDestination destination = message.getHeader(CamelConstants.JMS_HEADER_DESTINATION, ActiveMQDestination.class);
             if (destination instanceof ActiveMQTopic) {
                 ActiveMQTopic destinationTopic = (ActiveMQTopic) destination;
-                return destinationTopic.getTopicName().substring(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX.length());
+                return StringUtils.substring(destinationTopic.getTopicName(), KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX.length());
             } else {
                 logger.warn("jmsMessage destination is not a Topic or Queue: {}", destination);
                 throw new JMSException(String.format("Unable to extract the destination. Wrong destination %s", destination));

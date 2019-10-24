@@ -41,34 +41,34 @@ public class AccessPermissionAttributes extends KapuaEntityAttributes {
      *
      * @since 1.0.0
      */
-    public static final String PERMISSION_DOMAIN = PERMISSION + "." + PermissionAttributes.DOMAIN;
+    public static final String PERMISSION_DOMAIN = new StringBuilder().append(PERMISSION).append(".").append(PermissionAttributes.DOMAIN).toString();
 
     /**
      * Predicate for field {@link AccessPermission#getPermission()}.{@link Permission#getAction()}
      *
      * @since 1.0.0
      */
-    public static final String PERMISSION_ACTION = PERMISSION + "." + PermissionAttributes.ACTION;
+    public static final String PERMISSION_ACTION = new StringBuilder().append(PERMISSION).append(".").append(PermissionAttributes.ACTION).toString();
 
     /**
      * Predicate for field {@link AccessPermission#getPermission()}.{@link Permission#getTargetScopeId()}
      *
      * @since 1.0.0
      */
-    public static final String PERMISSION_TARGET_SCOPE_ID = PERMISSION + "." + PermissionAttributes.TARGET_SCOPE_ID;
+    public static final String PERMISSION_TARGET_SCOPE_ID = new StringBuilder().append(PERMISSION).append(".").append(PermissionAttributes.TARGET_SCOPE_ID).toString();
 
     /**
      * Predicate for field {@link AccessPermission#getPermission()}.{@link Permission#getGroupId()}
      *
      * @since 1.0.0
      */
-    public static final String PERMISSION_GROUP_ID = PERMISSION + "." + PermissionAttributes.GROUP_ID;
+    public static final String PERMISSION_GROUP_ID = new StringBuilder().append(PERMISSION).append(".").append(PermissionAttributes.GROUP_ID).toString();
 
     /**
      * Predicate for field {@link AccessPermission#getPermission()}.{@link Permission#getForwardable()}
      *
      * @since 1.0.0
      */
-    public static final String PERMISSION_FORWARDABLE = PERMISSION + "." + PermissionAttributes.FORWARDABLE;
+    public static final String PERMISSION_FORWARDABLE = new StringBuilder().append(PERMISSION).append(".").append(PermissionAttributes.FORWARDABLE).toString();
 
 }

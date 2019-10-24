@@ -34,34 +34,96 @@ public class KuraBirthCertificateModule implements Module {
 
     private static final Logger logger = LoggerFactory.getLogger(KuraBirthCertificateModule.class);
 
+	private final Set<String> applications = new TreeSet<>();
+
+	private MqttModuleContext client;
+
+	private final String accountName;
+
+	private final Set<Provider> providers;
+
+	private KuraBirthCertificateModule(final String accountName, final Set<Provider> providers) {
+        this.accountName = accountName;
+        this.providers = new HashSet<>(providers);
+    }
+
+	public static Builder newBuilder(final String accountName) {
+        return new Builder(accountName);
+    }
+
+	@Override
+    public void applicationAdded(final String applicationId) {
+        logger.info("Application added: {}", applicationId);
+        if (applications.add(applicationId)) {
+            sendBirthCertificate();
+        }
+    }
+
+	@Override
+    public void applicationRemoved(final String applicationId) {
+        logger.info("Application removed: {}", applicationId);
+        if (applications.remove(applicationId)) {
+            sendBirthCertificate();
+        }
+    }
+
+	@Override
+    public void connected() {
+        sendBirthCertificate();
+    }
+
+	@Override
+    public void initialize(final ModuleContext context) {
+        final Optional<MqttModuleContext> client = context.adapt(MqttModuleContext.class);
+
+        this.client = client.orElseThrow(() -> new IllegalStateException(String.format("%s can only be used with a client providing an instance to %s",
+				KuraBirthCertificateModule.class.getSimpleName(), MqttModuleContext.class.getName())));
+    }
+
+	private void sendBirthCertificate() {
+        logger.debug("Sending birth certificate");
+
+        final Map<String, String> values = new HashMap<>();
+
+        providers.forEach((final Provider provider) -> provider.provideData(values));
+
+        values.put("application_ids", String.join(",", applications));
+
+        // build payload
+
+        final KuraPayload.Builder builder = KuraPayload.newBuilder();
+        Metrics.buildMetrics(builder, values);
+        final ByteBuffer buffer = ByteBuffer.wrap(builder.build().toByteArray());
+
+        // publish MQTT payload
+
+        final String clientId = client.getMqttClientId();
+
+        try {
+            client.publishMqtt(String.format("$EDC/%s/%s/MQTT/BIRTH", accountName, clientId), buffer);
+        } catch (final Exception e) {
+            logger.warn("Failed to publish birth certificate", e);
+        }
+    }
+
     @FunctionalInterface
     public interface Provider {
 
-        public void provideData(Map<String, String> values);
+        Provider JVM = (final Map<String, String> values) -> {
+		    values.put("jvm_name", System.getProperty("java.vm.name"));
+		    values.put("jvm_version", System.getProperty("java.version"));
 
-        public static final Provider JVM = new Provider() {
+		    values.put("os", System.getProperty("os.name"));
+		    values.put("os_version", System.getProperty("os.version"));
+		    values.put("os_arch", System.getProperty("os.arch"));
+		};
 
-            @Override
-            public void provideData(final Map<String, String> values) {
-                values.put("jvm_name", System.getProperty("java.vm.name"));
-                values.put("jvm_version", System.getProperty("java.version"));
+		Provider RUNTIME = (final Map<String, String> values) -> {
+		    values.put("available_processors", Integer.toString(Runtime.getRuntime().availableProcessors()));
+		    values.put("total_memory", Long.toString(Runtime.getRuntime().totalMemory()));
+		};
 
-                values.put("os", System.getProperty("os.name"));
-                values.put("os_version", System.getProperty("os.version"));
-                values.put("os_arch", System.getProperty("os.arch"));
-            }
-
-        };
-
-        public static final Provider RUNTIME = new Provider() {
-
-            @Override
-            public void provideData(final Map<String, String> values) {
-                values.put("available_processors", Integer.toString(Runtime.getRuntime().availableProcessors()));
-                values.put("total_memory", Long.toString(Runtime.getRuntime().totalMemory()));
-            }
-
-        };
+		void provideData(Map<String, String> values);
     }
 
     public static class Builder {
@@ -98,84 +160,6 @@ public class KuraBirthCertificateModule implements Module {
 
         public KuraBirthCertificateModule build() {
             return new KuraBirthCertificateModule(accountName, providers());
-        }
-    }
-
-    public static Builder newBuilder(final String accountName) {
-        return new Builder(accountName);
-    }
-
-    private final Set<String> applications = new TreeSet<>();
-
-    private MqttModuleContext client;
-
-    private final String accountName;
-
-    private final Set<Provider> providers;
-
-    private KuraBirthCertificateModule(final String accountName, final Set<Provider> providers) {
-        this.accountName = accountName;
-        this.providers = new HashSet<>(providers);
-    }
-
-    @Override
-    public void applicationAdded(final String applicationId) {
-        logger.info("Application added: {}", applicationId);
-        if (applications.add(applicationId)) {
-            sendBirthCertificate();
-        }
-    }
-
-    @Override
-    public void applicationRemoved(final String applicationId) {
-        logger.info("Application removed: {}", applicationId);
-        if (applications.remove(applicationId)) {
-            sendBirthCertificate();
-        }
-    }
-
-    @Override
-    public void connected() {
-        sendBirthCertificate();
-    }
-
-    @Override
-    public void initialize(final ModuleContext context) {
-        final Optional<MqttModuleContext> client = context.adapt(MqttModuleContext.class);
-
-        this.client = client.orElseThrow(() -> {
-            return new IllegalStateException(
-                    String.format("%s can only be used with a client providing an instance to %s",
-                            KuraBirthCertificateModule.class.getSimpleName(),
-                            MqttModuleContext.class.getName()));
-        });
-    }
-
-    private void sendBirthCertificate() {
-        logger.debug("Sending birth certificate");
-
-        final Map<String, String> values = new HashMap<>();
-
-        for (final Provider provider : providers) {
-            provider.provideData(values);
-        }
-
-        values.put("application_ids", String.join(",", applications));
-
-        // build payload
-
-        final KuraPayload.Builder builder = KuraPayload.newBuilder();
-        Metrics.buildMetrics(builder, values);
-        final ByteBuffer buffer = ByteBuffer.wrap(builder.build().toByteArray());
-
-        // publish MQTT payload
-
-        final String clientId = client.getMqttClientId();
-
-        try {
-            client.publishMqtt(String.format("$EDC/%s/%s/MQTT/BIRTH", accountName, clientId), buffer);
-        } catch (final Exception e) {
-            logger.warn("Failed to publish birth certificate", e);
         }
     }
 

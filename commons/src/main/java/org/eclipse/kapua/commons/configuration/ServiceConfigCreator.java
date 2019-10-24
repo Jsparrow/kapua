@@ -28,14 +28,14 @@ public interface ServiceConfigCreator extends KapuaUpdatableEntityCreator<Servic
      *
      * @return
      */
-    public String getPid();
+    String getPid();
 
     /**
      * Set service pid
      *
      * @param pid
      */
-    public void setPid(String pid);
+    void setPid(String pid);
 
     /**
      * Return service configurations
@@ -43,7 +43,7 @@ public interface ServiceConfigCreator extends KapuaUpdatableEntityCreator<Servic
      * @return
      * @throws KapuaException
      */
-    public Properties getConfigurations() throws KapuaException;
+    Properties getConfigurations() throws KapuaException;
 
     /**
      * Set service configurations
@@ -51,5 +51,5 @@ public interface ServiceConfigCreator extends KapuaUpdatableEntityCreator<Servic
      * @param configurations
      * @throws KapuaException
      */
-    public void setConfigurations(Properties configurations) throws KapuaException;
+    void setConfigurations(Properties configurations) throws KapuaException;
 }

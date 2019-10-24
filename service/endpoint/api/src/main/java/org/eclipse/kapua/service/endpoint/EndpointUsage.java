@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(factoryClass = EndpointInfoXmlRegistry.class, factoryMethod = "newEndpointUsage")
 public interface EndpointUsage {
 
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
 }

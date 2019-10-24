@@ -17,10 +17,6 @@ import java.util.List;
 
 public class GwtJobStepDefinition extends GwtEntityModel {
 
-    public enum GwtJobStepType {
-        TARGET, GENERIC
-    }
-
     @Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
@@ -31,63 +27,67 @@ public class GwtJobStepDefinition extends GwtEntityModel {
         }
     }
 
-    public String getJobStepDefinitionName() {
+	public String getJobStepDefinitionName() {
         return get("jobStepDefinitionName");
     }
 
-    public void setJobStepDefinitionName(String jobStepDefinitionName) {
+	public void setJobStepDefinitionName(String jobStepDefinitionName) {
         set("jobStepDefinitionName", jobStepDefinitionName);
     }
 
-    public String getDescription() {
+	public String getDescription() {
         return get("description");
     }
 
-    public void setDescription(String description) {
+	public void setDescription(String description) {
         set("description", description);
     }
 
-    public String getStepType() {
+	public String getStepType() {
         return get("jobStepType");
     }
 
-    public GwtJobStepType getStepTypeEnum() {
+	public GwtJobStepType getStepTypeEnum() {
         return get("jobStepTypeEnum");
     }
 
-    public void setStepType(String jobStepType) {
+	public void setStepType(String jobStepType) {
         set("jobStepType", jobStepType);
     }
 
-    public String getReaderName() {
+	public String getReaderName() {
         return get("readerName");
     }
 
-    public void setReaderName(String readerName) {
+	public void setReaderName(String readerName) {
         set("readerName", readerName);
     }
 
-    public String getProcessorName() {
+	public String getProcessorName() {
         return get("processorName");
     }
 
-    public void setProcessorName(String processorName) {
+	public void setProcessorName(String processorName) {
         set("processorName", processorName);
     }
 
-    public String getWriterName() {
+	public String getWriterName() {
         return get("writerName");
     }
 
-    public void setWriterName(String writerName) {
+	public void setWriterName(String writerName) {
         set("writerName", writerName);
     }
 
-    public <P extends GwtJobStepProperty> List<P> getStepProperties() {
+	public <P extends GwtJobStepProperty> List<P> getStepProperties() {
         return get("jobStepProperties");
     }
 
-    public void setStepProperties(List<GwtJobStepProperty> jobStepProperties) {
+	public void setStepProperties(List<GwtJobStepProperty> jobStepProperties) {
         set("jobStepProperties", jobStepProperties);
+    }
+
+	public enum GwtJobStepType {
+        TARGET, GENERIC
     }
 }

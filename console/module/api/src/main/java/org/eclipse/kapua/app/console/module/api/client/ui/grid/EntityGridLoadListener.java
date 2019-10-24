@@ -50,10 +50,11 @@ public class EntityGridLoadListener<M extends GwtEntityModel> extends KapuaLoadL
     @Override
     public void loaderBeforeLoad(LoadEvent le) {
         selectedEntities = entityGrid.getSelectionModel().getSelectedItems();
-        if (searchButton != null && resetButton != null) {
-            searchButton.disable();
-            resetButton.disable();
-        }
+        if (!(searchButton != null && resetButton != null)) {
+			return;
+		}
+		searchButton.disable();
+		resetButton.disable();
     }
 
     /**

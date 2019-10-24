@@ -30,7 +30,6 @@ public class MetricInfoListResultImpl extends AbstractStorableListResult<MetricI
      * Construct a metric info result list
      */
     public MetricInfoListResultImpl() {
-        super();
     }
 
     /**

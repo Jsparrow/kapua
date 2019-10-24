@@ -20,11 +20,13 @@ public class GwtRolePermissionCreator extends GwtEntityCreator {
     String scopeId;
     String roleId;
 
-    public String getScopeId() {
+    @Override
+	public String getScopeId() {
         return scopeId;
     }
 
-    public void setScopeId(String scopeId) {
+    @Override
+	public void setScopeId(String scopeId) {
         this.scopeId = scopeId;
     }
 

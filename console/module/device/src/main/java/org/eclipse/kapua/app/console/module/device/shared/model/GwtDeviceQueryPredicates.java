@@ -17,58 +17,16 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 
-public class GwtDeviceQueryPredicates extends KapuaBaseModel implements Serializable {
+public class GwtDeviceQueryPredicates extends KapuaBaseModel {
 
     private static final long serialVersionUID = 2649696808210585054L;
-
-    public enum GwtDeviceStatus implements IsSerializable {
-        ENABLED, DISABLED, ANY;
-
-        GwtDeviceStatus() {
-        }
-    }
-
-    public enum GwtDeviceCertificateStatus implements IsSerializable {
-        ANY, NOT_INSTALLED, INSTALLED_OUT_OF_DATE, INSTALLED_UP_TO_DATE;
-
-        GwtDeviceCertificateStatus() {
-        }
-    }
-
-    public enum GwtDeviceConnectionStatus implements IsSerializable {
-        CONNECTED, DISCONNECTED, MISSING, ANY, UNKNOWN;
-
-        GwtDeviceConnectionStatus() {
-        }
-    }
-
-    public enum GwtSortOrder implements IsSerializable {
-        ASCENDING, DESCENDING;
-
-        GwtSortOrder() {
-        }
-    }
-
-    public enum GwtSortAttribute implements IsSerializable {
-        CLIENT_ID, DISPLAY_NAME, LAST_EVENT_ON;
-
-        GwtSortAttribute() {
-        }
-    }
-
-    public enum GwtGroupDevice implements IsSerializable {
-        NO_GROUP, ANY;
-
-        GwtGroupDevice() {
-        }
-    }
 
     public GwtDeviceQueryPredicates() {
         setSortAttribute(GwtSortAttribute.CLIENT_ID.name());
         setSortOrder(GwtSortOrder.ASCENDING.name());
     }
 
-    @Override
+	@Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
         if ("deviceStatusEnum".equals(property)) {
@@ -88,216 +46,258 @@ public class GwtDeviceQueryPredicates extends KapuaBaseModel implements Serializ
         }
     }
 
-    public String getClientId() {
+	public String getClientId() {
         return (String) get("clientId");
     }
 
-    public String getUnescapedClientId() {
+	public String getUnescapedClientId() {
         return (String) getUnescaped("clientId");
     }
 
-    public void setClientId(String clientId) {
+	public void setClientId(String clientId) {
         set("clientId", clientId);
     }
 
-    public String getDisplayName() {
+	public String getDisplayName() {
         return (String) get("displayName");
     }
 
-    public String getUnescapedDisplayName() {
+	public String getUnescapedDisplayName() {
         return (String) getUnescaped("displayName");
     }
 
-    public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName) {
         set("displayName", displayName);
     }
 
-    public String getSerialNumber() {
+	public String getSerialNumber() {
         return (String) get("serialNumber");
     }
 
-    public String getUnescapedSerialNumber() {
+	public String getUnescapedSerialNumber() {
         return (String) getUnescaped("serialNumber");
     }
 
-    public void setSerialNumber(String serialNumber) {
+	public void setSerialNumber(String serialNumber) {
         set("serialNumber", serialNumber);
     }
 
-    public String getDeviceStatus() {
+	public String getDeviceStatus() {
         return (String) get("deviceStatus");
     }
 
-    public GwtDeviceStatus getDeviceStatusEnum() {
+	public GwtDeviceStatus getDeviceStatusEnum() {
         return get("deviceStatusEnum");
     }
 
-    public void setDeviceStatus(String deviceStatus) {
+	public void setDeviceStatus(String deviceStatus) {
         set("deviceStatus", deviceStatus);
     }
 
-    public String getDeviceConnectionStatus() {
+	public String getDeviceConnectionStatus() {
         return (String) get("deviceConnectionStatus");
     }
 
-    public GwtDeviceConnectionStatus getDeviceConnectionStatusEnum() {
+	public GwtDeviceConnectionStatus getDeviceConnectionStatusEnum() {
         return get("deviceConnectionStatusEnum");
     }
 
-    public void setDeviceConnectionStatus(String deviceConnectionStatus) {
+	public void setDeviceConnectionStatus(String deviceConnectionStatus) {
         set("deviceConnectionStatus", deviceConnectionStatus);
     }
 
-    public String getIotFrameworkVersion() {
+	public String getIotFrameworkVersion() {
         return (String) get("iotFrameworkVersion");
     }
 
-    public String getUnescapedIotFrameworkVersion() {
+	public String getUnescapedIotFrameworkVersion() {
         return (String) getUnescaped("iotFrameworkVersion");
     }
 
-    public void setIotFrameworkVersion(String iotFrameworkVersion) {
+	public void setIotFrameworkVersion(String iotFrameworkVersion) {
         set("iotFrameworkVersion", iotFrameworkVersion);
     }
 
-    public String getApplicationIdentifiers() {
+	public String getApplicationIdentifiers() {
         return (String) get("applicationIdentifiers");
     }
 
-    public String getUnescapedApplicationIdentifiers() {
+	public String getUnescapedApplicationIdentifiers() {
         return (String) getUnescaped("applicationIdentifiers");
     }
 
-    public void setApplicationIdentifiers(String applicationIdentifiers) {
+	public void setApplicationIdentifiers(String applicationIdentifiers) {
         set("applicationIdentifiers", applicationIdentifiers);
     }
 
-    public String getImei() {
+	public String getImei() {
         return (String) get("imei");
     }
 
-    public void setImei(String imei) {
+	public void setImei(String imei) {
         set("imei", imei);
     }
 
-    public String getImsi() {
+	public String getImsi() {
         return (String) get("imsi");
     }
 
-    public void setImsi(String imsi) {
+	public void setImsi(String imsi) {
         set("imsi", imsi);
     }
 
-    public String getIccid() {
+	public String getIccid() {
         return (String) get("iccid");
     }
 
-    public void setIccid(String iccid) {
+	public void setIccid(String iccid) {
         set("iccid", iccid);
     }
 
-    public String getCustomAttribute1() {
+	public String getCustomAttribute1() {
         return (String) get("customAttribute1");
     }
 
-    public String getUnescapedCustomAttribute1() {
+	public String getUnescapedCustomAttribute1() {
         return (String) getUnescaped("customAttribute1");
     }
 
-    public void setCustomAttribute1(String customAttribute1) {
+	public void setCustomAttribute1(String customAttribute1) {
         set("customAttribute1", customAttribute1);
     }
 
-    public String getCustomAttribute2() {
+	public String getCustomAttribute2() {
         return (String) get("customAttribute2");
     }
 
-    public String getUnescapedCustomAttribute2() {
+	public String getUnescapedCustomAttribute2() {
         return (String) getUnescaped("customAttribute2");
     }
 
-    public void setCustomAttribute2(String customAttribute2) {
+	public void setCustomAttribute2(String customAttribute2) {
         set("customAttribute2", customAttribute2);
     }
 
-    public String getDeviceCertificateStatus() {
+	public String getDeviceCertificateStatus() {
         return get("deviceCertificateStatus");
     }
 
-    public GwtDeviceCertificateStatus getDeviceCertificateStatusEnum() {
+	public GwtDeviceCertificateStatus getDeviceCertificateStatusEnum() {
         return get("deviceCertificateStatusEnum");
     }
 
-    public void setDeviceCertificateStatus(String deviceCertificateStatus) {
+	public void setDeviceCertificateStatus(String deviceCertificateStatus) {
         set("deviceCertificateStatus", deviceCertificateStatus);
     }
 
-    public String getGroupDevice() {
+	public String getGroupDevice() {
         return get("groupDevice");
     }
 
-    public GwtGroupDevice getGroupDeviceEnum() {
+	public GwtGroupDevice getGroupDeviceEnum() {
         return get("groupDeviceEnum");
     }
 
-    public void setGroupDevice(String groupDevice) {
+	public void setGroupDevice(String groupDevice) {
         set("groupDevice", groupDevice);
     }
 
-    public Long getSignedCertificateId() {
+	public Long getSignedCertificateId() {
         return (Long) get("signedCertificateId");
     }
 
-    public void setSignedCertificateId(Long signedCertificateId) {
+	public void setSignedCertificateId(Long signedCertificateId) {
         set("signedCertificateId", signedCertificateId);
     }
 
-    public String getSortOrder() {
+	public String getSortOrder() {
         return (String) get("sortOrder");
     }
 
-    public GwtSortOrder getSortOrderEnum() {
+	public GwtSortOrder getSortOrderEnum() {
         return get("sortOrderEnum");
     }
 
-    public void setSortOrder(String sortOrder) {
+	public void setSortOrder(String sortOrder) {
         set("sortOrder", sortOrder);
     }
 
-    public String getSortAttribute() {
+	public String getSortAttribute() {
         return (String) get("sortAttribute");
     }
 
-    public GwtSortAttribute getSortAttributeEnum() {
+	public GwtSortAttribute getSortAttributeEnum() {
         return get("sortAttributeEnum");
     }
 
-    public void setSortAttribute(String sortAttribute) {
+	public void setSortAttribute(String sortAttribute) {
         set("sortAttribute", sortAttribute);
     }
 
-    public Long getDefaultPki() {
+	public Long getDefaultPki() {
         return get("defaultPki");
     }
 
-    public void setDefaultPki(Long value) {
+	public void setDefaultPki(Long value) {
         set("defaultPki", value);
     }
 
-    public String getGroupId() {
+	public String getGroupId() {
         return get("groupId");
     }
 
-    public void setGroupId(String groupId) {
+	public void setGroupId(String groupId) {
         set("groupId", groupId);
     }
 
-    public List<String> getTagIds() {
+	public List<String> getTagIds() {
         return (List<String>) get("tagIds");
     }
 
-    public void setTagIds(List<String> tagIds) {
+	public void setTagIds(List<String> tagIds) {
         set("tagIds", tagIds);
+    }
+
+	public enum GwtDeviceStatus implements IsSerializable {
+        ENABLED, DISABLED, ANY;
+
+        GwtDeviceStatus() {
+        }
+    }
+
+	public enum GwtDeviceCertificateStatus implements IsSerializable {
+        ANY, NOT_INSTALLED, INSTALLED_OUT_OF_DATE, INSTALLED_UP_TO_DATE;
+
+        GwtDeviceCertificateStatus() {
+        }
+    }
+
+	public enum GwtDeviceConnectionStatus implements IsSerializable {
+        CONNECTED, DISCONNECTED, MISSING, ANY, UNKNOWN;
+
+        GwtDeviceConnectionStatus() {
+        }
+    }
+
+	public enum GwtSortOrder implements IsSerializable {
+        ASCENDING, DESCENDING;
+
+        GwtSortOrder() {
+        }
+    }
+
+	public enum GwtSortAttribute implements IsSerializable {
+        CLIENT_ID, DISPLAY_NAME, LAST_EVENT_ON;
+
+        GwtSortAttribute() {
+        }
+    }
+
+	public enum GwtGroupDevice implements IsSerializable {
+        NO_GROUP, ANY;
+
+        GwtGroupDevice() {
+        }
     }
 
 }

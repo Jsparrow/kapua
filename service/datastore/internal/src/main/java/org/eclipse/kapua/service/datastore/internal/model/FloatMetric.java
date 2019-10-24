@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class FloatMetric extends MetricImpl<Float> implements Metric<Float> {
+public class FloatMetric extends MetricImpl<Float> {
 
     /**
      * Construct a float metric with the provided name and value

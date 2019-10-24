@@ -20,7 +20,6 @@ public class GwtQuery implements Serializable {
     private String scopeId;
 
     public GwtQuery() {
-        super();
     }
 
     public String getScopeId() {

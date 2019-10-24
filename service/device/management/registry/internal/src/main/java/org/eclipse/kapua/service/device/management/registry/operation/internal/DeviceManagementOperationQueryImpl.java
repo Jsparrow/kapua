@@ -23,14 +23,13 @@ import org.eclipse.kapua.service.device.management.registry.operation.DeviceMana
  */
 public class DeviceManagementOperationQueryImpl extends AbstractKapuaQuery<DeviceManagementOperation> implements DeviceManagementOperationQuery {
 
-    private DeviceManagementOperationQueryImpl() {
-        super();
-    }
-
     public DeviceManagementOperationQueryImpl(KapuaId scopeId) {
         this();
 
         setScopeId(scopeId);
+    }
+
+	private DeviceManagementOperationQueryImpl() {
     }
 
 }

@@ -24,6 +24,7 @@ import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticatio
 import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticationSettingKeys;
 import org.eclipse.kapua.service.authentication.shiro.utils.AuthenticationUtils;
 import org.eclipse.kapua.service.authentication.shiro.utils.CryptAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link Credential} {@link ServiceDAO}
@@ -150,9 +151,9 @@ public class CredentialDAO extends ServiceDAO {
         int preLength = setting.getInt(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_LENGTH);
         String preSeparator = setting.getString(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_SEPARATOR);
 
-        String hashedValue = credentialPlainKey.substring(0, preLength); // Add the pre in clear text
+        String hashedValue = StringUtils.substring(credentialPlainKey, 0, preLength); // Add the pre in clear text
         hashedValue += preSeparator; // Add separator
-        hashedValue += AuthenticationUtils.cryptCredential(CryptAlgorithm.BCRYPT, credentialPlainKey.substring(preLength, credentialPlainKey.length())); // Bcrypt the rest
+        hashedValue += AuthenticationUtils.cryptCredential(CryptAlgorithm.BCRYPT, StringUtils.substring(credentialPlainKey, preLength, credentialPlainKey.length())); // Bcrypt the rest
 
         return hashedValue;
     }

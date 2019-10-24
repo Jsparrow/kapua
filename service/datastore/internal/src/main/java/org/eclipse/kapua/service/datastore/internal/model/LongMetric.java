@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class LongMetric extends MetricImpl<Long> implements Metric<Long> {
+public class LongMetric extends MetricImpl<Long> {
 
     /**
      * Construct a long metric with the provided name and value

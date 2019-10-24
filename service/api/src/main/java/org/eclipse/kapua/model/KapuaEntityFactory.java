@@ -70,5 +70,5 @@ public interface KapuaEntityFactory<E extends KapuaEntity, C extends KapuaEntity
      * @throws KapuaEntityCloneException When error occurs while cloning the {@link KapuaEntity}
      * @since 1.1.0
      */
-    E clone(E entity) throws KapuaEntityCloneException;
+    E clone(E entity);
 }

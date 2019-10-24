@@ -36,19 +36,23 @@ public class DevicePackageBundleInfoImpl implements DevicePackageBundleInfo {
     @XmlElement(name = "version")
     public String version;
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    @Override
+	public void setName(String name) {
         this.name = name;
     }
 
-    public String getVersion() {
+    @Override
+	public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    @Override
+	public void setVersion(String version) {
         this.version = version;
     }
 }

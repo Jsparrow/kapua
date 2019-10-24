@@ -26,26 +26,6 @@ import java.util.function.Consumer;
  */
 public interface Transport {
 
-    public interface TransportEvents {
-
-        public void connected(Runnable runnable);
-
-        public void disconnected(Runnable runnable);
-    }
-
-    @FunctionalInterface
-    public interface ListenerHandle extends AutoCloseable {
-
-        @Override
-        public void close();
-    }
-
-    @FunctionalInterface
-    public interface Listener {
-
-        public void stateChange(boolean state);
-    }
-
     /**
      * Add a state listener
      *
@@ -57,9 +37,9 @@ public interface Transport {
      * @param listener
      *            the listener to transport state changes
      */
-    public ListenerHandle listen(Listener listener);
+    ListenerHandle listen(Listener listener);
 
-    /**
+	/**
      * This method allows to atomically set a state listener using simple runnable.
      *
      * <p>
@@ -88,7 +68,7 @@ public interface Transport {
      * @return
      *
      */
-    public default ListenerHandle events(final Consumer<TransportEvents> events) {
+    default ListenerHandle events(final Consumer<TransportEvents> events) {
         class TransportEventsImpl implements TransportEvents {
 
             private Runnable connected;
@@ -123,7 +103,7 @@ public interface Transport {
         });
     }
 
-    /**
+	/**
      * Wait for the connection to be established
      * <p>
      * <b>Note:</b> This method will reset the transport listeners.
@@ -134,7 +114,7 @@ public interface Transport {
      * @throws InterruptedException
      *             if the wait got interrupted
      */
-    public static void waitForConnection(final Transport transport) throws InterruptedException {
+    static void waitForConnection(final Transport transport) throws InterruptedException {
         Objects.requireNonNull(transport);
 
         final Semaphore sem = new Semaphore(0);
@@ -148,7 +128,7 @@ public interface Transport {
         }
     }
 
-    /**
+	/**
      * Wait for the connection to be established or the timeout occurs
      * <p>
      * <b>Note:</b> This method will reset the transport listeners.
@@ -161,7 +141,7 @@ public interface Transport {
      * @throws InterruptedException
      *             if the wait got interrupted
      */
-    public static boolean waitForConnection(final Transport transport, final Duration timeout) throws InterruptedException {
+    static boolean waitForConnection(final Transport transport, final Duration timeout) throws InterruptedException {
         Objects.requireNonNull(transport);
         Objects.requireNonNull(timeout);
 
@@ -175,5 +155,24 @@ public interface Transport {
             return sem.tryAcquire(timeout.toNanos(), TimeUnit.NANOSECONDS);
         }
 
+    }
+
+	public interface TransportEvents {
+
+        void connected(Runnable runnable);
+
+        void disconnected(Runnable runnable);
+    }
+
+    @FunctionalInterface
+    public interface ListenerHandle extends AutoCloseable {
+
+        @Override void close();
+    }
+
+    @FunctionalInterface
+    public interface Listener {
+
+        void stateChange(boolean state);
     }
 }

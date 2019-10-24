@@ -40,6 +40,7 @@ import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link Permission} implementation.
@@ -47,7 +48,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Embeddable
-public class PermissionImpl extends WildcardPermission implements Permission, org.apache.shiro.authz.Permission, Serializable {
+public class PermissionImpl extends WildcardPermission implements Permission {
 
     private static final long serialVersionUID = 1480557438886065675L;
 
@@ -79,13 +80,6 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
     private boolean forwardable;
 
     /**
-     * Constructor
-     */
-    protected PermissionImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param permission The {@link Permission} to parse.
@@ -100,7 +94,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
                 permission.getForwardable());
     }
 
-    /**
+	/**
      * Constructor.
      *
      * @param domain
@@ -113,7 +107,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         this(domain, action, targetScopeId, groupId, false);
     }
 
-    /**
+	/**
      * Constructor.
      *
      * @param domain
@@ -133,57 +127,63 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         setParts(toString());
     }
 
-    @Override
+	/**
+     * Constructor
+     */
+    protected PermissionImpl() {
+    }
+
+	@Override
     public void setDomain(String domain) {
         this.domain = domain;
     }
 
-    @Override
+	@Override
     public String getDomain() {
         return domain;
     }
 
-    @Override
+	@Override
     public void setAction(Actions action) {
         this.action = action;
     }
 
-    @Override
+	@Override
     public Actions getAction() {
         return action;
     }
 
-    @Override
+	@Override
     public void setTargetScopeId(KapuaId targetScopeId) {
         this.targetScopeId = KapuaEid.parseKapuaId(targetScopeId);
     }
 
-    @Override
+	@Override
     public KapuaId getTargetScopeId() {
         return targetScopeId;
     }
 
-    @Override
+	@Override
     public void setGroupId(KapuaId groupId) {
         this.groupId = KapuaEid.parseKapuaId(groupId);
     }
 
-    @Override
+	@Override
     public KapuaId getGroupId() {
         return groupId;
     }
 
-    @Override
+	@Override
     public boolean getForwardable() {
         return forwardable;
     }
 
-    @Override
+	@Override
     public void setForwardable(boolean forwardable) {
         this.forwardable = forwardable;
     }
 
-    /**
+	/**
      * This methods needs to be overridden to support Access {@link Group} feature.<br>
      * <p>
      * <p>
@@ -233,7 +233,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         return implies;
     }
 
-    /**
+	/**
      * Checks {@code this} Permission against the given {@link Permission} parameter.<br>
      * <p>
      * <p>
@@ -267,7 +267,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
                 String parentAccountPath = account.getParentAccountPath();
 
                 // If it doesn't contain the scope id in the parent, don't even try to check against
-                if (parentAccountPath.contains("/" + getTargetScopeId().toStringId() + "/")) {
+                if (StringUtils.contains(parentAccountPath, new StringBuilder().append("/").append(getTargetScopeId().toStringId()).append("/").toString())) {
                     setTargetScopeId(permission.getTargetScopeId());
                     setParts(toString());
 
@@ -281,7 +281,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         return false;
     }
 
-    @Override
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
@@ -296,7 +296,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         return sb.toString();
     }
 
-    @Override
+	@Override
     public int hashCode() {
         int prime = 31;
         int result = 1;
@@ -307,7 +307,7 @@ public class PermissionImpl extends WildcardPermission implements Permission, or
         return result;
     }
 
-    @Override
+	@Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

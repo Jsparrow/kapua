@@ -47,7 +47,7 @@ public class UserPassCredentialsMatcher implements CredentialsMatcher {
         //
         // Match token with info
         boolean credentialMatch = false;
-        if (tokenUsername.equals(infoUser.getName()) && CredentialType.PASSWORD.equals(infoCredential.getCredentialType()) && BCrypt.checkpw(tokenPassword, infoCredential.getCredentialKey())) {
+        if (tokenUsername.equals(infoUser.getName()) && CredentialType.PASSWORD == infoCredential.getCredentialType() && BCrypt.checkpw(tokenPassword, infoCredential.getCredentialKey())) {
             credentialMatch = true;
 
             // FIXME: if true cache token password for authentication performance improvement

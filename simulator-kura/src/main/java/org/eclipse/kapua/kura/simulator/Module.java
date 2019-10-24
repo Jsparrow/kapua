@@ -19,9 +19,9 @@ package org.eclipse.kapua.kura.simulator;
  */
 public interface Module {
 
-    public default void connected(final Transport transport) {
+    default void connected(final Transport transport) {
     }
 
-    public default void disconnected(final Transport transport) {
+    default void disconnected(final Transport transport) {
     }
 }

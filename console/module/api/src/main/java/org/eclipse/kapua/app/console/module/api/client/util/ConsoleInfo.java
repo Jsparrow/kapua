@@ -108,7 +108,8 @@ public class ConsoleInfo extends Info {
         }
 
         timer = new Timer() {
-            public void run() {
+            @Override
+			public void run() {
                 afterHide();
             }
         };
@@ -128,16 +129,18 @@ public class ConsoleInfo extends Info {
         }
 
     private void setText() {
-        if (config.text != null) {
-            if (config.params != null) {
-                config.text = Format.substitute(config.text, config.params);
-            }
-            removeAll();
-            addText(config.text);
-            }
+        if (config.text == null) {
+			return;
+		}
+		if (config.params != null) {
+		    config.text = Format.substitute(config.text, config.params);
+		}
+		removeAll();
+		addText(config.text);
     }
 
-    protected void afterHide() {
+    @Override
+	protected void afterHide() {
         RootPanel.get().remove(this);
     }
 }

@@ -20,6 +20,8 @@ import org.eclipse.kapua.service.device.call.kura.model.type.KuraObjectValueConv
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Kura channel asset definition
@@ -28,7 +30,8 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class KuraAssetChannel {
 
-    private String name;
+    private static final Logger logger = LoggerFactory.getLogger(KuraAssetChannel.class);
+	private String name;
     private KuraAssetChannelMode mode;
     private Class<?> type;
     private Object value;
@@ -208,7 +211,8 @@ public class KuraAssetChannel {
             try {
                 kuraAssetChannel.setType(KuraObjectTypeConverter.fromString(jsonType.asText()));
             } catch (ClassNotFoundException e) {
-                throw new KapuaIllegalArgumentException("channel.type", jsonType.asText());
+                logger.error(e.getMessage(), e);
+				throw new KapuaIllegalArgumentException("channel.type", jsonType.asText());
             }
         }
 
@@ -230,7 +234,8 @@ public class KuraAssetChannel {
             try {
                 kuraAssetChannel.setValue(KuraObjectValueConverter.fromString(jsonValue.asText(), kuraAssetChannel.getType()));
             } catch (ClassNotFoundException e) {
-                throw new KapuaIllegalArgumentException("channel.value", jsonValue.asText());
+                logger.error(e.getMessage(), e);
+				throw new KapuaIllegalArgumentException("channel.value", jsonValue.asText());
             }
         }
 

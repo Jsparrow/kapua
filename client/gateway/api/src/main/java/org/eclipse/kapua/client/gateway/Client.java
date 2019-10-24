@@ -27,19 +27,14 @@ package org.eclipse.kapua.client.gateway;
  */
 public interface Client extends AutoCloseable {
 
-    public interface Builder {
-
-        public Client build() throws Exception;
-    }
-
     /**
      * Get control over the transport
      *
      * @return The transport control instance
      */
-    public Transport transport();
+    Transport transport();
 
-    /**
+	/**
      * Create a new application instance
      * <p>
      * This method only returns a new builder which will
@@ -57,5 +52,10 @@ public interface Client extends AutoCloseable {
      *            The ID of the application to create
      * @return the new {@link Application.Builder} instance
      */
-    public Application.Builder buildApplication(String applicationId);
+    Application.Builder buildApplication(String applicationId);
+
+	public interface Builder {
+
+        Client build() throws Exception;
+    }
 }

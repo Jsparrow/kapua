@@ -122,7 +122,7 @@ public class KapuaDoPrivilegeTest {
                 }
             }
             Thread.sleep(200);
-            Assert.assertTrue("Timeout waiting for execution [" + timeOut + " msec]. The task is not yet completed!", attempt++ <= maxAttempt);
+            Assert.assertTrue(new StringBuilder().append("Timeout waiting for execution [").append(timeOut).append(" msec]. The task is not yet completed!").toString(), attempt++ <= maxAttempt);
         } while (!done);
         Assert.assertTrue("The task is not yet completed!", done);
     }

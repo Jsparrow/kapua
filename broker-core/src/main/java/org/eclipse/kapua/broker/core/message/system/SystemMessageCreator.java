@@ -20,11 +20,6 @@ import org.eclipse.kapua.broker.core.plugin.KapuaConnectionContext;
  */
 public interface SystemMessageCreator {
 
-    enum SystemMessageType {
-        CONNECT,
-        DISCONNECT
-    }
-
     /**
      * Create a system message
      * 
@@ -33,5 +28,10 @@ public interface SystemMessageCreator {
      * @return
      */
     String createMessage(SystemMessageType systemMessageType, KapuaConnectionContext kbc);
+
+	enum SystemMessageType {
+        CONNECT,
+        DISCONNECT
+    }
 
 }

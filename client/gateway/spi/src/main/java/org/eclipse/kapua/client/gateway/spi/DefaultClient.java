@@ -28,7 +28,68 @@ import org.eclipse.kapua.client.gateway.spi.util.MoreExecutors;
 
 public class DefaultClient extends AbstractClient {
 
-    public static final class Builder extends AbstractClient.Builder<Builder> {
+    private final Channel.Context context = new Channel.Context() {
+
+        @Override
+        public void notifyConnected() {
+            DefaultClient.this.notifyConnected();
+        }
+
+        @Override
+        public void notifyDisconnected() {
+            DefaultClient.this.notifyDisconnected();
+        }
+
+        @Override
+        public ScheduledExecutorService executor() {
+            return MoreExecutors.preventShutdown(executor);
+        }
+
+    };
+
+	private final Channel channel;
+
+	public DefaultClient(final Channel channel, final ScheduledExecutorService executor, final Set<Module> modules) {
+        super(executor, modules);
+
+        Objects.requireNonNull(channel);
+        this.channel = channel;
+        this.channel.handleInit(context);
+    }
+
+	@Override
+    public void close() throws Exception {
+        channel.handleClose(context);
+        executor.shutdown();
+    }
+
+	@Override
+    protected <T> Optional<T> adaptModuleContext(final Class<T> clazz) {
+
+        final Optional<T> result = channel.adapt(clazz);
+        if (result.isPresent()) {
+            return result;
+        }
+
+        return super.adaptModuleContext(clazz);
+    }
+
+	@Override
+    protected CompletionStage<?> handleSubscribe(String applicationId, Topic topic, MessageHandler messageHandler, ErrorHandler<? extends Throwable> errorHandler) {
+        return channel.handleSubscribe(applicationId, topic, messageHandler, errorHandler);
+    }
+
+	@Override
+    protected CompletionStage<?> handlePublish(String applicationId, Topic topic, Payload payload) {
+        return channel.handlePublish(applicationId, topic, payload);
+    }
+
+	@Override
+    protected void handleUnsubscribe(String applicationId, Collection<Topic> topics) throws Exception {
+        channel.handleUnsubscribe(applicationId, topics);
+    }
+
+	public static final class Builder extends AbstractClient.Builder<Builder> {
 
         private final Channel channel;
 
@@ -38,7 +99,8 @@ public class DefaultClient extends AbstractClient {
             this.channel = channel;
         }
 
-        protected Builder builder() {
+        @Override
+		protected Builder builder() {
             return this;
         }
 
@@ -69,67 +131,6 @@ public class DefaultClient extends AbstractClient {
                 }
             }
         }
-    }
-
-    private final Channel.Context context = new Channel.Context() {
-
-        @Override
-        public void notifyConnected() {
-            DefaultClient.this.notifyConnected();
-        }
-
-        @Override
-        public void notifyDisconnected() {
-            DefaultClient.this.notifyDisconnected();
-        }
-
-        @Override
-        public ScheduledExecutorService executor() {
-            return MoreExecutors.preventShutdown(executor);
-        }
-
-    };
-
-    private final Channel channel;
-
-    public DefaultClient(final Channel channel, final ScheduledExecutorService executor, final Set<Module> modules) {
-        super(executor, modules);
-
-        Objects.requireNonNull(channel);
-        this.channel = channel;
-        this.channel.handleInit(context);
-    }
-
-    @Override
-    public void close() throws Exception {
-        channel.handleClose(context);
-        executor.shutdown();
-    }
-
-    @Override
-    protected <T> Optional<T> adaptModuleContext(final Class<T> clazz) {
-
-        final Optional<T> result = channel.adapt(clazz);
-        if (result.isPresent()) {
-            return result;
-        }
-
-        return super.adaptModuleContext(clazz);
-    }
-
-    @Override
-    protected CompletionStage<?> handleSubscribe(String applicationId, Topic topic, MessageHandler messageHandler, ErrorHandler<? extends Throwable> errorHandler) {
-        return channel.handleSubscribe(applicationId, topic, messageHandler, errorHandler);
-    }
-
-    @Override
-    protected CompletionStage<?> handlePublish(String applicationId, Topic topic, Payload payload) {
-        return channel.handlePublish(applicationId, topic, payload);
-    }
-
-    @Override
-    protected void handleUnsubscribe(String applicationId, Collection<Topic> topics) throws Exception {
-        channel.handleUnsubscribe(applicationId, topics);
     }
 
 }

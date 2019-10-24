@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.commons.lang3.StringUtils;
 
 public final class AboutScanner {
 
@@ -61,10 +62,10 @@ public final class AboutScanner {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 if ("META-INF/MANIFEST.MF".equals(entry.getName())) {
-                    result = processOsgiManifest(result, entry, zis);
+                    result = processOsgiManifest(result, zis);
                     result = processPlainManifest(result, url, zis);
-                } else if (entry.getName().startsWith("META-INF/maven/") && entry.getName().endsWith("/pom.properties")) {
-                    result = processMavenProperties(result, entry, zis);
+                } else if (StringUtils.startsWith(entry.getName(), "META-INF/maven/") && StringUtils.endsWith(entry.getName(), "/pom.properties")) {
+                    result = processMavenProperties(result, zis);
                 } else if ("META-INF/NOTICE.txt".equals(entry.getName())) {
                     result = processNotice(result, url, zis);
                 } else if ("META-INF/NOTICE".equals(entry.getName())) {
@@ -78,6 +79,7 @@ public final class AboutScanner {
                 }
             }
         } catch (IOException e) {
+			LOG.error(e.getMessage(), e);
             // ignore
         }
 
@@ -119,7 +121,7 @@ public final class AboutScanner {
         final String fileContent = about.getNotice();
 
         // Makes sure all the keywords are contained in the about.html file
-        if (keywords.stream().allMatch(keyword -> fileContent.toLowerCase().contains(keyword.toLowerCase()))) {
+        if (keywords.stream().allMatch(keyword -> StringUtils.contains(fileContent.toLowerCase(), StringUtils.lowerCase(keyword)))) {
             about.setLicense(License.EPL);
         } else {
             // Default license
@@ -141,6 +143,7 @@ public final class AboutScanner {
         try {
             about.setNotice(CharStreams.toString(new InputStreamReader(in, StandardCharsets.UTF_8)));
         } catch (Exception e) {
+			LOG.error(e.getMessage(), e);
         }
 
         return about;
@@ -162,25 +165,27 @@ public final class AboutScanner {
                 about.setLicense(new License(null, text, null));
             }
         } catch (Exception e) {
+			LOG.error(e.getMessage(), e);
         }
 
         return about;
     }
 
     private static void setIdFromUrl(AboutEntry about, final URL url) {
-        if (about.getId() == null) {
-            final String[] paths = url.getPath().split("/");
-            if (paths.length < 1) {
-                // set the full URL, we don't understand it
-                about.setId("url:" + url.toString());
-            } else {
-                // set URL based id
-                about.setId("url:" + paths[paths.length - 1]);
-            }
-        }
+        if (about.getId() != null) {
+			return;
+		}
+		final String[] paths = url.getPath().split("/");
+		if (paths.length < 1) {
+		    // set the full URL, we don't understand it
+		    about.setId("url:" + url.toString());
+		} else {
+		    // set URL based id
+		    about.setId("url:" + paths[paths.length - 1]);
+		}
     }
 
-    private static AboutEntry processMavenProperties(AboutEntry about, final ZipEntry entry, final InputStream in) {
+    private static AboutEntry processMavenProperties(AboutEntry about, final InputStream in) {
         try {
             final Properties p = new Properties();
             p.load(in);
@@ -194,7 +199,7 @@ public final class AboutScanner {
                 about = needAbout(about);
 
                 // check if an ID is already present, maven goes last
-                if (about.getId() == null || about.getId().startsWith("url:")) {
+                if (about.getId() == null || StringUtils.startsWith(about.getId(), "url:")) {
                     about.setId(String.format("mvn:%s:%s:%s", groupId, artifactId, version));
                 }
 
@@ -206,11 +211,12 @@ public final class AboutScanner {
                 }
             }
         } catch (Exception e) {
+			LOG.error(e.getMessage(), e);
         }
         return about;
     }
 
-    private static AboutEntry processOsgiManifest(AboutEntry about, final ZipEntry entry, final InputStream in) {
+    private static AboutEntry processOsgiManifest(AboutEntry about, final InputStream in) {
         try {
             final Manifest mf = new Manifest(in);
             final String mfv = mf.getMainAttributes().getValue("Bundle-ManifestVersion");
@@ -233,12 +239,13 @@ public final class AboutScanner {
             about.setLicense(parseOsgiLicense(licenseString));
 
         } catch (Exception e) {
+			LOG.error(e.getMessage(), e);
         }
         return about;
     }
 
     private static License parseOsgiLicense(final String string) {
-        if (string == null || string.isEmpty()) {
+        if (string == null || StringUtils.isEmpty(string)) {
             return License.UNKNOWN;
         }
 
@@ -250,6 +257,7 @@ public final class AboutScanner {
             URL url = new URL(string);
             return new License(null, null, url);
         } catch (Exception e) {
+			LOG.error(e.getMessage(), e);
         }
 
         return License.UNKNOWN;

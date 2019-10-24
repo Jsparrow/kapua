@@ -40,10 +40,6 @@ public class LoginMetric {
     private Timer sendLoginUpdateMsgTime;
     private Timer removeConnectionTime;
 
-    public static LoginMetric getInstance() {
-        return LOGIN_METRIC;
-    }
-
     private LoginMetric() {
         MetricsService metricsService = MetricServiceFactory.getInstance();
         // login
@@ -69,83 +65,87 @@ public class LoginMetric {
         removeConnectionTime = metricsService.getTimer("security", "login", "remove_connection", "time", "s");
     }
 
-    public Counter getSuccess() {
+	public static LoginMetric getInstance() {
+        return LOGIN_METRIC;
+    }
+
+	public Counter getSuccess() {
         return success;
     }
 
-    public Counter getFailure() {
+	public Counter getFailure() {
         return failure;
     }
 
-    public Counter getInvalidUserPassword() {
+	public Counter getInvalidUserPassword() {
         return invalidUserPassword;
     }
 
-    public Counter getInvalidClientId() {
+	public Counter getInvalidClientId() {
         return invalidClientId;
     }
 
-    public Counter getKapuasysTokenAttempt() {
+	public Counter getKapuasysTokenAttempt() {
         return kapuasysTokenAttempt;
     }
 
-    public Counter getNormalUserAttempt() {
+	public Counter getNormalUserAttempt() {
         return normalUserAttempt;
     }
 
-    public Counter getStealingLinkConnect() {
+	public Counter getStealingLinkConnect() {
         return stealingLinkConnect;
     }
 
-    public Counter getStealingLinkDisconnect() {
+	public Counter getStealingLinkDisconnect() {
         return stealingLinkDisconnect;
     }
 
-    public Counter getRemoteStealingLinkDisconnect() {
+	public Counter getRemoteStealingLinkDisconnect() {
         return remoteStealingLinkDisconnect;
     }
 
-    public Counter getAdminStealingLinkDisconnect() {
+	public Counter getAdminStealingLinkDisconnect() {
         return adminStealingLinkDisconnect;
     }
 
-    public void setAdminStealingLinkDisconnect(Counter adminStealingLinkDisconnect) {
+	public void setAdminStealingLinkDisconnect(Counter adminStealingLinkDisconnect) {
         this.adminStealingLinkDisconnect = adminStealingLinkDisconnect;
     }
 
-    public Timer getAddConnectionTime() {
+	public Timer getAddConnectionTime() {
         return addConnectionTime;
     }
 
-    public Timer getNormalUserTime() {
+	public Timer getNormalUserTime() {
         return normalUserTime;
     }
 
-    public Timer getShiroLoginTime() {
+	public Timer getShiroLoginTime() {
         return shiroLoginTime;
     }
 
-    public Timer getCheckAccessTime() {
+	public Timer getCheckAccessTime() {
         return checkAccessTime;
     }
 
-    public Timer getFindClientIdTime() {
+	public Timer getFindClientIdTime() {
         return findClientIdTime;
     }
 
-    public Timer getFindDevTime() {
+	public Timer getFindDevTime() {
         return findDevTime;
     }
 
-    public Timer getShiroLogoutTime() {
+	public Timer getShiroLogoutTime() {
         return shiroLogoutTime;
     }
 
-    public Timer getSendLoginUpdateMsgTime() {
+	public Timer getSendLoginUpdateMsgTime() {
         return sendLoginUpdateMsgTime;
     }
 
-    public Timer getRemoveConnectionTime() {
+	public Timer getRemoveConnectionTime() {
         return removeConnectionTime;
     }
 

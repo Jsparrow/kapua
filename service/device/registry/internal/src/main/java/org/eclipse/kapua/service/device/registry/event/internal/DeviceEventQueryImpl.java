@@ -28,20 +28,18 @@ public class DeviceEventQueryImpl extends AbstractKapuaQuery<DeviceEvent> implem
 
     /**
      * Constructor
-     */
-    private DeviceEventQueryImpl() {
-        super();
-
-        setSortCriteria(new FieldSortCriteriaImpl(DeviceEventAttributes.RECEIVED_ON, SortOrder.DESCENDING));
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public DeviceEventQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private DeviceEventQueryImpl() {
+        setSortCriteria(new FieldSortCriteriaImpl(DeviceEventAttributes.RECEIVED_ON, SortOrder.DESCENDING));
     }
 }

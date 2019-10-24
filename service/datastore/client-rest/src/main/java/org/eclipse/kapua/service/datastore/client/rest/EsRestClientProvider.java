@@ -78,11 +78,48 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
 
     private RestClient client;
 
-    private static int getDefaultPort() {
+    /**
+     * Create the Elasticsearch rest client based on the default configuration settings ({@link ClientSettingsKey})
+     *
+     * @throws ClientUnavailableException
+     */
+    private EsRestClientProvider() throws ClientUnavailableException {
+        this(ClientSettings.getInstance());
+    }
+
+	/**
+     * Create the Elasticsearch rest client based on the provided configuration settings
+     * 
+     * @param settings
+     * @throws ClientUnavailableException
+     */
+    private EsRestClientProvider(final AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
+        this(parseAddresses(settings));
+    }
+
+	/**
+     * Create the Elasticsearch rest client based on the provided configuration addresses
+     * 
+     * @param addresses
+     * @throws ClientUnavailableException
+     */
+    private EsRestClientProvider(List<InetSocketAddress> addresses) throws ClientUnavailableException {
+        try {
+            if (addresses == null || addresses.isEmpty()) {
+                throw new ClientUnavailableException(PROVIDER_NO_NODE_CONFIGURED_MSG);
+            }
+            client = getClient(addresses);
+        } catch (Throwable t) {
+            throw new ClientUnavailableException(PROVIDER_FAILED_TO_CONFIGURE_MSG, t);
+        }
+
+    }
+
+	private static int getDefaultPort() {
         return ClientSettings.getInstance().getInt(ClientSettingsKey.ELASTICSEARCH_PORT, DEFAULT_PORT);
     }
 
-    /**
+	/**
      * Get the {@link EsRestClientProvider} instance
      * 
      * @return
@@ -95,7 +132,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         return instance;
     }
 
-    /**
+	/**
      * Initialize the {@link EsRestClientProvider} singleton instance.<br>
      * The nodes addresses and other parameters are read from the configuration file.<br>
      * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
@@ -114,7 +151,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         return instance;
     }
 
-    /**
+	/**
      * Initialize the {@link EsRestClientProvider} singleton instance.<br>
      * The nodes addresses and other parameters are overwritten with the provided settings.<br>
      * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
@@ -132,7 +169,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    /**
+	/**
      * Initialize the {@link EsRestClientProvider} singleton instance.<br>
      * <b>NOTE. The init methods can be called more than once in order to reinitialize the underlying datastore connection. It the datastore was already initialized this method close the old one
      * before initializing the new one.</b>
@@ -150,14 +187,15 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    private static void closeIfInstanceInitialized() throws ClientUnavailableException {
-        if (instance != null) {
-            logger.warn(PROVIDER_ALREADY_INITIALIZED_MSG);
-            close();
-        }
+	private static void closeIfInstanceInitialized() throws ClientUnavailableException {
+        if (instance == null) {
+			return;
+		}
+		logger.warn(PROVIDER_ALREADY_INITIALIZED_MSG);
+		close();
     }
 
-    /**
+	/**
      * Close the ES rest client
      * 
      * @throws ClientUnavailableException
@@ -176,7 +214,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    private void closeClient() throws IOException {
+	private void closeClient() throws IOException {
         if (client != null) {
             try {
                 client.close();
@@ -186,59 +224,21 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    /**
-     * Create the Elasticsearch rest client based on the default configuration settings ({@link ClientSettingsKey})
-     *
-     * @throws ClientUnavailableException
-     */
-    private EsRestClientProvider() throws ClientUnavailableException {
-        this(ClientSettings.getInstance());
-    }
-
-    /**
-     * Create the Elasticsearch rest client based on the provided configuration settings
-     * 
-     * @param settings
-     * @throws ClientUnavailableException
-     */
-    private EsRestClientProvider(final AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
-        this(parseAddresses(settings));
-    }
-
-    /**
-     * Create the Elasticsearch rest client based on the provided configuration addresses
-     * 
-     * @param addresses
-     * @throws ClientUnavailableException
-     */
-    private EsRestClientProvider(List<InetSocketAddress> addresses) throws ClientUnavailableException {
-        try {
-            if (addresses == null || addresses.isEmpty()) {
-                throw new ClientUnavailableException(PROVIDER_NO_NODE_CONFIGURED_MSG);
-            }
-            client = getClient(addresses);
-        } catch (Throwable t) {
-            throw new ClientUnavailableException(PROVIDER_FAILED_TO_CONFIGURE_MSG, t);
-        }
-
-    }
-
-    @Override
+	@Override
     public RestClient getClient() {
         return client;
     }
 
-    static RestClient getClient(List<InetSocketAddress> addresses) throws ClientUnavailableException {
+	static RestClient getClient(List<InetSocketAddress> addresses) throws ClientUnavailableException {
         if (addresses == null || addresses.isEmpty()) {
             throw new ClientUnavailableException(PROVIDER_NO_NODE_CONFIGURED_MSG);
         }
         ClientSettings settings = ClientSettings.getInstance();
-        List<HttpHost> hosts = new ArrayList<HttpHost>();
+        List<HttpHost> hosts = new ArrayList<>();
         boolean sslEnabled = settings.getBoolean(ClientSettingsKey.ELASTICSEARCH_SSL_ENABLED, false);
         logger.info("ES Rest Client - SSL {}enabled", (sslEnabled ? "" : "NOT "));
-        for (InetSocketAddress address : addresses) {
-            hosts.add(new HttpHost(address.getAddress(), address.getHostName(), address.getPort(), (sslEnabled ? SCHEMA_SSL : SCHEMA_UNTRUSTED)));
-        }
+        addresses.forEach(address -> hosts.add(new HttpHost(address.getAddress(), address.getHostName(), address.getPort(),
+				(sslEnabled ? SCHEMA_SSL : SCHEMA_UNTRUSTED))));
         RestClientBuilder restClientBuilder = RestClient.builder(hosts.toArray(new HttpHost[hosts.size()]));
         if (sslEnabled) {
             try {
@@ -265,7 +265,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
                 .build();
     }
 
-    static void initKeyStore(SSLContextBuilder sslBuilder) throws UnrecoverableKeyException, ClientUnavailableException, NoSuchAlgorithmException, KeyStoreException {
+	static void initKeyStore(SSLContextBuilder sslBuilder) throws UnrecoverableKeyException, ClientUnavailableException, NoSuchAlgorithmException, KeyStoreException {
         String keystorePath = ClientSettings.getInstance().getString(ClientSettingsKey.ELASTICSEARCH_SSL_KEYSTORE_PATH);
         String keystorePassword = ClientSettings.getInstance().getString(ClientSettingsKey.ELASTICSEARCH_SSL_KEYSTORE_PASSWORD);
         logger.info("ES Rest Client - Keystore path: {}", (StringUtils.isEmpty(keystorePath) ? "none" : keystorePath));
@@ -275,7 +275,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    static void initTrustStore(SSLContextBuilder sslBuilder) throws NoSuchAlgorithmException, KeyStoreException, ClientUnavailableException {
+	static void initTrustStore(SSLContextBuilder sslBuilder) throws NoSuchAlgorithmException, KeyStoreException, ClientUnavailableException {
         boolean trustServerCertificate = ClientSettings.getInstance().getBoolean(ClientSettingsKey.ELASTICSEARCH_SSL_TRUST_SERVER_CERTIFICATE, false);
         String truststorePath = ClientSettings.getInstance().getString(ClientSettingsKey.ELASTICSEARCH_SSL_TRUSTSTORE_PATH);
         String truststorePassword = ClientSettings.getInstance().getString(ClientSettingsKey.ELASTICSEARCH_SSL_TRUSTSTORE_PASSWORD);
@@ -297,7 +297,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    static KeyStore loadKeyStore(String keystorePath, String keystorePassword) throws ClientUnavailableException {
+	static KeyStore loadKeyStore(String keystorePath, String keystorePassword) throws ClientUnavailableException {
         InputStream is = null;
         try {
             KeyStore keystore = KeyStore.getInstance(ClientSettings.getInstance().getString(ClientSettingsKey.ELASTICSEARCH_SSL_KEYSTORE_TYPE, DEFAULT_KEY_STORE_TYPE));
@@ -317,7 +317,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    static RestClient createClient(final AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
+	static RestClient createClient(final AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
         try {
             final List<InetSocketAddress> addresses = parseAddresses(settings);
             return getClient(addresses);
@@ -328,7 +328,7 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         }
     }
 
-    static List<InetSocketAddress> parseAddresses(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
+	static List<InetSocketAddress> parseAddresses(AbstractBaseKapuaSetting<ClientSettingsKey> settings) throws ClientUnavailableException {
 
         // first try the legacy map approach
         final Map<String, String> map = settings.getMap(String.class, ClientSettingsKey.ELASTICSEARCH_NODE, "[0-9]+");
@@ -344,19 +344,19 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
 
         // now try the single node approach
         final String node = settings.getString(ClientSettingsKey.ELASTICSEARCH_NODE);
-        if (node != null && !node.isEmpty()) {
+        if (node != null && !StringUtils.isEmpty(node)) {
             return parseAndAdd(Stream.of(node));
         }
 
         return Collections.emptyList();
     }
 
-    static List<InetSocketAddress> parseAndAdd(Stream<String> stream) {
+	static List<InetSocketAddress> parseAndAdd(Stream<String> stream) {
         return stream.map(EsRestClientProvider::parseAddress).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    static InetSocketAddress parseAddress(String node) {
-        if (node == null || node.isEmpty()) {
+	static InetSocketAddress parseAddress(String node) {
+        if (node == null || StringUtils.isEmpty(node)) {
             return null;
         }
 
@@ -364,9 +364,9 @@ public class EsRestClientProvider implements ClientProvider<RestClient> {
         if (idx < 0) {
             return new InetSocketAddress(node, getDefaultPort());
         } else {
-            final String host = node.substring(0, idx);
-            final String port = node.substring(idx + 1);
-            if (port.isEmpty()) {
+            final String host = StringUtils.substring(node, 0, idx);
+            final String port = StringUtils.substring(node, idx + 1);
+            if (StringUtils.isEmpty(port)) {
                 return new InetSocketAddress(host, getDefaultPort());
             }
             return new InetSocketAddress(host, Integer.parseInt(port));

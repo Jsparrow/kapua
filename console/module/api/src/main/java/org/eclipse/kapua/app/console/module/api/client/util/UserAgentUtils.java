@@ -11,21 +11,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.module.api.client.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class UserAgentUtils {
 
     private UserAgentUtils() {
     }
 
     public static boolean isIE() {
-        return getUserAgent().toLowerCase().contains("msie");
+        return StringUtils.contains(getUserAgent().toLowerCase(), "msie");
     }
 
     public static boolean isFirefox() {
-        return getUserAgent().toLowerCase().contains("firefox");
+        return StringUtils.contains(getUserAgent().toLowerCase(), "firefox");
     }
 
     public static boolean isChrome() {
-        return getUserAgent().toLowerCase().contains("chrome");
+        return StringUtils.contains(getUserAgent().toLowerCase(), "chrome");
     }
 
     public static boolean isSafari() {
@@ -40,7 +42,7 @@ public class UserAgentUtils {
          * We need double check that if it contains "safari" it doesn't contains also "chrome"
          */
 
-        return getUserAgent().contains("safari") && !getUserAgent().contains("chrome");
+        return StringUtils.contains(getUserAgent(), "safari") && !StringUtils.contains(getUserAgent(), "chrome");
     }
 
     public static int getIEDocumentMode() {
