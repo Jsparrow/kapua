@@ -18,7 +18,7 @@ public interface Application {
      *
      * @return the application descriptor, must never return {@code null}
      */
-    public Descriptor getDescriptor();
+    Descriptor getDescriptor();
 
     /**
      * Create a new application handler
@@ -28,5 +28,5 @@ public interface Application {
      *
      * @return a new application handler, must never return {@code null}
      */
-    public Handler createHandler(ApplicationContext context);
+    Handler createHandler(ApplicationContext context);
 }

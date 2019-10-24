@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import com.google.common.io.CharStreams;
 import org.junit.experimental.categories.Category;
+import org.apache.commons.lang3.StringUtils;
 
 @Category(JUnitTests.class)
 public class ResourceUtilsTest {
@@ -37,7 +38,7 @@ public class ResourceUtilsTest {
         try (final Reader reader = ResourceUtils.openAsReader(url, StandardCharsets.UTF_8)) {
             final String string = CharStreams.toString(reader);
             Assert.assertNotNull(string);
-            Assert.assertFalse(string.isEmpty());
+            Assert.assertFalse(StringUtils.isEmpty(string));
         }
     }
 

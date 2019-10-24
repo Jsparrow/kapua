@@ -25,6 +25,7 @@ import org.eclipse.scada.utils.str.StringReplacer;
 import org.eclipse.scada.utils.str.StringReplacer.ReplaceSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaErrorHandlerServlet extends KapuaHttpServlet {
 
@@ -35,64 +36,14 @@ public class KapuaErrorHandlerServlet extends KapuaHttpServlet {
     private static final String HTTP_ERROR_PATH = "/httpError";
     private static final String THROWABLE_PATH = "/throwable";
 
-    private static final String HTTP_ERROR_TEMPLATE = "<!doctype html>" +
-            "<html>" +
-            "   <head>" +
-            "      <title>Eclipse Kapua&trade; Console - ${statusCode}</title>" +
-            "      <style>body {padding: 10px;}h1 {color: #1E80B0;}pre {display: none}.label {font-weight: bold;} .message {}</style>" +
-            "   </head>" +
-            "   <body>" +
-            "      <div>" +
-            "         <h1>Eclipse Kapua&trade;</h1>" +
-            "         <table>" +
-            "            <tr>" +
-            "               <td class='label'>HTTP Error Code:</td>" +
-            "               <td class='message'>${statusCode}</td>" +
-            "            </tr>" +
-            "            <tr>" +
-            "               <td class='label'>Requested Resource:</td>" +
-            "               <td class='message'>${requestUri}</td>" +
-            "            </tr>" +
-            "            <tr>" +
-            "               <td class='label'>Error Message:</td>" +
-            "               <td class='message'>${errorMessage}</td>" +
-            "            </tr>" +
-            "         </table>" +
-            "         <pre>${errorMessage}</pre>" +
-            "      </div>" +
-            "   </body>" +
-            "</html>";
-    private static final String THROWABLE_ERROR_TEMPLATE = "<!doctype html>" +
-            "<html>" +
-            "   <head>" +
-            "      <title>Eclipse Kapua&trade; Console - ${statusCode}</title>" +
-            "      <style>body {padding: 10px;}h1 {color: #1E80B0;}pre {display: none}.label {font-weight: bold;} .message {}</style>" +
-            "   </head>" +
-            "   <body>" +
-            "      <div>" +
-            "         <h1>Eclipse Kapua&trade;</h1>" +
-            "         <table>" +
-            "            <tr>" +
-            "               <td class='label'>HTTP Error Code:</td>" +
-            "               <td class='message'>${statusCode}</td>" +
-            "            </tr>" +
-            "            <tr>" +
-            "               <td class='label'>Requested Resource:</td>" +
-            "               <td class='message'>${requestUri}</td>" +
-            "            </tr>" +
-            "            <tr>" +
-            "               <td class='label'>Error Message:</td>" +
-            "               <td class='message'>${errorMessage}</td>" +
-            "            </tr>" +
-            "            <tr>" +
-            "                <td class='label'>Exception Message:</td>" +
-            "                <td class='message'>${exceptionMessage}</td>" +
-            "            </tr>" +
-            "         </table>" +
-            "         <pre>${errorMessage}</pre>" +
-            "      </div>" +
-            "   </body>" +
-            "</html>";
+    private static final String HTTP_ERROR_TEMPLATE = new StringBuilder().append("<!doctype html>").append("<html>").append("   <head>").append("      <title>Eclipse Kapua&trade; Console - ${statusCode}</title>").append("      <style>body {padding: 10px;}h1 {color: #1E80B0;}pre {display: none}.label {font-weight: bold;} .message {}</style>").append("   </head>").append("   <body>").append("      <div>")
+			.append("         <h1>Eclipse Kapua&trade;</h1>").append("         <table>").append("            <tr>").append("               <td class='label'>HTTP Error Code:</td>").append("               <td class='message'>${statusCode}</td>").append("            </tr>").append("            <tr>").append("               <td class='label'>Requested Resource:</td>").append("               <td class='message'>${requestUri}</td>")
+			.append("            </tr>").append("            <tr>").append("               <td class='label'>Error Message:</td>").append("               <td class='message'>${errorMessage}</td>").append("            </tr>").append("         </table>").append("         <pre>${errorMessage}</pre>").append("      </div>").append("   </body>")
+			.append("</html>").toString();
+    private static final String THROWABLE_ERROR_TEMPLATE = new StringBuilder().append("<!doctype html>").append("<html>").append("   <head>").append("      <title>Eclipse Kapua&trade; Console - ${statusCode}</title>").append("      <style>body {padding: 10px;}h1 {color: #1E80B0;}pre {display: none}.label {font-weight: bold;} .message {}</style>").append("   </head>").append("   <body>").append("      <div>")
+			.append("         <h1>Eclipse Kapua&trade;</h1>").append("         <table>").append("            <tr>").append("               <td class='label'>HTTP Error Code:</td>").append("               <td class='message'>${statusCode}</td>").append("            </tr>").append("            <tr>").append("               <td class='label'>Requested Resource:</td>").append("               <td class='message'>${requestUri}</td>")
+			.append("            </tr>").append("            <tr>").append("               <td class='label'>Error Message:</td>").append("               <td class='message'>${errorMessage}</td>").append("            </tr>").append("            <tr>").append("                <td class='label'>Exception Message:</td>").append("                <td class='message'>${exceptionMessage}</td>").append("            </tr>")
+			.append("         </table>").append("         <pre>${errorMessage}</pre>").append("      </div>").append("   </body>").append("</html>").toString();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -117,9 +68,9 @@ public class KapuaErrorHandlerServlet extends KapuaHttpServlet {
             return;
         }
 
-        if (pathInfo.startsWith(HTTP_ERROR_PATH)) {
+        if (StringUtils.startsWith(pathInfo, HTTP_ERROR_PATH)) {
             processHttpError(request, response);
-        } else if (pathInfo.startsWith(THROWABLE_PATH)) {
+        } else if (StringUtils.startsWith(pathInfo, THROWABLE_PATH)) {
             processThrowable(request, response);
         } else {
             response.sendError(404);

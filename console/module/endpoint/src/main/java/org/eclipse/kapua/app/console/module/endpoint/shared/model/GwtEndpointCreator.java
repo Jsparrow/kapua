@@ -21,7 +21,6 @@ public class GwtEndpointCreator extends GwtEntityCreator {
     private boolean secure;
 
     public GwtEndpointCreator() {
-        super();
     }
 
     public String getSchema() {

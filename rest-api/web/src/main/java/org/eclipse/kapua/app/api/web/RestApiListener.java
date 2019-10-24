@@ -44,7 +44,8 @@ public class RestApiListener implements ServletContextListener {
             try {
                 Class.forName(config.getString(SystemSettingKey.DB_JDBC_DRIVER));
             } catch (ClassNotFoundException e) {
-                LOG.warn("Could not find jdbc driver: {}", config.getString(SystemSettingKey.DB_JDBC_DRIVER));
+                LOG.error(e.getMessage(), e);
+				LOG.warn("Could not find jdbc driver: {}", config.getString(SystemSettingKey.DB_JDBC_DRIVER));
             }
 
             LOG.debug("Starting Liquibase embedded client update - URL: {}, user/pass: {}/{}", JdbcConnectionUrlResolvers.resolveJdbcUrl(), dbUsername, dbPassword);

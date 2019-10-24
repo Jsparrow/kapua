@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public class JbatchJobRunningStatuses extends ArrayList<BatchStatus> implements List<BatchStatus> {
+public class JbatchJobRunningStatuses extends ArrayList<BatchStatus> {
 
     private static final JbatchJobRunningStatuses STATUSES = new JbatchJobRunningStatuses();
 

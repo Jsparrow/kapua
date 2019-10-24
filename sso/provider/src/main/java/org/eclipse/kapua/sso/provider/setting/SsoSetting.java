@@ -19,15 +19,15 @@ public class SsoSetting extends AbstractKapuaSetting<SsoSettingKeys> {
 
     private static final SsoSetting INSTANCE = new SsoSetting();
 
-    private SsoSetting() {
-        super(SSO_SETTING_RESOURCE);
-    }
-
     SsoSetting(final String resourceName) {
         super(resourceName);
     }
 
-    public static SsoSetting getInstance() {
+	private SsoSetting() {
+        super(SSO_SETTING_RESOURCE);
+    }
+
+	public static SsoSetting getInstance() {
         return INSTANCE;
     }
 }

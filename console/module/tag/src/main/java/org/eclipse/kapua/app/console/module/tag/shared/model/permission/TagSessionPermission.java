@@ -18,7 +18,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.session.GwtSessionP
 public class TagSessionPermission extends GwtSessionPermission {
 
     protected TagSessionPermission() {
-        super();
     }
 
     private TagSessionPermission(GwtSessionPermissionAction action) {

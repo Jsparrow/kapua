@@ -22,6 +22,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that wraps a {@link org.eclipse.paho.client.mqttv3.MqttClient} and
@@ -32,7 +34,9 @@ import java.util.List;
  */
 public class MqttClient {
 
-    /**
+    private static final Logger logger = LoggerFactory.getLogger(MqttClient.class);
+
+	/**
      * The wrapped Paho client.
      */
     private org.eclipse.paho.client.mqttv3.MqttClient pahoMqttClient;
@@ -137,7 +141,8 @@ public class MqttClient {
         try {
             return getPahoClient().isConnected();
         } catch (KapuaException e) {
-            return false;
+            logger.error(e.getMessage(), e);
+			return false;
         }
     }
 
@@ -267,7 +272,8 @@ public class MqttClient {
         try {
             return getPahoClient().getClientId();
         } catch (KapuaException e) {
-            return null;
+            logger.error(e.getMessage(), e);
+			return null;
         }
     }
 

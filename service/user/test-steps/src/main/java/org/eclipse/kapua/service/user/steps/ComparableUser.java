@@ -48,6 +48,6 @@ public class ComparableUser {
                 thisUser.getDisplayName().equals(otherUser.getDisplayName()) &&
                 thisUser.getEmail().equals(otherUser.getEmail()) &&
                 thisUser.getPhoneNumber().equals(otherUser.getPhoneNumber()) &&
-                thisUser.getStatus().equals(otherUser.getStatus());
+                thisUser.getStatus() == otherUser.getStatus();
     }
 }

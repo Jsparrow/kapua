@@ -29,26 +29,25 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Kapua locator implementation bases on Guice framework
  */
 public class GuiceLocatorImpl extends KapuaLocator {
 
-    private final Injector injector;
+    private static final Logger logger = LoggerFactory.getLogger(GuiceLocatorImpl.class);
+	private final Injector injector;
 
     public GuiceLocatorImpl() {
         injector = Guice.createInjector(new KapuaModule());
-        ServiceModuleConfiguration.setConfigurationProvider(() -> {
-            return injector.getInstance(ServiceModuleProvider.class);
-        });
+        ServiceModuleConfiguration.setConfigurationProvider(() -> injector.getInstance(ServiceModuleProvider.class));
     }
 
     public GuiceLocatorImpl(String resourceName) {
         injector = Guice.createInjector(new KapuaModule(resourceName));
-        ServiceModuleConfiguration.setConfigurationProvider(() -> {
-            return injector.getInstance(ServiceModuleProvider.class);
-        });
+        ServiceModuleConfiguration.setConfigurationProvider(() -> injector.getInstance(ServiceModuleProvider.class));
     }
 
     @Override
@@ -65,7 +64,8 @@ public class GuiceLocatorImpl extends KapuaLocator {
         try {
             return injector.getInstance(factoryClass);
         } catch (ConfigurationException e) {
-            throw new KapuaRuntimeException(KapuaLocatorErrorCodes.FACTORY_UNAVAILABLE, factoryClass);
+            logger.error(e.getMessage(), e);
+			throw new KapuaRuntimeException(KapuaLocatorErrorCodes.FACTORY_UNAVAILABLE, factoryClass);
         }
     }
 
@@ -73,7 +73,8 @@ public class GuiceLocatorImpl extends KapuaLocator {
         try {
             return injector.getInstance(componentClass);
         } catch (ConfigurationException e) {
-            throw new KapuaRuntimeException(KapuaLocatorErrorCodes.COMPONENT_UNAVAILABLE, componentClass);
+            logger.error(e.getMessage(), e);
+			throw new KapuaRuntimeException(KapuaLocatorErrorCodes.COMPONENT_UNAVAILABLE, componentClass);
         }
     }
 

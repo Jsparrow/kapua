@@ -92,7 +92,6 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
      * @since 1.0.0
      */
     public CredentialImpl() {
-        super();
     }
 
     /**

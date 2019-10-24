@@ -27,7 +27,6 @@ public class KuraPassword {
      * @param password
      */
     public KuraPassword(String password) {
-        super();
         this.password = password;
     }
 

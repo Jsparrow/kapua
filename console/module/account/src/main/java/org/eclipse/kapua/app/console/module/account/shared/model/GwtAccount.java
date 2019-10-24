@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import org.eclipse.kapua.app.console.module.api.client.util.DateUtils;
 import org.eclipse.kapua.app.console.module.api.shared.model.GwtUpdatableEntityModel;
 
-public class GwtAccount extends GwtUpdatableEntityModel implements Serializable {
+public class GwtAccount extends GwtUpdatableEntityModel {
 
     private static final long serialVersionUID = -5999185569672904770L;
 
@@ -30,42 +30,14 @@ public class GwtAccount extends GwtUpdatableEntityModel implements Serializable 
     public static final int SERVICE_PLAN_UNLIMITED = -1;
     public static final int SERVICE_PLAN_DISABLED = 0;
 
-    public enum GwtAccountStatus implements IsSerializable {
-        BEING_PROVISIONED, ENABLED, DISABLED, BEING_DELETED;
+	private String brokerUrl;
 
-        GwtAccountStatus() {
-        }
+	private GwtOrganization gwtOrganization;
+
+	public GwtAccount() {
     }
 
-    public enum GwtAccountProvisioningStatus implements IsSerializable {
-        WAITING_TO_START, IN_PROGRESS, FAILED, COMPLETED;
-
-        GwtAccountProvisioningStatus() {
-        }
-    }
-
-    public enum GwtAccountDataIndexBy implements IsSerializable {
-        SERVER_TIMESTAMP, DEVICE_TIMESTAMP;
-
-        GwtAccountDataIndexBy() {
-        }
-    }
-
-    public enum GwtAccountMetricsIndexBy implements IsSerializable {
-        TIMESTAMP, VALUE, NONE;
-
-        GwtAccountMetricsIndexBy() {
-        }
-    }
-
-    private String brokerUrl;
-    private GwtOrganization gwtOrganization;
-
-    public GwtAccount() {
-        super();
-    }
-
-    @Override
+	@Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
         if ("expirationDateFormatted".equals(property)) {
@@ -79,132 +51,160 @@ public class GwtAccount extends GwtUpdatableEntityModel implements Serializable 
         }
     }
 
-    public String getName() {
+	public String getName() {
         return (String) get("name");
     }
 
-    public String getUnescapedName() {
+	public String getUnescapedName() {
         return (String) getUnescaped("name");
     }
 
-    public void setName(String name) {
+	public void setName(String name) {
         set("name", name);
     }
 
-    public String getPassword() {
+	public String getPassword() {
         return (String) get("password");
     }
 
-    public void setPassword(String password) {
+	public void setPassword(String password) {
         set("password", password);
     }
 
-    public GwtOrganization getGwtOrganization() {
+	public GwtOrganization getGwtOrganization() {
         return gwtOrganization;
     }
 
-    public void setGwtOrganization(GwtOrganization gwtOrganization) {
+	public void setGwtOrganization(GwtOrganization gwtOrganization) {
         this.gwtOrganization = gwtOrganization;
     }
 
-    public void setParentAccountId(String parentAccountId) {
+	public void setParentAccountId(String parentAccountId) {
         set("parentAccountId", parentAccountId);
     }
 
-    public String getParentAccountId() {
+	public String getParentAccountId() {
         return (String) get("parentAccountId");
     }
 
-    public String getParentAccountPath() {
+	public String getParentAccountPath() {
         return get("parentAccountPath");
     }
 
-    public void setParentAccountPath(String parentAccountPath) {
+	public void setParentAccountPath(String parentAccountPath) {
         set("parentAccountPath", parentAccountPath);
     }
 
-    public List<GwtAccount> getChildAccounts() {
+	public List<GwtAccount> getChildAccounts() {
         return get("childAccounts");
     }
 
-    public void setChildAccounts(List<GwtAccount> childAccounts) {
+	public void setChildAccounts(List<GwtAccount> childAccounts) {
         set("childAccounts", childAccounts);
     }
 
-    public Date getExpirationDate() {
+	public Date getExpirationDate() {
         return get("expirationDate");
     }
 
-    public String getExpirationDateFormatted() {
+	public String getExpirationDateFormatted() {
         return get("expirationDateFormatted");
     }
 
-    public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(Date expirationDate) {
         set("expirationDate", expirationDate);
     }
 
-    public String getContactName() {
+	public String getContactName() {
         return (String) getUnescaped("contactName");
     }
 
-    public void setContactName(String contactName) {
+	public void setContactName(String contactName) {
         set("contactName", contactName);
     }
 
-    public String getPhoneNumber() {
+	public String getPhoneNumber() {
         return (String) getUnescaped("phoneNumber");
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
         set("phoneNumber", phoneNumber);
     }
 
-    public String getAddress1() {
+	public String getAddress1() {
         return (String) getUnescaped("adress1");
     }
 
-    public void setAddress1(String adress1) {
+	public void setAddress1(String adress1) {
         set("adress1", adress1);
     }
 
-    public String getAddress2() {
+	public String getAddress2() {
         return (String) getUnescaped("address2");
     }
 
-    public void setAddress2(String address2) {
+	public void setAddress2(String address2) {
         set("address2", address2);
     }
 
-    public String getZipPostCode() {
+	public String getZipPostCode() {
         return (String) getUnescaped("zipPostCode");
     }
 
-    public void setZipPostCode(String zipPostCode) {
+	public void setZipPostCode(String zipPostCode) {
         set("zipPostCode", zipPostCode);
     }
 
-    public String getCity() {
+	public String getCity() {
         return (String) getUnescaped("city");
     }
 
-    public void setCity(String city) {
+	public void setCity(String city) {
         set("city", city);
     }
 
-    public String getStateProvince() {
+	public String getStateProvince() {
         return (String) getUnescaped("stateProvince");
     }
 
-    public void setStateProvince(String stateProvince) {
+	public void setStateProvince(String stateProvince) {
         set("stateProvince", stateProvince);
     }
 
-    public String getCountry() {
+	public String getCountry() {
         return (String) getUnescaped("country");
     }
 
-    public void setCountry(String country) {
+	public void setCountry(String country) {
         set("country", country);
+    }
+
+	public enum GwtAccountStatus implements IsSerializable {
+        BEING_PROVISIONED, ENABLED, DISABLED, BEING_DELETED;
+
+        GwtAccountStatus() {
+        }
+    }
+
+	public enum GwtAccountProvisioningStatus implements IsSerializable {
+        WAITING_TO_START, IN_PROGRESS, FAILED, COMPLETED;
+
+        GwtAccountProvisioningStatus() {
+        }
+    }
+
+	public enum GwtAccountDataIndexBy implements IsSerializable {
+        SERVER_TIMESTAMP, DEVICE_TIMESTAMP;
+
+        GwtAccountDataIndexBy() {
+        }
+    }
+
+	public enum GwtAccountMetricsIndexBy implements IsSerializable {
+        TIMESTAMP, VALUE, NONE;
+
+        GwtAccountMetricsIndexBy() {
+        }
     }
 
 }

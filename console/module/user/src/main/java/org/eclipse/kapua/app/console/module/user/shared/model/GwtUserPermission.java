@@ -17,29 +17,14 @@ import java.util.List;
 
 import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 
-public class GwtUserPermission extends KapuaBaseModel implements Serializable {
+public class GwtUserPermission extends KapuaBaseModel {
 
     private static final long serialVersionUID = 8760151213714238533L;
+	private Domain domain;
+	private Action action;
+	private String scopeId;
 
-    /**
-     * Defines the domain of the object protected by the Permission
-     */
-    public enum Domain {
-        account, user, data, device, broker,
-    }
-
-    /**
-     * Defines the actions allowed by the Permission
-     */
-    public enum Action {
-        create, read, update, delete, connect, all;
-    }
-
-    private Domain domain;
-    private Action action;
-    private String scopeId;
-
-    public GwtUserPermission(Domain domain, Action action, String accountId, boolean enabled) {
+	public GwtUserPermission(Domain domain, Action action, String accountId, boolean enabled) {
 
         this.domain = domain;
         this.action = action;
@@ -57,39 +42,40 @@ public class GwtUserPermission extends KapuaBaseModel implements Serializable {
         setAccountPermission(sbAccountPermission.toString());
     }
 
-    public GwtUserPermission(Domain domain, Action action, boolean enabled) {
+	public GwtUserPermission(Domain domain, Action action, boolean enabled) {
         this(domain, action, null, enabled);
     }
 
-    public GwtUserPermission(Domain domain, boolean enabled) {
+	public GwtUserPermission(Domain domain, boolean enabled) {
         this(domain, null, null, enabled);
     }
 
-    public boolean getEnabled() {
+	public boolean getEnabled() {
         return (Boolean) get("enabled");
     }
 
-    public void setEnabled(boolean enabled) {
+	public void setEnabled(boolean enabled) {
         set("enabled", enabled);
     }
 
-    public void setPermission(String permission) {
+	public void setPermission(String permission) {
         set("permission", permission);
     }
 
-    public String getPermission() {
+	public String getPermission() {
         return get("permission");
     }
 
-    public void setAccountPermission(String permission) {
+	public void setAccountPermission(String permission) {
         set("accountPermission", permission);
     }
 
-    public String getAccountPermission() {
+	public String getAccountPermission() {
         return get("accountPermission");
     }
 
-    public String toString() {
+	@Override
+	public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(domain.name());
         if (action != null) {
@@ -103,7 +89,7 @@ public class GwtUserPermission extends KapuaBaseModel implements Serializable {
         return sb.toString();
     }
 
-    public static List<GwtUserPermission> getAllPermissions(String scopeId) {
+	public static List<GwtUserPermission> getAllPermissions(String scopeId) {
         List<GwtUserPermission> permissions = new ArrayList<GwtUserPermission>();
         permissions.add(new GwtUserPermission(Domain.account, Action.create, scopeId, false));
         permissions.add(new GwtUserPermission(Domain.account, Action.read, scopeId, false));
@@ -126,5 +112,19 @@ public class GwtUserPermission extends KapuaBaseModel implements Serializable {
         permissions.add(new GwtUserPermission(Domain.user, Action.delete, scopeId, false));
 
         return permissions;
+    }
+
+	/**
+     * Defines the domain of the object protected by the Permission
+     */
+    public enum Domain {
+        account, user, data, device, broker,
+    }
+
+	/**
+     * Defines the actions allowed by the Permission
+     */
+    public enum Action {
+        create, read, update, delete, connect, all;
     }
 }

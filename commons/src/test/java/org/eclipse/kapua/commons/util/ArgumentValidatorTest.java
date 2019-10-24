@@ -22,11 +22,16 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Calendar;
 
 @Category(JUnitTests.class)
 public class ArgumentValidatorTest extends Assert {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(ArgumentValidatorTest.class);
+
+	@Test
     public void testConstructor() throws Exception {
         Constructor<ArgumentValidator> argvalidator = ArgumentValidator.class.getDeclaredConstructor();
         argvalidator.setAccessible(true);
@@ -39,7 +44,8 @@ public class ArgumentValidatorTest extends Assert {
         try {
             ArgumentValidator.match(argVal, CommonsValidationRegex.SIMPLE_NAME_REGEXP, "Null_test_case");
         } catch (Exception ex) {
-            fail("No exception expected for: " + argVal);
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected for: " + argVal);
         }
     }
 
@@ -63,6 +69,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsSimpleName[i], CommonsValidationRegex.SIMPLE_NAME_REGEXP, "SIMPLE_NAME_test_case");
                 fail("Exception expected for: " + listOfFalseStringsSimpleName[i]);
             } catch (KapuaIllegalArgumentException e) {
+				logger.error(e.getMessage(), e);
                 // Expected
             }
         }
@@ -71,7 +78,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsSimpleName[i], CommonsValidationRegex.SIMPLE_NAME_REGEXP, "SIMPLE_NAME_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsSimpleName[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsSimpleName[i]);
             }
         }
     }
@@ -97,6 +105,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsName[i], CommonsValidationRegex.NAME_REGEXP, "NAME_REGEXP_test_case");
                 fail("Exception expected for: " + listOfFalseStringsName[i]);
             } catch (KapuaIllegalArgumentException e) {
+				logger.error(e.getMessage(), e);
                 // Expected
             }
         }
@@ -105,7 +114,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsName[i], CommonsValidationRegex.NAME_REGEXP, "NAME_REGEXP_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsName[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsName[i]);
             }
         }
     }
@@ -131,6 +141,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsNameSpace[i], CommonsValidationRegex.NAME_SPACE_REGEXP, "NAME_SPACE_REGEXP_test_case");
                 fail("Exception expected for: " + listOfFalseStringsNameSpace[i]);
             } catch (KapuaIllegalArgumentException e) {
+				logger.error(e.getMessage(), e);
                 // Expected
             }
         }
@@ -138,7 +149,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsNameSpace[i], CommonsValidationRegex.NAME_SPACE_REGEXP, "NAME_SPACE_REGEXP_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsNameSpace[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsNameSpace[i]);
             }
         }
     }
@@ -164,6 +176,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsMACaddressRegExp[i], CommonsValidationRegex.MAC_ADDRESS_REGEXP, "MAC_ADDRESS_test_case");
                 fail("Exception expected for: " + listOfFalseStringsMACaddressRegExp[i]);
             } catch (KapuaIllegalArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -171,7 +184,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsMACaddressRegExp[i], CommonsValidationRegex.MAC_ADDRESS_REGEXP, "MAC_ADDRESS_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsMACaddressRegExp[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsMACaddressRegExp[i]);
             }
         }
     }
@@ -202,6 +216,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsPasswordRegExp[i], CommonsValidationRegex.PASSWORD_REGEXP, "PASSWORD_REGEXP_test_case");
                 fail("Exception expected for: " + listOfFalseStringsPasswordRegExp[i]);
             } catch (KapuaIllegalArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -209,7 +224,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsPasswordRegExp[i], CommonsValidationRegex.PASSWORD_REGEXP, "PASSWORD_REGEXP_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsPasswordRegExp[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsPasswordRegExp[i]);
             }
         }
     }
@@ -252,6 +268,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.match(listOfFalseStringsEmailRegExp[i], CommonsValidationRegex.EMAIL_REGEXP, "EMAIL_test_case");
                 fail("Exception expected for: " + listOfFalseStringsEmailRegExp[i]);
             } catch (KapuaIllegalArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -259,7 +276,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.match(listOfPermittedStringsEmailRegExp[i], CommonsValidationRegex.EMAIL_REGEXP, "EMAIL_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsEmailRegExp[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsEmailRegExp[i]);
             }
         }
     }
@@ -276,22 +294,24 @@ public class ArgumentValidatorTest extends Assert {
                 "http://172.0.0.1:8080", "https://172.0.0.1:8080", "http://192.168.0.1:8080", "https://192.168.0.1:8080", "http://10.10.10.10:8080",
                 "https://10.10.10.10:8080", "http:/127.0.0.1", "https:/127.0.0.1", "http:/10.10.10.10", "https:/10.10.10.10", "http:/172.0.1.2", "https:/172.0.1.2",
                 "http:/192.168.0.1", "https:/192.168.0.1" };
-        for (int i = 0; i < notValidLocalIp.length; i++) {
+        for (String aNotValidLocalIp : notValidLocalIp) {
             try {
-                ArgumentValidator.match(notValidLocalIp[i], CommonsValidationRegex.LOCAL_IP_ADDRESS_REGEXP, "LocalIP_test_case");
-                fail("Exception expected for: " + notValidLocalIp[i]);
+                ArgumentValidator.match(aNotValidLocalIp, CommonsValidationRegex.LOCAL_IP_ADDRESS_REGEXP, "LocalIP_test_case");
+                fail("Exception expected for: " + aNotValidLocalIp);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
         String[] validLocalIp = new String[] { "http://127.0.0.1", "http://10.0.0.1", "http://10.9.9.9", "http://10.255.255.255", "https://10.255.255.255",
                 "http://172.0.0.0", "https://172.0.0.0", "http://172.255.255.255", "http://192.168.0.0", "https://192.168.0.0", "http://192.168.255.255",
                 "https://192.168.255.255" };
-        for (int i = 0; i < validLocalIp.length; i++) {
+        for (String aValidLocalIp : validLocalIp) {
             try {
-                ArgumentValidator.match(validLocalIp[i], CommonsValidationRegex.LOCAL_IP_ADDRESS_REGEXP, "LocalIP_test_case");
+                ArgumentValidator.match(aValidLocalIp, CommonsValidationRegex.LOCAL_IP_ADDRESS_REGEXP, "LocalIP_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + validLocalIp[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + aValidLocalIp);
             }
         }
     }
@@ -304,11 +324,12 @@ public class ArgumentValidatorTest extends Assert {
                 "256.11.12.13", "10.256.12.13", "10.11.256.13", "10.11.12.256", "http:/10.11.12.13", "https:/10.11.12.13", "http:10.11.12.13", "https:10.11.12.13",
                 "htp://10.11.12.13", "htps://10.11.12.13", "htpp://10.11.12.13", "htpps://10.11.12.13", "htttp://10.11.12.13", "htttps://10.11.12.13",
                 "http://string", "https://string", "http://10.11.12.13:8080", "https://10.11.12.13:8080", "http://root@10.11.12.13", "https://root@10.11.12.13" };
-        for (int i = 0; i < notValidIp.length; i++) {
+        for (String aNotValidIp : notValidIp) {
             try {
-                ArgumentValidator.match(notValidIp[i], CommonsValidationRegex.IP_ADDRESS_REGEXP, "IP_test_case");
-                fail("Exception expected for: " + notValidIp[i]);
+                ArgumentValidator.match(aNotValidIp, CommonsValidationRegex.IP_ADDRESS_REGEXP, "IP_test_case");
+                fail("Exception expected for: " + aNotValidIp);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -316,11 +337,12 @@ public class ArgumentValidatorTest extends Assert {
                 "255.255.255.255", "http://10.11.12.13", "https://10.11.12.13", "10.11.12.13", "http://192.168.0.1", "https://192.168.0.1", "192.168.0.1",
                 "http://172.0.0.1", "https://172.0.0.1", "172.0.0.1", "http://127.0.0.1", "https://127.0.0.1", "127.0.0.1", "http://1.2.3.4", "https://1.2.3.4",
                 "1.2.3.4" };
-        for (int i = 0; i < validIp.length; i++) {
+        for (String aValidIp : validIp) {
             try {
-                ArgumentValidator.match(validIp[i], CommonsValidationRegex.IP_ADDRESS_REGEXP, "IP_test_case");
+                ArgumentValidator.match(aValidIp, CommonsValidationRegex.IP_ADDRESS_REGEXP, "IP_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + validIp[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + aValidIp);
             }
         }
     }
@@ -345,6 +367,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.notNull(listOfFalseStringsNullTest[i], "NULL_test_case");
                 fail("Exception expeected for: " + listOfFalseStringsNullTest[i]);
             } catch (KapuaIllegalNullArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -352,7 +375,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.notNull(listOfPermittedStringNullTest[i], "NULL_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringNullTest[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringNullTest[i]);
             }
         }
     }
@@ -377,6 +401,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.isNull(listOfFalseStringsNullTest[i], "NULL_test_case");
                 fail("Exception expeected for: " + listOfFalseStringsNullTest[i]);
             } catch (KapuaIllegalArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -384,7 +409,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.isNull(listOfPermittedStringNullTest[i], "NULL_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringNullTest[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringNullTest[i]);
             }
         }
     }
@@ -407,6 +433,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.isEmptyOrNull(listOfFalseStringsEmptyOrNull[i], "EMPTY_OR_NULL_test_case");
                 fail("Exception expeected for: " + listOfFalseStringsEmptyOrNull[i]);
             } catch (KapuaIllegalArgumentException ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -414,7 +441,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.isEmptyOrNull(listOfPermittedStringsEmptyOrNull[i], "EMPTY_OR_NULL_test_case");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStringsEmptyOrNull[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStringsEmptyOrNull[i]);
             }
         }
     }
@@ -430,6 +458,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.notEmptyOrNull(listOfFalseStrings[i], "notEmptyOrNullTest");
                 fail("Exception expected for: " + listOfFalseStrings[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -438,7 +467,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.notEmptyOrNull(listOfPermittedStrings[i], "notEmptyOrNullTest");
             } catch (Exception ex) {
-                fail("No Exception expected for: " + listOfPermittedStrings[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No Exception expected for: " + listOfPermittedStrings[i]);
             }
         }
     }
@@ -454,19 +484,22 @@ public class ArgumentValidatorTest extends Assert {
             ArgumentValidator.notEmptyOrNull(object1, "notEmptyOrNullTest");
             fail("Exception expected!");
         } catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
             // Expected
         }
         try {
             ArgumentValidator.notEmptyOrNull(object2, "notEmptyOrNullTest");
             fail("Exception expected!");
         } catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
             // Expected
         }
         for (int i = 0; i < sizeOfPermitted; i++) {
             try {
                 ArgumentValidator.notEmptyOrNull(listOfChoicesPermitted, "notEmptyOrNullTest");
             } catch (Exception ex) {
-                fail("No exception expected!");
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected!");
             }
         }
     }
@@ -487,33 +520,39 @@ public class ArgumentValidatorTest extends Assert {
             ArgumentValidator.notEmptyOrNull(stringList1, "notEmptyOrNullTest");
             fail("Exception expected.");
         } catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
             // Expected
         }
         try {
             ArgumentValidator.notEmptyOrNull(stringList2, "notEmptyOrNullTest");
             fail("Exception expected.");
         } catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
             // Expected
         }
         try {
             ArgumentValidator.notEmptyOrNull(stringList3, "notEmptyOrNullTest");
         } catch (Exception ex) {
-            fail("No exception expected.");
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected.");
         }
         try {
             ArgumentValidator.notEmptyOrNull(integerList, "notEmptyOrNullTest");
         } catch (Exception ex) {
-            fail("No exception expected.");
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected.");
         }
         try {
             ArgumentValidator.notEmptyOrNull(booleanList, "notEmptyOrNullTest");
         } catch (Exception ex) {
-            fail("No exception expected.");
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected.");
         }
         try {
             ArgumentValidator.notEmptyOrNull(longList, "notEmptyOrNullTest");
         } catch (Exception ex) {
-            fail("No exception expected.");
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected.");
         }
     }
 
@@ -529,6 +568,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.notNegative(listOfNegative[i], "not null test");
                 fail("Exception expected for : " + listOfNegative[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -536,7 +576,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.notNegative(listOfPositive[i], "not null test");
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPositive[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPositive[i]);
             }
         }
     }
@@ -544,20 +585,36 @@ public class ArgumentValidatorTest extends Assert {
     @Test
     public void testDateRange() throws Exception {
 
-        Date startTimeFalse2 = new Date(2018, 1, 1);
-        Date endTimeFalse2 = new Date(2017, 1, 1);
+        Calendar calendar = Calendar.getInstance();
+		calendar.set(3918, 1, 1);
+		Date startTimeFalse2 = calendar.getTime();
+        Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(3917, 1, 1);
+		Date endTimeFalse2 = calendar1.getTime();
 
         Date[] startTimeFalse = new Date[] { startTimeFalse2 };
         Date[] endTimeFalse = new Date[] { endTimeFalse2 };
 
-        Date startTimeOK0 = new Date(2017, 1, 1);
-        Date endTimeOK0 = new Date(2018, 1, 1);
+        Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(3917, 1, 1);
+		Date startTimeOK0 = calendar2.getTime();
+        Calendar calendar3 = Calendar.getInstance();
+		calendar3.set(3918, 1, 1);
+		Date endTimeOK0 = calendar3.getTime();
 
-        Date startTimeOK1 = new Date(-2017, -10, -10);
-        Date endTimeOK1 = new Date(2018, 1, 1);
+        Calendar calendar4 = Calendar.getInstance();
+		calendar4.set(-10, -10);
+		Date startTimeOK1 = calendar4.getTime();
+        Calendar calendar5 = Calendar.getInstance();
+		calendar5.set(3918, 1, 1);
+		Date endTimeOK1 = calendar5.getTime();
 
-        Date startTimeOK2 = new Date(2017, 1, 1);
-        Date endTimeOK2 = new Date(2018, -1, -1);
+        Calendar calendar6 = Calendar.getInstance();
+		calendar6.set(3917, 1, 1);
+		Date startTimeOK2 = calendar6.getTime();
+        Calendar calendar7 = Calendar.getInstance();
+		calendar7.set(3918, -1, -1);
+		Date endTimeOK2 = calendar7.getTime();
 
         Date[] startTimeOK = new Date[] { startTimeOK0, startTimeOK1, startTimeOK1 };
         Date[] endTimeOK = new Date[] { endTimeOK0, endTimeOK1, endTimeOK2 };
@@ -567,6 +624,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.dateRange(startTimeFalse[i], endTimeFalse[i]);
                 fail("Exception expected for: " + i);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -574,7 +632,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.dateRange(startTimeOK[i], endTimeOK[i]);
             } catch (Exception ex) {
-                fail("No exception expected for: " + startTimeOK[i] + endTimeOK[i]);
+                logger.error(ex.getMessage(), ex);
+				fail(new StringBuilder().append("No exception expected for: ").append(startTimeOK[i]).append(endTimeOK[i]).toString());
             }
         }
     }
@@ -613,6 +672,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.dateRange(startTimeNOK[i], endTimeNOK[i]);
                 fail("Exception expected for LONG: " + i);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -620,7 +680,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.dateRange(startTimeOK[i], endTimeOK[i]);
             } catch (Exception ex) {
-                fail("No exception expected for: " + startTimeOK[i] + endTimeOK[i]);
+                logger.error(ex.getMessage(), ex);
+				fail(new StringBuilder().append("No exception expected for: ").append(startTimeOK[i]).append(endTimeOK[i]).toString());
             }
         }
     }
@@ -636,6 +697,7 @@ public class ArgumentValidatorTest extends Assert {
                 ArgumentValidator.numRange(element, minValue, maxValue, "numRange test");
                 fail("Exception expected for: " + element);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -643,7 +705,8 @@ public class ArgumentValidatorTest extends Assert {
             try {
                 ArgumentValidator.numRange(element, minValue, maxValue, "numRange test");
             } catch (Exception ex) {
-                fail("No exception expected for: " + element);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + element);
             }
         }
     }

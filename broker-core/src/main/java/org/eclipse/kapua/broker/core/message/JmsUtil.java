@@ -57,7 +57,7 @@ public class JmsUtil {
     public static String getJmsTopic(ActiveMQMessage jmsMessage) throws JMSException {
         String jmsTopic = null;
         if (jmsMessage.getDestination().isTopic()) {
-            jmsTopic = ((Topic) jmsMessage.getJMSDestination()).getTopicName().substring(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX.length());
+            jmsTopic = StringUtils.substring(((Topic) jmsMessage.getJMSDestination()).getTopicName(), KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX.length());
         } else if (jmsMessage.getDestination().isQueue()) {
             jmsTopic = jmsMessage.getStringProperty(MessageConstants.PROPERTY_ORIGINAL_TOPIC);
         } else {

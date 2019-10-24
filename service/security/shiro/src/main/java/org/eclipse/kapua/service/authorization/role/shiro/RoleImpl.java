@@ -30,10 +30,6 @@ public class RoleImpl extends AbstractKapuaNamedEntity implements Role {
 
     private static final long serialVersionUID = -3760818776351242930L;
 
-    protected RoleImpl() {
-        super();
-    }
-
     /**
      * Constructor.
      *
@@ -44,7 +40,7 @@ public class RoleImpl extends AbstractKapuaNamedEntity implements Role {
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param role The {@link Role} to clone
@@ -55,7 +51,10 @@ public class RoleImpl extends AbstractKapuaNamedEntity implements Role {
         super(role);
     }
 
-    @Override
+	protected RoleImpl() {
+    }
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -63,7 +62,7 @@ public class RoleImpl extends AbstractKapuaNamedEntity implements Role {
         return result;
     }
 
-    @Override
+	@Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

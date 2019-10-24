@@ -24,13 +24,12 @@ import java.util.Date;
  * In that category fall all the messages that aren't categorized in the others life cycle message groups.
  * </p>
  */
-public class KuraUnmatchedMessage extends KuraMessage<KuraUnmatchedChannel, KuraUnmatchedPayload> implements DeviceMessage<KuraUnmatchedChannel, KuraUnmatchedPayload> {
+public class KuraUnmatchedMessage extends KuraMessage<KuraUnmatchedChannel, KuraUnmatchedPayload> {
 
     /**
      * Constructor
      */
     public KuraUnmatchedMessage() {
-        super();
     }
 
     /**

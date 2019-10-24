@@ -34,16 +34,18 @@ public class KapuaTextArea extends TextArea {
     @Override
     protected void onFocus(ComponentEvent ce) {
         super.onFocus(ce);
-        if (!this.mimicing) {
-            this.mimicing = true;
-            this.focusEventPreview.add();
-        }
+        if (this.mimicing) {
+			return;
+		}
+		this.mimicing = true;
+		this.focusEventPreview.add();
     }
 
     @Override
     protected void onRender(Element target, int index) {
         this.focusEventPreview = new BaseEventPreview() {
-            protected boolean onAutoHide(PreviewEvent ce) {
+            @Override
+			protected boolean onAutoHide(PreviewEvent ce) {
                 if (ce.getEventTypeInt() == 4) {
                     KapuaTextArea.this.mimicBlur(ce, ce.getTarget());
                 }
@@ -64,7 +66,8 @@ public class KapuaTextArea extends TextArea {
 
     protected void triggerBlur(ComponentEvent ce) {
         DeferredCommand.addCommand(new Command() {
-            public void execute() {
+            @Override
+			public void execute() {
                 KapuaTextArea.this.getFocusEl().blur();
             }
         });

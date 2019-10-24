@@ -35,6 +35,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 @ScenarioScoped
 public class RestClientSteps extends Assert {
@@ -46,27 +47,27 @@ public class RestClientSteps extends Assert {
      */
     private StepData stepData;
 
-    @Before
-    public void setupJaxb() {
-        XmlUtil.setContextProvider(new RestJAXBContextProvider());
-    }
-
     @Inject
     public RestClientSteps(StepData stepData) {
         this.stepData = stepData;
     }
 
-    @When("^REST GET call at \"(.*)\"")
+	@Before
+    public void setupJaxb() {
+        XmlUtil.setContextProvider(new RestJAXBContextProvider());
+    }
+
+	@When("^REST GET call at \"(.*)\"")
     public void restGetCall(String resource) throws Exception {
 
         String host = (String) stepData.get("host");
         String port = (String) stepData.get("port");
         String tokenId = (String) stepData.get("tokenId");
         resource = insertStepData(resource);
-        URL url = new URL("http://" + host + ":" + port + resource);
+        URL url = new URL(new StringBuilder().append("http://").append(host).append(":").append(port).append(resource).toString());
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try (AutoCloseable cconn = () -> conn.disconnect()) {
+        try (AutoCloseable cconn = conn::disconnect) {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept-Language", "UTF-8");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
@@ -77,10 +78,7 @@ public class RestClientSteps extends Assert {
             if (httpRespCode == 200) {
                 StringBuilder sb = new StringBuilder();
                 try (BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())))) {
-                    String output;
-                    while ((output = br.readLine()) != null) {
-                        sb.append(output);
-                    }
+                    br.lines().forEach(sb::append);
                 }
                 stepData.put("restResponse", sb.toString());
             }
@@ -91,7 +89,7 @@ public class RestClientSteps extends Assert {
         }
     }
 
-    @When("^REST POST call at \"(.*)\" with JSON \"(.*)\"")
+	@When("^REST POST call at \"(.*)\" with JSON \"(.*)\"")
     public void restPostCallWithJson(String resource, String json) throws Exception {
 
         String host = (String) stepData.get("host");
@@ -99,10 +97,10 @@ public class RestClientSteps extends Assert {
         String tokenId = (String) stepData.get("tokenId");
         resource = insertStepData(resource);
         json = insertStepData(json);
-        URL url = new URL("http://" + host + ":" + port + resource);
+        URL url = new URL(new StringBuilder().append("http://").append(host).append(":").append(port).append(resource).toString());
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try (AutoCloseable cconn = () -> conn.disconnect()) {
+        try (AutoCloseable cconn = conn::disconnect) {
             conn.setRequestProperty("Accept-Language", "UTF-8");
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
@@ -119,10 +117,7 @@ public class RestClientSteps extends Assert {
             if (httpRespCode == 200) {
                 StringBuilder sb = new StringBuilder();
                 try (BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())))) {
-                    String output;
-                    while ((output = br.readLine()) != null) {
-                        sb.append(output);
-                    }
+                    br.lines().forEach(sb::append);
                 }
                 stepData.put("restResponse", sb.toString());
             }
@@ -133,35 +128,35 @@ public class RestClientSteps extends Assert {
         }
     }
 
-    @Then("^REST response containing text \"(.*)\"$")
+	@Then("^REST response containing text \"(.*)\"$")
     public void restResponseContaining(String checkStr) throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
         assertTrue(String.format("Response %s doesn't include %s.", restResponse, checkStr),
-                restResponse.contains(checkStr));
+                StringUtils.contains(restResponse, checkStr));
     }
 
-    @Then("^REST response containing Account$")
+	@Then("^REST response containing Account$")
     public void restResponseContainingAccount() throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
         Account account = XmlUtil.unmarshalJson(restResponse, Account.class, null);
         KapuaId accId = account.getId();
-        System.out.println("Account Id = " + accId);
+        logger.info("Account Id = " + accId);
         stepData.put("lastAccountId", accId.toStringId());
         stepData.put("lastAccountCompactId", accId.toCompactId());
     }
 
-    @Then("^REST response containing \"(.*)\" with prefix account \"(.*)\"$")
+	@Then("^REST response containing \"(.*)\" with prefix account \"(.*)\"$")
     public void restResponseContainingPrefixVar(String checkStr, String var) {
 
         String restResponse = (String) stepData.get("restResponse");
         Account account = (Account) stepData.get(var);
         assertTrue(String.format("Response %s doesn't include %s.", restResponse, account.getId() + checkStr),
-                restResponse.contains(account.getId() + checkStr));
+                StringUtils.contains(restResponse, account.getId() + checkStr));
     }
 
-    @Then("^REST response containing AccessToken$")
+	@Then("^REST response containing AccessToken$")
     public void restResponseContainingAccessToken() throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
@@ -171,7 +166,7 @@ public class RestClientSteps extends Assert {
         stepData.put("tokenId", token.getTokenId());
     }
 
-    @Then("^REST response containing User")
+	@Then("^REST response containing User")
     public void restResponseContainingUser() throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
@@ -179,7 +174,7 @@ public class RestClientSteps extends Assert {
         stepData.put("lastUserCompactId", user.getId().toCompactId());
     }
 
-    @Then("^REST response contains list of Users")
+	@Then("^REST response contains list of Users")
     public void restResponseContainsUsers() throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
@@ -187,7 +182,7 @@ public class RestClientSteps extends Assert {
         Assert.assertFalse("Retrieved user list should NOT be empty.", userList.isEmpty());
     }
 
-    @Then("^REST response doesn't contain User")
+	@Then("^REST response doesn't contain User")
     public void restResponseDoesntContainUser() throws Exception {
 
         String restResponse = (String) stepData.get("restResponse");
@@ -195,14 +190,14 @@ public class RestClientSteps extends Assert {
         Assert.assertTrue("There should be NO User retrieved.", user == null);
     }
 
-    @Then("^REST response code is (\\d+)$")
+	@Then("^REST response code is (\\d+)$")
     public void restResponseDoesntContainUser(int expeted) throws Exception {
 
         int restResponseCode = (Integer) stepData.get("restResponseCode");
         Assert.assertEquals("Wrong response code.", expeted, restResponseCode);
     }
 
-    /**
+	/**
      * Take input parameter and replace its $var$ with value of var that is stored
      * in step data.
      *
@@ -215,14 +210,14 @@ public class RestClientSteps extends Assert {
             Object oValue = stepData.get(key);
             if (oValue instanceof String) {
                 String value = (String) oValue;
-                template = template.replace("$" + key + "$", value);
+                template = template.replace(new StringBuilder().append("$").append(key).append("$").toString(), value);
             }
         }
 
         return template;
     }
 
-    // TODO move this step in common steps
+	// TODO move this step in common steps
     @Given("^Move step data \"(.*)\" to \"(.*)\"$")
     public void moveStepData(String keyFrom, String keyTo) {
 
@@ -230,7 +225,7 @@ public class RestClientSteps extends Assert {
         stepData.put(keyTo, valueFrom);
     }
 
-    // TODO move this step in common steps
+	// TODO move this step in common steps
     @Given("^Move Account compact id from step data \"(.*)\" to \"(.*)\"$")
     public void moveAccountCompactIdStepData(String keyFrom, String keyTo) {
 
@@ -238,7 +233,7 @@ public class RestClientSteps extends Assert {
         stepData.put(keyTo, account.getId().toCompactId());
     }
 
-    // TODO move this step in common steps
+	// TODO move this step in common steps
     @Given("^Clear step data with key \"(.*)\"$")
     public void clearStepData(String key) {
 

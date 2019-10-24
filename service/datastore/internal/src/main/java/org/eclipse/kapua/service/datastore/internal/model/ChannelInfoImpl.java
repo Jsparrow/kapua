@@ -84,7 +84,8 @@ public class ChannelInfoImpl implements ChannelInfo {
      * 
      * @param clientId
      */
-    public void setClientId(String clientId) {
+    @Override
+	public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 

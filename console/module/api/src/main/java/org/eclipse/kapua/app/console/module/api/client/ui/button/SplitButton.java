@@ -19,7 +19,6 @@ public class SplitButton extends com.extjs.gxt.ui.client.widget.button.SplitButt
     private KapuaIcon icon;
 
     public SplitButton(String text, KapuaIcon icon) {
-        super();
         setText(text);
         setIcon(icon);
     }
@@ -36,7 +35,7 @@ public class SplitButton extends com.extjs.gxt.ui.client.widget.button.SplitButt
     }
 
     public void setIcon(KapuaIcon icon) {
-        super.setText(icon.getInlineHTML() + " " + originalText);
+        super.setText(new StringBuilder().append(icon.getInlineHTML()).append(" ").append(originalText).toString());
         this.icon = icon;
     }
 

@@ -22,13 +22,6 @@ public class CertificateInfoQueryImpl extends AbstractKapuaQuery<CertificateInfo
 
     /**
      * Constructor
-     */
-    private CertificateInfoQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
@@ -38,12 +31,18 @@ public class CertificateInfoQueryImpl extends AbstractKapuaQuery<CertificateInfo
 
     }
 
-    @Override
+	/**
+     * Constructor
+     */
+    private CertificateInfoQueryImpl() {
+    }
+
+	@Override
     public Boolean getIncludeInherited() {
         return includeInherited;
     }
 
-    @Override
+	@Override
     public void setIncludeInherited(Boolean includeInherited) {
         this.includeInherited = includeInherited;
     }

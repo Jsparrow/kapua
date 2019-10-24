@@ -13,8 +13,8 @@ package org.eclipse.kapua.service.device.management.packages.message.internal;
 
 import org.eclipse.kapua.service.device.management.commons.message.request.KapuaRequestChannelImpl;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Package request message channel.
@@ -45,6 +45,6 @@ public class PackageRequestChannel extends KapuaRequestChannelImpl {
 
     @Override
     public List<String> getSemanticParts() {
-        return Arrays.asList(packageResource.name());
+        return Collections.singletonList(packageResource.name());
     }
 }

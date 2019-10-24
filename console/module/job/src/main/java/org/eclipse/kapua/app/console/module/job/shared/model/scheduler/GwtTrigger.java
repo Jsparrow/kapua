@@ -80,7 +80,7 @@ public class GwtTrigger extends GwtUpdatableEntityModel {
 
     public String getJobId() {
         for (GwtTriggerProperty property : getTriggerProperties()) {
-            if (property.getPropertyName().equals("jobId")) {
+            if ("jobId".equals(property.getPropertyName())) {
                 return property.getPropertyValue();
             }
         }
@@ -89,7 +89,7 @@ public class GwtTrigger extends GwtUpdatableEntityModel {
 
     public String getInterval() {
         for (GwtTriggerProperty property : getTriggerProperties()) {
-            if (property.getPropertyName().equals("interval")) {
+            if ("interval".equals(property.getPropertyName())) {
                 return property.getPropertyValue();
             }
         }
@@ -98,7 +98,7 @@ public class GwtTrigger extends GwtUpdatableEntityModel {
 
     public String getCronExpression() {
         for (GwtTriggerProperty property : getTriggerProperties()) {
-            if (property.getPropertyName().equals("cronExpression")) {
+            if ("cronExpression".equals(property.getPropertyName())) {
                 return property.getPropertyValue();
             }
         }

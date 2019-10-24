@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public enum DeviceValidationRegex implements ValidationRegex {
 
-    QUERY_FETCH_ATTRIBUTES("(" + DeviceAttributes.CONNECTION + "|" + DeviceAttributes.LAST_EVENT + ")");
+    QUERY_FETCH_ATTRIBUTES(new StringBuilder().append("(").append(DeviceAttributes.CONNECTION).append("|").append(DeviceAttributes.LAST_EVENT).append(")").toString());
 
     private Pattern pattern;
 

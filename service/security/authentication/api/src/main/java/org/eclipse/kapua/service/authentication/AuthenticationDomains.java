@@ -16,9 +16,9 @@ import org.eclipse.kapua.service.authentication.token.AccessTokenDomain;
 
 public class AuthenticationDomains {
 
-    private AuthenticationDomains() { }
-
     public static final CredentialDomain CREDENTIAL_DOMAIN = new CredentialDomain();
 
-    public static final AccessTokenDomain ACCESS_TOKEN_DOMAIN = new AccessTokenDomain();
+	public static final AccessTokenDomain ACCESS_TOKEN_DOMAIN = new AccessTokenDomain();
+
+	private AuthenticationDomains() { }
 }

@@ -50,7 +50,7 @@ public class ToptionImpl implements KapuaToption {
     protected List<Object> any;
     protected String label;
     protected String value;
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the any property.
@@ -74,9 +74,10 @@ public class ToptionImpl implements KapuaToption {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -87,7 +88,8 @@ public class ToptionImpl implements KapuaToption {
      * @return possible object is
      * {@link String }
      */
-    public String getLabel() {
+    @Override
+	public String getLabel() {
         return label;
     }
 
@@ -97,7 +99,8 @@ public class ToptionImpl implements KapuaToption {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setLabel(String value) {
+    @Override
+	public void setLabel(String value) {
         this.label = value;
     }
 
@@ -107,7 +110,8 @@ public class ToptionImpl implements KapuaToption {
      * @return possible object is
      * {@link String }
      */
-    public String getValue() {
+    @Override
+	public String getValue() {
         return value;
     }
 
@@ -117,7 +121,8 @@ public class ToptionImpl implements KapuaToption {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setValue(String value) {
+    @Override
+	public void setValue(String value) {
         this.value = value;
     }
 
@@ -133,7 +138,8 @@ public class ToptionImpl implements KapuaToption {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 }

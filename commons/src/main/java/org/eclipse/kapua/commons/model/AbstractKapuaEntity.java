@@ -65,16 +65,6 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable {
     protected KapuaEid createdBy;
 
     /**
-     * Protected default constructor.<br>
-     * Required by JPA.
-     *
-     * @since 1.0.0
-     */
-    protected AbstractKapuaEntity() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scope {@link KapuaId} to set for this {@link KapuaEntity}.
@@ -86,7 +76,16 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable {
         setScopeId(scopeId);
     }
 
-    /**
+	/**
+     * Protected default constructor.<br>
+     * Required by JPA.
+     *
+     * @since 1.0.0
+     */
+    protected AbstractKapuaEntity() {
+    }
+
+	/**
      * Constructor.
      * <p>
      * It can be used to clone the {@link KapuaUpdatableEntity}
@@ -102,32 +101,32 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable {
         setCreatedOn(entity.getCreatedOn());
     }
 
-    @Override
+	@Override
     public KapuaId getId() {
         return id;
     }
 
-    @Override
+	@Override
     public void setId(KapuaId id) {
         this.id = KapuaEid.parseKapuaId(id);
     }
 
-    @Override
+	@Override
     public KapuaId getScopeId() {
         return scopeId;
     }
 
-    @Override
+	@Override
     public void setScopeId(KapuaId scopeId) {
         this.scopeId = KapuaEid.parseKapuaId(scopeId);
     }
 
-    @Override
+	@Override
     public Date getCreatedOn() {
         return createdOn;
     }
 
-    /**
+	/**
      * Sets the date of creation.
      *
      * @param createdOn the date of creation.
@@ -137,12 +136,12 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable {
         this.createdOn = createdOn;
     }
 
-    @Override
+	@Override
     public KapuaId getCreatedBy() {
         return createdBy;
     }
 
-    /**
+	/**
      * Sets the identity {@link KapuaId} who has created this {@link KapuaEntity}
      *
      * @param createdBy the identity {@link KapuaId} who has created this {@link KapuaEntity}
@@ -152,7 +151,7 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable {
         this.createdBy = KapuaEid.parseKapuaId(createdBy);
     }
 
-    /**
+	/**
      * Before create action sets the {@link KapuaEntity} {@link #id}, {@link #createdBy} and {@link #createdOn}.
      *
      * @since 1.0.0

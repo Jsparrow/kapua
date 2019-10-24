@@ -65,8 +65,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
      * Authorization.
      */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
-            throws AuthenticationException {
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //
         // Extract principal
         String username = ((User) principals.getPrimaryPrincipal()).getName();
@@ -137,11 +136,11 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
                 throw new ShiroException("Error while find access permissions!", e);
             }
 
-            for (AccessPermission accessPermission : accessPermissions.getItems()) {
+            accessPermissions.getItems().forEach(accessPermission -> {
                 PermissionImpl p = accessPermission.getPermission();
                 logger.trace("User: {} has permission: {}", username, p);
                 info.addObjectPermission(p);
-            }
+            });
 
             // Access Role Id
             AccessRoleService accessRoleService = locator.getService(AccessRoleService.class);
@@ -177,12 +176,12 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
                     throw new ShiroException("Error while find role permission!", e);
                 }
 
-                for (RolePermission rolePermission : rolePermissions.getItems()) {
+                rolePermissions.getItems().forEach(rolePermission -> {
 
                     PermissionImpl p = rolePermission.getPermission();
                     logger.trace("Role: {} has permission: {}", role, p);
                     info.addObjectPermission(p);
-                }
+                });
             }
         }
 
@@ -203,8 +202,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
      * This method can always return null as it does not support any authentication token.
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-            throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
         return null;
     }
 

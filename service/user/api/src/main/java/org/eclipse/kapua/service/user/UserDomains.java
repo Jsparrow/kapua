@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.user;
 
 public class UserDomains {
 
-    private UserDomains() { }
-
     public static final UserDomain USER_DOMAIN = new UserDomain();
+
+	private UserDomains() { }
 }

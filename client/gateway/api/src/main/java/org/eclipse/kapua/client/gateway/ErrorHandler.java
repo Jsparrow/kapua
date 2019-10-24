@@ -16,5 +16,5 @@ import java.util.Optional;
 @FunctionalInterface
 public interface ErrorHandler<X extends Throwable> {
 
-    public void handleError(Throwable e, Optional<Payload> payload) throws X;
+    void handleError(Throwable e, Optional<Payload> payload) throws X;
 }

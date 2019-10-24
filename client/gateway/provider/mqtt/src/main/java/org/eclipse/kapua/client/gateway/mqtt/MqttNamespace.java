@@ -29,5 +29,5 @@ public interface MqttNamespace {
      *            The data topid
      * @return The topic or {@code null} if no topic could be rendered for the provided input parameters
      */
-    public String dataTopic(String clientId, String applicationId, Topic topic);
+    String dataTopic(String clientId, String applicationId, Topic topic);
 }

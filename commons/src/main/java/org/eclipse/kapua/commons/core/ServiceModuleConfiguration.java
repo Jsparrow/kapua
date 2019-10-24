@@ -16,20 +16,20 @@ import java.util.Set;
 
 public class ServiceModuleConfiguration {
 
-    public interface ConfigurationProvider {
-        ServiceModuleProvider get() ;
-    }
-
     private static ConfigurationProvider cofigurationProvider;
 
-    private ServiceModuleConfiguration() {}
+	private ServiceModuleConfiguration() {}
 
-    public static void setConfigurationProvider(ConfigurationProvider aProvider) {
+	public static void setConfigurationProvider(ConfigurationProvider aProvider) {
         cofigurationProvider = aProvider;
     }
 
-    public static Set<ServiceModule> getServiceModules() {
+	public static Set<ServiceModule> getServiceModules() {
         return cofigurationProvider.get().getModules();
+    }
+
+	public interface ConfigurationProvider {
+        ServiceModuleProvider get() ;
     }
 
  }

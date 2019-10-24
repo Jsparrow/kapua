@@ -30,7 +30,148 @@ import javax.xml.bind.annotation.XmlEnumValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlConfigPropertyAdapted {
 
-    @XmlEnum
+    /**
+     * The name of the property.
+     */
+    @XmlAttribute(name = "name")
+    private String name;
+
+	/**
+     * Whether the property value is an array.
+     */
+    @XmlAttribute(name = "array")
+    private boolean array;
+
+	/**
+     * Whether the property value is encrypted.
+     */
+    @XmlAttribute(name = "encrypted")
+    private boolean encrypted;
+
+	/**
+     * The property type.
+     */
+    @XmlAttribute(name = "type")
+    private ConfigPropertyType type;
+
+	/**
+     * The property value(s).
+     */
+    @XmlElement(name = "value")
+    private String[] values;
+
+	/**
+     * Constructor
+     */
+    public XmlConfigPropertyAdapted() {
+    }
+
+	/**
+     * Constructor
+     * 
+     * @param name
+     * @param type
+     * @param values
+     */
+    public XmlConfigPropertyAdapted(String name,
+            ConfigPropertyType type,
+            String[] values) {
+        this.type = type;
+        this.values = values;
+        this.encrypted = false;
+    }
+
+	/**
+     * Get the property name
+     * 
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+	/**
+     * Set the property name
+     * 
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+	/**
+     * Get the is array flag property
+     * 
+     * @return
+     */
+    public boolean getArray() {
+        return array;
+    }
+
+	/**
+     * Set the is array flag property
+     * 
+     * @param array
+     */
+    public void setArray(boolean array) {
+        this.array = array;
+    }
+
+	/**
+     * Get the property type
+     * 
+     * @return
+     */
+    public ConfigPropertyType getType() {
+        return type;
+    }
+
+	/**
+     * Set the property type
+     * 
+     * @param type
+     */
+    public void setType(ConfigPropertyType type) {
+        this.type = type;
+    }
+
+	/**
+     * Get the is encrypted flag property
+     * 
+     * @return
+     */
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
+	/**
+     * Set the is encrypted flag property
+     * 
+     * @param encrypted
+     */
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
+    }
+
+	/**
+     * Get property values
+     * 
+     * @return
+     */
+    public String[] getValues() {
+        return values;
+    }
+
+	/**
+     * Set property values
+     * 
+     * @param values
+     */
+    public void setValues(String[] values) {
+        this.values = values;
+    }
+
+	@XmlEnum
     public enum ConfigPropertyType {
         @XmlEnumValue("String")
         stringType, @XmlEnumValue("Long")
@@ -43,148 +184,5 @@ public class XmlConfigPropertyAdapted {
         booleanType, @XmlEnumValue("Short")
         shortType, @XmlEnumValue("Password")
         passwordType
-    }
-
-    /**
-     * The name of the property.
-     */
-    @XmlAttribute(name = "name")
-    private String name;
-
-    /**
-     * Whether the property value is an array.
-     */
-    @XmlAttribute(name = "array")
-    private boolean array;
-
-    /**
-     * Whether the property value is encrypted.
-     */
-    @XmlAttribute(name = "encrypted")
-    private boolean encrypted;
-
-    /**
-     * The property type.
-     */
-    @XmlAttribute(name = "type")
-    private ConfigPropertyType type;
-
-    /**
-     * The property value(s).
-     */
-    @XmlElement(name = "value")
-    private String[] values;
-
-    /**
-     * Constructor
-     */
-    public XmlConfigPropertyAdapted() {
-    }
-
-    /**
-     * Constructor
-     * 
-     * @param name
-     * @param type
-     * @param values
-     */
-    public XmlConfigPropertyAdapted(String name,
-            ConfigPropertyType type,
-            String[] values) {
-        super();
-
-        this.type = type;
-        this.values = values;
-        this.encrypted = false;
-    }
-
-    /**
-     * Get the property name
-     * 
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the property name
-     * 
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Get the is array flag property
-     * 
-     * @return
-     */
-    public boolean getArray() {
-        return array;
-    }
-
-    /**
-     * Set the is array flag property
-     * 
-     * @param array
-     */
-    public void setArray(boolean array) {
-        this.array = array;
-    }
-
-    /**
-     * Get the property type
-     * 
-     * @return
-     */
-    public ConfigPropertyType getType() {
-        return type;
-    }
-
-    /**
-     * Set the property type
-     * 
-     * @param type
-     */
-    public void setType(ConfigPropertyType type) {
-        this.type = type;
-    }
-
-    /**
-     * Get the is encrypted flag property
-     * 
-     * @return
-     */
-    public boolean isEncrypted() {
-        return encrypted;
-    }
-
-    /**
-     * Set the is encrypted flag property
-     * 
-     * @param encrypted
-     */
-    public void setEncrypted(boolean encrypted) {
-        this.encrypted = encrypted;
-    }
-
-    /**
-     * Get property values
-     * 
-     * @return
-     */
-    public String[] getValues() {
-        return values;
-    }
-
-    /**
-     * Set property values
-     * 
-     * @param values
-     */
-    public void setValues(String[] values) {
-        this.values = values;
     }
 }

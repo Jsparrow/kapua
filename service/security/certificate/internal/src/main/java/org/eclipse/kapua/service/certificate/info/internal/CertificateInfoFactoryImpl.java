@@ -44,7 +44,7 @@ public class CertificateInfoFactoryImpl implements CertificateInfoFactory {
     }
 
     @Override
-    public CertificateInfo clone(CertificateInfo certificateInfo) throws KapuaEntityCloneException {
+    public CertificateInfo clone(CertificateInfo certificateInfo) {
         try {
             return new CertificateInfoImpl(certificateInfo);
         } catch (Exception e) {

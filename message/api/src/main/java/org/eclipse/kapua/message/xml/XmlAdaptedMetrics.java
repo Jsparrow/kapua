@@ -25,7 +25,6 @@ public class XmlAdaptedMetrics {
     private List<XmlAdaptedMetric> adaptedMetrics;
 
     public XmlAdaptedMetrics() {
-        super();
     }
 
     public XmlAdaptedMetrics(List<XmlAdaptedMetric> adaptedItems) {

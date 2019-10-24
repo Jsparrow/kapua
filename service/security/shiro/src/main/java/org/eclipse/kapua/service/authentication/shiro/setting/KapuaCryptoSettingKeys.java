@@ -35,7 +35,8 @@ public enum KapuaCryptoSettingKeys implements SettingKey {
         this.key = key;
     }
 
-    public String key() {
+    @Override
+	public String key() {
         return key;
     }
 }

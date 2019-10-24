@@ -18,10 +18,6 @@ import java.util.List;
 
 public class GwtTriggerDefinition extends GwtEntityModel {
 
-    public enum GwtTriggerType {
-        TIMER, EVENT
-    }
-
     @Override
     public <X> X get(String property) {
         if ("triggerTypeEnum".equals(property)) {
@@ -31,47 +27,51 @@ public class GwtTriggerDefinition extends GwtEntityModel {
         }
     }
 
-    public String getTriggerDefinitionName() {
+	public String getTriggerDefinitionName() {
         return get("triggerDefinitionName");
     }
 
-    public void setTriggerDefinitionName(String triggerDefinitionName) {
+	public void setTriggerDefinitionName(String triggerDefinitionName) {
         set("triggerDefinitionName", triggerDefinitionName);
     }
 
-    public String getDescription() {
+	public String getDescription() {
         return get("description");
     }
 
-    public void setDescription(String description) {
+	public void setDescription(String description) {
         set("description", description);
     }
 
-    public String getTriggerType() {
+	public String getTriggerType() {
         return get("triggerType");
     }
 
-    public GwtTriggerType getTriggerTypeEnum() {
+	public GwtTriggerType getTriggerTypeEnum() {
         return get("triggerTypeEnum");
     }
 
-    public void setTriggerType(String triggerType) {
+	public void setTriggerType(String triggerType) {
         set("triggerType", triggerType);
     }
 
-    public String getProcessorName() {
+	public String getProcessorName() {
         return get("processorName");
     }
 
-    public void setProcessorName(String processorName) {
+	public void setProcessorName(String processorName) {
         set("processorName", processorName);
     }
 
-    public <P extends GwtTriggerProperty> List<P> getTriggerProperties() {
+	public <P extends GwtTriggerProperty> List<P> getTriggerProperties() {
         return get("triggerProperties");
     }
 
-    public void setTriggerProperties(List<GwtTriggerProperty> triggerProperties) {
+	public void setTriggerProperties(List<GwtTriggerProperty> triggerProperties) {
         set("triggerProperties", triggerProperties);
+    }
+
+	public enum GwtTriggerType {
+        TIMER, EVENT
     }
 }

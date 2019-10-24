@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class BinaryMetric extends MetricImpl<Byte[]> implements Metric<Byte[]> {
+public class BinaryMetric extends MetricImpl<Byte[]> {
 
     /**
      * Construct a binary metric with the provided name and value

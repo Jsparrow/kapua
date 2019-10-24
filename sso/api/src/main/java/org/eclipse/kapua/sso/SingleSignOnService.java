@@ -18,9 +18,9 @@ import javax.json.JsonObject;
 
 public interface SingleSignOnService {
 
-    public boolean isEnabled();
+    boolean isEnabled();
 
-    public String getLoginUri(String state, URI redirectUri);
+    String getLoginUri(String state, URI redirectUri);
 
-    public JsonObject getAccessToken(String authCode, URI redirectUri) throws IOException;
+    JsonObject getAccessToken(String authCode, URI redirectUri) throws IOException;
 }

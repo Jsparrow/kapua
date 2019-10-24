@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class IdsPredicateImpl implements IdsPredicate {
 
     private String type;
-    private Set<StorableId> idSet = new HashSet<StorableId>();
+    private Set<StorableId> idSet = new HashSet<>();
 
     /**
      * Default constructor
@@ -130,9 +130,7 @@ public class IdsPredicateImpl implements IdsPredicate {
         ObjectNode rootNode = SchemaUtil.getObjectNode();
         ObjectNode idsNode = SchemaUtil.getObjectNode();
         ArrayNode idsList = SchemaUtil.getArrayNode();
-        for (StorableId id : idSet) {
-            idsList.add(id.toString());
-        }
+        idSet.forEach(id -> idsList.add(id.toString()));
         idsNode.set(PredicateConstants.TYPE_KEY, SchemaUtil.getTextNode(type));
         idsNode.set(PredicateConstants.VALUES_KEY, idsList);
         rootNode.set(PredicateConstants.IDS_KEY, idsNode);

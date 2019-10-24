@@ -54,15 +54,6 @@ public class DeviceConnectionOptionImpl extends AbstractKapuaUpdatableEntity imp
     private KapuaEid reservedUserId;
 
     /**
-     * Constructor.
-     *
-     * @since 1.0.0
-     */
-    protected DeviceConnectionOptionImpl() {
-        super();
-    }
-
-    /**
      * Constructor
      *
      * @param scopeId The scope {@link KapuaId} to set into the {@link DeviceConnectionOption}
@@ -72,7 +63,7 @@ public class DeviceConnectionOptionImpl extends AbstractKapuaUpdatableEntity imp
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param deviceConnectionOptions
@@ -87,32 +78,40 @@ public class DeviceConnectionOptionImpl extends AbstractKapuaUpdatableEntity imp
         setReservedUserId(deviceConnectionOptions.getReservedUserId());
     }
 
-    @Override
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected DeviceConnectionOptionImpl() {
+    }
+
+	@Override
     public boolean getAllowUserChange() {
         return allowUserChange;
     }
 
-    @Override
+	@Override
     public void setAllowUserChange(boolean allowUserChange) {
         this.allowUserChange = allowUserChange;
     }
 
-    @Override
+	@Override
     public ConnectionUserCouplingMode getUserCouplingMode() {
         return userCouplingMode;
     }
 
-    @Override
+	@Override
     public void setUserCouplingMode(ConnectionUserCouplingMode userCouplingMode) {
         this.userCouplingMode = userCouplingMode;
     }
 
-    @Override
+	@Override
     public KapuaId getReservedUserId() {
         return reservedUserId;
     }
 
-    @Override
+	@Override
     public void setReservedUserId(KapuaId reservedUserId) {
         this.reservedUserId = KapuaEid.parseKapuaId(reservedUserId);
     }

@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class DoubleMetric extends MetricImpl<Double> implements Metric<Double> {
+public class DoubleMetric extends MetricImpl<Double> {
 
     /**
      * Construct a double metric with the provided name and value

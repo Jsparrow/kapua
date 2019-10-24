@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class AndPredicateImpl implements AndPredicate {
 
-    private List<StorablePredicate> predicates = new ArrayList<StorablePredicate>();
+    private List<StorablePredicate> predicates = new ArrayList<>();
 
     /**
      * Default constructor

@@ -59,6 +59,7 @@ import ch.qos.logback.classic.layout.TTLLLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This is a main class running a simple default simulator setup with multiple
@@ -157,7 +158,7 @@ public class SimulatorRunner {
         try {
             cli = new DefaultParser().parse(opts, args);
         } catch (final ParseException e) {
-            System.err.println(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
             System.exit(-1);
             return;
         }
@@ -212,9 +213,7 @@ public class SimulatorRunner {
                 apps.add(new SimpleCommandApplication(s -> String.format("Command '%s' not found", s)));
                 apps.add(AnnotatedApplication.build(new SimpleDeployApplication(downloadExecutor)));
 
-                for (final Simulation sim : simulations) {
-                    apps.add(sim.createApplication(name));
-                }
+                simulations.forEach((final Simulation sim) -> apps.add(sim.createApplication(name)));
 
                 final MqttAsyncTransport transport = new MqttAsyncTransport(configuration);
                 close.add(transport);
@@ -233,7 +232,7 @@ public class SimulatorRunner {
     }
 
     private static boolean hasText(final String text) {
-        return text != null && !text.isEmpty();
+        return text != null && !StringUtils.isEmpty(text);
     }
 
     private static List<Simulation> createSimulations(final CommandLine cli) throws IOException {
@@ -260,6 +259,7 @@ public class SimulatorRunner {
                 }
 
             } catch (final InvalidPathException e) {
+				logger.error(e.getMessage(), e);
                 // ignore and re-try as URL
             }
 
@@ -288,7 +288,7 @@ public class SimulatorRunner {
     }
 
     private static Optional<NameFactory> createNameFactory(final String nameFactoryName) throws Exception {
-        if (nameFactoryName == null || nameFactoryName.isEmpty()) {
+        if (nameFactoryName == null || StringUtils.isEmpty(nameFactoryName)) {
             return Optional.empty();
         }
 
@@ -312,7 +312,7 @@ public class SimulatorRunner {
 
     private static void dumpEnv() {
 
-        final List<String> keys = System.getenv().keySet().stream().filter(key -> key.startsWith("KSIM_")).sorted()
+        final List<String> keys = System.getenv().keySet().stream().filter(key -> StringUtils.startsWith(key, "KSIM_")).sorted()
                 .collect(Collectors.toList());
 
         if (keys.isEmpty()) {
@@ -321,14 +321,12 @@ public class SimulatorRunner {
         }
 
         logger.info("Dumping KSIM_* env vars:");
-        for (final String key : keys) {
-            logger.info("\t{} = '{}'", key, System.getenv(key));
-        }
+        keys.forEach((final String key) -> logger.info("\t{} = '{}'", key, System.getenv(key)));
     }
 
     private static String createBrokerUrl(final Optional<String> hostFromCli) {
         final String broker = System.getenv("KSIM_BROKER_URL");
-        if (broker != null && !broker.isEmpty()) {
+        if (broker != null && !StringUtils.isEmpty(broker)) {
             return broker;
         }
 
@@ -342,9 +340,9 @@ public class SimulatorRunner {
 
         sb.append(proto).append("://");
 
-        if (user != null && !user.isEmpty()) {
+        if (user != null && !StringUtils.isEmpty(user)) {
             sb.append(user);
-            if (password != null && !password.isEmpty()) {
+            if (password != null && !StringUtils.isEmpty(password)) {
                 sb.append(':').append(password);
             }
             sb.append('@');
@@ -367,19 +365,20 @@ public class SimulatorRunner {
     private static void closeAll(final List<AutoCloseable> close) throws Throwable {
         final LinkedList<Throwable> errors = new LinkedList<>();
 
-        for (final AutoCloseable c : close) {
+        close.forEach((final AutoCloseable c) -> {
             try {
                 c.close();
             } catch (final Exception e) {
                 errors.add(e);
             }
-        }
+        });
 
         final Throwable e = errors.pollFirst();
-        if (e != null) {
-            errors.forEach(e::addSuppressed);
-            throw e;
-        }
+        if (e == null) {
+			return;
+		}
+		errors.forEach(e::addSuppressed);
+		throw e;
     }
 
     /**

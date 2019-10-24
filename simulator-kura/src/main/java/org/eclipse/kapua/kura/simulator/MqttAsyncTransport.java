@@ -123,15 +123,11 @@ public class MqttAsyncTransport extends AbstractMqttTransport implements AutoClo
         Objects.requireNonNull(consumer);
 
         try {
-            this.client.subscribe(topic.render(this.topicContext), 0, null, null, new IMqttMessageListener() {
-
-                @Override
-                public void messageArrived(final String topic, final MqttMessage mqttMessage) throws Exception {
-                    logger.debug("Received MQTT message from {}", topic);
-                    consumer.accept(new Message(Topic.fromString(topic), mqttMessage.getPayload(),
-                            MqttAsyncTransport.this.topicContext));
-                }
-            });
+            this.client.subscribe(topic.render(this.topicContext), 0, null, null, (final String topic1, final MqttMessage mqttMessage) -> {
+			    logger.debug("Received MQTT message from {}", topic1);
+			    consumer.accept(new Message(Topic.fromString(topic1), mqttMessage.getPayload(),
+			            MqttAsyncTransport.this.topicContext));
+			});
         } catch (final MqttException e) {
             if (e.getReasonCode() != MqttException.REASON_CODE_CLIENT_NOT_CONNECTED) {
                 logger.warn("Failed to subscribe to: {}", topic, e);

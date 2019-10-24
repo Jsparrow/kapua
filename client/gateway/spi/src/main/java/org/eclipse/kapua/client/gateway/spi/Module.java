@@ -13,18 +13,18 @@ package org.eclipse.kapua.client.gateway.spi;
 
 public interface Module {
 
-    public default void initialize(final ModuleContext context) {
+    default void initialize(final ModuleContext context) {
     }
 
-    public default void applicationAdded(final String applicationId) {
+    default void applicationAdded(final String applicationId) {
     }
 
-    public default void applicationRemoved(final String applicationId) {
+    default void applicationRemoved(final String applicationId) {
     }
 
-    public default void connected() {
+    default void connected() {
     }
 
-    public default void disconnected() {
+    default void disconnected() {
     }
 }

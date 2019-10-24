@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @since 1.0.0
  */
-public class AssetResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload {
+public class AssetResponsePayload extends KapuaResponsePayloadImpl {
 
     private static final DeviceAssetFactory DEVICE_ASSET_FACTORY = KapuaLocator.getInstance().getFactory(DeviceAssetFactory.class);
     private static final DeviceManagementSetting CONFIG = DeviceManagementSetting.getInstance();

@@ -60,8 +60,7 @@ public class KapuaAuthenticator extends ModularRealmAuthenticator {
                 } catch (Exception exception) {
                     t = exception;
                     if (logger.isDebugEnabled()) {
-                        String msg = "Realm [" + realm
-                                + "] threw an exception during a multi-realm authentication attempt:";
+                        String msg = new StringBuilder().append("Realm [").append(realm).append("] threw an exception during a multi-realm authentication attempt:").toString();
                         logger.debug(msg, t);
                     }
                 }

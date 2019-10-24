@@ -13,7 +13,7 @@ package org.eclipse.kapua.broker;
 
 public class BrokerDomains {
 
-    private BrokerDomains() { }
-
     public static final BrokerDomain BROKER_DOMAIN = new BrokerDomain();
+
+	private BrokerDomains() { }
 }

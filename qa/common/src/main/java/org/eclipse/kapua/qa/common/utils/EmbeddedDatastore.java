@@ -49,7 +49,7 @@ public class EmbeddedDatastore {
             try {
                 Thread.sleep(Duration.ofSeconds(EXTRA_STARTUP_DELAY).toMillis());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         logger.info("starting embedded datastore DONE");
@@ -66,7 +66,7 @@ public class EmbeddedDatastore {
             try {
                 Thread.sleep(Duration.ofSeconds(EXTRA_STARTUP_DELAY).toMillis());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         if (esEmbeddedEngine != null) {

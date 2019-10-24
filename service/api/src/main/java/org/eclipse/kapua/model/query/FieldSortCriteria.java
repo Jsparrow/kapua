@@ -17,12 +17,12 @@ public interface FieldSortCriteria extends KapuaSortCriteria{
      *
      * @return
      */
-    public String getAttributeName();
+    String getAttributeName();
 
     /**
      * Get the sort attribute order
      *
      * @return
      */
-    public SortOrder getSortOrder();
+    SortOrder getSortOrder();
 }

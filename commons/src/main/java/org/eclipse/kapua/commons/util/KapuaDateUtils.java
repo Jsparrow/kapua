@@ -26,16 +26,16 @@ import java.util.Locale;
  */
 public final class KapuaDateUtils {
 
-    private KapuaDateUtils() {
-    }
-
     public static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // example 24/01/2017T11:22:10.999Z
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter
             .ofPattern(ISO_DATE_PATTERN)
             .withLocale(KapuaDateUtils.getLocale())
             .withZone(getTimeZone());
-    /**
+	private KapuaDateUtils() {
+    }
+
+	/**
      * Get current date
      *
      * @return current date
@@ -44,15 +44,15 @@ public final class KapuaDateUtils {
         return Instant.now();
     }
 
-    public static ZoneId getTimeZone() {
+	public static ZoneId getTimeZone() {
         return ZoneOffset.UTC;
     }
 
-    public static Locale getLocale() {
+	public static Locale getLocale() {
         return Locale.US;
     }
 
-    /**
+	/**
      * Parse the provided String using the {@link KapuaDateUtils#ISO_DATE_PATTERN default pattern}
      *
      * @param date
@@ -67,7 +67,7 @@ public final class KapuaDateUtils {
         }
     }
 
-    /**
+	/**
      * Format the provided Date using the {@link KapuaDateUtils#ISO_DATE_PATTERN default pattern}
      *
      * @param date

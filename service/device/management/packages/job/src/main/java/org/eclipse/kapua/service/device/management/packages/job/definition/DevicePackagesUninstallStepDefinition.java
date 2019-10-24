@@ -22,7 +22,7 @@ import org.eclipse.kapua.service.job.step.definition.JobStepProperty;
 import java.util.Arrays;
 import java.util.List;
 
-public class DevicePackagesUninstallStepDefinition extends AbstractTargetJobStepDefinition implements JobStepDefinition {
+public class DevicePackagesUninstallStepDefinition extends AbstractTargetJobStepDefinition {
 
     private static final long serialVersionUID = -4994045121586264564L;
 

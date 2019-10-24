@@ -19,8 +19,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.Enum;
 public class EnumComboBox<E extends Enum> extends SimpleComboBox<E> {
 
     public EnumComboBox() {
-        super();
-
         setEditable(false);
         setTriggerAction(TriggerAction.ALL);
         setAllowBlank(false);

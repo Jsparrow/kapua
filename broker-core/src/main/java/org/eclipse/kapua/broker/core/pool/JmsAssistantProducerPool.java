@@ -41,19 +41,10 @@ import org.slf4j.LoggerFactory;
 public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProducerWrapper> {
 
     private static final Logger logger = LoggerFactory.getLogger(JmsAssistantProducerPool.class);
+	private static Map<DESTINATIONS, JmsAssistantProducerPool> pools;
 
-    public enum DESTINATIONS {
-        /**
-         * To be used to send messages without known destination.
-         * Otherwise the inactive monitor will not be able to remove the destination because it has a producer!
-         */
-        NO_DESTINATION
-    }
-
-    private static Map<DESTINATIONS, JmsAssistantProducerPool> pools;
-
-    static {
-        pools = new HashMap<JmsAssistantProducerPool.DESTINATIONS, JmsAssistantProducerPool>();
+	static {
+        pools = new HashMap<>();
         logger.info("Create pools (internal broker use)...");
         logger.info("Create NoDestination pool...");
         pools.put(DESTINATIONS.NO_DESTINATION,
@@ -61,7 +52,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         logger.info("Create pools (internal broker use)... done.");
     }
 
-    /**
+	/**
      * Create a JmsAssistantProducerPool from the given factory
      * 
      * @param factory
@@ -86,7 +77,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         setConfig(jmsPoolConfig);
     }
 
-    /**
+	/**
      * Return a JmsAssistantProducerPool for the given destination
      * 
      * @param destination
@@ -96,7 +87,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         return pools.get(destination);
     }
 
-    /**
+	/**
      * Close all connection pools
      */
     public static void closePools() {
@@ -107,6 +98,14 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         } else {
             logger.warn("Cannot close producer pools... Pools not initialized!");
         }
+    }
+
+	public enum DESTINATIONS {
+        /**
+         * To be used to send messages without known destination.
+         * Otherwise the inactive monitor will not be able to remove the destination because it has a producer!
+         */
+        NO_DESTINATION
     }
 
 }

@@ -17,6 +17,8 @@ import org.eclipse.kapua.KapuaIllegalArgumentException;
 import org.eclipse.kapua.model.xml.DateXmlAdapter;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Adapted for query parameters of type {@link Date}.
@@ -25,14 +27,16 @@ import com.google.common.base.Strings;
  */
 public class DateParam extends DateXmlAdapter {
 
-    private Date date;
+    private static final Logger logger = LoggerFactory.getLogger(DateParam.class);
+	private Date date;
 
     public DateParam(String stringDate) throws KapuaIllegalArgumentException {
         if (!Strings.isNullOrEmpty(stringDate)) {
             try {
                 setDate(super.unmarshal(stringDate));
             } catch (IllegalArgumentException e) {
-                throw new KapuaIllegalArgumentException("date", stringDate);
+                logger.error(e.getMessage(), e);
+				throw new KapuaIllegalArgumentException("date", stringDate);
             }
         }
     }

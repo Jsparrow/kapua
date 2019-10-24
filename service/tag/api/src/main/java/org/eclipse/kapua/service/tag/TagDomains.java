@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.tag;
 
 public class TagDomains {
 
-    private TagDomains() { }
-
     public static final TagDomain TAG_DOMAIN = new TagDomain();
+
+	private TagDomains() { }
 }

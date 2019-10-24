@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class BooleanMetric extends MetricImpl<Boolean> implements Metric<Boolean> {
+public class BooleanMetric extends MetricImpl<Boolean> {
 
     /**
      * Construct a boolean metric with the provided name and value

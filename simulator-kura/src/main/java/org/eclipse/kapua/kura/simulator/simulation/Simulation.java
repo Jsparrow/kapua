@@ -15,5 +15,5 @@ import org.eclipse.kapua.kura.simulator.app.Application;
 
 public interface Simulation extends AutoCloseable {
 
-    public Application createApplication(String simulatorId);
+    Application createApplication(String simulatorId);
 }

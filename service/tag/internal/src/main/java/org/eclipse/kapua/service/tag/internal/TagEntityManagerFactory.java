@@ -18,6 +18,7 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
+import java.util.Collections;
 
 /**
  * Entity manager factory for the tag module.
@@ -25,11 +26,11 @@ import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
  * @since 1.0.0
  *
  */
-public class TagEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class TagEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-tag";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONSTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONSTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static TagEntityManagerFactory instance = new TagEntityManagerFactory();
 

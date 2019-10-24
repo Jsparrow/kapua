@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GwtSession extends KapuaBaseModel implements Serializable {
+public class GwtSession extends KapuaBaseModel {
 
     private static final long serialVersionUID = -4511854889803351914L;
 
@@ -247,30 +247,29 @@ public class GwtSession extends KapuaBaseModel implements Serializable {
     private boolean isPermitted(GwtSessionPermission permissionToCheck) {
 
         for (GwtSessionPermission gsp : getSessionPermissions()) {
-            if (gsp.getDomain() == null || gsp.getDomain().equals(permissionToCheck.getDomain())) {
-                if (gsp.getAction() == null || gsp.getAction().equals(permissionToCheck.getAction())) {
+            boolean condition = (gsp.getDomain() == null || gsp.getDomain().equals(permissionToCheck.getDomain())) && (gsp.getAction() == null || gsp.getAction() == permissionToCheck.getAction());
+			if (condition) {
 
-                    GwtSessionPermissionScope permissionToCheckScope = permissionToCheck.getPermissionScope();
+			    GwtSessionPermissionScope permissionToCheckScope = permissionToCheck.getPermissionScope();
 
-                    boolean check = false;
-                    switch (gsp.getPermissionScope()) {
-                    case ALL:
-                        check = true;
-                        break;
-                    case CHILDREN:
-                        check = (GwtSessionPermissionScope.CHILDREN.equals(permissionToCheckScope) ||
-                                GwtSessionPermissionScope.SELF.equals(permissionToCheckScope));
-                        break;
-                    case SELF:
-                        check = GwtSessionPermissionScope.SELF.equals(permissionToCheckScope);
-                        break;
-                    }
+			    boolean check = false;
+			    switch (gsp.getPermissionScope()) {
+			    case ALL:
+			        check = true;
+			        break;
+			    case CHILDREN:
+			        check = (GwtSessionPermissionScope.CHILDREN == permissionToCheckScope ||
+			                GwtSessionPermissionScope.SELF == permissionToCheckScope);
+			        break;
+			    case SELF:
+			        check = GwtSessionPermissionScope.SELF == permissionToCheckScope;
+			        break;
+			    }
 
-                    if (check) {
-                        return check;
-                    }
-                }
-            }
+			    if (check) {
+			        return check;
+			    }
+			}
         }
 
         return false;

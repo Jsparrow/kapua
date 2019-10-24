@@ -35,10 +35,6 @@ public class EntityNotFoundExceptionInfo extends KapuaExceptionInfo {
     @ApiModelProperty(dataType = "string")
     private KapuaId entityId;
 
-    protected EntityNotFoundExceptionInfo() {
-        super();
-    }
-
     public EntityNotFoundExceptionInfo(Status httpStatus, KapuaEntityNotFoundException kapuaException) {
         super(httpStatus, kapuaException.getCode(), kapuaException);
 
@@ -46,19 +42,22 @@ public class EntityNotFoundExceptionInfo extends KapuaExceptionInfo {
         setEntityId(kapuaException.getEntityId());
     }
 
-    public String getEntityType() {
+	protected EntityNotFoundExceptionInfo() {
+    }
+
+	public String getEntityType() {
         return entityType;
     }
 
-    private void setEntityType(String entityType) {
+	private void setEntityType(String entityType) {
         this.entityType = entityType;
     }
 
-    public KapuaId getEntityId() {
+	public KapuaId getEntityId() {
         return entityId;
     }
 
-    private void setEntityId(KapuaId entityId) {
+	private void setEntityId(KapuaId entityId) {
         this.entityId = entityId;
     }
 

@@ -12,7 +12,7 @@
 package org.eclipse.kapua.commons.service.event.store.api;
 
 public class EventStoreDomains {
-    private EventStoreDomains() { }
-
     public static final EventStoreDomain EVENT_STORE_DOMAIN = new EventStoreDomain();
+
+	private EventStoreDomains() { }
 }

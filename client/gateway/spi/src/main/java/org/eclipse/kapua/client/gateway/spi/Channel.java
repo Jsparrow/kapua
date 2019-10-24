@@ -23,25 +23,25 @@ import org.eclipse.kapua.client.gateway.Topic;
 
 public interface Channel {
 
-    public interface Context {
+    void handleInit(Context context);
 
-        public void notifyConnected();
+	void handleClose(Context context);
 
-        public void notifyDisconnected();
+	<T> Optional<T> adapt(Class<T> clazz);
 
-        public ScheduledExecutorService executor();
+	CompletionStage<?> handleSubscribe(String applicationId, Topic topic, MessageHandler messageHandler, ErrorHandler<? extends Throwable> errorHandler);
+
+	CompletionStage<?> handlePublish(String applicationId, Topic topic, Payload payload);
+
+	void handleUnsubscribe(String applicationId, Collection<Topic> topics) throws Exception;
+
+	public interface Context {
+
+        void notifyConnected();
+
+        void notifyDisconnected();
+
+        ScheduledExecutorService executor();
     }
-
-    public void handleInit(Context context);
-
-    public void handleClose(Context context);
-
-    public <T> Optional<T> adapt(Class<T> clazz);
-
-    public CompletionStage<?> handleSubscribe(String applicationId, Topic topic, MessageHandler messageHandler, ErrorHandler<? extends Throwable> errorHandler);
-
-    public CompletionStage<?> handlePublish(String applicationId, Topic topic, Payload payload);
-
-    public void handleUnsubscribe(String applicationId, Collection<Topic> topics) throws Exception;
 
 }

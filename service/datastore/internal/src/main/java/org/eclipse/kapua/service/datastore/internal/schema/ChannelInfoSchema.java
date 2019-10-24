@@ -24,36 +24,36 @@ import org.eclipse.kapua.service.datastore.client.SchemaKeys;
  */
 public class ChannelInfoSchema {
 
-    private ChannelInfoSchema() {
-
-    }
-
     /**
      * Channel information schema name
      */
     public static final String CHANNEL_TYPE_NAME = "channel";
-    /**
+	/**
      * Channel information - channel
      */
     public static final String CHANNEL_NAME = "channel";
-    /**
+	/**
      * Channel information - client identifier
      */
     public static final String CHANNEL_CLIENT_ID = "client_id";
-    /**
+	/**
      * Channel information - scope id
      */
     public static final String CHANNEL_SCOPE_ID = "scope_id";
-    /**
+	/**
      * Channel information - message timestamp (of the first message published in this channel)
      */
     public static final String CHANNEL_TIMESTAMP = "timestamp";
-    /**
+	/**
      * Channel information - message identifier (of the first message published in this channel)
      */
     public static final String CHANNEL_MESSAGE_ID = "message_id";
 
-    /**
+	private ChannelInfoSchema() {
+
+    }
+
+	/**
      * Create and return the Json representation of the channel info schema
      *
      * @param allEnable

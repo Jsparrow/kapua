@@ -29,10 +29,6 @@ public class IllegalArgumentExceptionInfo extends KapuaExceptionInfo {
     @XmlElement(name = "argumentValue")
     private String argumentValue;
 
-    protected IllegalArgumentExceptionInfo() {
-        super();
-    }
-
     public IllegalArgumentExceptionInfo(Status httpStatus, KapuaIllegalArgumentException kapuaException) {
         super(httpStatus, kapuaException.getCode(), kapuaException);
 
@@ -40,19 +36,22 @@ public class IllegalArgumentExceptionInfo extends KapuaExceptionInfo {
         setArgumentValue(kapuaException.getArgumentValue());
     }
 
-    public String getArgumenName() {
+	protected IllegalArgumentExceptionInfo() {
+    }
+
+	public String getArgumenName() {
         return argumentName;
     }
 
-    private void setArgumentName(String argumentName) {
+	private void setArgumentName(String argumentName) {
         this.argumentName = argumentName;
     }
 
-    public String getArgumentValue() {
+	public String getArgumentValue() {
         return argumentValue;
     }
 
-    private void setArgumentValue(String argumentValue) {
+	private void setArgumentValue(String argumentValue) {
         this.argumentValue = argumentValue;
     }
 

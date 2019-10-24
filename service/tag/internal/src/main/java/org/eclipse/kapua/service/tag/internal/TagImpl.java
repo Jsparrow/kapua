@@ -33,15 +33,6 @@ public class TagImpl extends AbstractKapuaNamedEntity implements Tag {
     /**
      * Constructor.
      *
-     * @since 1.0.0
-     */
-    protected TagImpl() {
-        super();
-    }
-
-    /**
-     * Constructor.
-     *
      * @param scopeId The scope {@link KapuaId}
      * @since 1.0.0
      */
@@ -49,7 +40,7 @@ public class TagImpl extends AbstractKapuaNamedEntity implements Tag {
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param tag The {@link Tag} from which to create the new {@link Tag}.
@@ -58,5 +49,13 @@ public class TagImpl extends AbstractKapuaNamedEntity implements Tag {
      */
     public TagImpl(Tag tag) throws KapuaException {
         super(tag);
+    }
+
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected TagImpl() {
     }
 }

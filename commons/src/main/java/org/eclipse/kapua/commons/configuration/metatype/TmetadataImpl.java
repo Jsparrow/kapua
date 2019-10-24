@@ -54,7 +54,7 @@ public class TmetadataImpl implements KapuaTmetadata {
     protected List<KapuaTdesignate> designate;
     protected List<Object> any;
     protected String localization;
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the ocd property.
@@ -84,7 +84,8 @@ public class TmetadataImpl implements KapuaTmetadata {
         return new ArrayList<>(this.ocd);
     }
 
-    public void setOCD(List<KapuaTocd> ocd) {
+    @Override
+	public void setOCD(List<KapuaTocd> ocd) {
         this.ocd = ocd;
     }
 
@@ -108,14 +109,16 @@ public class TmetadataImpl implements KapuaTmetadata {
      * Objects of the following type(s) are allowed in the list
      * {@link TdesignateImpl }
      */
-    public List<KapuaTdesignate> getDesignate() {
+    @Override
+	public List<KapuaTdesignate> getDesignate() {
         if (designate == null) {
             designate = new ArrayList<>();
         }
         return new ArrayList<>(this.designate);
     }
 
-    public void setDesignate(List<KapuaTdesignate> designate) {
+    @Override
+	public void setDesignate(List<KapuaTdesignate> designate) {
         this.designate = designate;
     }
 
@@ -140,14 +143,16 @@ public class TmetadataImpl implements KapuaTmetadata {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
 
-    public void setAny(List<Object> any) {
+    @Override
+	public void setAny(List<Object> any) {
         this.any = any;
     }
 
@@ -157,7 +162,8 @@ public class TmetadataImpl implements KapuaTmetadata {
      * @return possible object is
      * {@link String }
      */
-    public String getLocalization() {
+    @Override
+	public String getLocalization() {
         return localization;
     }
 
@@ -167,7 +173,8 @@ public class TmetadataImpl implements KapuaTmetadata {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setLocalization(String value) {
+    @Override
+	public void setLocalization(String value) {
         this.localization = value;
     }
 
@@ -183,11 +190,13 @@ public class TmetadataImpl implements KapuaTmetadata {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 
-    public void setOtherAttributes(Map<QName, String> otherAttributes) {
+    @Override
+	public void setOtherAttributes(Map<QName, String> otherAttributes) {
         this.otherAttributes = otherAttributes;
     }
 

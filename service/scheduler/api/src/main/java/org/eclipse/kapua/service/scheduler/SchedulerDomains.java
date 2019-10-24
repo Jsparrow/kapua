@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.scheduler;
 
 public class SchedulerDomains {
 
-    private SchedulerDomains() { }
-
     public static final SchedulerDomain SCHEDULER_DOMAIN = new SchedulerDomain();
+
+	private SchedulerDomains() { }
 }

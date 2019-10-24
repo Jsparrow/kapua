@@ -16,7 +16,7 @@ import org.eclipse.kapua.app.console.module.device.shared.model.GwtDeviceConnect
 
 import java.io.Serializable;
 
-public class GwtDeviceConnectionOption extends GwtUpdatableEntityModel implements Serializable {
+public class GwtDeviceConnectionOption extends GwtUpdatableEntityModel {
 
     /**
      * 

@@ -72,7 +72,8 @@ public class MqttClientException extends KapuaException {
      * 
      * @since 1.0.0
      */
-    protected String getKapuaErrorMessagesBundle() {
+    @Override
+	protected String getKapuaErrorMessagesBundle() {
         return KAPUA_ERROR_MESSAGES;
     }
 }

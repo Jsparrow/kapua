@@ -31,7 +31,7 @@ import javax.inject.Inject;
  *
  * @since 1.0.0
  */
-public class DeviceBundleStartTargetProcessor extends AbstractTargetProcessor implements TargetProcessor {
+public class DeviceBundleStartTargetProcessor extends AbstractTargetProcessor {
 
     private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
     private static final DeviceBundleManagementService BUNDLE_MANAGEMENT_SERVICE = LOCATOR.getService(DeviceBundleManagementService.class);

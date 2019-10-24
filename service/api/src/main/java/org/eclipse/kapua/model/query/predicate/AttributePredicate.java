@@ -20,6 +20,30 @@ package org.eclipse.kapua.model.query.predicate;
 public interface AttributePredicate<T> extends QueryPredicate {
 
     /**
+     * Gets the name of the {@link org.eclipse.kapua.model.KapuaEntityAttributes} to compare.
+     *
+     * @return The name name of the {@link org.eclipse.kapua.model.KapuaEntityAttributes} to compare.
+     * @since 1.0.0
+     */
+    String getAttributeName();
+
+	/**
+     * Gets the value to compare the results.
+     *
+     * @return The value to compare the results.
+     * @since 1.0.0
+     */
+    T getAttributeValue();
+
+	/**
+     * Get the {@link Operator} used to compare results.
+     *
+     * @return The {@link Operator} used to compare results.
+     * @since 1.0.0
+     */
+    Operator getOperator();
+
+	/**
      * {@link AttributePredicate}s operators
      * <p>
      * Determines how the values of the result set are compared with the given {@link AttributePredicate#getAttributeValue()}
@@ -120,28 +144,4 @@ public interface AttributePredicate<T> extends QueryPredicate {
          */
         LESS_THAN_OR_EQUAL
     }
-
-    /**
-     * Gets the name of the {@link org.eclipse.kapua.model.KapuaEntityAttributes} to compare.
-     *
-     * @return The name name of the {@link org.eclipse.kapua.model.KapuaEntityAttributes} to compare.
-     * @since 1.0.0
-     */
-    String getAttributeName();
-
-    /**
-     * Gets the value to compare the results.
-     *
-     * @return The value to compare the results.
-     * @since 1.0.0
-     */
-    T getAttributeValue();
-
-    /**
-     * Get the {@link Operator} used to compare results.
-     *
-     * @return The {@link Operator} used to compare results.
-     * @since 1.0.0
-     */
-    Operator getOperator();
 }

@@ -17,6 +17,7 @@ import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utilities to manipulate string
@@ -25,13 +26,13 @@ import java.util.List;
  */
 public class StringUtil {
 
-    private StringUtil() {
+    private static final char DELIMITER = ',';
+	private static final char ESCAPE = '\\';
+
+	private StringUtil() {
     }
 
-    private static final char DELIMITER = ',';
-    private static final char ESCAPE = '\\';
-
-    /**
+	/**
      * Split the string using the delimiter {@link StringUtil#DELIMITER}
      *
      * @param strValues
@@ -112,7 +113,7 @@ public class StringUtil {
                                     continue;
                                 }
                                 if (c2 != DELIMITER) {
-                                    buffer.append(strValues.substring(i, j));
+                                    buffer.append(StringUtils.substring(strValues, i, j));
                                 }
                                 // Let loop counter i catch up with the inner loop but keep in
                                 // mind it will still be incremented at the end of the outer loop.
@@ -131,7 +132,7 @@ public class StringUtil {
         return values.toArray(new String[]{});
     }
 
-    /**
+	/**
      * Convert the string to the appropriate Object based on type
      *
      * @param type   allowed values are {@link TscalarImpl}
@@ -144,56 +145,56 @@ public class StringUtil {
             return null;
         }
 
-        if (type == null || type.isEmpty()) {
+        if (type == null || StringUtils.isEmpty(type)) {
             throw KapuaException.internalError("Invalid type");
         }
 
         TscalarImpl scalarType = TscalarImpl.fromValue(type);
 
-        if (TscalarImpl.STRING.equals(scalarType)) {
+        if (TscalarImpl.STRING == scalarType) {
             return string;
         }
 
-        if (TscalarImpl.BOOLEAN.equals(scalarType)) {
+        if (TscalarImpl.BOOLEAN == scalarType) {
             return Boolean.valueOf(string);
         }
 
-        if (TscalarImpl.BYTE.equals(scalarType)) {
+        if (TscalarImpl.BYTE == scalarType) {
             return Byte.valueOf(string);
         }
 
-        if (TscalarImpl.CHAR.equals(scalarType)) {
+        if (TscalarImpl.CHAR == scalarType) {
             return string.toCharArray()[0];
         }
 
-        if (TscalarImpl.DOUBLE.equals(scalarType)) {
+        if (TscalarImpl.DOUBLE == scalarType) {
             return Double.valueOf(string);
         }
 
-        if (TscalarImpl.FLOAT.equals(scalarType)) {
+        if (TscalarImpl.FLOAT == scalarType) {
             return Float.valueOf(string);
         }
 
-        if (TscalarImpl.INTEGER.equals(scalarType)) {
+        if (TscalarImpl.INTEGER == scalarType) {
             return Integer.valueOf(string);
         }
 
-        if (TscalarImpl.LONG.equals(scalarType)) {
+        if (TscalarImpl.LONG == scalarType) {
             return Long.valueOf(string);
         }
 
-        if (TscalarImpl.SHORT.equals(scalarType)) {
+        if (TscalarImpl.SHORT == scalarType) {
             return Short.valueOf(string);
         }
 
-        if (TscalarImpl.PASSWORD.equals(scalarType)) {
+        if (TscalarImpl.PASSWORD == scalarType) {
             return new Password(string);
         }
 
         throw KapuaException.internalError("Unknown type");
     }
 
-    /**
+	/**
      * Convert the value to a String.<br>
      * It supports also arrays such as Integer[], Boolean[], ... Password[]). For the arrays the converted String will be a comma separated concatenation.
      *
@@ -229,7 +230,7 @@ public class StringUtil {
             String[] ss = (String[]) value;
             for (int i = 0; i < ss.length; i++) {
                 if (ss[i] != null) {
-                    sb.append(escapeString(ss[i].toString()));
+                    sb.append(escapeString(ss[i]));
                     if (i != ss.length - 1) {
                         sb.append(",");
                     }
@@ -348,7 +349,7 @@ public class StringUtil {
         return result;
     }
 
-    /**
+	/**
      * Escape the String <br>
      * Escaped values are '\' ',' and ' '
      *
@@ -363,7 +364,7 @@ public class StringUtil {
         return escaped;
     }
 
-    /**
+	/**
      * Remove the escaped values from the string (remove escape prefix, if present, for ',' ' ' and the spaces at the beginning and the end of the String
      *
      * @param s

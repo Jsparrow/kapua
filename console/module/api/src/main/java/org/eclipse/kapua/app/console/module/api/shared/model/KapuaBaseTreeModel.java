@@ -17,12 +17,11 @@ import org.eclipse.kapua.app.console.module.api.client.util.KapuaSafeHtmlUtils;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
 
-public class KapuaBaseTreeModel extends BaseTreeModel implements Serializable {
+public class KapuaBaseTreeModel extends BaseTreeModel {
 
     private static final long serialVersionUID = 167866061149596287L;
 
     public KapuaBaseTreeModel() {
-        super();
     }
 
     @Override

@@ -41,15 +41,6 @@ public abstract class AbstractKapuaNamedEntity extends AbstractKapuaUpdatableEnt
     /**
      * Constructor.
      *
-     * @since 1.0.0
-     */
-    protected AbstractKapuaNamedEntity() {
-        super();
-    }
-
-    /**
-     * Constructor.
-     *
      * @param scopeId The scope {@link KapuaId}.
      * @since 1.0.0
      */
@@ -57,7 +48,7 @@ public abstract class AbstractKapuaNamedEntity extends AbstractKapuaUpdatableEnt
         super(scopeId);
     }
 
-    /**
+	/**
      * Constructor.
      *
      * @param scopeId The scope {@link KapuaId}.
@@ -70,7 +61,15 @@ public abstract class AbstractKapuaNamedEntity extends AbstractKapuaUpdatableEnt
         setName(name);
     }
 
-    /**
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected AbstractKapuaNamedEntity() {
+    }
+
+	/**
      * Constructor.
      * <p>
      * It can be used to clone the {@link KapuaUpdatableEntity}.
@@ -84,22 +83,22 @@ public abstract class AbstractKapuaNamedEntity extends AbstractKapuaUpdatableEnt
         setDescription(kapuaNamedEntity.getDescription());
     }
 
-    @Override
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getDescription() {
         return description;
     }
 
-    @Override
+	@Override
     public void setDescription(String description) {
         this.description = description;
     }

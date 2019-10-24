@@ -31,13 +31,13 @@ import org.eclipse.kapua.app.console.module.authorization.shared.model.GwtRoleQu
 @RemoteServiceRelativePath("role")
 public interface GwtRoleService extends RemoteService {
 
-    public GwtRole create(GwtXSRFToken gwtXsrfToken, GwtRoleCreator gwtRoleCreator)
+    GwtRole create(GwtXSRFToken gwtXsrfToken, GwtRoleCreator gwtRoleCreator)
             throws GwtKapuaException;
 
-    public GwtRole update(GwtXSRFToken gwtXsrfToken, GwtRole gwtRole)
+    GwtRole update(GwtXSRFToken gwtXsrfToken, GwtRole gwtRole)
             throws GwtKapuaException;
 
-    public GwtRole find(String scopeShortId, String roleShortId)
+    GwtRole find(String scopeShortId, String roleShortId)
             throws GwtKapuaException;
 
     /**
@@ -48,24 +48,24 @@ public interface GwtRoleService extends RemoteService {
      * @throws GwtKapuaException
      * 
      */
-    public List<GwtRole> findAll(String scopeIdStirng)
+    List<GwtRole> findAll(String scopeIdStirng)
             throws GwtKapuaException;
 
-    public PagingLoadResult<GwtRole> query(PagingLoadConfig loadConfig, GwtRoleQuery gwtRoleQuery)
+    PagingLoadResult<GwtRole> query(PagingLoadConfig loadConfig, GwtRoleQuery gwtRoleQuery)
             throws GwtKapuaException;
 
-    public ListLoadResult<GwtGroupedNVPair> getRoleDescription(String scopeShortId, String roleShortId)
+    ListLoadResult<GwtGroupedNVPair> getRoleDescription(String scopeShortId, String roleShortId)
             throws GwtKapuaException;
 
-    public PagingLoadResult<GwtRolePermission> getRolePermissions(PagingLoadConfig loadConfig, String scopeShortId, String roleShortId)
+    PagingLoadResult<GwtRolePermission> getRolePermissions(PagingLoadConfig loadConfig, String scopeShortId, String roleShortId)
             throws GwtKapuaException;
 
-    public void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String roleShortId)
+    void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String roleShortId)
             throws GwtKapuaException;
 
-    public GwtRolePermission addRolePermission(GwtXSRFToken gwtXsrfToken, GwtRolePermissionCreator gwtRolePermissionCreator, GwtPermission gwtPermission)
+    GwtRolePermission addRolePermission(GwtXSRFToken gwtXsrfToken, GwtRolePermissionCreator gwtRolePermissionCreator, GwtPermission gwtPermission)
             throws GwtKapuaException;
 
-    public void deleteRolePermission(GwtXSRFToken gwtXsrfToken, String scopeShortId, String roleShortId)
+    void deleteRolePermission(GwtXSRFToken gwtXsrfToken, String scopeShortId, String roleShortId)
             throws GwtKapuaException;
 }

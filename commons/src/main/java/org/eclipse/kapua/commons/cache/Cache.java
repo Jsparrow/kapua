@@ -28,14 +28,14 @@ public interface Cache<K, V> {
      * 
      * @return
      */
-    public String getNamespace();
+    String getNamespace();
 
     /**
      * Set the metric namespace
      * 
      * @param namespace
      */
-    public void setNamespace(String namespace);
+    void setNamespace(String namespace);
 
     /**
      * Return the cache value for the given key
@@ -43,7 +43,7 @@ public interface Cache<K, V> {
      * @param k
      * @return
      */
-    public V get(K k);
+    V get(K k);
 
     /**
      * Set the cache value for the given key
@@ -51,7 +51,7 @@ public interface Cache<K, V> {
      * @param k
      * @param v
      */
-    public void put(K k, V v);
+    void put(K k, V v);
 
     /**
      * Remove the cache value for the given key.<BR>
@@ -59,11 +59,11 @@ public interface Cache<K, V> {
      * 
      * @param k
      */
-    public void remove(K k);
+    void remove(K k);
 
     /**
      * Clear the cache
      */
-    public void invalidateAll();
+    void invalidateAll();
 
 }

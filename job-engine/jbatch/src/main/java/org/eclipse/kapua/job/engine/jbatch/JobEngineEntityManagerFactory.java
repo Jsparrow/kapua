@@ -17,17 +17,18 @@ import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * {@link EntityManagerFactory} for the job-engine-jbatch module.
  *
  * @since 1.1.0
  */
-public class JobEngineEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class JobEngineEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-job-engine";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static JobEngineEntityManagerFactory instance = new JobEngineEntityManagerFactory();
 

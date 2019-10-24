@@ -13,5 +13,5 @@ package org.eclipse.kapua.app.console.module.api.shared.model;
 
 public interface Enum {
 
-    public String name();
+    String name();
 }

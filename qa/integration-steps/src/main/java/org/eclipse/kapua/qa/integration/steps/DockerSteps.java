@@ -114,7 +114,7 @@ public class DockerSteps {
             client.connect();
         } catch (MqttException e) {
             logger.error("Unable to connect to mqtt broker with client " + clientId, e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -134,7 +134,8 @@ public class DockerSteps {
         try {
             client.subscribe(topic, 1);
         } catch (MqttException e) {
-            logger.error("Can not subscribe with client " + clientId);
+            logger.error(e.getMessage(), e);
+			logger.error("Can not subscribe with client " + clientId);
         }
     }
 
@@ -151,7 +152,8 @@ public class DockerSteps {
         try {
             client.publish(topic, 1, message);
         } catch (MqttException e) {
-            logger.error("Can not publish to topic " + topic);
+            logger.error(e.getMessage(), e);
+			logger.error("Can not publish to topic " + topic);
         }
     }
 
@@ -176,9 +178,7 @@ public class DockerSteps {
     public void listImages(String imageName) throws Exception {
         List<Image> images = docker.listImages(DockerClient.ListImagesParam.byName(imageName));
         if ((images != null) && (images.size() > 0)) {
-            for (Image image : images) {
-                logger.info("Image: " + image);
-            }
+            images.forEach(image -> logger.info("Image: " + image));
         } else {
             logger.info("No docker images found.");
         }
@@ -228,7 +228,7 @@ public class DockerSteps {
         BrokerConfigData bcData = brokerConfigDataList.get(0);
         logger.info("Starting Message Broker container {}...", bcData.getName());
         ContainerConfig mbConfig = getBrokerContainerConfig(
-                bcData.getBrokerAddress(), bcData.getBrokerIp(), bcData.getClusterName(), null,
+                bcData.getBrokerIp(), bcData.getClusterName(), null,
                 bcData.getMqttPort(), bcData.getMqttHostPort(), bcData.getMqttsPort(), bcData.getMqttsHostPort(),
                 bcData.getWebPort(), bcData.getWebHostPort(), bcData.getDebugPort(), bcData.getDebugHostPort(),
                 bcData.getBrokerInternalDebugPort(), bcData.getDockerImage());
@@ -260,7 +260,6 @@ public class DockerSteps {
     /**
      * Creation of docker container configuration for broker.
      *
-     * @param brokerAddr
      * @param brokerIp
      * @param clusterName
      * @param controlMessageForwarding
@@ -276,7 +275,7 @@ public class DockerSteps {
      * @param dockerImage              full name of image (e.g. "kapua/kapua-broker:1.2.0-SNAPSHOT")
      * @return Container configuration for specific boroker instance
      */
-    private ContainerConfig getBrokerContainerConfig(String brokerAddr, String brokerIp,
+    private ContainerConfig getBrokerContainerConfig(String brokerIp,
             String clusterName,
             String controlMessageForwarding,
             int mqttPort, int mqttHostPort,

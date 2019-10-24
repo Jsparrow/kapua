@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class StringMetric extends MetricImpl<String> implements Metric<String> {
+public class StringMetric extends MetricImpl<String> {
 
     /**
      * Construct an integer metric with the provided name and value

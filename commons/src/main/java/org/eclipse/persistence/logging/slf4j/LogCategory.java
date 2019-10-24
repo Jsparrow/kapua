@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.persistence.logging.SessionLog;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * EclipseLink categories used for logging name space.
@@ -77,7 +78,7 @@ public enum LogCategory {
     private static final String NAMESPACE_PREFIX = "eclipselink.logging.";
 
     /** {@link Map} for {@link String} to {@link LogCategory} case insensitive conversion. */
-    private static final Map<String, LogCategory> stringValuesMap = new HashMap<String, LogCategory>(2 * length);
+    private static final Map<String, LogCategory> stringValuesMap = new HashMap<>(2 * length);
 
     /** Logger name spaces lookup table. */
     private static final String[] nameSpaces = new String[length];
@@ -85,7 +86,7 @@ public enum LogCategory {
     static {
         // Initialize String to LogCategory case insensitive lookup Map.
         for (LogCategory category : LogCategory.values()) {
-            stringValuesMap.put(category.name.toLowerCase(), category);
+            stringValuesMap.put(StringUtils.lowerCase(category.name), category);
         }
         // Initialize logger name spaces lookup table.
         for (LogCategory category : LogCategory.values()) {
@@ -101,7 +102,7 @@ public enum LogCategory {
      *         of the string argument is converted to {@code ALL}.
      */
     public static final LogCategory toValue(final String name) {
-        return name != null  && name.length() > 0 ? stringValuesMap.get(name.toLowerCase()) : ALL;
+        return name != null  && name.length() > 0 ? stringValuesMap.get(StringUtils.lowerCase(name)) : ALL;
     }
 
     /** Logging category ID. Continuous integer sequence starting from 0. */

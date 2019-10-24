@@ -26,72 +26,72 @@ import org.eclipse.kapua.service.datastore.client.SchemaKeys;
  */
 public class MetricInfoSchema {
 
-    private MetricInfoSchema() {
-
-    }
-
     /**
      * Metric information schema name
      */
     public static final String METRIC_TYPE_NAME = "metric";
-    /**
+	/**
      * Metric information - channel
      */
     public static final String METRIC_CHANNEL = "channel";
-    /**
+	/**
      * Metric information - client identifier
      */
     public static final String METRIC_CLIENT_ID = "client_id";
-    /**
+	/**
      * Metric information - scope id
      */
     public static final String METRIC_SCOPE_ID = "scope_id";
-    /**
+	/**
      * Metric information - metric map prefix
      */
     public static final String METRIC_MTR = "metric";
-    /**
+	/**
      * Metric information - name
      */
     public static final String METRIC_MTR_NAME = "name";
-    /**
+	/**
      * Metric information - full name (so with the metric type suffix)
      */
     public static final String METRIC_MTR_NAME_FULL = "metric.name";
-    /**
+	/**
      * Metric information - type
      */
     public static final String METRIC_MTR_TYPE = "type";
-    /**
+	/**
      * Metric information - full type (so with the metric type suffix)
      */
     public static final String METRIC_MTR_TYPE_FULL = "metric.type";
-    /**
+	/**
      * Metric information - value
      */
     public static final String METRIC_MTR_VALUE = "value";
-    /**
+	/**
      * Metric information - full value (so with the metric type suffix)
      */
     public static final String METRIC_MTR_VALUE_FULL = "metric.value";
-    /**
+	/**
      * Metric information - message timestamp (of the first message published in this channel)
      */
     public static final String METRIC_MTR_TIMESTAMP = "timestamp";
-    /**
+	/**
      * Metric information - message timestamp (of the first message published in this channel, with the metric type suffix)
      */
     public static final String METRIC_MTR_TIMESTAMP_FULL = "metric.timestamp";
-    /**
+	/**
      * Metric information - message identifier (of the first message published in this channel)
      */
     public static final String METRIC_MTR_MSG_ID = "message_id";
-    /**
+	/**
      * Metric information - full message identifier (of the first message published in this channel, with the metric type suffix)
      */
     public static final String METRIC_MTR_MSG_ID_FULL = "metric.message_id";
 
-    /**
+	private MetricInfoSchema() {
+
+    }
+
+	/**
      * Create and return the Json representation of the metric info schema
      * 
      * @param allEnable

@@ -22,7 +22,54 @@ import java.util.Objects;
  */
 public class Payload {
 
-    public static class Builder {
+    private final Instant timestamp;
+	private final Map<String, ?> values;
+
+	private Payload(final Instant timestamp, final Map<String, ?> values, final boolean cloneValues) {
+        this.timestamp = timestamp;
+        this.values = Collections.unmodifiableMap(cloneValues ? new HashMap<>(values) : values);
+    }
+
+	public Instant getTimestamp() {
+        return timestamp;
+    }
+
+	public Map<String, ?> getValues() {
+        return values;
+    }
+
+	@Override
+    public String toString() {
+        return String.format("[Payload - timestamp: %s, values: %s]", timestamp, values);
+    }
+
+	public static Payload of(final String key, final Object value) {
+        Objects.requireNonNull(key);
+
+        return new Payload(Instant.now(), Collections.singletonMap(key, value), false);
+    }
+
+	public static Payload of(final Map<String, ?> values) {
+        Objects.requireNonNull(values);
+
+        return new Payload(Instant.now(), values, true);
+    }
+
+	public static Payload of(final Instant timestamp, final String key, final Object value) {
+        Objects.requireNonNull(timestamp);
+        Objects.requireNonNull(key);
+
+        return new Payload(timestamp, Collections.singletonMap(key, value), false);
+    }
+
+	public static Payload of(final Instant timestamp, final Map<String, ?> values) {
+        Objects.requireNonNull(timestamp);
+        Objects.requireNonNull(values);
+
+        return new Payload(timestamp, values, true);
+    }
+
+	public static class Builder {
 
         private Instant timestamp;
 
@@ -66,52 +113,5 @@ public class Payload {
         public Payload build() {
             return new Payload(timestamp, values, true);
         }
-    }
-
-    private final Instant timestamp;
-    private final Map<String, ?> values;
-
-    private Payload(final Instant timestamp, final Map<String, ?> values, final boolean cloneValues) {
-        this.timestamp = timestamp;
-        this.values = Collections.unmodifiableMap(cloneValues ? new HashMap<>(values) : values);
-    }
-
-    public Instant getTimestamp() {
-        return timestamp;
-    }
-
-    public Map<String, ?> getValues() {
-        return values;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("[Payload - timestamp: %s, values: %s]", timestamp, values);
-    }
-
-    public static Payload of(final String key, final Object value) {
-        Objects.requireNonNull(key);
-
-        return new Payload(Instant.now(), Collections.singletonMap(key, value), false);
-    }
-
-    public static Payload of(final Map<String, ?> values) {
-        Objects.requireNonNull(values);
-
-        return new Payload(Instant.now(), values, true);
-    }
-
-    public static Payload of(final Instant timestamp, final String key, final Object value) {
-        Objects.requireNonNull(timestamp);
-        Objects.requireNonNull(key);
-
-        return new Payload(timestamp, Collections.singletonMap(key, value), false);
-    }
-
-    public static Payload of(final Instant timestamp, final Map<String, ?> values) {
-        Objects.requireNonNull(timestamp);
-        Objects.requireNonNull(values);
-
-        return new Payload(timestamp, values, true);
     }
 }

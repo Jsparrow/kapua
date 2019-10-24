@@ -68,7 +68,7 @@ import java.util.Timer;
  *
  * @since 1.0.0
  */
-public class KapuaJobListener extends AbstractJobListener implements JobListener {
+public class KapuaJobListener extends AbstractJobListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(KapuaJobListener.class);
 
@@ -308,27 +308,21 @@ public class KapuaJobListener extends AbstractJobListener implements JobListener
      */
     private JobExecution getAnotherJobExecutionRunning(KapuaId scopeId, KapuaId jobId, KapuaId currentJobExecutionId, String jobName, Set<KapuaId> jobTargetIdSubset) throws KapuaException {
         List<Long> runningExecutionsIds = BatchRuntime.getJobOperator().getRunningExecutions(jobName);
-        if (runningExecutionsIds.size() > 1) {
-
-            JobExecutionQuery jobExecutionQuery = JOB_EXECUTION_FACTORY.newQuery(scopeId);
-
-            jobExecutionQuery.setPredicate(
-                    jobExecutionQuery.andPredicate(
-                            jobExecutionQuery.attributePredicate(JobExecutionAttributes.JOB_ID, jobId),
-                            jobExecutionQuery.attributePredicate(JobExecutionAttributes.ENTITY_ID, currentJobExecutionId, AttributePredicate.Operator.NOT_EQUAL),
-                            jobExecutionQuery.attributePredicate(JobExecutionAttributes.ENDED_ON, null),
-                            jobExecutionQuery.attributePredicate(JobExecutionAttributes.TARGET_IDS, jobTargetIdSubset.toArray())
-                    )
-            );
-
-            jobExecutionQuery.setSortCriteria(jobExecutionQuery.fieldSortCriteria(JobExecutionAttributes.STARTED_ON, SortOrder.ASCENDING));
-
-            JobExecutionListResult jobExecutions = KapuaSecurityUtils.doPrivileged(() -> JOB_EXECUTION_SERVICE.query(jobExecutionQuery));
-
-            return jobExecutions.getFirstItem();
-        }
-
-        return null;
+        if (runningExecutionsIds.size() <= 1) {
+			return null;
+		}
+		JobExecutionQuery jobExecutionQuery = JOB_EXECUTION_FACTORY.newQuery(scopeId);
+		jobExecutionQuery.setPredicate(
+		        jobExecutionQuery.andPredicate(
+		                jobExecutionQuery.attributePredicate(JobExecutionAttributes.JOB_ID, jobId),
+		                jobExecutionQuery.attributePredicate(JobExecutionAttributes.ENTITY_ID, currentJobExecutionId, AttributePredicate.Operator.NOT_EQUAL),
+		                jobExecutionQuery.attributePredicate(JobExecutionAttributes.ENDED_ON, null),
+		                jobExecutionQuery.attributePredicate(JobExecutionAttributes.TARGET_IDS, jobTargetIdSubset.toArray())
+		        )
+		);
+		jobExecutionQuery.setSortCriteria(jobExecutionQuery.fieldSortCriteria(JobExecutionAttributes.STARTED_ON, SortOrder.ASCENDING));
+		JobExecutionListResult jobExecutions = KapuaSecurityUtils.doPrivileged(() -> JOB_EXECUTION_SERVICE.query(jobExecutionQuery));
+		return jobExecutions.getFirstItem();
     }
 
     /**

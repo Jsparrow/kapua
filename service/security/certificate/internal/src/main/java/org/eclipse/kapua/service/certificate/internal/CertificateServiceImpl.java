@@ -180,79 +180,79 @@ public class CertificateServiceImpl implements CertificateService {
 
         private static final EmptyTocd INSTANCE = new EmptyTocd();
 
-        public static EmptyTocd getInstance() {
-            return INSTANCE;
-        }
-
         private EmptyTocd() {
         }
 
-        @Override
+		public static EmptyTocd getInstance() {
+            return INSTANCE;
+        }
+
+		@Override
         public void setOtherAttributes(Map<QName, String> otherAttributes) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setName(String value) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setId(String value) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setIcon(List<? extends KapuaTicon> icon) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setDescription(String value) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setAny(List<Object> any) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public void setAD(List<? extends KapuaTad> icon) {
             // This is a Empty TOCD implementation
         }
 
-        @Override
+		@Override
         public Map<QName, String> getOtherAttributes() {
             return Collections.emptyMap();
         }
 
-        @Override
+		@Override
         public String getName() {
             return CertificateService.class.getSimpleName();
         }
 
-        @Override
+		@Override
         public String getId() {
             return CertificateService.class.getName();
         }
 
-        @Override
+		@Override
         public List<KapuaTicon> getIcon() {
             return Collections.emptyList();
         }
 
-        @Override
+		@Override
         public String getDescription() {
             return null;
         }
 
-        @Override
+		@Override
         public List<Object> getAny() {
             return Collections.emptyList();
         }
 
-        @Override
+		@Override
         public List<KapuaTad> getAD() {
             return Collections.emptyList();
         }

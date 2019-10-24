@@ -22,7 +22,6 @@ public class GwtAccessPermissionCreator extends GwtEntityCreator {
     private GwtPermission permission;
 
     public GwtAccessPermissionCreator() {
-        super();
     }
 
     public String getAccessInfoId() {

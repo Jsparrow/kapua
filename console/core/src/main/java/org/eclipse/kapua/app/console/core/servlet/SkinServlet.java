@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public class SkinServlet extends HttpServlet {
 
@@ -43,7 +44,7 @@ public class SkinServlet extends HttpServlet {
             // check to see if we have an external resource directory configured
             ConsoleSetting consoleSetting = ConsoleSetting.getInstance();
             String resourceDir = consoleSetting.getString(ConsoleSettingKeys.SKIN_RESOURCE_DIR);
-            if (resourceDir != null && resourceDir.trim().length() != 0) {
+            if (resourceDir != null && StringUtils.trim(resourceDir).length() != 0) {
 
                 File fResourceDir = new File(resourceDir);
                 if (!fResourceDir.exists()) {

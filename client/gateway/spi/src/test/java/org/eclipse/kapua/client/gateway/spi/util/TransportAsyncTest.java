@@ -24,11 +24,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class TransportAsyncTest {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(TransportAsyncTest.class);
+
+	@Test
     public void test1() throws InterruptedException {
         final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -43,7 +47,7 @@ public class TransportAsyncTest {
             Transport.waitForConnection(transport);
 
             Duration duration = Duration.between(start, Instant.now());
-            System.out.println(duration);
+            logger.info(String.valueOf(duration));
 
             Assert.assertTrue(duration.compareTo(Duration.ofMillis(100)) >= 0);
 

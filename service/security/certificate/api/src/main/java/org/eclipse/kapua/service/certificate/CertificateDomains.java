@@ -16,8 +16,8 @@ package org.eclipse.kapua.service.certificate;
  */
 public class CertificateDomains {
 
-    private CertificateDomains() {
-    }
-
     public static final CertificateDomain CERTIFICATE_DOMAIN = new CertificateDomain();
+
+	private CertificateDomains() {
+    }
 }

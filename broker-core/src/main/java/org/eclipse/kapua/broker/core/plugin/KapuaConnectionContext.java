@@ -203,12 +203,11 @@ public class KapuaConnectionContext {
     }
 
     public void logAuthDestinationToLog() {
-        if (!authDestinations.isEmpty()) {
-            logger.debug("Authorization map:");
-            for (String str : authDestinations) {
-                logger.debug(str);
-            }
-        }
+        if (authDestinations.isEmpty()) {
+			return;
+		}
+		logger.debug("Authorization map:");
+		authDestinations.forEach(logger::debug);
     }
 
 }

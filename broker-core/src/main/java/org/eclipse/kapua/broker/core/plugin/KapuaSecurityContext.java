@@ -50,7 +50,7 @@ public class KapuaSecurityContext extends SecurityContext {
 
         this.principal = kcc.getPrincipal();
         this.kapuaSession = KapuaSession.createFrom();
-        principals = new HashSet<Principal>();
+        principals = new HashSet<>();
         principals.add(principal);
 
         this.authMap = authMap;
@@ -63,7 +63,8 @@ public class KapuaSecurityContext extends SecurityContext {
         return principal;
     }
 
-    public Set<Principal> getPrincipals() {
+    @Override
+	public Set<Principal> getPrincipals() {
         return principals;
     }
 

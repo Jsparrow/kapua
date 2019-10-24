@@ -49,13 +49,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creator of Accounts, Users, Permissions that are used in ACL tests
  */
 public class AclCreator {
 
-    private static final KapuaId SYS_ID = new KapuaEid(BigInteger.ONE);
+    private static final Logger logger = LoggerFactory.getLogger(AclCreator.class);
+
+	private static final KapuaId SYS_ID = new KapuaEid(BigInteger.ONE);
 
     private static final KapuaId ROOT_SCOPE_ID = new KapuaEid(BigInteger.ONE);
 
@@ -128,7 +132,7 @@ public class AclCreator {
         try {
             userService.setConfigValues(accId, scopeId, valueMap);
         } catch (KapuaException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -147,7 +151,7 @@ public class AclCreator {
         try {
             userService.setConfigValues(accId, scopeId, valueMap);
         } catch (KapuaException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -167,7 +171,7 @@ public class AclCreator {
             try {
                 accessInfoService.create(accessInfoCreatorCreator(permissionList, user, account));
             } catch (KapuaException ke) {
-                ke.printStackTrace();
+                logger.error(ke.getMessage(), ke);
                 //skip
             }
 
@@ -191,7 +195,7 @@ public class AclCreator {
         accessInfoCreator.setUserId(user.getId());
         accessInfoCreator.setScopeId(user.getScopeId());
         Set<Permission> permissions = new HashSet<>();
-        for (AclPermission permissionData : permissionList) {
+        permissionList.forEach(permissionData -> {
             Actions action = permissionData.getAction();
             KapuaEid targetScopeId = permissionData.getTargetScopeId();
             if (targetScopeId == null) {
@@ -200,7 +204,7 @@ public class AclCreator {
             Domain domain = permissionData.getDomain();
             Permission permission = permissionFactory.newPermission(domain, action, targetScopeId);
             permissions.add(permission);
-        }
+        });
         accessInfoCreator.setPermissions(permissions);
 
         return accessInfoCreator;
@@ -213,6 +217,7 @@ public class AclCreator {
             try {
                 credentialService.create(credentialCreator);
             } catch (KapuaException ke) {
+				logger.error(ke.getMessage(), ke);
                 // skip
             }
 
@@ -227,6 +232,7 @@ public class AclCreator {
             try {
                 credentialService.create(credentialCreator);
             } catch (KapuaException ke) {
+				logger.error(ke.getMessage(), ke);
                 // skip
             }
 

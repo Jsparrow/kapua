@@ -33,7 +33,16 @@ public class Metadata {
     // No removal of existing cached mappings or changes in the
     // existing mappings.
     private Map<String, Metric> messageMappingsCache;
-    //
+    /**
+     * Contruct metadata
+     */
+    public Metadata(String dataIndexName, String registryIndexName) {
+        messageMappingsCache = new HashMap<>(100);
+        this.dataIndexName = dataIndexName;
+        this.registryIndexName = registryIndexName;
+    }
+
+	//
 
     /**
      * Get the mappings cache
@@ -44,16 +53,7 @@ public class Metadata {
         return messageMappingsCache;
     }
 
-    /**
-     * Contruct metadata
-     */
-    public Metadata(String dataIndexName, String registryIndexName) {
-        messageMappingsCache = new HashMap<String, Metric>(100);
-        this.dataIndexName = dataIndexName;
-        this.registryIndexName = registryIndexName;
-    }
-
-    /**
+	/**
      * Get the Elasticsearch data index name
      * 
      * @return
@@ -62,7 +62,7 @@ public class Metadata {
         return dataIndexName;
     }
 
-    /**
+	/**
      * Get the Kapua data index name
      * 
      * @return

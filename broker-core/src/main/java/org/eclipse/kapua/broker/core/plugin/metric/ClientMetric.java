@@ -24,10 +24,6 @@ public class ClientMetric {
     private Counter disconnectionClient;
     private Counter disconnectionKapuasys;
 
-    public static ClientMetric getInstance() {
-        return CLIENT_METRIC;
-    }
-
     private ClientMetric() {
         MetricsService metricsService = MetricServiceFactory.getInstance();
         connectedClient = metricsService.getCounter("security", "login", "clients", "connected", "count");
@@ -36,19 +32,23 @@ public class ClientMetric {
         disconnectionKapuasys = metricsService.getCounter("security", "login", "kapuasys", "disconnected", "count");
     }
 
-    public Counter getConnectedClient() {
+	public static ClientMetric getInstance() {
+        return CLIENT_METRIC;
+    }
+
+	public Counter getConnectedClient() {
         return connectedClient;
     }
 
-    public Counter getConnectedKapuasys() {
+	public Counter getConnectedKapuasys() {
         return connectedKapuasys;
     }
 
-    public Counter getDisconnectionClient() {
+	public Counter getDisconnectionClient() {
         return disconnectionClient;
     }
 
-    public Counter getDisconnectionKapuasys() {
+	public Counter getDisconnectionKapuasys() {
         return disconnectionKapuasys;
     }
 

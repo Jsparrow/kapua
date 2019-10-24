@@ -132,7 +132,8 @@ public class AbstractStorableListResult<E extends Storable> implements StorableL
      * 
      * @param totalCount
      */
-    public void setTotalCount(Long totalCount) {
+    @Override
+	public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 

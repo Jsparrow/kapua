@@ -74,11 +74,7 @@ public class LocatorConfig {
     }
 
     private static void addAllStrings(final List<String> list, Collection<?> other) {
-        for (Object entry : other) {
-            if (entry instanceof String) {
-                list.add((String) entry);
-            }
-        }
+        other.stream().filter(entry -> entry instanceof String).forEach(entry -> list.add((String) entry));
     }
 
     public URL getURL() {

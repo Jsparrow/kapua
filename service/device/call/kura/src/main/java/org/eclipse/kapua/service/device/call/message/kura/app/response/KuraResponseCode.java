@@ -84,21 +84,21 @@ public enum KuraResponseCode implements DeviceResponseCode {
 
     @Override
     public boolean isAccepted() {
-        return ACCEPTED.equals(this);
+        return ACCEPTED == this;
     }
 
     @Override
     public boolean isBadRequest() {
-        return BAD_REQUEST.equals(this);
+        return BAD_REQUEST == this;
     }
 
     @Override
     public boolean isNotFound() {
-        return NOT_FOUND.equals(this);
+        return NOT_FOUND == this;
     }
 
     @Override
     public boolean isInternalError() {
-        return INTERNAL_ERROR.equals(this);
+        return INTERNAL_ERROR == this;
     }
 }

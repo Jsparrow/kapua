@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaLiquibaseClient {
 
@@ -120,7 +121,7 @@ public class KapuaLiquibaseClient {
     }
 
     private static void executeMasters(Connection connection, Optional<String> schema, File changelogTempDirectory, String preMaster) throws LiquibaseException {
-        List<File> masterChangelogs = Arrays.asList(changelogTempDirectory.listFiles((FilenameFilter) (dir, name) -> name.endsWith(preMaster)));
+        List<File> masterChangelogs = Arrays.asList(changelogTempDirectory.listFiles((FilenameFilter) (dir, name) -> StringUtils.endsWith(name, preMaster)));
 
         LOG.info("\tMaster Liquibase files found: {}", masterChangelogs.size());
 

@@ -83,15 +83,6 @@ public class DeviceConnectionImpl extends AbstractKapuaUpdatableEntity implement
     /**
      * Constructor
      *
-     * @since 1.0.0
-     */
-    protected DeviceConnectionImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
-     *
      * @param scopeId
      * @since 1.0.0
      */
@@ -99,7 +90,7 @@ public class DeviceConnectionImpl extends AbstractKapuaUpdatableEntity implement
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param deviceConnection
@@ -120,92 +111,100 @@ public class DeviceConnectionImpl extends AbstractKapuaUpdatableEntity implement
         setServerIp(deviceConnection.getServerIp());
     }
 
-    @Override
+	/**
+     * Constructor
+     *
+     * @since 1.0.0
+     */
+    protected DeviceConnectionImpl() {
+    }
+
+	@Override
     public DeviceConnectionStatus getStatus() {
         return status;
     }
 
-    @Override
+	@Override
     public void setStatus(DeviceConnectionStatus connectionStatus) {
         this.status = connectionStatus;
     }
 
-    @Override
+	@Override
     public String getClientId() {
         return clientId;
     }
 
-    @Override
+	@Override
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
-    @Override
+	@Override
     public KapuaId getUserId() {
         return userId;
     }
 
-    @Override
+	@Override
     public void setUserId(KapuaId userId) {
         this.userId = KapuaEid.parseKapuaId(userId);
     }
 
-    @Override
+	@Override
     public boolean getAllowUserChange() {
         return allowUserChange;
     }
 
-    @Override
+	@Override
     public void setAllowUserChange(boolean allowUserChange) {
         this.allowUserChange = allowUserChange;
     }
 
-    @Override
+	@Override
     public ConnectionUserCouplingMode getUserCouplingMode() {
         return userCouplingMode;
     }
 
-    @Override
+	@Override
     public void setUserCouplingMode(ConnectionUserCouplingMode userCouplingMode) {
         this.userCouplingMode = userCouplingMode;
     }
 
-    @Override
+	@Override
     public KapuaId getReservedUserId() {
         return reservedUserId;
     }
 
-    @Override
+	@Override
     public void setReservedUserId(KapuaId reservedUserId) {
         this.reservedUserId = KapuaEid.parseKapuaId(reservedUserId);
     }
 
-    @Override
+	@Override
     public String getProtocol() {
         return protocol;
     }
 
-    @Override
+	@Override
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
 
-    @Override
+	@Override
     public String getClientIp() {
         return clientIp;
     }
 
-    @Override
+	@Override
     public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
     }
 
-    @Override
+	@Override
     public String getServerIp() {
         return serverIp;
     }
 
-    @Override
+	@Override
     public void setServerIp(String serverIp) {
         this.serverIp = serverIp;
     }

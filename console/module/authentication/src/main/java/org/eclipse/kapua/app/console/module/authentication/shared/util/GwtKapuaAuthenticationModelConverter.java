@@ -61,23 +61,23 @@ public class GwtKapuaAuthenticationModelConverter {
         CredentialQuery query = credentialFactory.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtCredentialQuery.getScopeId()));
         AndPredicate andPredicate = query.andPredicate();
 
-        if (gwtCredentialQuery.getUserId() != null && !gwtCredentialQuery.getUserId().trim().isEmpty()) {
+        if (gwtCredentialQuery.getUserId() != null && !StringUtils.isEmpty(gwtCredentialQuery.getUserId().trim())) {
             andPredicate.and(query.attributePredicate(CredentialAttributes.USER_ID, GwtKapuaCommonsModelConverter.convertKapuaId(gwtCredentialQuery.getUserId())));
         }
-        if (gwtCredentialQuery.getUsername() != null && !gwtCredentialQuery.getUsername().trim().isEmpty()) {
+        if (gwtCredentialQuery.getUsername() != null && !StringUtils.isEmpty(gwtCredentialQuery.getUsername().trim())) {
             // TODO set username predicate
         }
         if (gwtCredentialQuery.getType() != null && gwtCredentialQuery.getType() != GwtCredentialType.ALL) {
             andPredicate.and(query.attributePredicate(CredentialAttributes.CREDENTIAL_TYPE, convertCredentialType(gwtCredentialQuery.getType()), Operator.EQUAL));
         }
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? CredentialAttributes.CREDENTIAL_TYPE : loadConfig.getSortField();
-        if (sortField.equals("expirationDateFormatted")) {
+        if ("expirationDateFormatted".equals(sortField)) {
             sortField = CredentialAttributes.EXPIRATION_DATE;
-        } else if (sortField.equals("modifiedOnFormatted")) {
+        } else if ("modifiedOnFormatted".equals(sortField)) {
             sortField = CredentialAttributes.MODIFIED_ON;
         }
 
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setPredicate(andPredicate);
@@ -131,7 +131,7 @@ public class GwtKapuaAuthenticationModelConverter {
         KapuaId scopeId = GwtKapuaCommonsModelConverter.convertKapuaId(gwtCredential.getScopeId());
         Credential credential = credentialFactory.newEntity(scopeId);
         GwtKapuaCommonsModelConverter.convertUpdatableEntity(gwtCredential, credential);
-        if (gwtCredential.getId() != null && !gwtCredential.getId().trim().isEmpty()) {
+        if (gwtCredential.getId() != null && !StringUtils.isEmpty(gwtCredential.getId().trim())) {
             credential.setId(GwtKapuaCommonsModelConverter.convertKapuaId(gwtCredential.getId()));
         }
         credential.setUserId(GwtKapuaCommonsModelConverter.convertKapuaId(gwtCredential.getUserId()));

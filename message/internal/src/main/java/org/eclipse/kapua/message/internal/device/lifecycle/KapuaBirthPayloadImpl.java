@@ -28,7 +28,6 @@ public class KapuaBirthPayloadImpl extends AbstractLifecyclePayloadImpl implemen
      * @since 1.1.0
      */
     public KapuaBirthPayloadImpl() {
-        super();
     }
 
     /**

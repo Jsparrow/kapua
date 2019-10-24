@@ -94,6 +94,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The server side implementation of the RPC service.
@@ -432,7 +433,8 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
                     try {
                         tocd = configurableService.getConfigMetadata(GwtKapuaCommonsModelConverter.convertKapuaId(scopeId));
                     } catch (SubjectUnauthorizedException ex) {
-                        continue;
+                        LOG.error(ex.getMessage(), ex);
+						continue;
                     }
                     if (tocd != null) {
                         GwtConfigComponent gwtConfig = new GwtConfigComponent();
@@ -523,152 +525,153 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
         String iconResource = icon.getResource();
 
         //
-        // Check if the resource is an HTTP URL or not
-        if (iconResource != null &&
-                (iconResource.toLowerCase().startsWith("http://") ||
-                        iconResource.toLowerCase().startsWith("https://"))) {
-            File tmpFile = null;
+		// Check if the resource is an HTTP URL or not
+		// If not, all is fine.
+		//
+		if (!(iconResource != null &&
+                (StringUtils.startsWith(iconResource.toLowerCase(), "http://") ||
+                        StringUtils.startsWith(iconResource.toLowerCase(), "https://")))) {
+			return;
+		}
+		File tmpFile = null;
+		try {
+		    LOG.info("Got configuration component icon from URL: {}", iconResource);
 
-            try {
-                LOG.info("Got configuration component icon from URL: {}", iconResource);
+		    //
+		    // Tmp file name creation
+		    String systemTmpDir = System.getProperty("java.io.tmpdir");
+		    String iconResourcesTmpDir = config.getString(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_FOLDER);
+		    String tmpFileName = Base64.encodeBase64String(MessageDigest.getInstance("MD5").digest(iconResource.getBytes("UTF-8")));
 
-                //
-                // Tmp file name creation
-                String systemTmpDir = System.getProperty("java.io.tmpdir");
-                String iconResourcesTmpDir = config.getString(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_FOLDER);
-                String tmpFileName = Base64.encodeBase64String(MessageDigest.getInstance("MD5").digest(iconResource.getBytes("UTF-8")));
+		    // Conversions needed got security reasons!
+		    // On the file servlet we use the regex [0-9A-Za-z]{1,} to validate the given file id.
+		    // This validation prevents the caller of the file servlet to try to move out of the directory where the icons are stored.
+		    tmpFileName = tmpFileName.replaceAll("/", "a");
+		    tmpFileName = tmpFileName.replaceAll("\\+", "m");
+		    tmpFileName = tmpFileName.replaceAll("=", "z");
 
-                // Conversions needed got security reasons!
-                // On the file servlet we use the regex [0-9A-Za-z]{1,} to validate the given file id.
-                // This validation prevents the caller of the file servlet to try to move out of the directory where the icons are stored.
-                tmpFileName = tmpFileName.replaceAll("/", "a");
-                tmpFileName = tmpFileName.replaceAll("\\+", "m");
-                tmpFileName = tmpFileName.replaceAll("=", "z");
+		    //
+		    // Tmp dir check and creation
+		    StringBuilder tmpDirPathSb = new StringBuilder().append(systemTmpDir);
+		    if (!StringUtils.endsWith(systemTmpDir, "/")) {
+		        tmpDirPathSb.append("/");
+		    }
+		    tmpDirPathSb.append(iconResourcesTmpDir);
 
-                //
-                // Tmp dir check and creation
-                StringBuilder tmpDirPathSb = new StringBuilder().append(systemTmpDir);
-                if (!systemTmpDir.endsWith("/")) {
-                    tmpDirPathSb.append("/");
-                }
-                tmpDirPathSb.append(iconResourcesTmpDir);
+		    File tmpDir = new File(tmpDirPathSb.toString());
+		    if (!tmpDir.exists()) {
+		        LOG.info("Creating tmp dir on path: {}", tmpDir);
+		        tmpDir.mkdir();
+		    }
 
-                File tmpDir = new File(tmpDirPathSb.toString());
-                if (!tmpDir.exists()) {
-                    LOG.info("Creating tmp dir on path: {}", tmpDir);
-                    tmpDir.mkdir();
-                }
+		    //
+		    // Tmp file check and creation
+		    tmpDirPathSb.append("/")
+		            .append(tmpFileName);
+		    tmpFile = new File(tmpDirPathSb.toString());
 
-                //
-                // Tmp file check and creation
-                tmpDirPathSb.append("/")
-                        .append(tmpFileName);
-                tmpFile = new File(tmpDirPathSb.toString());
+		    // Check date of modification to avoid caching forever
+		    if (tmpFile.exists()) {
+		        long lastModifiedDate = tmpFile.lastModified();
 
-                // Check date of modification to avoid caching forever
-                if (tmpFile.exists()) {
-                    long lastModifiedDate = tmpFile.lastModified();
+		        long maxCacheTime = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_CACHE_TIME);
 
-                    long maxCacheTime = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_CACHE_TIME);
+		        if (System.currentTimeMillis() - lastModifiedDate > maxCacheTime) {
+		            LOG.info("Deleting old cached file: {}", tmpFile);
+		            tmpFile.delete();
+		        }
+		    }
 
-                    if (System.currentTimeMillis() - lastModifiedDate > maxCacheTime) {
-                        LOG.info("Deleting old cached file: {}", tmpFile);
-                        tmpFile.delete();
-                    }
-                }
+		    // If file is not cached, download it.
+		    if (!tmpFile.exists()) {
+		        // Url connection
+		        URL iconUrl = new URL(iconResource);
+		        URLConnection urlConnection = iconUrl.openConnection();
+		        urlConnection.setConnectTimeout(2000);
+		        urlConnection.setReadTimeout(2000);
 
-                // If file is not cached, download it.
-                if (!tmpFile.exists()) {
-                    // Url connection
-                    URL iconUrl = new URL(iconResource);
-                    URLConnection urlConnection = iconUrl.openConnection();
-                    urlConnection.setConnectTimeout(2000);
-                    urlConnection.setReadTimeout(2000);
+		        // Length check
+		        String contentLengthString = urlConnection.getHeaderField("Content-Length");
 
-                    // Length check
-                    String contentLengthString = urlConnection.getHeaderField("Content-Length");
+		        long maxLength = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_SIZE_MAX);
 
-                    long maxLength = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_SIZE_MAX);
+		        try {
+		            Long contentLength = Long.parseLong(contentLengthString);
+		            if (contentLength > maxLength) {
+		                LOG.warn("Content lenght exceeded ({}/{}) for URL: {}", contentLength, maxLength, iconResource);
+		                throw new IOException(new StringBuilder().append("Content-Length reported a length of ").append(contentLength).append(" which exceeds the maximum allowed size of ").append(maxLength).toString());
+		            }
+		        } catch (NumberFormatException nfe) {
+		            LOG.error(nfe.getMessage(), nfe);
+					LOG.warn("Cannot get Content-Length header!");
+		        }
 
-                    try {
-                        Long contentLength = Long.parseLong(contentLengthString);
-                        if (contentLength > maxLength) {
-                            LOG.warn("Content lenght exceeded ({}/{}) for URL: {}", contentLength, maxLength, iconResource);
-                            throw new IOException("Content-Length reported a length of " + contentLength + " which exceeds the maximum allowed size of " + maxLength);
-                        }
-                    } catch (NumberFormatException nfe) {
-                        LOG.warn("Cannot get Content-Length header!");
-                    }
+		        LOG.info("Creating file: {}", tmpFile);
+		        tmpFile.createNewFile();
 
-                    LOG.info("Creating file: {}", tmpFile);
-                    tmpFile.createNewFile();
+		        // Icon download
+		        InputStream is = urlConnection.getInputStream();
+		        try {
+		            byte[] buffer = new byte[4096];
+		            OutputStream os = new FileOutputStream(tmpFile);
+		            try {
+		                int len;
+		                while ((len = is.read(buffer)) > 0) {
+		                    os.write(buffer, 0, len);
 
-                    // Icon download
-                    InputStream is = urlConnection.getInputStream();
-                    try {
-                        byte[] buffer = new byte[4096];
-                        OutputStream os = new FileOutputStream(tmpFile);
-                        try {
-                            int len;
-                            while ((len = is.read(buffer)) > 0) {
-                                os.write(buffer, 0, len);
+		                    maxLength -= len;
 
-                                maxLength -= len;
+		                    if (maxLength < 0) {
+		                        LOG.warn("Maximum content lenght exceeded ({}) for URL: {}", maxLength, iconResource);
+		                        throw new IOException(new StringBuilder().append("Maximum content lenght exceeded (").append(maxLength).append(") for URL: ").append(iconResource).toString());
+		                    }
+		                }
+		            } finally {
+		                os.close();
+		            }
+		        } finally {
+		            is.close();
+		        }
 
-                                if (maxLength < 0) {
-                                    LOG.warn("Maximum content lenght exceeded ({}) for URL: {}", maxLength, iconResource);
-                                    throw new IOException("Maximum content lenght exceeded (" + maxLength + ") for URL: " + iconResource);
-                                }
-                            }
-                        } finally {
-                            os.close();
-                        }
-                    } finally {
-                        is.close();
-                    }
+		        LOG.info("Downloaded file: {}", tmpFile);
 
-                    LOG.info("Downloaded file: {}", tmpFile);
+		        // Image metadata content checks
+		        ImageFormat imgFormat = Sanselan.guessFormat(tmpFile);
 
-                    // Image metadata content checks
-                    ImageFormat imgFormat = Sanselan.guessFormat(tmpFile);
+		        if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_BMP) ||
+		                imgFormat.equals(ImageFormat.IMAGE_FORMAT_GIF) ||
+		                imgFormat.equals(ImageFormat.IMAGE_FORMAT_JPEG) ||
+		                imgFormat.equals(ImageFormat.IMAGE_FORMAT_PNG)) {
+		            LOG.info("Detected image format: {}", imgFormat.name);
+		        } else if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_UNKNOWN)) {
+		            LOG.error("Unknown file format for URL: {}", iconResource);
+		            throw new IOException("Unknown file format for URL: " + iconResource);
+		        } else {
+		            LOG.error("Usupported file format ({}) for URL: {}", imgFormat, iconResource);
+		            throw new IOException("Unknown file format for URL: {}" + iconResource);
+		        }
 
-                    if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_BMP) ||
-                            imgFormat.equals(ImageFormat.IMAGE_FORMAT_GIF) ||
-                            imgFormat.equals(ImageFormat.IMAGE_FORMAT_JPEG) ||
-                            imgFormat.equals(ImageFormat.IMAGE_FORMAT_PNG)) {
-                        LOG.info("Detected image format: {}", imgFormat.name);
-                    } else if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_UNKNOWN)) {
-                        LOG.error("Unknown file format for URL: {}", iconResource);
-                        throw new IOException("Unknown file format for URL: " + iconResource);
-                    } else {
-                        LOG.error("Usupported file format ({}) for URL: {}", imgFormat, iconResource);
-                        throw new IOException("Unknown file format for URL: {}" + iconResource);
-                    }
+		        LOG.info("Image validation passed for URL: {}", iconResource);
+		    } else {
+		        LOG.info("Using cached file: {}", tmpFile);
+		    }
 
-                    LOG.info("Image validation passed for URL: {}", iconResource);
-                } else {
-                    LOG.info("Using cached file: {}", tmpFile);
-                }
+		    //
+		    // Injecting new URL for the icon resource
+		    String newResourceURL = "img://console/file/icons?id=" +
+		            tmpFileName;
 
-                //
-                // Injecting new URL for the icon resource
-                String newResourceURL = "img://console/file/icons?id=" +
-                        tmpFileName;
+		    LOG.info("Injecting configuration component icon: {}", newResourceURL);
+		    icon.setResource(newResourceURL);
+		} catch (Exception e) {
+		    if (tmpFile != null && tmpFile.exists()) {
+		        tmpFile.delete();
+		    }
 
-                LOG.info("Injecting configuration component icon: {}", newResourceURL);
-                icon.setResource(newResourceURL);
-            } catch (Exception e) {
-                if (tmpFile != null && tmpFile.exists()) {
-                    tmpFile.delete();
-                }
+		    icon.setResource("Default");
 
-                icon.setResource("Default");
-
-                LOG.error("Error while checking component configuration icon. Using the default plugin icon.", e);
-            }
-        }
-        //
-        // If not, all is fine.
+		    LOG.error("Error while checking component configuration icon. Using the default plugin icon.", e);
+		}
     }
 
     @Override

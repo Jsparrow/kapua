@@ -85,15 +85,6 @@ public class DeviceManagementOperationImpl extends AbstractKapuaUpdatableEntity 
     /**
      * Constructor.
      *
-     * @since 1.0.0
-     */
-    protected DeviceManagementOperationImpl() {
-        super();
-    }
-
-    /**
-     * Constructor.
-     *
      * @param scopeId
      * @since 1.0.0
      */
@@ -101,7 +92,7 @@ public class DeviceManagementOperationImpl extends AbstractKapuaUpdatableEntity 
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param deviceManagementOperation
@@ -122,87 +113,95 @@ public class DeviceManagementOperationImpl extends AbstractKapuaUpdatableEntity 
         setInputProperties(deviceManagementOperation.getInputProperties());
     }
 
-    @Override
+	/**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    protected DeviceManagementOperationImpl() {
+    }
+
+	@Override
     public Date getStartedOn() {
         return startedOn;
     }
 
-    @Override
+	@Override
     public void setStartedOn(Date startedOn) {
         this.startedOn = startedOn;
     }
 
-    @Override
+	@Override
     public Date getEndedOn() {
         return endedOn;
     }
 
-    @Override
+	@Override
     public void setEndedOn(Date endedOn) {
         this.endedOn = endedOn;
     }
 
-    @Override
+	@Override
     public KapuaId getDeviceId() {
         return deviceId;
     }
 
-    @Override
+	@Override
     public void setDeviceId(KapuaId deviceId) {
         this.deviceId = KapuaEid.parseKapuaId(deviceId);
     }
 
-    @Override
+	@Override
     public KapuaId getOperationId() {
         return operationId;
     }
 
-    @Override
+	@Override
     public void setOperationId(KapuaId operationId) {
         this.operationId = KapuaEid.parseKapuaId(operationId);
     }
 
-    @Override
+	@Override
     public String getAppId() {
         return appId;
     }
 
-    @Override
+	@Override
     public void setAppId(String appId) {
         this.appId = appId;
     }
 
-    @Override
+	@Override
     public KapuaMethod getAction() {
         return action;
     }
 
-    @Override
+	@Override
     public void setAction(KapuaMethod action) {
         this.action = action;
     }
 
-    @Override
+	@Override
     public String getResource() {
         return resource;
     }
 
-    @Override
+	@Override
     public void setResource(String resource) {
         this.resource = resource;
     }
 
-    @Override
+	@Override
     public OperationStatus getStatus() {
         return status;
     }
 
-    @Override
+	@Override
     public void setStatus(OperationStatus status) {
         this.status = status;
     }
 
-    @Override
+	@Override
     public List<DeviceManagementOperationPropertyImpl> getInputProperties() {
         if (inputProperties == null) {
             inputProperties = new ArrayList<>();
@@ -211,13 +210,11 @@ public class DeviceManagementOperationImpl extends AbstractKapuaUpdatableEntity 
         return inputProperties;
     }
 
-    @Override
+	@Override
     public void setInputProperties(List<DeviceManagementOperationProperty> inputProperties) {
         this.inputProperties = new ArrayList<>();
         if (inputProperties != null) {
-            for (DeviceManagementOperationProperty sp : inputProperties) {
-                this.inputProperties.add(DeviceManagementOperationPropertyImpl.parse(sp));
-            }
+            inputProperties.forEach(sp -> this.inputProperties.add(DeviceManagementOperationPropertyImpl.parse(sp)));
         }
     }
 }

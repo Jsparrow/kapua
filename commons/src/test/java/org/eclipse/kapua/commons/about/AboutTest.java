@@ -15,11 +15,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class AboutTest {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(AboutTest.class);
+
+	@Test
     public void testScan1() {
         final AboutScanner scanner = AboutScanner.scan();
 
@@ -27,8 +31,6 @@ public class AboutTest {
         Assert.assertNotNull(scanner.getEntries());
         Assert.assertFalse(scanner.getEntries().isEmpty());
 
-        for (AboutEntry entry : scanner.getEntries()) {
-            System.out.println(entry.getId());
-        }
+        scanner.getEntries().forEach(entry -> logger.info(entry.getId()));
     }
 }

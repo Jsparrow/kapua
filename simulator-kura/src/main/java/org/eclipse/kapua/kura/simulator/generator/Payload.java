@@ -22,7 +22,17 @@ public class Payload {
     private final Position position;
     private final Map<String, Object> metrics;
 
-    private static ByteBuffer copy(final ByteBuffer source) {
+    public Payload(final ByteBuffer body, final Position position, final Map<String, Object> metrics) {
+        this.body = copy(body);
+        this.position = position;
+        this.metrics = metrics != null ? Collections.unmodifiableMap(new HashMap<>(metrics)) : Collections.emptyMap();
+    }
+
+	public Payload(final Map<String, Object> metrics) {
+        this(null, null, metrics);
+    }
+
+	private static ByteBuffer copy(final ByteBuffer source) {
         if (source == null || !source.hasRemaining()) {
             return null;
         }
@@ -33,25 +43,15 @@ public class Payload {
         return result.asReadOnlyBuffer();
     }
 
-    public Payload(final ByteBuffer body, final Position position, final Map<String, Object> metrics) {
-        this.body = copy(body);
-        this.position = position;
-        this.metrics = metrics != null ? Collections.unmodifiableMap(new HashMap<>(metrics)) : Collections.emptyMap();
-    }
-
-    public Payload(final Map<String, Object> metrics) {
-        this(null, null, metrics);
-    }
-
-    public ByteBuffer getBody() {
+	public ByteBuffer getBody() {
         return this.body;
     }
 
-    public Position getPosition() {
+	public Position getPosition() {
         return this.position;
     }
 
-    public Map<String, Object> getMetrics() {
+	public Map<String, Object> getMetrics() {
         return this.metrics;
     }
 }

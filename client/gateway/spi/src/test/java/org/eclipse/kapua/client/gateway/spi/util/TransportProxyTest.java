@@ -27,48 +27,19 @@ import org.junit.experimental.categories.Category;
 @Category(JUnitTests.class)
 public class TransportProxyTest {
 
-    private static final class TestListener {
-
-        private static final long DEFAULT_TIMEOUT = Long.getLong("defaultTimeout", 500L); // 500ms default
-
-        private final Semaphore lock = new Semaphore(0);
-
-        private boolean state;
-
-        public void set(boolean state) {
-            this.state = state;
-            lock.release();
-        }
-
-        public boolean get() {
-            return state;
-        }
-
-        public Boolean await(long timeoutMillis) throws InterruptedException {
-            if (lock.tryAcquire(timeoutMillis, TimeUnit.MILLISECONDS)) {
-                return state;
-            }
-            return null;
-        }
-
-        public Boolean await() throws InterruptedException {
-            return await(DEFAULT_TIMEOUT);
-        }
-    }
-
     private ExecutorService executor;
 
-    @Before
+	@Before
     public void createExecutor() {
         executor = Executors.newSingleThreadExecutor();
     }
 
-    @After
+	@After
     public void disposeExecutor() {
         executor.shutdown();
     }
 
-    @Test
+	@Test
     public void test1() throws Exception {
 
         final TestListener b1 = new TestListener();
@@ -114,22 +85,51 @@ public class TransportProxyTest {
         }
     }
 
-    @Test(expected = NullPointerException.class)
+	@Test(expected = NullPointerException.class)
     public void testFail1() {
         TransportProxy.proxy(null, executor);
     }
 
-    @Test(expected = NullPointerException.class)
+	@Test(expected = NullPointerException.class)
     public void testFail2() {
         TransportProxy.proxy(new TransportAsync(executor), null);
     }
 
-    @Test(expected = IllegalStateException.class)
+	@Test(expected = IllegalStateException.class)
     public void testFail3() {
         final TransportProxy proxy = TransportProxy.proxy(new TransportAsync(executor), executor);
         proxy.close();
         proxy.listen((state) -> {
         });
+    }
+
+	private static final class TestListener {
+
+        private static final long DEFAULT_TIMEOUT = Long.getLong("defaultTimeout", 500L); // 500ms default
+
+        private final Semaphore lock = new Semaphore(0);
+
+        private boolean state;
+
+        public void set(boolean state) {
+            this.state = state;
+            lock.release();
+        }
+
+        public boolean get() {
+            return state;
+        }
+
+        public Boolean await(long timeoutMillis) throws InterruptedException {
+            if (lock.tryAcquire(timeoutMillis, TimeUnit.MILLISECONDS)) {
+                return state;
+            }
+            return null;
+        }
+
+        public Boolean await() throws InterruptedException {
+            return await(DEFAULT_TIMEOUT);
+        }
     }
 
 }

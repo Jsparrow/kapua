@@ -24,12 +24,12 @@ import org.eclipse.kapua.app.console.module.authorization.shared.model.GwtAccess
 @RemoteServiceRelativePath("accessrole")
 public interface GwtAccessRoleService extends RemoteService {
 
-    public GwtAccessRole create(GwtXSRFToken gwtXsrfToken, GwtAccessRoleCreator gwtAccessRoleCreator)
+    GwtAccessRole create(GwtXSRFToken gwtXsrfToken, GwtAccessRoleCreator gwtAccessRoleCreator)
             throws GwtKapuaException;
 
-    public void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String accessRoleShortId)
+    void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String accessRoleShortId)
             throws GwtKapuaException;
 
-    public PagingLoadResult<GwtAccessRole> findByUserId(PagingLoadConfig loadConfig, String scopeShortId, String userShortId)
+    PagingLoadResult<GwtAccessRole> findByUserId(PagingLoadConfig loadConfig, String scopeShortId, String userShortId)
             throws GwtKapuaException;
 }

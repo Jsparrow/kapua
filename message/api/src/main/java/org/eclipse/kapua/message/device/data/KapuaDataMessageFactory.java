@@ -26,7 +26,7 @@ public interface KapuaDataMessageFactory extends KapuaObjectFactory {
      * @return The newly instantiated {@link KapuaDataMessage}
      * @since 1.1.0
      */
-    public KapuaDataMessage newKapuaDataMessage();
+    KapuaDataMessage newKapuaDataMessage();
 
     /**
      * Instantiates a new {@link KapuaDataChannel}

@@ -99,6 +99,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 // Implementation of Gherkin steps used to test miscellaneous Shiro 
 // authorization functionality.
@@ -231,9 +232,7 @@ public class AuthorizationServiceSteps extends TestBase {
         Map<String, Object> valueMap = new HashMap<>();
         KapuaId accId = getKapuaId(accountId);
 
-        for (CucConfig config : cucConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        cucConfigs.forEach(config -> config.addConfigToMap(valueMap));
 
         primeException();
         try {
@@ -554,9 +553,7 @@ public class AuthorizationServiceSteps extends TestBase {
         assertNotNull(permissionList);
         assertNotEquals(0, permissionList.getSize());
         assertEquals(actLst.size(), permissionList.getSize());
-        for (RolePermission tmpPerm : permissionList.getItems()) {
-            assertTrue(actLst.contains(tmpPerm.getPermission().getAction()));
-        }
+        permissionList.getItems().forEach(tmpPerm -> assertTrue(actLst.contains(tmpPerm.getPermission().getAction())));
     }
 
     @Then("^The correct role entry was found$")
@@ -908,13 +905,12 @@ public class AuthorizationServiceSteps extends TestBase {
         assertNotNull(domain.getId());
         assertNotNull(domainCreator);
         assertEquals(domainCreator.getName(), domain.getName());
-        if (domainCreator.getActions() != null) {
-            assertNotNull(domain.getActions());
-            assertEquals(domainCreator.getActions().size(), domain.getActions().size());
-            for (Actions a : domainCreator.getActions()) {
-                assertTrue(domain.getActions().contains(a));
-            }
-        }
+        if (domainCreator.getActions() == null) {
+			return;
+		}
+		assertNotNull(domain.getActions());
+		assertEquals(domainCreator.getActions().size(), domain.getActions().size());
+		domainCreator.getActions().forEach(a -> assertTrue(domain.getActions().contains(a)));
     }
 
     @Then("^The domain matches the parameters$")
@@ -929,12 +925,11 @@ public class AuthorizationServiceSteps extends TestBase {
         if (tmpDom.getName() != null) {
             assertEquals(tmpDom.getName(), domain.getName());
         }
-        if (tmpDom.getActionSet() != null) {
-            assertEquals(tmpDom.getActionSet().size(), domain.getActions().size());
-            for (Actions a : tmpDom.getActionSet()) {
-                assertTrue(domain.getActions().contains(a));
-            }
-        }
+        if (tmpDom.getActionSet() == null) {
+			return;
+		}
+		assertEquals(tmpDom.getActionSet().size(), domain.getActions().size());
+		tmpDom.getActionSet().forEach(a -> assertTrue(domain.getActions().contains(a)));
     }
 
     @Then("^(\\d+) more domains (?:was|were) created$")
@@ -1162,7 +1157,7 @@ public class AuthorizationServiceSteps extends TestBase {
     public void checkGroupName(String name) {
 
         Group group = (Group) stepData.get("Group");
-        assertEquals(group.getName(), name.trim());
+        assertEquals(group.getName(), StringUtils.trim(name));
     }
 
     @Then("^The group matches the creator$")
@@ -1218,7 +1213,7 @@ public class AuthorizationServiceSteps extends TestBase {
     public void createPermissionsForDomain(String permList) {
 
         // Split the parameter string and make sure there is at least one item
-        String[] tmpList = permList.toLowerCase().split(",");
+        String[] tmpList = StringUtils.lowerCase(permList).split(",");
         assertNotNull(tmpList);
         assertNotEquals(0, tmpList.length);
 
@@ -1230,7 +1225,7 @@ public class AuthorizationServiceSteps extends TestBase {
         Domain curDomain = (Domain) stepData.get("Domain");
 
         for (String perm : tmpList) {
-            switch (perm.trim()) {
+            switch (StringUtils.trim(perm)) {
                 case "read":
                     permissions.add(permissionFactory.newPermission(curDomain.getDomain(), Actions.read, currId));
                     break;
@@ -1998,7 +1993,7 @@ public class AuthorizationServiceSteps extends TestBase {
     public void accessRoleWithNameIsFinded(String roleName) throws Exception {
 
         try {
-            primeException();;
+            primeException();
             RoleQuery roleQuery = roleFactory.newQuery(getCurrentScopeId());
             roleQuery.setPredicate(roleQuery.attributePredicate(RoleAttributes.NAME, roleName));
             RoleListResult roleList = roleService.query(roleQuery);
@@ -2015,7 +2010,7 @@ public class AuthorizationServiceSteps extends TestBase {
     @And("^I create the roles$")
     public void iCreateTheRoles(List<CucRole> roleNames) throws Exception {
         RoleCreator roleCreator = roleFactory.newCreator(getCurrentScopeId());
-        ArrayList<Role> roleArrayList = new ArrayList<Role>();
+        ArrayList<Role> roleArrayList = new ArrayList<>();
         stepData.remove("RoleList");
         Role role = null;
         for (CucRole roleName : roleNames) {

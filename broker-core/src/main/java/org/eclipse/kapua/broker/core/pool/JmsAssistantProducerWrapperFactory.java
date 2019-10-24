@@ -42,7 +42,7 @@ public class JmsAssistantProducerWrapperFactory extends BasePooledObjectFactory<
 
     @Override
     public PooledObject<JmsAssistantProducerWrapper> wrap(JmsAssistantProducerWrapper producerWrapper) {
-        return new DefaultPooledObject<JmsAssistantProducerWrapper>(producerWrapper);
+        return new DefaultPooledObject<>(producerWrapper);
     }
 
     /**

@@ -24,5 +24,5 @@ public interface SettingKey {
      * 
      * @return
      */
-    public String key();
+    String key();
 }

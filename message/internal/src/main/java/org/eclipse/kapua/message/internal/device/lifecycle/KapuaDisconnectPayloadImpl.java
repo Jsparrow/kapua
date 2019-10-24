@@ -27,7 +27,6 @@ public class KapuaDisconnectPayloadImpl extends AbstractLifecyclePayloadImpl imp
      * @since 1.1.0
      */
     public KapuaDisconnectPayloadImpl() {
-        super();
     }
 
     /**

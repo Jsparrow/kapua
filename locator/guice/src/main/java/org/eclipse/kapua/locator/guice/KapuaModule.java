@@ -37,13 +37,14 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaModule extends AbstractModule {
 
@@ -69,7 +70,7 @@ public class KapuaModule extends AbstractModule {
     protected void configure() {
         try {
             // Find locator configuration file
-            List<URL> locatorConfigurations = Arrays.asList(ResourceUtils.getResource(resourceName));
+            List<URL> locatorConfigurations = Collections.singletonList(ResourceUtils.getResource(resourceName));
             if (locatorConfigurations.isEmpty()) {
                 return;
             }
@@ -108,7 +109,7 @@ public class KapuaModule extends AbstractModule {
 
                 boolean isClassBound = false;
 
-                final String trimmedServiceLine = providedName.trim();
+                final String trimmedServiceLine = StringUtils.trim(providedName);
                 Class<?> kapuaObject = Class.forName(trimmedServiceLine, !initialize, classLoader);
 
                 // When the provided object is a service ...

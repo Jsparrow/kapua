@@ -26,7 +26,7 @@ public interface TransactionManager {
      * @param manager
      * @throws KapuaException
      */
-    public void commit(EntityManager manager) throws KapuaException;
+    void commit(EntityManager manager) throws KapuaException;
 
     /**
      * Create the transaction
@@ -34,6 +34,6 @@ public interface TransactionManager {
      * @param manager
      * @throws KapuaException
      */
-    public void beginTransaction(EntityManager manager) throws KapuaException;
+    void beginTransaction(EntityManager manager) throws KapuaException;
 
 }

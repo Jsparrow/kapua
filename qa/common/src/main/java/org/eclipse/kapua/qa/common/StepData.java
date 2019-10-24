@@ -63,10 +63,7 @@ public class StepData {
         List<String> keys = new ArrayList<>();
 
         Set<String> setOfKeys = stepDataMap.keySet();
-        Iterator<String> keyIterator = setOfKeys.iterator();
-        while (keyIterator.hasNext()) {
-            keys.add(keyIterator.next());
-        }
+        setOfKeys.forEach(keys::add);
 
         return keys;
     }

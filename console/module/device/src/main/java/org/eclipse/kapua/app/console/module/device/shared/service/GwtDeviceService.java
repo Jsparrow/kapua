@@ -40,7 +40,7 @@ public interface GwtDeviceService extends RemoteService {
      * @param deviceIdString
      * @return
      */
-    public GwtDevice findDevice(String scopeIdString, String deviceIdString)
+    GwtDevice findDevice(String scopeIdString, String deviceIdString)
             throws GwtKapuaException;
 
     /**
@@ -50,7 +50,7 @@ public interface GwtDeviceService extends RemoteService {
      * @param gwtDeviceQuery
      * @return
      */
-    public PagingLoadResult<GwtDevice> query(PagingLoadConfig loadConfig, GwtDeviceQuery gwtDeviceQuery)
+    PagingLoadResult<GwtDevice> query(PagingLoadConfig loadConfig, GwtDeviceQuery gwtDeviceQuery)
             throws GwtKapuaException;
 
     /**
@@ -59,7 +59,7 @@ public interface GwtDeviceService extends RemoteService {
      * @param gwtDeviceQuery
      * @return
      */
-    public List<GwtDevice> query(GwtDeviceQuery gwtDeviceQuery)
+    List<GwtDevice> query(GwtDeviceQuery gwtDeviceQuery)
             throws GwtKapuaException;
 
     /**
@@ -70,7 +70,7 @@ public interface GwtDeviceService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtDevice createDevice(GwtXSRFToken xsrfToken, GwtDeviceCreator gwtDeviceCreator)
+    GwtDevice createDevice(GwtXSRFToken xsrfToken, GwtDeviceCreator gwtDeviceCreator)
             throws GwtKapuaException;
 
     /**
@@ -80,7 +80,7 @@ public interface GwtDeviceService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtDevice updateAttributes(GwtXSRFToken xsfrToken, GwtDevice gwtDevice)
+    GwtDevice updateAttributes(GwtXSRFToken xsfrToken, GwtDevice gwtDevice)
             throws GwtKapuaException;
 
     /**
@@ -93,10 +93,10 @@ public interface GwtDeviceService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig, GwtDevice gwtDevice, Date startDate, Date endDate)
+    PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig, GwtDevice gwtDevice, Date startDate, Date endDate)
             throws GwtKapuaException;
 
-    public ListLoadResult<GwtGroupedNVPair> findDeviceProfile(String scopeIdString, String clientId)
+    ListLoadResult<GwtGroupedNVPair> findDeviceProfile(String scopeIdString, String clientId)
             throws GwtKapuaException;
 
     /**
@@ -106,7 +106,7 @@ public interface GwtDeviceService extends RemoteService {
      * @param scopeIdString
      * @param clientId
      */
-    public void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)
+    void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)
             throws GwtKapuaException;
 
     /**
@@ -117,7 +117,7 @@ public interface GwtDeviceService extends RemoteService {
      * @param deviceIdString
      * @param tagIdString
      */
-    public void addDeviceTag(GwtXSRFToken xsrfToken, String scopeIdString, String deviceIdString, String tagIdString) throws GwtKapuaException;
+    void addDeviceTag(GwtXSRFToken xsrfToken, String scopeIdString, String deviceIdString, String tagIdString) throws GwtKapuaException;
 
     /**
      * Removes the association between the Tag and the Device
@@ -127,12 +127,12 @@ public interface GwtDeviceService extends RemoteService {
      * @param deviceId
      * @param tagId
      */
-    public void deleteDeviceTag(GwtXSRFToken xsfrToken, String scopeIdString, String deviceId, String tagId) throws GwtKapuaException;
+    void deleteDeviceTag(GwtXSRFToken xsfrToken, String scopeIdString, String deviceId, String tagId) throws GwtKapuaException;
 
     /**
      * Return Maps Tile Endpoint
      */
-    public String getTileEndpoint()
+    String getTileEndpoint()
             throws GwtKapuaException;
 
     /**
@@ -140,6 +140,6 @@ public interface GwtDeviceService extends RemoteService {
      *
      * @return whether the Map tab is enabled or not
      */
-    public boolean isMapEnabled()
+    boolean isMapEnabled()
             throws GwtKapuaException;
 }

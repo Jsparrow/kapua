@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.DeviceStatus;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Data object used in Gherkin to input Device parameters.
@@ -68,7 +69,7 @@ public class CucDevice {
         }
 
         if (status != null) {
-            switch (status.trim().toUpperCase()) {
+            switch (StringUtils.upperCase(status.trim())) {
             case "DISABLED":
                 kStatus = DeviceStatus.DISABLED;
                 break;

@@ -23,9 +23,6 @@ import org.eclipse.kapua.model.query.KapuaQuery;
  */
 public class KapuaEntityAttributes {
 
-    protected KapuaEntityAttributes() {
-    }
-
     /**
      * Predicate for field {@link KapuaEntity#getScopeId()}
      *
@@ -33,25 +30,28 @@ public class KapuaEntityAttributes {
      */
     public static final String SCOPE_ID = "scopeId";
 
-    /**
+	/**
      * Predicate for field {@link KapuaEntity#getId()}
      *
      * @since 1.0.0
      */
     public static final String ENTITY_ID = "id";
 
-    /**
+	/**
      * Predicate for field {@link KapuaEntity#getCreatedOn()}
      *
      * @since 1.0.0
      */
     public static final String CREATED_ON = "createdOn";
 
-    /**
+	/**
      * Predicate for field {@link KapuaEntity#getCreatedBy()}
      *
      * @since 1.0.0
      */
     public static final String CREATED_BY = "createdBy";
+
+	protected KapuaEntityAttributes() {
+    }
 
 }

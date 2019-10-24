@@ -45,46 +45,7 @@ public class FuseChannel extends AbstractMqttChannel {
 
     private static final Logger logger = LoggerFactory.getLogger(FuseChannel.class);
 
-    public static class Builder extends AbstractMqttChannel.Builder<Builder> {
-
-        @Override
-        protected Builder builder() {
-            return this;
-        }
-
-        @Override
-        public FuseChannel build() throws Exception {
-
-            final URI broker = Objects.requireNonNull(broker(), "Broker must be set");
-            final String clientId = Strings.nonEmptyText(clientId(), "clientId");
-
-            final MqttNamespace namespace = Objects.requireNonNull(namespace(), "Namespace must be set");
-            final BinaryPayloadCodec codec = Objects.requireNonNull(codec(), "Codec must be set");
-
-            final MQTT mqtt = new MQTT();
-            mqtt.setCleanSession(false);
-            mqtt.setHost(broker);
-            mqtt.setClientId(clientId);
-
-            final Object credentials = credentials();
-            if (credentials == null) {
-                // none
-            } else if (credentials instanceof UserAndPassword) {
-                final UserAndPassword userAndPassword = (UserAndPassword) credentials;
-                mqtt.setUserName(userAndPassword.getUsername());
-                mqtt.setPassword(userAndPassword.getPasswordAsString());
-            } else {
-                throw new IllegalStateException(
-                        String.format("Unknown credentials type: %s", credentials.getClass().getName()));
-            }
-
-            final CallbackConnection connection = mqtt.callbackConnection();
-            final FuseChannel result = new FuseChannel(clientId, namespace, codec, connection);
-            return result;
-        }
-    }
-
-    private final ExtendedListener listener = new ExtendedListener() {
+	private final ExtendedListener listener = new ExtendedListener() {
 
         @Override
         public void onPublish(final UTF8Buffer topic, final Buffer body, final Runnable ack) {
@@ -122,13 +83,13 @@ public class FuseChannel extends AbstractMqttChannel {
         }
     };
 
-    private final CallbackConnection connection;
+	private final CallbackConnection connection;
 
-    private final Map<String, MqttMessageHandler> subscriptions = new HashMap<>();
+	private final Map<String, MqttMessageHandler> subscriptions = new HashMap<>();
 
-    private Context context;
+	private Context context;
 
-    private FuseChannel(final String clientId, final MqttNamespace namespace, final BinaryPayloadCodec codec, final CallbackConnection connection) {
+	private FuseChannel(final String clientId, final MqttNamespace namespace, final BinaryPayloadCodec codec, final CallbackConnection connection) {
 
         super(codec, namespace, clientId);
 
@@ -136,33 +97,33 @@ public class FuseChannel extends AbstractMqttChannel {
         this.connection.listener(listener);
     }
 
-    protected void handleConnected() {
+	protected void handleConnected() {
         context.notifyConnected();
     }
 
-    protected void handleDisconnected() {
+	protected void handleDisconnected() {
         context.notifyDisconnected();
     }
 
-    @Override
+	@Override
     public void handleInit(final Context context) {
         this.context = context;
         connection.connect(new Promise<>());
     }
 
-    @Override
+	@Override
     public void handleClose(final Context context) {
         connection.disconnect(null);
     }
 
-    @Override
+	@Override
     public CompletionStage<?> publishMqtt(final String topic, final ByteBuffer payload) {
         final CompletableFuture<Void> future = new CompletableFuture<>();
         connection.publish(Buffer.utf8(topic), new Buffer(payload), QoS.AT_LEAST_ONCE, false, Callbacks.asCallback(future));
         return future;
     }
 
-    @Override
+	@Override
     protected CompletionStage<?> subscribeMqtt(final String topic, final MqttMessageHandler messageHandler) {
         synchronized (this) {
             subscriptions.put(topic, messageHandler);
@@ -177,7 +138,7 @@ public class FuseChannel extends AbstractMqttChannel {
         }
     }
 
-    @Override
+	@Override
     protected void unsubscribeMqtt(final Set<String> mqttTopics) {
 
         logger.info("Unsubscribe from: {}", mqttTopics);
@@ -185,17 +146,13 @@ public class FuseChannel extends AbstractMqttChannel {
         final List<UTF8Buffer> topics = new ArrayList<>(mqttTopics.size());
 
         synchronized (this) {
-            for (final String topic : mqttTopics) {
-                if (subscriptions.remove(topic) != null) {
-                    topics.add(new UTF8Buffer(topic));
-                }
-            }
+            mqttTopics.stream().filter((final String topic) -> subscriptions.remove(topic) != null).forEach((final String topic) -> topics.add(new UTF8Buffer(topic)));
         }
 
         connection.unsubscribe(topics.toArray(new UTF8Buffer[topics.size()]), new Promise<>());
     }
 
-    protected void handleMessageArrived(final String topic, final Buffer payload, final Callback<Callback<Void>> ack) {
+	protected void handleMessageArrived(final String topic, final Buffer payload, final Callback<Callback<Void>> ack) {
         final MqttMessageHandler handler;
 
         synchronized (this) {
@@ -209,6 +166,45 @@ public class FuseChannel extends AbstractMqttChannel {
             } catch (Exception e) {
                 ack.onFailure(e);
             }
+        }
+    }
+
+    public static class Builder extends AbstractMqttChannel.Builder<Builder> {
+
+        @Override
+        protected Builder builder() {
+            return this;
+        }
+
+        @Override
+        public FuseChannel build() throws Exception {
+
+            final URI broker = Objects.requireNonNull(broker(), "Broker must be set");
+            final String clientId = Strings.nonEmptyText(clientId(), "clientId");
+
+            final MqttNamespace namespace = Objects.requireNonNull(namespace(), "Namespace must be set");
+            final BinaryPayloadCodec codec = Objects.requireNonNull(codec(), "Codec must be set");
+
+            final MQTT mqtt = new MQTT();
+            mqtt.setCleanSession(false);
+            mqtt.setHost(broker);
+            mqtt.setClientId(clientId);
+
+            final Object credentials = credentials();
+            if (credentials == null) {
+                // none
+            } else if (credentials instanceof UserAndPassword) {
+                final UserAndPassword userAndPassword = (UserAndPassword) credentials;
+                mqtt.setUserName(userAndPassword.getUsername());
+                mqtt.setPassword(userAndPassword.getPasswordAsString());
+            } else {
+                throw new IllegalStateException(
+                        String.format("Unknown credentials type: %s", credentials.getClass().getName()));
+            }
+
+            final CallbackConnection connection = mqtt.callbackConnection();
+            final FuseChannel result = new FuseChannel(clientId, namespace, codec, connection);
+            return result;
         }
     }
 

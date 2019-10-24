@@ -17,14 +17,18 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class KapuaEidTest {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(KapuaEidTest.class);
+
+	@Test
     public void testIdOne() {
         KapuaEid one = new KapuaEid(BigInteger.ONE);
-        System.out.println(one.toCompactId());
+        logger.info(one.toCompactId());
         Assert.assertEquals("AQ", one.toCompactId());
     }
 }

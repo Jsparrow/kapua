@@ -137,11 +137,11 @@ public class DomainRegistryServiceImpl extends AbstractKapuaService implements D
         }
         LOGGER.info("DomainRegistryService: received kapua event from {}, operation {}", kapuaEvent.getService(), kapuaEvent.getOperation());
         if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteDomainByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteDomainByAccountId(kapuaEvent.getEntityId());
         }
     }
 
-    private void deleteDomainByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteDomainByAccountId(KapuaId accountId) throws KapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         DomainFactory domainFactory = locator.getFactory(DomainFactory.class);
 

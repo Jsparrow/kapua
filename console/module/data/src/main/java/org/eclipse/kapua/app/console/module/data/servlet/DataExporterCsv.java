@@ -42,7 +42,7 @@ public class DataExporterCsv extends DataExporter {
 
         response.setContentType("text/csv");
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + URLEncoder.encode(topicOrDevice, "UTF-8") + "_data.csv");
+        response.setHeader("Content-Disposition", new StringBuilder().append("attachment; filename*=UTF-8''").append(URLEncoder.encode(topicOrDevice, "UTF-8")).append("_data.csv").toString());
         response.setHeader("Cache-Control", "no-transform, max-age=0");
 
         writer = new CSVWriter(response.getWriter());

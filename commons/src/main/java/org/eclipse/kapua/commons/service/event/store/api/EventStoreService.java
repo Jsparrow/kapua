@@ -34,7 +34,7 @@ public interface EventStoreService extends KapuaEntityService<EventStoreRecord, 
      * @return
      * @throws KapuaException
      */
-    public EventStoreRecord find(KapuaId id)
+    EventStoreRecord find(KapuaId id)
             throws KapuaException;
 
     /**
@@ -45,8 +45,7 @@ public interface EventStoreService extends KapuaEntityService<EventStoreRecord, 
      * @throws KapuaException
      * @since 1.0.0
      */
-    @Override
-    public EventStoreRecordListResult query(KapuaQuery<EventStoreRecord> query)
+    @Override EventStoreRecordListResult query(KapuaQuery<EventStoreRecord> query)
             throws KapuaException;
 
 }

@@ -19,11 +19,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class CryptoUtilTest extends Assert {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(CryptoUtilTest.class);
+
+	@Test
     public void testConstructor() throws Exception {
         Constructor<CryptoUtil> crypto = CryptoUtil.class.getDeclaredConstructor();
         crypto.setAccessible(true);
@@ -49,6 +53,7 @@ public class CryptoUtilTest extends Assert {
                 CryptoUtil.sha1Hash(falseStrings[i]);
                 fail("Exception expected for: " + falseStrings[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -57,7 +62,8 @@ public class CryptoUtilTest extends Assert {
             try {
                 CryptoUtil.sha1Hash(permittedStrings[i]);
             } catch (Exception ex) {
-                fail("No exception expected for 'test string'");
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for 'test string'");
             }
         }
     }
@@ -81,6 +87,7 @@ public class CryptoUtilTest extends Assert {
                 CryptoUtil.encodeBase64(falseStrings[i]);
                 fail("Exception expected for: " + falseStrings[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -90,7 +97,8 @@ public class CryptoUtilTest extends Assert {
             try {
                 CryptoUtil.encodeBase64(permittedStrings[i]);
             } catch (Exception ex) {
-                fail("No exception expected for 'test string'");
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for 'test string'");
             }
         }
     }
@@ -114,6 +122,7 @@ public class CryptoUtilTest extends Assert {
                 CryptoUtil.decodeBase64(falseStrings[i]);
                 fail("Exception expected for: " + falseStrings[i]);
             } catch (Exception ex) {
+				logger.error(ex.getMessage(), ex);
                 // Expected
             }
         }
@@ -123,7 +132,8 @@ public class CryptoUtilTest extends Assert {
             try {
                 CryptoUtil.decodeBase64(permittedStrings[i]);
             } catch (Exception ex) {
-                fail("No exception expected for 'test string'");
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for 'test string'");
             }
         }
     }

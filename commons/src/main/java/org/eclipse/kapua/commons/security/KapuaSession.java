@@ -66,67 +66,6 @@ public class KapuaSession implements Serializable {
      * Default constructor
      */
     public KapuaSession() {
-        super();
-    }
-
-    private KapuaSession(KapuaId scopeId, KapuaId userId, boolean trustedMode) {
-        this.scopeId = scopeId;
-        this.userId = userId;
-        this.trustedMode = trustedMode;
-    }
-
-    /**
-     * Creates a {@link KapuaSession} copy with trusted mode flag set to true (to be used only from trusted classes)
-     *
-     * @return
-     */
-    public static KapuaSession createFrom() {
-        if (isCallerClassTrusted()) {
-            KapuaSession kapuaSession = KapuaSecurityUtils.getSession();
-            KapuaSession kapuaSessionCopy = new KapuaSession(kapuaSession.getAccessToken(),
-                    kapuaSession.getScopeId(),
-                    kapuaSession.getUserId());
-            kapuaSessionCopy.trustedMode = true;
-            return kapuaSessionCopy;
-        } else {
-            // TODO to be replaced with a security exception
-            throw new RuntimeException("Method not allowed for the caller class");
-        }
-    }
-
-    /**
-     * Creates a new {@link KapuaSession} with trusted mode flag set to true (to be used only from trusted classes)
-     *
-     * @return
-     */
-    public static KapuaSession createFrom(KapuaId scopeId, KapuaId userId) {
-        if (isCallerClassTrusted()) {
-            KapuaSession session = new KapuaSession(scopeId, userId, true);
-            KapuaSecurityUtils.setSession(session);
-            return session;
-        } else {
-            // TODO to be replaced with a security exception
-            throw new RuntimeException("Method not allowed for the caller class");
-        }
-    }
-
-    /**
-     * Check if the caller is included in the caller list allowed to change the trusted mode flag.
-     *
-     * @return
-     */
-    private static boolean isCallerClassTrusted() {
-        // the stack trace should be like
-        // 0 ---> Thread
-        // 1 ---> KapuaSession -> isCallerClassTrusted()
-        // 2 ---> KapuaSession -> createFrom()
-        // 3 ---> "outside" caller class that should be checked
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        if (stackTraceElements != null && stackTraceElements.length > 4) {
-            return TRUSTED_CLASSES.contains(MessageFormat.format(TRUST_CLASS_METHOD_PATTERN, stackTraceElements[3].getClassName(), stackTraceElements[3].getMethodName()));
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -145,7 +84,7 @@ public class KapuaSession implements Serializable {
         this.userId = userId;
     }
 
-    /**
+	/**
      * Constructs a {@link KapuaSession} with given parameter
      *
      * @param principal
@@ -155,7 +94,67 @@ public class KapuaSession implements Serializable {
         userId = principal.getUserId();
     }
 
-    /**
+	private KapuaSession(KapuaId scopeId, KapuaId userId, boolean trustedMode) {
+        this.scopeId = scopeId;
+        this.userId = userId;
+        this.trustedMode = trustedMode;
+    }
+
+	/**
+     * Creates a {@link KapuaSession} copy with trusted mode flag set to true (to be used only from trusted classes)
+     *
+     * @return
+     */
+    public static KapuaSession createFrom() {
+        if (isCallerClassTrusted()) {
+            KapuaSession kapuaSession = KapuaSecurityUtils.getSession();
+            KapuaSession kapuaSessionCopy = new KapuaSession(kapuaSession.getAccessToken(),
+                    kapuaSession.getScopeId(),
+                    kapuaSession.getUserId());
+            kapuaSessionCopy.trustedMode = true;
+            return kapuaSessionCopy;
+        } else {
+            // TODO to be replaced with a security exception
+            throw new RuntimeException("Method not allowed for the caller class");
+        }
+    }
+
+	/**
+     * Creates a new {@link KapuaSession} with trusted mode flag set to true (to be used only from trusted classes)
+     *
+     * @return
+     */
+    public static KapuaSession createFrom(KapuaId scopeId, KapuaId userId) {
+        if (isCallerClassTrusted()) {
+            KapuaSession session = new KapuaSession(scopeId, userId, true);
+            KapuaSecurityUtils.setSession(session);
+            return session;
+        } else {
+            // TODO to be replaced with a security exception
+            throw new RuntimeException("Method not allowed for the caller class");
+        }
+    }
+
+	/**
+     * Check if the caller is included in the caller list allowed to change the trusted mode flag.
+     *
+     * @return
+     */
+    private static boolean isCallerClassTrusted() {
+        // the stack trace should be like
+        // 0 ---> Thread
+        // 1 ---> KapuaSession -> isCallerClassTrusted()
+        // 2 ---> KapuaSession -> createFrom()
+        // 3 ---> "outside" caller class that should be checked
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if (stackTraceElements != null && stackTraceElements.length > 4) {
+            return TRUSTED_CLASSES.contains(MessageFormat.format(TRUST_CLASS_METHOD_PATTERN, stackTraceElements[3].getClassName(), stackTraceElements[3].getMethodName()));
+        } else {
+            return false;
+        }
+    }
+
+	/**
      * Get the access token
      *
      * @return
@@ -164,7 +163,7 @@ public class KapuaSession implements Serializable {
         return accessToken;
     }
 
-    /**
+	/**
      * Get the scope identifier
      *
      * @return
@@ -173,7 +172,7 @@ public class KapuaSession implements Serializable {
         return scopeId;
     }
 
-    /**
+	/**
      * Get the user identifier
      *
      * @return
@@ -182,7 +181,7 @@ public class KapuaSession implements Serializable {
         return userId;
     }
 
-    /**
+	/**
      * Set the trusted mode status.<br>
      * If true every rights check will be skipped, in other word <b>the user is trusted so he is allowed to execute every operation</b> defined in the system.
      */
@@ -190,7 +189,7 @@ public class KapuaSession implements Serializable {
         this.trustedMode = trustedMode;
     }
 
-    /**
+	/**
      * Return the trusted mode status.<br>
      * If true every rights check will be skipped, in other word <b>the user is trusted so he is allowed to execute every operation</b> defined in the system.
      *

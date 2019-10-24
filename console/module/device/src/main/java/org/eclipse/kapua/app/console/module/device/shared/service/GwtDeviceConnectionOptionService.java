@@ -23,6 +23,6 @@ import org.eclipse.kapua.app.console.module.device.shared.model.GwtDeviceConnect
 @RemoteServiceRelativePath("deviceConnectionOption")
 public interface GwtDeviceConnectionOptionService extends RemoteService {
 
-    public GwtDeviceConnectionOption update(GwtXSRFToken gwtXsrfToken, GwtDeviceConnectionOption gwtDeviceConnectionOption) throws GwtKapuaException;
+    GwtDeviceConnectionOption update(GwtXSRFToken gwtXsrfToken, GwtDeviceConnectionOption gwtDeviceConnectionOption) throws GwtKapuaException;
 
 }

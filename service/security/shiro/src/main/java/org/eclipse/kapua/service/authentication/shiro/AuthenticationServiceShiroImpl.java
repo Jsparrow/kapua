@@ -102,21 +102,6 @@ import org.slf4j.MDC;
 public class AuthenticationServiceShiroImpl implements AuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationServiceShiroImpl.class);
-    private final KapuaLocator locator = KapuaLocator.getInstance();
-    private final UserService userService = locator.getService(UserService.class);
-    private final CredentialService credentialService = locator.getService(CredentialService.class);
-    private final AccessTokenService accessTokenService = locator.getService(AccessTokenService.class);
-    private final AccessTokenFactory accessTokenFactory = locator.getFactory(AccessTokenFactory.class);
-    private final CertificateService certificateService = locator.getService(CertificateService.class);
-    private final CertificateFactory certificateFactory = locator.getFactory(CertificateFactory.class);
-    private final AccessInfoService accessInfoService = locator.getService(AccessInfoService.class);
-    private final AccessRoleService accessRoleService = locator.getService(AccessRoleService.class);
-    private final AccessRoleFactory accessRoleFactory = locator.getFactory(AccessRoleFactory.class);
-    private final RolePermissionService rolePermissionService = locator.getService(RolePermissionService.class);
-    private final RolePermissionFactory rolePermissionFactory = locator.getFactory(RolePermissionFactory.class);
-    private final AccessPermissionService accessPermissionService = locator.getService(AccessPermissionService.class);
-    private final AccessPermissionFactory accessPermissionFactory = locator.getFactory(AccessPermissionFactory.class);
-
     static {
         // Make the SecurityManager instance available to the entire application:
         Collection<Realm> realms = new ArrayList<>();
@@ -149,7 +134,22 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         }
     }
 
-    @Override
+	private final KapuaLocator locator = KapuaLocator.getInstance();
+	private final UserService userService = locator.getService(UserService.class);
+	private final CredentialService credentialService = locator.getService(CredentialService.class);
+	private final AccessTokenService accessTokenService = locator.getService(AccessTokenService.class);
+	private final AccessTokenFactory accessTokenFactory = locator.getFactory(AccessTokenFactory.class);
+	private final CertificateService certificateService = locator.getService(CertificateService.class);
+	private final CertificateFactory certificateFactory = locator.getFactory(CertificateFactory.class);
+	private final AccessInfoService accessInfoService = locator.getService(AccessInfoService.class);
+	private final AccessRoleService accessRoleService = locator.getService(AccessRoleService.class);
+	private final AccessRoleFactory accessRoleFactory = locator.getFactory(AccessRoleFactory.class);
+	private final RolePermissionService rolePermissionService = locator.getService(RolePermissionService.class);
+	private final RolePermissionFactory rolePermissionFactory = locator.getFactory(RolePermissionFactory.class);
+	private final AccessPermissionService accessPermissionService = locator.getService(AccessPermissionService.class);
+	private final AccessPermissionFactory accessPermissionFactory = locator.getFactory(AccessPermissionFactory.class);
+
+	@Override
     public AccessToken login(LoginCredentials loginCredentials) throws KapuaException {
 
         checkCurrentSubjectNotAuthenticated();
@@ -198,7 +198,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return accessToken;
     }
 
-    @Override
+	@Override
     public void authenticate(SessionCredentials sessionCredentials) throws KapuaException {
         checkCurrentSubjectNotAuthenticated();
 
@@ -255,7 +255,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
 
     }
 
-    @Override
+	@Override
     public void verifyCredentials(LoginCredentials loginCredentials) throws KapuaException {
         //
         // Parse login credentials
@@ -291,7 +291,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         }
     }
 
-    @Override
+	@Override
     public void logout()
             throws KapuaException {
         Subject currentUser = SecurityUtils.getSubject();
@@ -308,6 +308,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
             }
             currentUser.logout();
         } catch (KapuaEntityNotFoundException kenfe) {
+			LOG.error(kenfe.getMessage(), kenfe);
             // Exception should not be propagated it is sometimes expected behaviour
         } catch (Exception e) {
             throw KapuaException.internalError(e);
@@ -316,7 +317,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         }
     }
 
-    @Override
+	@Override
     public AccessToken findAccessToken(String tokenId) throws KapuaException {
         AccessToken accessToken = null;
         try {
@@ -335,7 +336,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return accessToken;
     }
 
-    @Override
+	@Override
     public AccessToken refreshAccessToken(String tokenId, String refreshToken) throws KapuaException {
         Date now = new Date();
         AccessToken expiredAccessToken = KapuaSecurityUtils.doPrivileged(() -> findAccessToken(tokenId));
@@ -349,6 +350,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
             try {
                 accessTokenService.invalidate(expiredAccessToken.getScopeId(), expiredAccessToken.getId());
             } catch (KapuaEntityNotFoundException kenfe) {
+				LOG.error(kenfe.getMessage(), kenfe);
                 // Exception should not be propagated it is sometimes expected behaviour
             }
             return null;
@@ -356,7 +358,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return createAccessToken((KapuaEid) expiredAccessToken.getScopeId(), (KapuaEid) expiredAccessToken.getUserId());
     }
 
-    @Override
+	@Override
     public LoginInfo getLoginInfo() throws KapuaException {
         LoginInfo loginInfo = accessTokenFactory.newLoginInfo();
 
@@ -392,7 +394,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return loginInfo;
     }
 
-    //
+	//
     // Private Methods
     //
 
@@ -407,13 +409,14 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
             throws KapuaAuthenticationException {
         Subject currentUser = SecurityUtils.getSubject();
 
-        if (currentUser != null && currentUser.isAuthenticated()) {
-            LOG.info("Thread already authenticated for thread '{}' - '{}' - '{}'", Thread.currentThread().getId(), Thread.currentThread().getName(), currentUser);
-            throw new KapuaAuthenticationException(KapuaAuthenticationErrorCodes.SUBJECT_ALREADY_LOGGED);
-        }
+        if (!(currentUser != null && currentUser.isAuthenticated())) {
+			return;
+		}
+		LOG.info("Thread already authenticated for thread '{}' - '{}' - '{}'", Thread.currentThread().getId(), Thread.currentThread().getName(), currentUser);
+		throw new KapuaAuthenticationException(KapuaAuthenticationErrorCodes.SUBJECT_ALREADY_LOGGED);
     }
 
-    private void handleTokenLoginException(ShiroException se, Subject currentSubject, AuthenticationToken authenticationToken) throws KapuaException {
+	private void handleTokenLoginException(ShiroException se, Subject currentSubject, AuthenticationToken authenticationToken) throws KapuaException {
 
         if (currentSubject != null) {
             currentSubject.logout();
@@ -443,7 +446,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         throw kae;
     }
 
-    /**
+	/**
      * Create and persist a {@link AccessToken} from the data contained in the Shiro {@link Session}
      *
      * @param session The Shiro {@link Session} from which extract data
@@ -460,7 +463,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return createAccessToken(scopeId, userId);
     }
 
-    /**
+	/**
      * Create and persist a {@link AccessToken} from a scopeId and a userId
      *
      * @param scopeId The scopeID
@@ -496,13 +499,13 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return accessToken;
     }
 
-    private void establishSession(Subject subject, AccessToken accessToken) {
+	private void establishSession(Subject subject, AccessToken accessToken) {
         KapuaSession kapuaSession = new KapuaSession(accessToken, accessToken.getScopeId(), accessToken.getUserId());
         KapuaSecurityUtils.setSession(kapuaSession);
         subject.getSession().setAttribute(KapuaSession.KAPUA_SESSION_KEY, kapuaSession);
     }
 
-    private String generateJwt(KapuaEid scopeId, KapuaEid userId, Date now, long ttl) {
+	private String generateJwt(KapuaEid scopeId, KapuaEid userId, Date now, long ttl) {
 
         KapuaAuthenticationSetting settings = KapuaAuthenticationSetting.getInstance();
 
@@ -554,7 +557,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         return jwt;
     }
 
-    /**
+	/**
      * Method for checking the lockout state of the user credential
      */
     private Boolean checkIfCredentialHasJustBeenLocked(AuthenticationToken authenticationToken) throws KapuaException {
@@ -566,13 +569,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
                 CredentialListResult credentialList = credentialService.findByUserId(user.getScopeId(), user.getId());
 
                 if (!credentialList.isEmpty()) {
-                    Credential credentialMatched = null;
-                    for (Credential c : credentialList.getItems()) {
-                        if (CredentialType.PASSWORD.equals(c.getCredentialType())) {
-                            credentialMatched = c;
-                            break;
-                        }
-                    }
+                    Credential credentialMatched = credentialList.getItems().stream().filter(c -> CredentialType.PASSWORD.equals(c.getCredentialType())).findFirst().orElse(null);
                     return credentialMatched;
                 } else {
                     return null;

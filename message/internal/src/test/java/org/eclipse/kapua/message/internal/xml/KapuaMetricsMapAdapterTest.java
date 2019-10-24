@@ -31,16 +31,9 @@ public class KapuaMetricsMapAdapterTest extends Assert {
     private static final String NEWLINE = System.lineSeparator();
 
     private static final String METRICS_XML_STR = //
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NEWLINE +
-                    "<payload>" + NEWLINE +
-                    "   <metrics>" + NEWLINE +
-                    "      <metric>" + NEWLINE +
-                    "         <valueType>string</valueType>" + NEWLINE +
-                    "         <value>value1</value>" + NEWLINE +
-                    "         <name>key1</name>" + NEWLINE +
-                    "      </metric>" + NEWLINE +
-                    "   </metrics>" + NEWLINE +
-                    "</payload>" + NEWLINE;
+            new StringBuilder().append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>").append(NEWLINE).append("<payload>").append(NEWLINE).append("   <metrics>").append(NEWLINE).append("      <metric>")
+			.append(NEWLINE).append("         <valueType>string</valueType>").append(NEWLINE).append("         <value>value1</value>").append(NEWLINE).append("         <name>key1</name>").append(NEWLINE).append("      </metric>")
+			.append(NEWLINE).append("   </metrics>").append(NEWLINE).append("</payload>").append(NEWLINE).toString();
 
     @Before
     public void before() throws Exception {

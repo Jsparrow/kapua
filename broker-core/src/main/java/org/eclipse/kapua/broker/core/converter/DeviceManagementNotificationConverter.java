@@ -32,7 +32,6 @@ public class DeviceManagementNotificationConverter extends AbstractKapuaConverte
     private Counter metricConverterDeviceManagementNotificationMessage;
 
     public DeviceManagementNotificationConverter() {
-        super();
         metricConverterDeviceManagementNotificationMessage = METRICS_SERVICE.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "notify", "count");
     }
 

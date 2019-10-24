@@ -282,15 +282,15 @@ public class EndpointInfoServiceImpl
 
         query.setPredicate(andPredicate);
 
-        if (count(query) > 0) {
-            List<Map.Entry<String, Object>> uniquesFieldValues = new ArrayList<>();
-            uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.SCOPE_ID, scopeId));
-            uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.SCHEMA, schema));
-            uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.DNS, dns));
-            uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.PORT, port));
-
-            throw new KapuaEntityUniquenessException(EndpointInfo.TYPE, uniquesFieldValues);
-        }
+        if (count(query) <= 0) {
+			return;
+		}
+		List<Map.Entry<String, Object>> uniquesFieldValues = new ArrayList<>();
+		uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.SCOPE_ID, scopeId));
+		uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.SCHEMA, schema));
+		uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.DNS, dns));
+		uniquesFieldValues.add(new AbstractMap.SimpleEntry<>(EndpointInfoAttributes.PORT, port));
+		throw new KapuaEntityUniquenessException(EndpointInfo.TYPE, uniquesFieldValues);
     }
 
     private boolean countAllEndpointsInScope(EntityManager em, KapuaId scopeId) throws KapuaException {

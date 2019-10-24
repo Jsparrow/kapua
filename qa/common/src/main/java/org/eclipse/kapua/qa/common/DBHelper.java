@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import cucumber.api.java.After;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Singleton for managing database creation and deletion inside Gherkin scenarios.
@@ -80,20 +81,17 @@ public class DBHelper {
 
         isSetup = true;
 
-        if (h2TestServer) {
-            // Start external server to provide access to in mem H2 database
-            if ((webServer == null) && (server == null)) {
-                if (h2TestServer) {
-                    try {
-                        webServer = Server.createWebServer("-webAllowOthers", "-webPort", "8082").start();
-                        server = Server.createTcpServer("-tcpAllowOthers", "-tcpPort", "9092").start();
-                        logger.info("H2 TCP and Web server started.");
-                    } catch (SQLException e) {
-                        logger.warn("Error setting up H2 web server.", e);
-                    }
-                }
-            }
-        }
+        boolean condition = h2TestServer && (webServer == null) && (server == null) && h2TestServer;
+		// Start external server to provide access to in mem H2 database
+		if (condition) {
+		    try {
+		        webServer = Server.createWebServer("-webAllowOthers", "-webPort", "8082").start();
+		        server = Server.createTcpServer("-tcpAllowOthers", "-tcpPort", "9092").start();
+		        logger.info("H2 TCP and Web server started.");
+		    } catch (SQLException e) {
+		        logger.warn("Error setting up H2 web server.", e);
+		    }
+		}
 
         logger.info("Setting up embedded database");
 
@@ -168,7 +166,7 @@ public class DBHelper {
         ResultSet sqlResults = connection.getMetaData().getTables(null, null, "%" , types);
 
         while(sqlResults.next()) {
-            String sqlStatement = String.format("DROP TABLE %s", sqlResults.getString("TABLE_NAME").toUpperCase());
+            String sqlStatement = String.format("DROP TABLE %s", StringUtils.upperCase(sqlResults.getString("TABLE_NAME")));
             connection.prepareStatement(sqlStatement).execute();
         }
 

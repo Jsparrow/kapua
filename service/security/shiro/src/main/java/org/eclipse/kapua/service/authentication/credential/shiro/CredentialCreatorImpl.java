@@ -69,7 +69,8 @@ public class CredentialCreatorImpl extends AbstractKapuaEntityCreator<Credential
         return userId;
     }
 
-    public void setUserId(KapuaId userId) {
+    @Override
+	public void setUserId(KapuaId userId) {
         this.userId = userId;
     }
 
@@ -78,7 +79,8 @@ public class CredentialCreatorImpl extends AbstractKapuaEntityCreator<Credential
         return credentialType;
     }
 
-    public void setCredentialType(CredentialType credentialType) {
+    @Override
+	public void setCredentialType(CredentialType credentialType) {
         this.credentialType = credentialType;
     }
 

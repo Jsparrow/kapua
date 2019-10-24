@@ -69,13 +69,13 @@ public class GwtKapuaEndpointModelConverter {
         // Sort order conversion
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? EndpointInfoAttributes.DNS : loadConfig.getSortField();
 
-        if (sortField.equals("schema")) {
+        if ("schema".equals(sortField)) {
             sortField = EndpointInfoAttributes.SCHEMA;
-        } else if (sortField.equals("createdOnFormatted")) {
+        } else if ("createdOnFormatted".equals(sortField)) {
             sortField = EndpointInfoAttributes.CREATED_ON;
         }
 
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
 
         // Query conversion

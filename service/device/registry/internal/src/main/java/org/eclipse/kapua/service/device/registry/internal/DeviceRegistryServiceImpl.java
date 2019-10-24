@@ -148,7 +148,7 @@ public class DeviceRegistryServiceImpl extends AbstractKapuaConfigurableResource
         if ("group".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
             deleteDeviceByGroupId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
         } else if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteDeviceByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteDeviceByAccountId(kapuaEvent.getEntityId());
         }
     }
 
@@ -167,7 +167,7 @@ public class DeviceRegistryServiceImpl extends AbstractKapuaConfigurableResource
         }
     }
 
-    private void deleteDeviceByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteDeviceByAccountId(KapuaId accountId) throws KapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
 

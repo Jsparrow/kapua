@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link KapuaPosition} definition.
@@ -216,6 +217,6 @@ public interface KapuaPosition extends Position, Serializable {
 
         String displayString = Payloads.toDisplayString(properties);
 
-        return displayString.isEmpty() ? null : displayString;
+        return StringUtils.isEmpty(displayString) ? null : displayString;
     }
 }

@@ -36,41 +36,23 @@ public class GeneratorScheduler implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneratorScheduler.class);
 
-    public interface Handle {
+	private final ScheduledFuture<?> job;
 
-        public void remove();
-    }
+	private final Set<Entry> tasks = new CopyOnWriteArraySet<>();
 
-    private static class Entry {
+	private final ScheduledExecutorService executorService;
 
-        private final Consumer<Instant> task;
-
-        public Entry(final Consumer<Instant> task) {
-            this.task = task;
-        }
-
-        public void accept(final Instant timestamp) {
-            this.task.accept(timestamp);
-        }
-    }
-
-    private final ScheduledFuture<?> job;
-
-    private final Set<Entry> tasks = new CopyOnWriteArraySet<>();
-
-    private final ScheduledExecutorService executorService;
-
-    public GeneratorScheduler(final ScheduledExecutorService executorService, final Duration period) {
+	public GeneratorScheduler(final ScheduledExecutorService executorService, final Duration period) {
         this.executorService = null;
         this.job = executorService.scheduleAtFixedRate(this::tick, 0, period.toMillis(), TimeUnit.MILLISECONDS);
     }
 
-    public GeneratorScheduler(final Duration period) {
+	public GeneratorScheduler(final Duration period) {
         this.executorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("GeneratorScheduler"));
         this.job = this.executorService.scheduleAtFixedRate(this::tick, 0, period.toMillis(), TimeUnit.MILLISECONDS);
     }
 
-    @Override
+	@Override
     public void close() throws Exception {
         if (this.job != null) {
             this.job.cancel(false);
@@ -80,17 +62,15 @@ public class GeneratorScheduler implements AutoCloseable {
         }
     }
 
-    protected void tick() {
+	protected void tick() {
         // Run all tasks with the same timestamp
         final Instant timestamp = Instant.now();
 
-        for (final Entry task : this.tasks) {
-            // If a task fails here, we still process others
-            task.accept(timestamp);
-        }
+        // If a task fails here, we still process others
+		this.tasks.forEach((final Entry task) -> task.accept(timestamp));
     }
 
-    /**
+	/**
      * Add a new task to the scheduler
      * <p>
      * Adding the same task multiple time will result in the task being processed multiple times per tick.
@@ -121,6 +101,24 @@ public class GeneratorScheduler implements AutoCloseable {
                 }
             }
         };
+    }
+
+    public interface Handle {
+
+        void remove();
+    }
+
+    private static class Entry {
+
+        private final Consumer<Instant> task;
+
+        public Entry(final Consumer<Instant> task) {
+            this.task = task;
+        }
+
+        public void accept(final Instant timestamp) {
+            this.task.accept(timestamp);
+        }
     }
 
 }

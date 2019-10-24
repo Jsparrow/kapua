@@ -18,13 +18,13 @@ import org.eclipse.kapua.service.authorization.role.RoleDomain;
 
 public class AuthorizationDomains {
 
-    private AuthorizationDomains() { }
-
     public static final AccessInfoDomain ACCESS_INFO_DOMAIN = new AccessInfoDomain();
 
-    public static final DomainDomain DOMAIN_DOMAIN = new DomainDomain();
+	public static final DomainDomain DOMAIN_DOMAIN = new DomainDomain();
 
-    public static final GroupDomain GROUP_DOMAIN = new GroupDomain();
+	public static final GroupDomain GROUP_DOMAIN = new GroupDomain();
 
-    public static final RoleDomain ROLE_DOMAIN = new RoleDomain();
+	public static final RoleDomain ROLE_DOMAIN = new RoleDomain();
+
+	private AuthorizationDomains() { }
 }

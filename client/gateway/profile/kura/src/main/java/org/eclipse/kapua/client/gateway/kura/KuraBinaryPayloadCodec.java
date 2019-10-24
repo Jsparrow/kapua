@@ -25,17 +25,10 @@ import org.eclipse.kapua.gateway.client.kura.payload.KuraPayloadProto.KuraPayloa
 
 public class KuraBinaryPayloadCodec implements BinaryPayloadCodec {
 
-    public static class Builder {
-
-        public KuraBinaryPayloadCodec build() {
-            return new KuraBinaryPayloadCodec();
-        }
-    }
-
     private KuraBinaryPayloadCodec() {
     }
 
-    @Override
+	@Override
     public ByteBuffer encode(final Payload payload, final ByteBuffer buffer) throws Exception {
 
         Objects.requireNonNull(payload);
@@ -62,13 +55,20 @@ public class KuraBinaryPayloadCodec implements BinaryPayloadCodec {
         }
     }
 
-    @Override
+	@Override
     public Payload decode(final ByteBuffer buffer) throws Exception {
         Objects.requireNonNull(buffer);
 
         final KuraPayload payload = KuraPayload.parseFrom(Buffers.toByteArray(buffer));
         final Map<String, Object> values = Metrics.extractMetrics(payload);
         return Payload.of(Instant.ofEpochMilli(payload.getTimestamp()), values);
+    }
+
+	public static class Builder {
+
+        public KuraBinaryPayloadCodec build() {
+            return new KuraBinaryPayloadCodec();
+        }
     }
 
 }

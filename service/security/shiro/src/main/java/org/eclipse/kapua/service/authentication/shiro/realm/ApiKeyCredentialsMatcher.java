@@ -20,6 +20,7 @@ import org.eclipse.kapua.service.authentication.credential.CredentialType;
 import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticationSetting;
 import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticationSettingKeys;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link UsernamePasswordCredentials} credential matcher implementation
@@ -43,14 +44,15 @@ public class ApiKeyCredentialsMatcher implements CredentialsMatcher {
         //
         // Match token with info
         boolean credentialMatch = false;
-        if (CredentialType.API_KEY.equals(infoCredential.getCredentialType())) {
+        // FIXME: if true cache token password for authentication performance improvement
+		if (CredentialType.API_KEY == infoCredential.getCredentialType()) {
             String fullApiKey = infoCredential.getCredentialKey();
 
             KapuaAuthenticationSetting setting = KapuaAuthenticationSetting.getInstance();
 
             int preLength = setting.getInt(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_LENGTH);
-            String tokenPre = tokenApiFullKey.substring(0, preLength);
-            String tokenKey = tokenApiFullKey.substring(preLength, tokenApiFullKey.length());
+            String tokenPre = StringUtils.substring(tokenApiFullKey, 0, preLength);
+            String tokenKey = StringUtils.substring(tokenApiFullKey, preLength, tokenApiFullKey.length());
 
             String preSeparator = setting.getString(KapuaAuthenticationSettingKeys.AUTHENTICATION_CREDENTIAL_APIKEY_PRE_SEPARATOR);
             String infoPre = fullApiKey.split(preSeparator)[0];

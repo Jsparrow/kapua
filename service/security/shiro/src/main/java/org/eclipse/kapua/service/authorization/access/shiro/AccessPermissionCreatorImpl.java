@@ -39,20 +39,24 @@ public class AccessPermissionCreatorImpl extends AbstractKapuaEntityCreator<Acce
         super(scopeId);
     }
 
-    public KapuaId getAccessInfoId() {
+    @Override
+	public KapuaId getAccessInfoId() {
         return accessInfo;
     }
 
-    public void setAccessInfoId(KapuaId accessInfo) {
+    @Override
+	public void setAccessInfoId(KapuaId accessInfo) {
         this.accessInfo = accessInfo;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Permission getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+    @Override
+	public void setPermission(Permission permission) {
         this.permission = permission;
     }
 }

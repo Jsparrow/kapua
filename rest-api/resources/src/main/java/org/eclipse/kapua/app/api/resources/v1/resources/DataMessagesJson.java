@@ -245,9 +245,7 @@ public class DataMessagesJson extends AbstractKapuaResource implements JsonSeria
 
         List<SortField> sortFields = new ArrayList<>();
         if (query.getSortFields() != null) {
-            for (XmlAdaptedSortField xmlAdaptedSortField : query.getSortFields()) {
-                sortFields.add(SortField.of(xmlAdaptedSortField.getDirection(), xmlAdaptedSortField.getField()));
-            }
+            query.getSortFields().forEach(xmlAdaptedSortField -> sortFields.add(SortField.of(xmlAdaptedSortField.getDirection(), xmlAdaptedSortField.getField())));
         }
         messageQuery.setSortFields(sortFields);
         return messageQuery;

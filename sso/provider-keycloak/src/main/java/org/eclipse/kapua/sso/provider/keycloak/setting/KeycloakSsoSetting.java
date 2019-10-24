@@ -19,15 +19,15 @@ public class KeycloakSsoSetting extends AbstractKapuaSetting<KeycloakSsoSettingK
 
     private static final KeycloakSsoSetting INSTANCE = new KeycloakSsoSetting();
 
-    private KeycloakSsoSetting() {
-        super(KEYCLOAK_SSO_SETTING_RESOURCE);
-    }
-
     KeycloakSsoSetting(final String resourceName) {
         super(resourceName);
     }
 
-    public static KeycloakSsoSetting getInstance() {
+	private KeycloakSsoSetting() {
+        super(KEYCLOAK_SSO_SETTING_RESOURCE);
+    }
+
+	public static KeycloakSsoSetting getInstance() {
         return INSTANCE;
     }
 }

@@ -35,18 +35,18 @@ public enum KapuaResponseCode {
     INTERNAL_ERROR; // 500
 
     public boolean isAccepted() {
-        return ACCEPTED.equals(this);
+        return ACCEPTED == this;
     }
 
     public boolean isBadRequest() {
-        return BAD_REQUEST.equals(this);
+        return BAD_REQUEST == this;
     }
 
     public boolean isNotFound() {
-        return NOT_FOUND.equals(this);
+        return NOT_FOUND == this;
     }
 
     public boolean isInternalError() {
-        return INTERNAL_ERROR.equals(this);
+        return INTERNAL_ERROR == this;
     }
 }

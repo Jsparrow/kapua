@@ -120,7 +120,7 @@ public class ModelContextImpl implements ModelContext {
      * 
      */
     private DatastoreMessage unmarshalDatastoreMessage(Map<String, Object> messageMap)
-            throws DatamodelMappingException, JsonParseException, JsonMappingException, IOException, ParseException {
+            throws DatamodelMappingException, IOException, ParseException {
         StorableFetchStyle fetchStyle = getStorableFetchStyle(messageMap);
         DatastoreMessageImpl message = new DatastoreMessageImpl();
         String id = (String) messageMap.get(ModelContext.DATASTORE_ID_KEY);
@@ -149,7 +149,7 @@ public class ModelContextImpl implements ModelContext {
         message.setTimestamp((Date) (timestamp == null ? null : KapuaDateUtils.parseDate((String) timestamp)));
 
         // stop the mapping if only fields are requested
-        if (fetchStyle.equals(StorableFetchStyle.FIELDS)) {
+        if (fetchStyle == StorableFetchStyle.FIELDS) {
             return message;
         }
 
@@ -209,7 +209,7 @@ public class ModelContextImpl implements ModelContext {
         if (messageMap.get(MessageSchema.MESSAGE_METRICS) != null) {
             @SuppressWarnings("unchecked")
             Map<String, Object> metrics = (Map<String, Object>) messageMap.get(MessageSchema.MESSAGE_METRICS);
-            Map<String, Object> payloadMetrics = new HashMap<String, Object>();
+            Map<String, Object> payloadMetrics = new HashMap<>();
             String[] metricNames = metrics.keySet().toArray(new String[] {});
             for (String metricsName : metricNames) {
                 @SuppressWarnings("unchecked")
@@ -225,7 +225,7 @@ public class ModelContextImpl implements ModelContext {
             }
             payload.setMetrics(payloadMetrics);
         }
-        if (fetchStyle.equals(StorableFetchStyle.SOURCE_SELECT)) {
+        if (fetchStyle == StorableFetchStyle.SOURCE_SELECT) {
             return message;
         }
         if (messageMap.get(MessageSchema.MESSAGE_BODY) != null) {
@@ -239,7 +239,7 @@ public class ModelContextImpl implements ModelContext {
     }
 
     private MetricInfo unmarshalMetricInfo(Map<String, Object> metricInfoMap)
-            throws DatamodelMappingException, JsonParseException, JsonMappingException, IOException, ParseException {
+            throws DatamodelMappingException, IOException, ParseException {
         KapuaId scopeId = new KapuaEid(new BigInteger((String) metricInfoMap.get(MetricInfoSchema.METRIC_SCOPE_ID)));
         MetricInfo metricInfo = new MetricInfoImpl(scopeId);
         String id = (String) metricInfoMap.get(ModelContext.DATASTORE_ID_KEY);
@@ -264,7 +264,7 @@ public class ModelContextImpl implements ModelContext {
     }
 
     private ChannelInfo unmarshalChannelInfo(Map<String, Object> channelInfoMap)
-            throws DatamodelMappingException, JsonParseException, JsonMappingException, IOException, ParseException {
+            throws DatamodelMappingException, IOException, ParseException {
         KapuaId scopeId = new KapuaEid(new BigInteger((String) channelInfoMap.get(ChannelInfoSchema.CHANNEL_SCOPE_ID)));
         ChannelInfo channelInfo = new ChannelInfoImpl(scopeId);
         String id = (String) channelInfoMap.get(ModelContext.DATASTORE_ID_KEY);
@@ -277,7 +277,7 @@ public class ModelContextImpl implements ModelContext {
     }
 
     private ClientInfo unmarshalClientInfo(Map<String, Object> clientInfoMap)
-            throws DatamodelMappingException, JsonParseException, JsonMappingException, IOException, ParseException {
+            throws DatamodelMappingException, IOException, ParseException {
         KapuaId scopeId = new KapuaEid(new BigInteger((String) clientInfoMap.get(ClientInfoSchema.CLIENT_SCOPE_ID)));
         ClientInfo clientInfo = new ClientInfoImpl(scopeId);
         String id = (String) clientInfoMap.get(ModelContext.DATASTORE_ID_KEY);
@@ -314,11 +314,11 @@ public class ModelContextImpl implements ModelContext {
         if (kapuaPosition != null) {
             Map<String, Object> location = null;
             if (kapuaPosition.getLongitude() != null && kapuaPosition.getLatitude() != null) {
-                location = new HashMap<String, Object>();
+                location = new HashMap<>();
                 location.put(MessageSchema.MESSAGE_POSITION_LONGITUDE, kapuaPosition.getLongitude());
                 location.put(MessageSchema.MESSAGE_POSITION_LATITUDE, kapuaPosition.getLatitude());
             }
-            Map<String, Object> position = new HashMap<String, Object>();
+            Map<String, Object> position = new HashMap<>();
             position.put(MessageSchema.MESSAGE_POS_LOCATION, location);
             position.put(MessageSchema.MESSAGE_POS_ALT, kapuaPosition.getAltitude());
             position.put(MessageSchema.MESSAGE_POS_PRECISION, kapuaPosition.getPrecision());
@@ -336,7 +336,7 @@ public class ModelContextImpl implements ModelContext {
         unmarshalledMessage.put(MessageSchema.MESSAGE_BODY, payload.getBody());
         Map<String, Object> kapuaMetrics = payload.getMetrics();
         if (kapuaMetrics != null) {
-            Map<String, Object> metrics = new HashMap<String, Object>();
+            Map<String, Object> metrics = new HashMap<>();
             String[] metricNames = kapuaMetrics.keySet().toArray(new String[] {});
             for (String kapuaMetricName : metricNames) {
                 Object metricValue = kapuaMetrics.get(kapuaMetricName);
@@ -344,7 +344,7 @@ public class ModelContextImpl implements ModelContext {
                 String metricName = DatastoreUtils.normalizeMetricName(kapuaMetricName);
                 String clientMetricType = DatastoreUtils.getClientMetricFromType(metricValue.getClass());
                 String clientMetricTypeAcronim = DatastoreUtils.getClientMetricFromAcronym(clientMetricType);
-                Map<String, Object> field = new HashMap<String, Object>();
+                Map<String, Object> field = new HashMap<>();
                 if (DatastoreUtils.isDateMetric(clientMetricTypeAcronim) && metricValue instanceof Date) {
                     field.put(clientMetricTypeAcronim, KapuaDateUtils.formatDate((Date) metricValue));
                 } else {

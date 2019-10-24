@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.job;
 
 public class JobDomains {
 
-    private JobDomains() { }
-
     public static final JobDomain JOB_DOMAIN = new JobDomain();
+
+	private JobDomains() { }
 }

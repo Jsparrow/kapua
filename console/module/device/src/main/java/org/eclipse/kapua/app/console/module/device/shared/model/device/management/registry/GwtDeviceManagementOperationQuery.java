@@ -20,7 +20,6 @@ public class GwtDeviceManagementOperationQuery extends GwtQuery {
     private String deviceId;
 
     public GwtDeviceManagementOperationQuery() {
-        super();
 
     }
 

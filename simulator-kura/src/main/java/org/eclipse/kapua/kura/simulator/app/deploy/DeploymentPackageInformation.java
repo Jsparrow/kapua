@@ -18,7 +18,39 @@ import java.util.List;
 
 public class DeploymentPackageInformation {
 
-    public static class BundleInformation {
+    private final String symbolicName;
+
+	private final String version;
+
+	private final Instant installDate;
+
+	private final List<BundleInformation> bundles;
+
+	public DeploymentPackageInformation(final String symbolicName, final String version, final Instant installDate,
+            final List<BundleInformation> bundles) {
+        this.symbolicName = symbolicName;
+        this.version = version;
+        this.installDate = installDate;
+        this.bundles = Collections.unmodifiableList(new ArrayList<>(bundles));
+    }
+
+	public String getSymbolicName() {
+        return this.symbolicName;
+    }
+
+	public String getVersion() {
+        return this.version;
+    }
+
+	public Instant getInstallDate() {
+        return this.installDate;
+    }
+
+	public List<BundleInformation> getBundles() {
+        return this.bundles;
+    }
+
+	public static class BundleInformation {
 
         private final String symbolicName;
 
@@ -36,37 +68,5 @@ public class DeploymentPackageInformation {
         public String getVersion() {
             return this.version;
         }
-    }
-
-    private final String symbolicName;
-
-    private final String version;
-
-    private final Instant installDate;
-
-    private final List<BundleInformation> bundles;
-
-    public DeploymentPackageInformation(final String symbolicName, final String version, final Instant installDate,
-            final List<BundleInformation> bundles) {
-        this.symbolicName = symbolicName;
-        this.version = version;
-        this.installDate = installDate;
-        this.bundles = Collections.unmodifiableList(new ArrayList<>(bundles));
-    }
-
-    public String getSymbolicName() {
-        return this.symbolicName;
-    }
-
-    public String getVersion() {
-        return this.version;
-    }
-
-    public Instant getInstallDate() {
-        return this.installDate;
-    }
-
-    public List<BundleInformation> getBundles() {
-        return this.bundles;
     }
 }

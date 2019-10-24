@@ -38,78 +38,87 @@ public class KuraDevice implements MqttCallback {
      */
     private static final Logger logger = LoggerFactory.getLogger(KuraDevice.class);
 
-    /**
-     * Topics that Kura device is listening to.
-     */
-    private String deployPackages;
-    private String deployBundles;
-    private String deployConf;
-    private String putConf;
-    private String cmdExec;
-    private String deployV2ExecStart34;
-    private String deployV2ExecStart95;
-    private String deployV2ExecStop77;
-
-    /**
+	/**
      * URI of mqtt broker.
      */
     private static final String BROKER_URI = "tcp://localhost:1883";
 
-    /**
+	/**
      * Mocked Kura device client id.
      */
     private static final String CLIENT_ID = "rpione3";
 
-    /**
+	/**
      * User with which Mocked Kura device is connecting to Cloud service.
      */
     private static final String CLIENT_USER = "kapua-broker";
 
-    /**
+	/**
      * Mocked Kura device password while connecting to Cloud service.
      */
     private static final String CLIENT_PASSWORD = "kapua-password";
 
-    /**
+	/**
      * User under which Kura device is listening for messages.
      */
     private static final String SERVER_USER = "kapua-sys";
 
-    /**
+	/**
      * Password for system user under which Kura is listening form messages.
      */
     private static final String SERVER_PASSWORD = "kapua-password";
 
-    /**
+	/**
      * Account under which Kura device is registered.
      */
     private static final String CLIENT_ACCOUNT = "kapua-sys";
 
-    /**
+	/**
      * Kapua system topic and everything under it as mqtt filter.
      */
     private static final String TOPIC_FILTER = "$EDC/#";
 
-    /**
+	/**
      * Default quality of service - mqtt.
      */
     private static final int QOS = 0;
 
-    /**
+	/**
+     * Topics that Kura device is listening to.
+     */
+    private String deployPackages;
+
+	private String deployBundles;
+
+	private String deployConf;
+
+	private String putConf;
+
+	private String cmdExec;
+
+	private String deployV2ExecStart34;
+
+	private String deployV2ExecStart95;
+
+	private String deployV2ExecStop77;
+
+	/**
      * Mqtt client for sending messages form Mocked Kura device.
      */
     private MqttClient mqttClient;
 
-    /**
+	/**
      * Mqtt client form listening from messages on Mocked Kura device.
      */
     private MqttClient subscribedClient;
-    private String clientId;
 
-    public boolean bundleStateChanged;
-    public boolean configurationChanged;
+	private String clientId;
 
-    public KuraDevice() {
+	public boolean bundleStateChanged;
+
+	public boolean configurationChanged;
+
+	public KuraDevice() {
         deployPackages = "$EDC/kapua-sys/rpione3/DEPLOY-V2/GET/packages";
 
         deployBundles = "$EDC/kapua-sys/rpione3/DEPLOY-V2/GET/bundles";
@@ -131,16 +140,16 @@ public class KuraDevice implements MqttCallback {
         mqttClientSetup();
     }
 
-    public String getClientId() {
+	public String getClientId() {
         return this.clientId;
     }
 
-    public void addMoreThanOneDeviceToKuraMock(String name){
+	public void addMoreThanOneDeviceToKuraMock(String name){
         clientId = name;
         mqttClientSetupForMoreDevices();
     }
 
-    /**
+	/**
      * Disconnect Mocked Kura device mqtt clients that listen and send messages
      * to mqtt broker.
      */
@@ -157,7 +166,7 @@ public class KuraDevice implements MqttCallback {
         }
     }
 
-    /**
+	/**
      * Connect both listening and sending mqtt client of Mocked Kura device.
      */
     public void mqttClientConnect() {
@@ -173,11 +182,11 @@ public class KuraDevice implements MqttCallback {
             subscribedClient.connect(serverOpts);
             subscribedClient.subscribe(TOPIC_FILTER, QOS);
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
-    /**
+	/**
      * Prepare client and server part of mocked mqtt.
      */
     private void mqttClientSetup() {
@@ -191,45 +200,45 @@ public class KuraDevice implements MqttCallback {
             subscribedClient = new MqttClient(BROKER_URI, MqttClient.generateClientId(),
                     new MemoryPersistence());
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         subscribedClient.setCallback(this);
     }
 
-    private void mqttClientSetupForMoreDevices() {
+	private void mqttClientSetupForMoreDevices() {
         /*
          * mqttClient is meant to simulate Kura device for sending messages,
          * while subscribedClient is meant to receive messages from Kura device side.
          */
         try {
-            deployPackages = "$EDC/kapua-sys/" + clientId + "/DEPLOY-V2/GET/packages";
+            deployPackages = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/DEPLOY-V2/GET/packages").toString();
 
-            deployBundles = "$EDC/kapua-sys/" + clientId + "/DEPLOY-V2/GET/bundles";
+            deployBundles = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/DEPLOY-V2/GET/bundles").toString();
 
-            deployConf = "$EDC/kapua-sys/" + clientId + "/CONF-V1/GET/configurations";
+            deployConf = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/CONF-V1/GET/configurations").toString();
 
-            putConf = "$EDC/kapua-sys/" + clientId + "/CONF-V1/PUT/configurations";
+            putConf = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/CONF-V1/PUT/configurations").toString();
 
-            cmdExec = "$EDC/kapua-sys/" + clientId + "/CMD-V1/EXEC/command";
+            cmdExec = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/CMD-V1/EXEC/command").toString();
 
-            deployV2ExecStart34 = "$EDC/kapua-sys/" + clientId + "/DEPLOY-V2/EXEC/start/34";
+            deployV2ExecStart34 = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/DEPLOY-V2/EXEC/start/34").toString();
 
-            deployV2ExecStart95 = "$EDC/kapua-sys/" + clientId + "/DEPLOY-V2/EXEC/start/95";
+            deployV2ExecStart95 = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/DEPLOY-V2/EXEC/start/95").toString();
 
-            deployV2ExecStop77 = "$EDC/kapua-sys/" + clientId + "/DEPLOY-V2/EXEC/stop/77";
+            deployV2ExecStop77 = new StringBuilder().append("$EDC/kapua-sys/").append(clientId).append("/DEPLOY-V2/EXEC/stop/77").toString();
 
             mqttClient = new MqttClient(BROKER_URI, clientId,
                     new MemoryPersistence());
             subscribedClient = new MqttClient(BROKER_URI, MqttClient.generateClientId(),
                     new MemoryPersistence());
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         subscribedClient.setCallback(this);
     }
 
-    /**
+	/**
      * Sending data to mqtt broker. Data is read form file containing pre-recorded response.
      *
      * @param topic
@@ -249,7 +258,7 @@ public class KuraDevice implements MqttCallback {
         mqttClient.publish(topic, payload, qos, retained);
     }
 
-    /**
+	/**
      * Extraction of metrics form Kapua message payload.
      *
      * @param payload
@@ -265,7 +274,8 @@ public class KuraDevice implements MqttCallback {
         try {
             kuraPayload = KuraPayloadProto.KuraPayload.parseFrom(payload);
         } catch (InvalidProtocolBufferException e) {
-            value = null;
+            logger.error(e.getMessage(), e);
+			value = null;
         }
         if (kuraPayload == null) {
             return value;
@@ -282,7 +292,7 @@ public class KuraDevice implements MqttCallback {
         return value;
     }
 
-    /**
+	/**
      * Ectraction of callback parameters form Kapua generated message stored as Metrics.
      *
      * @param payload
@@ -300,12 +310,12 @@ public class KuraDevice implements MqttCallback {
         return callbackParam;
     }
 
-    @Override
+	@Override
     public void connectionLost(Throwable throwable) {
         logger.info("Kapua Mock Device connection to broker lost.");
     }
 
-    @Override
+	@Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         logger.info("Message arrived in Kapua Mock Device with topic: " + topic);
 
@@ -317,28 +327,32 @@ public class KuraDevice implements MqttCallback {
         if(topic.equals(deployPackages)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/DEPLOY-V2/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/DEPLOY-V2/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource("/mqtt/KapuaPool-client-id_DEPLOY-V2_REPLY_req-id_packages.mqtt").toURI()));
 
             mqttClient.publish(responseTopic, responsePayload, 0, false);
         } else if (topic.equals(deployBundles)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/DEPLOY-V2/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/DEPLOY-V2/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource(bundleStateChanged == true ? "/mqtt/KapuaPool-client-id_DEPLOY-V2_REPLY_req-id_bundles_updated_state.mqtt" : "/mqtt/KapuaPool-client-id_DEPLOY-V2_REPLY_req-id_bundles_inital_state.mqtt").toURI()));
 
             mqttClient.publish(responseTopic, responsePayload, 0, false);
         } else if (topic.equals(deployConf)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/CONF-V1/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/CONF-V1/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource( configurationChanged == true ? "/mqtt/KapuaPool-client-id_CONF-V1_REPLY_req-id_updated_configurations.mqtt" : "/mqtt/KapuaPool-client-id_CONF-V1_REPLY_req-id_inital_configurations.mqtt").toURI()));
 
             mqttClient.publish(responseTopic, responsePayload, 0, false);
         } else if (topic.equals(putConf)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/CONF-V1/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/CONF-V1/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource("/mqtt/KapuaPool-client-id_CONF-V1_PUT_configurations.mqtt").toURI()));
 
             configurationChanged = true;
@@ -346,14 +360,16 @@ public class KuraDevice implements MqttCallback {
         } else if (topic.equals(cmdExec)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/CMD-V1/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/CMD-V1/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource("/mqtt/KapuaPool-client-id_CMD-V1_REPLY_req-id_command.mqtt").toURI()));
 
             mqttClient.publish(responseTopic, responsePayload, 0, false);
         } else if (topic.equals(deployV2ExecStart34) || topic.equals(deployV2ExecStart95)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/DEPLOY-V2/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/DEPLOY-V2/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource("/mqtt/KapuaPool-client-id_DEPLOY-V2_EXEC_START_bundle_id.mqtt").toURI()));
 
             bundleStateChanged = true;
@@ -361,7 +377,8 @@ public class KuraDevice implements MqttCallback {
         } else if (topic.equals(deployV2ExecStop77)) {
             callbackParam = extractCallback(payload);
 
-            responseTopic = "$EDC/" + CLIENT_ACCOUNT + "/" + callbackParam.getClientId() + "/DEPLOY-V2/REPLY/" + callbackParam.getRequestId();
+            responseTopic = new StringBuilder().append("$EDC/").append(CLIENT_ACCOUNT).append("/").append(callbackParam.getClientId()).append("/DEPLOY-V2/REPLY/").append(callbackParam.getRequestId())
+					.toString();
             responsePayload = Files.readAllBytes(Paths.get(getClass().getResource("/mqtt/KapuaPool-client-id_DEPLOY-V2_EXEC_STOP_bundle_id.mqtt").toURI()));
 
             bundleStateChanged = true;
@@ -371,7 +388,7 @@ public class KuraDevice implements MqttCallback {
         }
     }
 
-    @Override
+	@Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
         logger.info("Kapua Mock Device message delivery complete.");
     }

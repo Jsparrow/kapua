@@ -28,10 +28,6 @@ public class PublishMetric {
     private Histogram messageSizeAllowed;
     private Histogram messageSizeNotAllowed;
 
-    public static PublishMetric getInstance() {
-        return PUBLISH_METRIC;
-    }
-
     private PublishMetric() {
         MetricsService metricsService = MetricServiceFactory.getInstance();
         // publish/subscribe
@@ -43,23 +39,27 @@ public class PublishMetric {
         messageSizeNotAllowed = metricsService.getHistogram("security", "publish", "messages", "not_allowed", "size", "bytes");
     }
 
-    public Counter getAllowedMessages() {
+	public static PublishMetric getInstance() {
+        return PUBLISH_METRIC;
+    }
+
+	public Counter getAllowedMessages() {
         return allowedMessages;
     }
 
-    public Counter getNotAllowedMessages() {
+	public Counter getNotAllowedMessages() {
         return notAllowedMessages;
     }
 
-    public Timer getTime() {
+	public Timer getTime() {
         return time;
     }
 
-    public Histogram getMessageSizeAllowed() {
+	public Histogram getMessageSizeAllowed() {
         return messageSizeAllowed;
     }
 
-    public Histogram getMessageSizeNotAllowed() {
+	public Histogram getMessageSizeNotAllowed() {
         return messageSizeNotAllowed;
     }
 

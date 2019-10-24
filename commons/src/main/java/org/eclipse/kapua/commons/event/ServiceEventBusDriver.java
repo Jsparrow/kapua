@@ -16,11 +16,11 @@ import org.eclipse.kapua.event.ServiceEventBusException;
 
 public interface ServiceEventBusDriver {
 
-    public String getType();
+    String getType();
 
-    public void start() throws ServiceEventBusException;
+    void start() throws ServiceEventBusException;
 
-    public void stop() throws ServiceEventBusException;
+    void stop() throws ServiceEventBusException;
 
-    public ServiceEventBus getEventBus();
+    ServiceEventBus getEventBus();
 }

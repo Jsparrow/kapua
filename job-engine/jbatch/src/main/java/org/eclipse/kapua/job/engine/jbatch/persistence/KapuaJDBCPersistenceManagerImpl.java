@@ -25,7 +25,7 @@ import com.ibm.jbatch.container.exception.PersistenceException;
 import com.ibm.jbatch.container.services.IPersistenceManagerService;
 import com.ibm.jbatch.container.services.impl.JDBCPersistenceManagerImpl;
 
-public class KapuaJDBCPersistenceManagerImpl extends JDBCPersistenceManagerImpl implements IPersistenceManagerService {
+public class KapuaJDBCPersistenceManagerImpl extends JDBCPersistenceManagerImpl {
 
     private static final String CLASSNAME = KapuaJDBCPersistenceManagerImpl.class.getName();
 
@@ -51,18 +51,9 @@ public class KapuaJDBCPersistenceManagerImpl extends JDBCPersistenceManagerImpl 
         LOG.entering(CLASSNAME, "purgeByName", jobName);
         String deleteJobs = "DELETE FROM jobinstancedata WHERE name = ?";
 
-        String deleteJobExecutions = "DELETE FROM executioninstancedata "
-                + "WHERE jobexecid IN ("
-                + "SELECT B.jobexecid FROM jobinstancedata A INNER JOIN (SELECT * FROM executioninstancedata) B "
-                + "ON A.jobinstanceid = B.jobinstanceid "
-                + "WHERE A.name = ?)";
+        String deleteJobExecutions = new StringBuilder().append("DELETE FROM executioninstancedata ").append("WHERE jobexecid IN (").append("SELECT B.jobexecid FROM jobinstancedata A INNER JOIN (SELECT * FROM executioninstancedata) B ").append("ON A.jobinstanceid = B.jobinstanceid ").append("WHERE A.name = ?)").toString();
 
-        String deleteStepExecutions = "DELETE FROM stepexecutioninstancedata "
-                + "WHERE stepexecid IN ("
-                + "SELECT C.stepexecid FROM jobinstancedata A INNER JOIN executioninstancedata B "
-                + "ON A.jobinstanceid = B.jobinstanceid INNER JOIN (SELECT * FROM stepexecutioninstancedata) C "
-                + "ON B.jobexecid = C.jobexecid "
-                + "WHERE A.name = ?)";
+        String deleteStepExecutions = new StringBuilder().append("DELETE FROM stepexecutioninstancedata ").append("WHERE stepexecid IN (").append("SELECT C.stepexecid FROM jobinstancedata A INNER JOIN executioninstancedata B ").append("ON A.jobinstanceid = B.jobinstanceid INNER JOIN (SELECT * FROM stepexecutioninstancedata) C ").append("ON B.jobexecid = C.jobexecid ").append("WHERE A.name = ?)").toString();
 
         try (Connection conn = getConnection()) {
             try(PreparedStatement statement = conn.prepareStatement(deleteStepExecutions)) {

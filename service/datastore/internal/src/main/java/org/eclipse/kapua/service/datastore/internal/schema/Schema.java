@@ -126,7 +126,7 @@ public class Schema {
      */
     public void updateMessageMappings(KapuaId scopeId, long time, Map<String, Metric> metrics)
             throws ClientException {
-        if (metrics == null || metrics.size() == 0) {
+        if (metrics == null || metrics.isEmpty()) {
             return;
         }
         String newIndex;

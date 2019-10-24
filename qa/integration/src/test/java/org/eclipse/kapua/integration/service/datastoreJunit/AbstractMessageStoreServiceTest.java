@@ -83,7 +83,7 @@ public abstract class AbstractMessageStoreServiceTest extends Assert {
 
             XmlUtil.setContextProvider(new TestJAXBContextProvider());
         } catch (KapuaException exc) {
-            exc.printStackTrace();
+            logger.error(exc.getMessage(), exc);
         }
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractMessageStoreServiceTest extends Assert {
 
             authenticationService.logout();
         } catch (KapuaException exc) {
-            exc.printStackTrace();
+            logger.error(exc.getMessage(), exc);
         }
     }
 

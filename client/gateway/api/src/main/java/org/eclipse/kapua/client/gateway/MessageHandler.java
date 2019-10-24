@@ -14,5 +14,5 @@ package org.eclipse.kapua.client.gateway;
 @FunctionalInterface
 public interface MessageHandler {
 
-    public void handleMessage(Payload payload);
+    void handleMessage(Payload payload);
 }

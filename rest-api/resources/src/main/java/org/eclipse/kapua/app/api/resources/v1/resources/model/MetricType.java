@@ -15,10 +15,13 @@ import org.eclipse.kapua.KapuaIllegalArgumentException;
 import org.eclipse.kapua.model.type.ObjectTypeConverter;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MetricType<V extends Comparable<V>> {
 
-    private Class<V> type;
+    private static final Logger logger = LoggerFactory.getLogger(MetricType.class);
+	private Class<V> type;
 
     @SuppressWarnings("unchecked")
     public MetricType(String stringMetricType) throws KapuaIllegalArgumentException {
@@ -26,7 +29,8 @@ public class MetricType<V extends Comparable<V>> {
             try {
                 type = (Class<V>) ObjectTypeConverter.fromString(stringMetricType);
             } catch (ClassNotFoundException e) {
-                throw new KapuaIllegalArgumentException("type", stringMetricType);
+                logger.error(e.getMessage(), e);
+				throw new KapuaIllegalArgumentException("type", stringMetricType);
             }
         }
     }

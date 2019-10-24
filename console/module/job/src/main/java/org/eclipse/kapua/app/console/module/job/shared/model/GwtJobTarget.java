@@ -15,10 +15,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.GwtUpdatableEntityM
 
 public class GwtJobTarget extends GwtUpdatableEntityModel {
 
-    public enum GwtJobTargetStatus {
-        PROCESS_OK, PROCESS_FAILED, PROCESS_AWAITING
-    }
-
     @Override
     public <X> X get(String property) {
         if ("statusEnum".equals(property)) {
@@ -28,66 +24,70 @@ public class GwtJobTarget extends GwtUpdatableEntityModel {
         }
     }
 
-    public String getJobId() {
+	public String getJobId() {
         return get("jobId");
     }
 
-    public void setJobId(String jobId) {
+	public void setJobId(String jobId) {
         set("jobId", jobId);
     }
 
-    public String getJobTargetId() {
+	public String getJobTargetId() {
         return get("jobTargetId");
     }
 
-    public void setJobTargetId(String jobTargetId) {
+	public void setJobTargetId(String jobTargetId) {
         set("jobTargetId", jobTargetId);
     }
 
-    public String getStatus() {
+	public String getStatus() {
         return get("status");
     }
 
-    public String getStatusEnum() {
+	public String getStatusEnum() {
         return get("statusEnum");
     }
 
-    public void setStatus(String status) {
+	public void setStatus(String status) {
         set("status", status);
     }
 
-    public int getStepIndex() {
+	public int getStepIndex() {
         return get("stepIndex");
     }
 
-    public void setStepIndex(int stepIndex) {
+	public void setStepIndex(int stepIndex) {
         set("stepIndex", stepIndex);
     }
 
-    public String getStatusMessage() {
+	public String getStatusMessage() {
         return get("statusMessage");
     }
 
-    public void setStatusMessage(String statusMessage) {
+	public void setStatusMessage(String statusMessage) {
         set("statusMessage", statusMessage);
     }
 
-    //
+	//
     // Additional fields
     //
     public String getClientId() {
         return get("clientId");
     }
 
-    public void setClientId(String clientId) {
+	public void setClientId(String clientId) {
         set("clientId", clientId);
     }
 
-    public String getDisplayName() {
+	public String getDisplayName() {
         return get("displayName");
     }
 
-    public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName) {
         set("displayName", displayName);
+    }
+
+	public enum GwtJobTargetStatus {
+        PROCESS_OK, PROCESS_FAILED, PROCESS_AWAITING
     }
 }

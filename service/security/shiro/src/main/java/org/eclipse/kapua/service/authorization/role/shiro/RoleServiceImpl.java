@@ -242,11 +242,11 @@ public class RoleServiceImpl extends AbstractKapuaConfigurableResourceLimitedSer
 
         LOG.info("RoleService: received kapua event from {}, operation {}", kapuaEvent.getService(), kapuaEvent.getOperation());
         if ("account".equals(kapuaEvent.getService()) && "delete".equals(kapuaEvent.getOperation())) {
-            deleteRoleByAccountId(kapuaEvent.getScopeId(), kapuaEvent.getEntityId());
+            deleteRoleByAccountId(kapuaEvent.getEntityId());
         }
     }
 
-    private void deleteRoleByAccountId(KapuaId scopeId, KapuaId accountId) throws KapuaException {
+    private void deleteRoleByAccountId(KapuaId accountId) throws KapuaException {
 
         RoleQuery query = new RoleQueryImpl(accountId);
 

@@ -344,12 +344,12 @@ public class DevicePackageManagementServiceImpl extends AbstractDeviceManagement
         createDeviceEvent(scopeId, deviceId, packageRequestMessage, responseMessage);
 
         //
-        // Check response
-        if (!responseMessage.getResponseCode().isAccepted()) {
-            KapuaResponsePayload responsePayload = responseMessage.getPayload();
-
-            throw new PackageDownloadStopManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
-        }
+		// Check response
+		if (responseMessage.getResponseCode().isAccepted()) {
+			return;
+		}
+		KapuaResponsePayload responsePayload = responseMessage.getPayload();
+		throw new PackageDownloadStopManagementException(responseMessage.getResponseCode(), responsePayload.getExceptionMessage(), responsePayload.getExceptionStack());
     }
 
     //

@@ -26,7 +26,6 @@ public class KapuaAppsPayloadImpl extends KapuaBirthPayloadImpl implements Kapua
      * @since 1.1.0
      */
     public KapuaAppsPayloadImpl() {
-        super();
     }
 
     /**

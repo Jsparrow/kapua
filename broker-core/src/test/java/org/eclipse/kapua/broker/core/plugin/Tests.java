@@ -24,10 +24,10 @@ public final class Tests {
 
         // set properties
 
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
+        properties.entrySet().forEach(entry -> {
             String value = System.setProperty(entry.getKey(), entry.getValue());
             old.put(entry.getKey(), value);
-        }
+        });
 
         try {
 
@@ -38,14 +38,14 @@ public final class Tests {
 
             // restore state
 
-            for (Map.Entry<String, String> entry : old.entrySet()) {
+            old.entrySet().forEach(entry -> {
                 String value = entry.getValue();
                 if (value == null) {
                     System.clearProperty(entry.getKey());
                 } else {
                     System.setProperty(entry.getKey(), value);
                 }
-            }
+            });
         }
     }
 

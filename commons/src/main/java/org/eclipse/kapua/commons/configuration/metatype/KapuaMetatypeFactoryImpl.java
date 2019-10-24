@@ -55,15 +55,18 @@ public class KapuaMetatypeFactoryImpl implements KapuaMetatypeFactory {
         return new TiconImpl();
     }
 
-    public KapuaTmetadata newKapuaTmetadata() {
+    @Override
+	public KapuaTmetadata newKapuaTmetadata() {
         return new TmetadataImpl();
     }
 
-    public KapuaTdesignate newKapuaTdesignate() {
+    @Override
+	public KapuaTdesignate newKapuaTdesignate() {
         return new TdesignateImpl();
     }
 
-    public KapuaTobject newKapuaTobject() {
+    @Override
+	public KapuaTobject newKapuaTobject() {
         return new TobjectImpl();
     }
 }

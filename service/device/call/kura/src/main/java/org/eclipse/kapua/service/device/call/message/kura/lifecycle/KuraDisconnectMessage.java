@@ -29,7 +29,6 @@ public class KuraDisconnectMessage extends KuraMessage<KuraDisconnectChannel, Ku
      * Constructor
      */
     public KuraDisconnectMessage() {
-        super();
     }
 
     /**

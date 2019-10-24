@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.device.management;
 
 public class DeviceManagementDomains {
 
-    private DeviceManagementDomains() { }
-
     public static final DeviceManagementDomain DEVICE_MANAGEMENT_DOMAIN = new DeviceManagementDomain();
+
+	private DeviceManagementDomains() { }
 }

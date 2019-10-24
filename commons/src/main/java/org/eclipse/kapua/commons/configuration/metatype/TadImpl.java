@@ -94,7 +94,8 @@ public class TadImpl implements KapuaTad {
      * Objects of the following type(s) are allowed in the list
      * {@link ToptionImpl }
      */
-    public List<KapuaToption> getOption() {
+    @Override
+	public List<KapuaToption> getOption() {
         if (option == null) {
             option = new ArrayList<>();
         }
@@ -117,9 +118,7 @@ public class TadImpl implements KapuaTad {
     @Override
     public void setOption(List<KapuaToption> option) {
         this.option = new ArrayList<>();
-        for (KapuaToption singleOption : option) {
-            this.option.add((ToptionImpl) singleOption);
-        }
+        option.forEach(singleOption -> this.option.add((ToptionImpl) singleOption));
     }
 
     /**
@@ -145,9 +144,10 @@ public class TadImpl implements KapuaTad {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -163,7 +163,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
@@ -174,7 +175,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setName(String value) {
+    @Override
+	public void setName(String value) {
         this.name = value;
     }
 
@@ -184,7 +186,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
@@ -195,7 +198,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setDescription(String value) {
+    @Override
+	public void setDescription(String value) {
         this.description = value;
     }
 
@@ -205,7 +209,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
 
@@ -216,7 +221,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setId(String value) {
+    @Override
+	public void setId(String value) {
         this.id = value;
     }
 
@@ -226,7 +232,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link TscalarImpl }
      */
-    public TscalarImpl getType() {
+    @Override
+	public TscalarImpl getType() {
         return type;
     }
 
@@ -237,7 +244,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link TscalarImpl }
      */
-    public void setType(KapuaTscalar value) {
+    @Override
+	public void setType(KapuaTscalar value) {
         this.type = (TscalarImpl) value;
     }
 
@@ -247,7 +255,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link Integer }
      */
-    public Integer getCardinality() {
+    @Override
+	public Integer getCardinality() {
         if (cardinality == null) {
             return 0;
         } else {
@@ -262,7 +271,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link Integer }
      */
-    public void setCardinality(Integer value) {
+    @Override
+	public void setCardinality(Integer value) {
         this.cardinality = value;
     }
 
@@ -272,7 +282,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getMin() {
+    @Override
+	public String getMin() {
         return min;
     }
 
@@ -283,7 +294,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setMin(String value) {
+    @Override
+	public void setMin(String value) {
         this.min = value;
     }
 
@@ -293,7 +305,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getMax() {
+    @Override
+	public String getMax() {
         return max;
     }
 
@@ -304,7 +317,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setMax(String value) {
+    @Override
+	public void setMax(String value) {
         this.max = value;
     }
 
@@ -314,7 +328,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link String }
      */
-    public String getDefault() {
+    @Override
+	public String getDefault() {
         return defaultValue;
     }
 
@@ -325,7 +340,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link String }
      */
-    public void setDefault(String value) {
+    @Override
+	public void setDefault(String value) {
         this.defaultValue = value;
     }
 
@@ -335,7 +351,8 @@ public class TadImpl implements KapuaTad {
      * @return possible object is
      *         {@link Boolean }
      */
-    public Boolean isRequired() {
+    @Override
+	public Boolean isRequired() {
         if (required == null) {
             return true;
         } else {
@@ -350,7 +367,8 @@ public class TadImpl implements KapuaTad {
      *            allowed object is
      *            {@link Boolean }
      */
-    public void setRequired(Boolean value) {
+    @Override
+	public void setRequired(Boolean value) {
         this.required = value;
     }
 
@@ -366,7 +384,8 @@ public class TadImpl implements KapuaTad {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 

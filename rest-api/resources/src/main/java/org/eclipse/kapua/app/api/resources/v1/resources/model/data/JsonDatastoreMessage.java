@@ -32,12 +32,9 @@ public class JsonDatastoreMessage extends JsonKapuaDataMessage implements Storab
     private Date timestamp;
 
     public JsonDatastoreMessage() {
-        super();
     }
 
     public JsonDatastoreMessage(DatastoreMessage datastoreMessage) {
-        super();
-
         setId(datastoreMessage.getId());
         setDatastoreId(datastoreMessage.getDatastoreId());
         setTimestamp(datastoreMessage.getTimestamp());

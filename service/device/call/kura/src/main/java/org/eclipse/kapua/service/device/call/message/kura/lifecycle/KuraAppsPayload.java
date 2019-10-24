@@ -16,6 +16,6 @@ import org.eclipse.kapua.service.device.call.message.lifecycle.DeviceLifecyclePa
 /**
  * {@link DeviceLifecyclePayload} {@link org.eclipse.kapua.service.device.call.kura.Kura} implementation.
  */
-public class KuraAppsPayload extends AbstractKuraAppsBirthPayload implements DeviceLifecyclePayload {
+public class KuraAppsPayload extends AbstractKuraAppsBirthPayload {
 
 }

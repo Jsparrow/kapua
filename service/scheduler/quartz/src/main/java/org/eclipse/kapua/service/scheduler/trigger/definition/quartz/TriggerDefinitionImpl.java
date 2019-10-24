@@ -119,8 +119,6 @@ public class TriggerDefinitionImpl extends AbstractKapuaNamedEntity implements T
     public void setTriggerProperties(List<TriggerProperty> triggerProperties) {
         this.triggerProperties = new ArrayList<>();
 
-        for (TriggerProperty sp : triggerProperties) {
-            this.triggerProperties.add(TriggerPropertyImpl.parse(sp));
-        }
+        triggerProperties.forEach(sp -> this.triggerProperties.add(TriggerPropertyImpl.parse(sp)));
     }
 }

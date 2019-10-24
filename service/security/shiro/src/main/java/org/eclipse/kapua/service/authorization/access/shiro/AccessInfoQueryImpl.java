@@ -27,7 +27,6 @@ public class AccessInfoQueryImpl extends AbstractKapuaQuery<AccessInfo> implemen
      * Constructor
      */
     public AccessInfoQueryImpl() {
-        super();
     }
 
     /**

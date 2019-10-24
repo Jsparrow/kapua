@@ -34,7 +34,6 @@ public class KapuaEid implements KapuaId, Serializable {
      * Constructor
      */
     public KapuaEid() {
-        super();
     }
 
     /**

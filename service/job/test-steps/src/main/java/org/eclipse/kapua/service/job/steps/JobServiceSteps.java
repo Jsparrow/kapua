@@ -87,6 +87,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.HashSet;
+import org.apache.commons.lang3.StringUtils;
 
 // ****************************************************************************************
 // * Implementation of Gherkin steps used in JobService.feature scenarios.                *
@@ -305,7 +306,7 @@ public class JobServiceSteps extends TestBase {
         primeException();
         try {
             for (int i = 0; i < num; i++) {
-                tmpCreator.setName(name + "_" + i);
+                tmpCreator.setName(new StringBuilder().append(name).append("_").append(i).toString());
                 jobService.create(tmpCreator);
             }
         } catch (KapuaException ex) {
@@ -596,9 +597,7 @@ public class JobServiceSteps extends TestBase {
         stepDefinitionCreator.setName(name);
 
         List<JobStepProperty> tmpPropLst = new ArrayList<>();
-        for (CucJobStepProperty prop : list) {
-            tmpPropLst.add(jobStepDefinitionFactory.newStepProperty(prop.getName(), prop.getType(), null));
-        }
+        list.forEach(prop -> tmpPropLst.add(jobStepDefinitionFactory.newStepProperty(prop.getName(), prop.getType(), null)));
         stepDefinitionCreator.setStepProperties(tmpPropLst);
 
         stepData.put("JobStepDefinitionCreator", stepDefinitionCreator);
@@ -913,9 +912,7 @@ public class JobServiceSteps extends TestBase {
         stepCreator.setJobStepDefinitionId(currentStepDefId);
 
         List<JobStepProperty> tmpPropLst = new ArrayList<>();
-        for (CucJobStepProperty prop : list) {
-            tmpPropLst.add(jobStepFactory.newStepProperty(prop.getName(), prop.getType(), prop.getValue()));
-        }
+        list.forEach(prop -> tmpPropLst.add(jobStepFactory.newStepProperty(prop.getName(), prop.getType(), prop.getValue())));
         stepCreator.setJobStepProperties(tmpPropLst);
 
         stepData.put("JobStepCreator", stepCreator);
@@ -1580,7 +1577,7 @@ public class JobServiceSteps extends TestBase {
     // ************************************************************************************
     private JobStepType getTypeFromString(String type) {
 
-        if (type.trim().toUpperCase().equals("TARGET")) {
+        if ("TARGET".equals(StringUtils.upperCase(type.trim()))) {
             return JobStepType.TARGET;
         } else {
             return JobStepType.GENERIC;
@@ -1634,7 +1631,7 @@ public class JobServiceSteps extends TestBase {
 
     private JobTargetStatus parseJobTargetStatusFromString(String stat) {
 
-        switch (stat.toUpperCase().trim()) {
+        switch (StringUtils.trim(stat.toUpperCase())) {
             case "PROCESS_AWAITING":
                 return JobTargetStatus.PROCESS_AWAITING;
             case "PROCESS_OK":

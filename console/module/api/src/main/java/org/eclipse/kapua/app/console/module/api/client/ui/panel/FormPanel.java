@@ -20,8 +20,6 @@ public class FormPanel extends com.extjs.gxt.ui.client.widget.form.FormPanel {
     FormData formData = new FormData("-15");
 
     public FormPanel(int formLabelWidth) {
-        super();
-
         FormLayout formLayout = new FormLayout();
         formLayout.setLabelWidth(formLabelWidth);
 

@@ -27,10 +27,6 @@ public class AccessTokenCredentialsImpl implements AccessTokenCredentials, Authe
 
     private String tokenId;
 
-    private AccessTokenCredentialsImpl() {
-        super();
-    }
-
     /**
      * Constructor
      * 
@@ -41,20 +37,25 @@ public class AccessTokenCredentialsImpl implements AccessTokenCredentials, Authe
         this.tokenId = tokenId;
     }
 
-    public String getTokenId() {
+	private AccessTokenCredentialsImpl() {
+    }
+
+	@Override
+	public String getTokenId() {
         return tokenId;
     }
 
-    public void setTokenId(String tokenId) {
+	@Override
+	public void setTokenId(String tokenId) {
         this.tokenId = tokenId;
     }
 
-    @Override
+	@Override
     public Object getPrincipal() {
         return getTokenId();
     }
 
-    @Override
+	@Override
     public Object getCredentials() {
         return getTokenId();
     }

@@ -30,7 +30,6 @@ public class KuraRequestChannel extends KuraAppChannel implements DeviceRequestC
      * Constructor
      */
     public KuraRequestChannel() {
-        super();
     }
 
     /**

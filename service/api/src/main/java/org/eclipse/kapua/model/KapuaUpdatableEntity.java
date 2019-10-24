@@ -82,7 +82,7 @@ public interface KapuaUpdatableEntity extends KapuaEntity {
      * @throws EntityPropertiesReadException If there are error while reading {@link Properties}
      */
     @XmlTransient
-    Properties getEntityAttributes() throws EntityPropertiesReadException;
+    Properties getEntityAttributes();
 
     /**
      * Sets the attributes
@@ -91,7 +91,7 @@ public interface KapuaUpdatableEntity extends KapuaEntity {
      * @throws EntityPropertiesWriteException If there are error while writing {@link Properties}
      * @since 1.0.0
      */
-    void setEntityAttributes(Properties props) throws EntityPropertiesWriteException;
+    void setEntityAttributes(Properties props);
 
     /**
      * Gets the property entities
@@ -101,7 +101,7 @@ public interface KapuaUpdatableEntity extends KapuaEntity {
      * @since 1.0.0
      */
     @XmlTransient
-    Properties getEntityProperties() throws EntityPropertiesReadException;
+    Properties getEntityProperties();
 
     /**
      * Sets the property entities
@@ -110,5 +110,5 @@ public interface KapuaUpdatableEntity extends KapuaEntity {
      * @throws EntityPropertiesWriteException If there are error while writing {@link Properties}
      * @since 1.0.0
      */
-    void setEntityProperties(Properties props) throws EntityPropertiesWriteException;
+    void setEntityProperties(Properties props);
 }

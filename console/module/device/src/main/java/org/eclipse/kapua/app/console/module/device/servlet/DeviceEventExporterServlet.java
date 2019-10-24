@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.Callable;
+import org.apache.commons.lang3.StringUtils;
 
 public class DeviceEventExporterServlet extends HttpServlet {
 
@@ -73,11 +74,11 @@ public class DeviceEventExporterServlet extends HttpServlet {
                 throw new IllegalArgumentException("format");
             }
 
-            if (scopeId == null || scopeId.isEmpty()) {
+            if (scopeId == null || StringUtils.isEmpty(scopeId)) {
                 throw new IllegalArgumentException("scopeId");
             }
 
-            if (deviceId == null || deviceId.isEmpty()) {
+            if (deviceId == null || StringUtils.isEmpty(deviceId)) {
                 throw new IllegalArgumentException("deviceId");
             }
 

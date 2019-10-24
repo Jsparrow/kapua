@@ -27,7 +27,6 @@ public class AccessPermissionQueryImpl extends AbstractKapuaQuery<AccessPermissi
      * Constructor
      */
     public AccessPermissionQueryImpl() {
-        super();
     }
 
     /**

@@ -21,6 +21,7 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Sql script executor bean. Used to invoke the execution of sql scripts to update database schema.
@@ -76,25 +77,25 @@ public class SimpleSqlScriptExecutor {
 
         String prefix = "";
         String suffix = "";
-        if (filenameFilter.contains(WILDCAR_ANY)) {
-            int pos = filenameFilter.indexOf(WILDCAR_ANY);
-            prefix = filenameFilter.substring(0, pos);
-            suffix = filenameFilter.substring(pos + 1);
+        if (StringUtils.contains(filenameFilter, WILDCAR_ANY)) {
+            int pos = StringUtils.indexOf(filenameFilter, WILDCAR_ANY);
+            prefix = StringUtils.substring(filenameFilter, 0, pos);
+            suffix = StringUtils.substring(filenameFilter, pos + 1);
         }
 
         final String finalPrefix = prefix;
         final String finalSuffix = suffix;
 
         FilenameFilter sqlfilter = (dir, name) -> {
-            if (finalPrefix.isEmpty() && finalSuffix.isEmpty()) {
+            if (StringUtils.isEmpty(finalPrefix) && StringUtils.isEmpty(finalSuffix)) {
                 return filenameFilter.equals(name);
             }
 
-            if (!finalPrefix.isEmpty() && !name.startsWith(finalPrefix)) {
+            if (!StringUtils.isEmpty(finalPrefix) && !StringUtils.startsWith(name, finalPrefix)) {
                 return false;
             }
 
-            if (!finalSuffix.isEmpty() && !name.endsWith(finalSuffix)) {
+            if (!StringUtils.isEmpty(finalSuffix) && !StringUtils.endsWith(name, finalSuffix)) {
                 return false;
             }
 
@@ -114,18 +115,18 @@ public class SimpleSqlScriptExecutor {
 
         String sep = String.valueOf(File.separatorChar);
         for (String sqlItem : dirContents) {
-            String sqlFileName = scanPath + (scanPath.endsWith(sep) ? "" : sep) + sqlItem;
+            String sqlFileName = new StringBuilder().append(scanPath).append(StringUtils.endsWith(scanPath, sep) ? "" : sep).append(sqlItem).toString();
             File sqlFile = new File(sqlFileName);
-            if (sqlFile.isFile() && sqlItem.endsWith("_drop.sql")) {
+            if (sqlFile.isFile() && StringUtils.endsWith(sqlItem, "_drop.sql")) {
                 dropScripts.add(String.format(RUN_SCRIPT_CMD, sqlFileName));
             }
-            if (sqlFile.isFile() && sqlItem.endsWith("_create.sql")) {
+            if (sqlFile.isFile() && StringUtils.endsWith(sqlItem, "_create.sql")) {
                 createScripts.add(String.format(RUN_SCRIPT_CMD, sqlFileName));
             }
-            if (sqlFile.isFile() && sqlItem.endsWith("_seed.sql")) {
+            if (sqlFile.isFile() && StringUtils.endsWith(sqlItem, "_seed.sql")) {
                 seedScripts.add(String.format(RUN_SCRIPT_CMD, sqlFileName));
             }
-            if (sqlFile.isFile() && sqlItem.endsWith("_delete.sql")) {
+            if (sqlFile.isFile() && StringUtils.endsWith(sqlItem, "_delete.sql")) {
                 deleteScripts.add(String.format(RUN_SCRIPT_CMD, sqlFileName));
             }
         }

@@ -31,7 +31,6 @@ public class GridSelectionChangedListener<M extends ModelData> implements Listen
      * The constructor
      */
     public GridSelectionChangedListener() {
-        super();
     }
 
     /**

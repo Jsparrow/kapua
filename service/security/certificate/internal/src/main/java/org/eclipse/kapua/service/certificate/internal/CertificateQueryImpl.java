@@ -22,13 +22,6 @@ public class CertificateQueryImpl extends AbstractKapuaQuery<Certificate> implem
     private Boolean includeInherited = Boolean.FALSE;
 
     /**
-     * Constructor
-     */
-    private CertificateQueryImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scopeId of the {@link KapuaQuery}
@@ -38,7 +31,7 @@ public class CertificateQueryImpl extends AbstractKapuaQuery<Certificate> implem
         setScopeId(scopeId);
     }
 
-    /**
+	/**
      * Constructor
      * <p>
      * This deeply clones the given {@link CertificateQuery}
@@ -49,12 +42,18 @@ public class CertificateQueryImpl extends AbstractKapuaQuery<Certificate> implem
         super(query);
     }
 
-    @Override
+	/**
+     * Constructor
+     */
+    private CertificateQueryImpl() {
+    }
+
+	@Override
     public Boolean getIncludeInherited() {
         return includeInherited;
     }
 
-    @Override
+	@Override
     public void setIncludeInherited(Boolean includeInherited) {
         this.includeInherited = includeInherited;
     }

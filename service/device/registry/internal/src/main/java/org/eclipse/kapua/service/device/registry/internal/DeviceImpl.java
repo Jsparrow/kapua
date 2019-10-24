@@ -182,15 +182,6 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device, 
     private String customAttribute5;
 
     /**
-     * Constructor
-     *
-     * @since 1.0.0
-     */
-    protected DeviceImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scope {@link KapuaId} to set into the {@link Device}.
@@ -200,7 +191,7 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device, 
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param device
@@ -242,317 +233,321 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device, 
         setCustomAttribute5(device.getCustomAttribute5());
     }
 
-    @Override
+	/**
+     * Constructor
+     *
+     * @since 1.0.0
+     */
+    protected DeviceImpl() {
+    }
+
+	@Override
     public void setTagIds(Set<KapuaId> tagIds) {
         this.tagIds = new HashSet<>();
 
-        for (KapuaId id : tagIds) {
-            this.tagIds.add(KapuaEid.parseKapuaId(id));
-        }
+        tagIds.forEach(id -> this.tagIds.add(KapuaEid.parseKapuaId(id)));
     }
 
-    @Override
+	@Override
     public Set<KapuaId> getTagIds() {
         Set<KapuaId> tagIds = new HashSet<>();
 
         if (this.tagIds != null) {
-            for (KapuaId deviceTagId : this.tagIds) {
-                tagIds.add(new KapuaEid(deviceTagId));
-            }
+            this.tagIds.forEach(deviceTagId -> tagIds.add(new KapuaEid(deviceTagId)));
         }
 
         return tagIds;
     }
 
-    @Override
+	@Override
     public KapuaId getGroupId() {
         return groupId;
     }
 
-    @Override
+	@Override
     public void setGroupId(KapuaId groupId) {
         this.groupId = KapuaEid.parseKapuaId(groupId);
     }
 
-    @Override
+	@Override
     public String getClientId() {
         return clientId;
     }
 
-    @Override
+	@Override
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
-    @Override
+	@Override
     public KapuaId getConnectionId() {
         return connectionId;
     }
 
-    @Override
+	@Override
     public void setConnectionId(KapuaId connectionId) {
         this.connectionId = KapuaEid.parseKapuaId(connectionId);
     }
 
-    @Override
+	@Override
     public DeviceConnection getConnection() {
         return connection;
     }
 
-    public void setConnection(DeviceConnection connection) throws KapuaException {
+	public void setConnection(DeviceConnection connection) throws KapuaException {
         this.connection = connection != null ? new DeviceConnectionImpl(connection) : null;
     }
 
-    @Override
+	@Override
     public DeviceStatus getStatus() {
         return status;
     }
 
-    @Override
+	@Override
     public void setStatus(DeviceStatus status) {
         this.status = status;
     }
 
-    @Override
+	@Override
     public String getDisplayName() {
         return displayName;
     }
 
-    @Override
+	@Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    @Override
+	@Override
     public KapuaId getLastEventId() {
         return lastEventId;
     }
 
-    @Override
+	@Override
     public void setLastEventId(KapuaId lastEventId) {
         this.lastEventId = KapuaEid.parseKapuaId(lastEventId);
     }
 
-    @Override
+	@Override
     public DeviceEvent getLastEvent() {
         return lastEvent;
     }
 
-    public void setLastEvent(DeviceEvent lastEvent) throws KapuaException {
+	public void setLastEvent(DeviceEvent lastEvent) throws KapuaException {
         this.lastEvent = lastEvent != null ? new DeviceEventImpl(lastEvent) : null;
     }
 
-    @Override
+	@Override
     public String getSerialNumber() {
         return serialNumber;
     }
 
-    @Override
+	@Override
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 
-    @Override
+	@Override
     public String getModelId() {
         return modelId;
     }
 
-    @Override
+	@Override
     public void setModelId(String modelId) {
         this.modelId = modelId;
     }
 
-    @Override
+	@Override
     public String getModelName() {
         return modelName;
     }
 
-    @Override
+	@Override
     public void setModelName(String modelName) {
         this.modelName = modelName;
     }
 
-    @Override
+	@Override
     public String getImei() {
         return imei;
     }
 
-    @Override
+	@Override
     public void setImei(String imei) {
         this.imei = imei;
     }
 
-    @Override
+	@Override
     public String getImsi() {
         return imsi;
     }
 
-    @Override
+	@Override
     public void setImsi(String imsi) {
         this.imsi = imsi;
     }
 
-    @Override
+	@Override
     public String getIccid() {
         return iccid;
     }
 
-    @Override
+	@Override
     public void setIccid(String iccid) {
         this.iccid = iccid;
     }
 
-    @Override
+	@Override
     public String getBiosVersion() {
         return biosVersion;
     }
 
-    @Override
+	@Override
     public void setBiosVersion(String biosVersion) {
         this.biosVersion = biosVersion;
     }
 
-    @Override
+	@Override
     public String getFirmwareVersion() {
         return firmwareVersion;
     }
 
-    @Override
+	@Override
     public void setFirmwareVersion(String firmwareVersion) {
         this.firmwareVersion = firmwareVersion;
     }
 
-    @Override
+	@Override
     public String getOsVersion() {
         return osVersion;
     }
 
-    @Override
+	@Override
     public void setOsVersion(String osVersion) {
         this.osVersion = osVersion;
     }
 
-    @Override
+	@Override
     public String getJvmVersion() {
         return jvmVersion;
     }
 
-    @Override
+	@Override
     public void setJvmVersion(String jvmVersion) {
         this.jvmVersion = jvmVersion;
     }
 
-    @Override
+	@Override
     public String getOsgiFrameworkVersion() {
         return osgiFrameworkVersion;
     }
 
-    @Override
+	@Override
     public void setOsgiFrameworkVersion(String osgiFrameworkVersion) {
         this.osgiFrameworkVersion = osgiFrameworkVersion;
     }
 
-    @Override
+	@Override
     public String getApplicationFrameworkVersion() {
         return applicationFrameworkVersion;
     }
 
-    @Override
+	@Override
     public void setApplicationFrameworkVersion(String applicationFrameworkVersion) {
         this.applicationFrameworkVersion = applicationFrameworkVersion;
     }
 
-    @Override
+	@Override
     public String getConnectionInterface() {
         return connectionInterface;
     }
 
-    @Override
+	@Override
     public void setConnectionInterface(String connectionInterface) {
         this.connectionInterface = connectionInterface;
     }
 
-    @Override
+	@Override
     public String getConnectionIp() {
         return connectionIp;
     }
 
-    @Override
+	@Override
     public void setConnectionIp(String connectionIp) {
         this.connectionIp = connectionIp;
     }
 
-    @Override
+	@Override
     public String getApplicationIdentifiers() {
         return applicationIdentifiers;
     }
 
-    @Override
+	@Override
     public void setApplicationIdentifiers(String applicationIdentifiers) {
         this.applicationIdentifiers = applicationIdentifiers;
     }
 
-    @Override
+	@Override
     public String getAcceptEncoding() {
         return acceptEncoding;
     }
 
-    @Override
+	@Override
     public void setAcceptEncoding(String acceptEncoding) {
         this.acceptEncoding = acceptEncoding;
     }
 
-    @Override
+	@Override
     public String getCustomAttribute1() {
         return customAttribute1;
     }
 
-    @Override
+	@Override
     public void setCustomAttribute1(String customAttribute1) {
         this.customAttribute1 = customAttribute1;
     }
 
-    @Override
+	@Override
     public String getCustomAttribute2() {
         return customAttribute2;
     }
 
-    @Override
+	@Override
     public void setCustomAttribute2(String customAttribute2) {
         this.customAttribute2 = customAttribute2;
     }
 
-    @Override
+	@Override
     public String getCustomAttribute3() {
         return customAttribute3;
     }
 
-    @Override
+	@Override
     public void setCustomAttribute3(String customAttribute3) {
         this.customAttribute3 = customAttribute3;
     }
 
-    @Override
+	@Override
     public String getCustomAttribute4() {
         return customAttribute4;
     }
 
-    @Override
+	@Override
     public void setCustomAttribute4(String customAttribute4) {
         this.customAttribute4 = customAttribute4;
     }
 
-    @Override
+	@Override
     public String getCustomAttribute5() {
         return customAttribute5;
     }
 
-    @Override
+	@Override
     public void setCustomAttribute5(String customAttribute5) {
         this.customAttribute5 = customAttribute5;
     }
 
-    @Override
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }

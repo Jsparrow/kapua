@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.endpoint;
 
 public class EndpointInfoDomains {
 
-    private EndpointInfoDomains() { }
-
     public static final EndpointInfoDomain ENDPOINT_INFO_DOMAIN = new EndpointInfoDomain();
+
+	private EndpointInfoDomains() { }
 }

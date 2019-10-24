@@ -142,12 +142,12 @@ public class TranslatorAppSnapshotKuraKapua extends AbstractSimpleTranslatorResp
                 DeviceSnapshots deviceSnapshots = deviceSnapshotFactory.newDeviceSnapshots();
 
                 List<Long> snapshotIds = kuraSnapshotIdResult.getSnapshotIds();
-                for (Long snapshotId : snapshotIds) {
+                snapshotIds.forEach(snapshotId -> {
                     DeviceSnapshot snapshot = deviceSnapshotFactory.newDeviceSnapshot();
                     snapshot.setId(Long.toString(snapshotId));
                     snapshot.setTimestamp(snapshotId);
                     deviceSnapshots.getSnapshots().add(snapshot);
-                }
+                });
 
                 StringWriter sw = new StringWriter();
                 XmlUtil.marshal(deviceSnapshots, sw);

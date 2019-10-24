@@ -12,5 +12,5 @@
 package org.eclipse.kapua.app.console.module.api.client.ui.widget;
 
 public interface UsageDateRangeSelectorListener {
-    public void onUpdate();
+    void onUpdate();
 }

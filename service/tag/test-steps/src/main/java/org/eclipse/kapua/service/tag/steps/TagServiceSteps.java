@@ -131,9 +131,7 @@ public class TagServiceSteps extends TestBase {
         }
         Map<String, Object> valueMap = new HashMap<>();
 
-        for (CucConfig config : testConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        testConfigs.forEach(config -> config.addConfigToMap(valueMap));
         try {
             primeException();
             tagService.setConfigValues(scopeId, parentId, valueMap);

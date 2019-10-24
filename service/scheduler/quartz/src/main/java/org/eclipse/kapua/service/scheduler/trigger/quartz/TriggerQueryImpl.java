@@ -25,19 +25,18 @@ public class TriggerQueryImpl extends AbstractKapuaQuery<Trigger> implements Tri
 
     /**
      * Constructor
-     */
-    private TriggerQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public TriggerQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private TriggerQueryImpl() {
     }
 
 }

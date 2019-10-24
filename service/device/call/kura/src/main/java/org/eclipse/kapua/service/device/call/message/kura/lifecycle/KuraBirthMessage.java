@@ -21,7 +21,7 @@ import java.util.Date;
  * <p>
  * The birth message is sent by the {@link org.eclipse.kapua.service.device.registry.Device} to notify to the platform that it is available.
  */
-public class KuraBirthMessage extends AbstractKuraAppsBirthMessage<KuraBirthChannel, KuraBirthPayload> implements DeviceLifecycleMessage<KuraBirthChannel, KuraBirthPayload> {
+public class KuraBirthMessage extends AbstractKuraAppsBirthMessage<KuraBirthChannel, KuraBirthPayload> {
 
     /**
      * Constructor

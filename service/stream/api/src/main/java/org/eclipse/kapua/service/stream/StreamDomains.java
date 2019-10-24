@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.stream;
 
 public class StreamDomains {
 
-    private StreamDomains() { }
-
     public static final StreamDomain STREAM_DOMAIN = new StreamDomain();
+
+	private StreamDomains() { }
 }

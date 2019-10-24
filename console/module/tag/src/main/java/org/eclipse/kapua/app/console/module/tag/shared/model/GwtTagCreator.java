@@ -21,7 +21,6 @@ public class GwtTagCreator extends GwtEntityCreator {
     private String description;
 
     public GwtTagCreator() {
-        super();
     }
 
     public String getName() {

@@ -14,5 +14,5 @@ package org.eclipse.kapua.client.gateway;
 @FunctionalInterface
 public interface MessageErrorHandler {
 
-    public void handleError(Throwable e);
+    void handleError(Throwable e);
 }

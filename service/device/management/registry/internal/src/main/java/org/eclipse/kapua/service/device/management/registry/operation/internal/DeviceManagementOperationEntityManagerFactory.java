@@ -17,15 +17,16 @@ import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * @since 1.0
  */
-public class DeviceManagementOperationEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class DeviceManagementOperationEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-device_management_operation_registry";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static DeviceManagementOperationEntityManagerFactory instance = new DeviceManagementOperationEntityManagerFactory();
 

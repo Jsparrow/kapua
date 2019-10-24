@@ -19,7 +19,15 @@ public final class Credentials {
     private Credentials() {
     }
 
-    public static class UserAndPassword {
+    public static UserAndPassword userAndPassword(final String username, final String password) {
+        return new UserAndPassword(username, password != null ? password.toCharArray() : null);
+    }
+
+	public static UserAndPassword userAndPassword(final String username, final char[] password) {
+        return new UserAndPassword(username, password);
+    }
+
+	public static class UserAndPassword {
 
         private final String username;
         private final char[] password;
@@ -44,13 +52,5 @@ public final class Credentials {
 
             return String.valueOf(password);
         }
-    }
-
-    public static UserAndPassword userAndPassword(final String username, final String password) {
-        return new UserAndPassword(username, password != null ? password.toCharArray() : null);
-    }
-
-    public static UserAndPassword userAndPassword(final String username, final char[] password) {
-        return new UserAndPassword(username, password);
     }
 }

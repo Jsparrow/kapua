@@ -25,7 +25,6 @@ public class XmlAdaptedSortFields {
     private List<XmlAdaptedSortField> adaptedSortFields;
 
     public XmlAdaptedSortFields() {
-        super();
     }
 
     public XmlAdaptedSortFields(List<XmlAdaptedSortField> adaptedItems) {

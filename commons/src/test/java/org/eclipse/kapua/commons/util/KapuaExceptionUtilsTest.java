@@ -22,11 +22,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class KapuaExceptionUtilsTest extends Assert {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(KapuaExceptionUtilsTest.class);
+
+	@Test
     public void testConstructor() throws Exception {
         Constructor<KapuaExceptionUtils> exceptionUtil = KapuaExceptionUtils.class.getDeclaredConstructor();
         exceptionUtil.setAccessible(true);
@@ -60,7 +64,8 @@ public class KapuaExceptionUtilsTest extends Assert {
             try {
                 KapuaExceptionUtils.convertPersistenceException(listOfPermittedExceptions[i]);
             } catch (Exception ex) {
-                // Expected
+                logger.error(ex.getMessage(), ex);
+				// Expected
                 fail("No exception expected for: " + listOfPermittedExceptions[i]);
             }
         }

@@ -13,7 +13,7 @@ package org.eclipse.kapua.service.account;
 
 public class AccountDomains {
 
-    private AccountDomains() { }
-
     public static final AccountDomain ACCOUNT_DOMAIN = new AccountDomain();
+
+	private AccountDomains() { }
 }

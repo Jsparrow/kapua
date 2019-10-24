@@ -59,7 +59,7 @@ public class TdesignateImpl implements KapuaTdesignate {
     protected String bundle;
     protected Boolean optional;
     protected Boolean merge;
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the object property.
@@ -67,7 +67,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link TobjectImpl }
      */
-    public KapuaTobject getObject() {
+    @Override
+	public KapuaTobject getObject() {
         return object;
     }
 
@@ -77,7 +78,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link TobjectImpl }
      */
-    public void setObject(KapuaTobject value) {
+    @Override
+	public void setObject(KapuaTobject value) {
         this.object = (TobjectImpl) value;
     }
 
@@ -102,14 +104,16 @@ public class TdesignateImpl implements KapuaTdesignate {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
 
-    public void setAny(List<Object> any) {
+    @Override
+	public void setAny(List<Object> any) {
         this.any = any;
     }
 
@@ -119,7 +123,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link String }
      */
-    public String getPid() {
+    @Override
+	public String getPid() {
         return pid;
     }
 
@@ -129,7 +134,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setPid(String value) {
+    @Override
+	public void setPid(String value) {
         this.pid = value;
     }
 
@@ -139,7 +145,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link String }
      */
-    public String getFactoryPid() {
+    @Override
+	public String getFactoryPid() {
         return factoryPid;
     }
 
@@ -149,7 +156,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setFactoryPid(String value) {
+    @Override
+	public void setFactoryPid(String value) {
         this.factoryPid = value;
     }
 
@@ -159,7 +167,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link String }
      */
-    public String getBundle() {
+    @Override
+	public String getBundle() {
         return bundle;
     }
 
@@ -169,7 +178,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setBundle(String value) {
+    @Override
+	public void setBundle(String value) {
         this.bundle = value;
     }
 
@@ -179,7 +189,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link Boolean }
      */
-    public Boolean isOptional() {
+    @Override
+	public Boolean isOptional() {
         if (optional == null) {
             return false;
         } else {
@@ -193,7 +204,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link Boolean }
      */
-    public void setOptional(Boolean value) {
+    @Override
+	public void setOptional(Boolean value) {
         this.optional = value;
     }
 
@@ -203,7 +215,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @return possible object is
      * {@link Boolean }
      */
-    public Boolean isMerge() {
+    @Override
+	public Boolean isMerge() {
         if (merge == null) {
             return false;
         } else {
@@ -217,7 +230,8 @@ public class TdesignateImpl implements KapuaTdesignate {
      * @param value allowed object is
      *              {@link Boolean }
      */
-    public void setMerge(Boolean value) {
+    @Override
+	public void setMerge(Boolean value) {
         this.merge = value;
     }
 
@@ -233,11 +247,13 @@ public class TdesignateImpl implements KapuaTdesignate {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 
-    public void setOtherAttributes(Map<QName, String> otherAttributes) {
+    @Override
+	public void setOtherAttributes(Map<QName, String> otherAttributes) {
         this.otherAttributes = otherAttributes;
     }
 }

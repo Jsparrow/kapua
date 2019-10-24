@@ -70,12 +70,13 @@ public class Starting implements AutoCloseable {
     private List<AutoCloseable> closeables;
 
     public void add(AutoCloseable closeable) {
-        if (closeable != null) {
-            if (closeables == null) {
-                closeables = new LinkedList<>();
-            }
-            closeables.add(closeable);
-        }
+        if (closeable == null) {
+			return;
+		}
+		if (closeables == null) {
+		    closeables = new LinkedList<>();
+		}
+		closeables.add(closeable);
     }
 
     @Override
@@ -89,19 +90,20 @@ public class Starting implements AutoCloseable {
 
         final LinkedList<Exception> exceptions = new LinkedList<>();
 
-        for (final AutoCloseable closeable : closeables) {
+        closeables.forEach((final AutoCloseable closeable) -> {
             try {
                 closeable.close();
             } catch (Exception e) {
                 exceptions.add(e);
             }
-        }
+        });
 
-        if (!exceptions.isEmpty()) {
-            final Exception e = exceptions.pollFirst();
-            exceptions.forEach(e::addSuppressed);
-            throw e;
-        }
+        if (exceptions.isEmpty()) {
+			return;
+		}
+		final Exception e = exceptions.pollFirst();
+		exceptions.forEach(e::addSuppressed);
+		throw e;
     }
 
     public List<AutoCloseable> started() {

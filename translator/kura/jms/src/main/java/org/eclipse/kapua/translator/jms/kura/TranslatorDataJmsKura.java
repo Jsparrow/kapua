@@ -24,6 +24,8 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.message.jms.JmsMessage;
 import org.eclipse.kapua.transport.message.jms.JmsPayload;
 import org.eclipse.kapua.transport.message.jms.JmsTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Messages translator implementation from {@link org.eclipse.kapua.transport.message.jms.JmsMessage} to {@link org.eclipse.kapua.service.device.call.message.kura.data.KuraDataMessage}
@@ -32,7 +34,9 @@ import org.eclipse.kapua.transport.message.jms.JmsTopic;
  */
 public class TranslatorDataJmsKura extends Translator<JmsMessage, KuraDataMessage> {
 
-    @Override
+    private static final Logger logger = LoggerFactory.getLogger(TranslatorDataJmsKura.class);
+
+	@Override
     public KuraDataMessage translate(JmsMessage jmsMessage)
             throws KapuaException {
         KuraDataChannel kuraChannel = translate(jmsMessage.getTopic());
@@ -48,7 +52,7 @@ public class TranslatorDataJmsKura extends Translator<JmsMessage, KuraDataMessag
         KuraDataChannel kuraDataChannel = new KuraDataChannel();
         kuraDataChannel.setScope(mqttTopicTokens[0]);
         kuraDataChannel.setClientId(mqttTopicTokens[1]);
-        List<String> channelPartsList = new LinkedList<String>(Arrays.asList(mqttTopicTokens));
+        List<String> channelPartsList = new LinkedList<>(Arrays.asList(mqttTopicTokens));
         // remove the first 2 items (do no use sublist since the returned object is not serializable then Camel will throws exception on error handling
         // channelPartsList.subList(2,mqttTopicTokens.length))
         channelPartsList.remove(0);
@@ -65,7 +69,8 @@ public class TranslatorDataJmsKura extends Translator<JmsMessage, KuraDataMessag
             try {
                 kuraPayload.readFromByteArray(jmsPayload.getBody());
             } catch (MessageException ex) {
-                kuraPayload.setBody(jmsPayload.getBody());
+                logger.error(ex.getMessage(), ex);
+				kuraPayload.setBody(jmsPayload.getBody());
             }
         }
         return kuraPayload;

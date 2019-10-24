@@ -115,7 +115,7 @@ public class DeviceCallExecutor<C extends KapuaRequestChannel, P extends KapuaRe
 
         //
         // Check Device Connection status
-        if (!DeviceConnectionStatus.CONNECTED.equals(device.getConnection().getStatus())) {
+        if (DeviceConnectionStatus.CONNECTED != device.getConnection().getStatus()) {
             throw new DeviceNotConnectedException(device.getId(), device.getConnection().getStatus());
         }
 

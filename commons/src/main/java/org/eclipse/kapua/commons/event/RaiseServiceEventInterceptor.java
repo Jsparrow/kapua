@@ -41,6 +41,7 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Event interceptor. It builds the event object and sends it to the event bus.
@@ -89,7 +90,7 @@ public class RaiseServiceEventInterceptor implements MethodInterceptor {
 
             // Raise service event if the execution is successful
             try {
-                sendEvent(invocation, serviceEvent, returnObject);
+                sendEvent(invocation, serviceEvent);
             } catch (ServiceEventBusException e) {
                 LOG.warn("Error sending event: {}", e.getMessage(), e);
             }
@@ -193,7 +194,7 @@ public class RaiseServiceEventInterceptor implements MethodInterceptor {
             serviceEvent.setEntityId(ids.get(0));
         }
         String serviceInterface = implementedClass[0].getAnnotatedInterfaces()[0].getType().getTypeName();
-        String genericsList = serviceInterface.substring(serviceInterface.indexOf('<') + 1, serviceInterface.indexOf('>'));
+        String genericsList = StringUtils.substring(serviceInterface, StringUtils.indexOf(serviceInterface, '<') + 1, StringUtils.indexOf(serviceInterface, '>'));
         String[] entityClassesToScan = genericsList.replaceAll("\\,", "").split(" ");
         for (String str : entityClassesToScan) {
             try {
@@ -226,16 +227,12 @@ public class RaiseServiceEventInterceptor implements MethodInterceptor {
 
     private void logFoundEntities(List<KapuaEntity> entities, List<KapuaId> ids) {
         LOG.debug("Entities found:");
-        for (KapuaEntity tmp : entities) {
-            LOG.debug("   id: {} - scopeId: {} - type: {}", tmp.getId(), tmp.getScopeId(), tmp.getType());
-        }
+        entities.forEach(tmp -> LOG.debug("   id: {} - scopeId: {} - type: {}", tmp.getId(), tmp.getScopeId(), tmp.getType()));
         LOG.debug("   KapuaIds found:");
-        for (KapuaId tmp : ids) {
-            LOG.debug("   id: {}", tmp.getId());
-        }
+        ids.forEach(tmp -> LOG.debug("   id: {}", tmp.getId()));
     }
 
-    private void sendEvent(MethodInvocation invocation, ServiceEvent serviceEvent, Object returnedValue) throws ServiceEventBusException {
+    private void sendEvent(MethodInvocation invocation, ServiceEvent serviceEvent) throws ServiceEventBusException {
         String address = ServiceMap.getAddress(serviceEvent.getService());
         try {
             ServiceEventBusManager.getInstance().publish(address, serviceEvent);

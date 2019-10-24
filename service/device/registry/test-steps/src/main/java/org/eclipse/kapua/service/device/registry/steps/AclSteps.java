@@ -39,6 +39,8 @@ import org.junit.Assert;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Steps for testing Access Control List functionality on Broker service.
@@ -46,7 +48,9 @@ import java.util.Map;
 @ScenarioScoped
 public class AclSteps extends TestBase {
 
-    public static final int BROKER_START_WAIT_MILLIS = 5000;
+    private static final Logger logger = LoggerFactory.getLogger(AclSteps.class);
+
+	public static final int BROKER_START_WAIT_MILLIS = 5000;
 
     private static final String SYS_USERNAME = "kapua-sys";
 
@@ -193,10 +197,11 @@ public class AclSteps extends TestBase {
     @Then("^Broker doesn't receive string \"([^\"]*)\" on topic \"([^\"]*)\"$")
     public void brokerDoesntReceiveStringOnTopic(String payload, String topic) throws Throwable {
 
-        if ((listenerMqttMessage != null) && (listenerMqttMessage.size() >= 1)) {
-            String message = listenerMqttMessage.get(topic);
-            Assert.assertNotEquals(payload, message);
-        }
+        if (!((listenerMqttMessage != null) && (listenerMqttMessage.size() >= 1))) {
+			return;
+		}
+		String message = listenerMqttMessage.get(topic);
+		Assert.assertNotEquals(payload, message);
     }
 
     @Then("^client \"([^\"]*)\" receives string \"([^\"]*)\" on topic \"([^\"]*)\"$")
@@ -216,10 +221,11 @@ public class AclSteps extends TestBase {
     public void clientDoesntReceiveStringOnTopic(String clientId, String payload, String topic) throws Throwable {
 
         Map<String, String> messages = clientMqttMessage.get(clientId);
-        if ((messages != null) && (messages.size() >= 1)) {
-            String message = messages.get(topic);
-            Assert.assertNotEquals(payload, message);
-        }
+        if (!((messages != null) && (messages.size() >= 1))) {
+			return;
+		}
+		String message = messages.get(topic);
+		Assert.assertNotEquals(payload, message);
     }
 
     @And("^broker account and user are created$")
@@ -290,6 +296,7 @@ public class AclSteps extends TestBase {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
+			logger.error(e.getMessage(), e);
             // ignore
         }
     }

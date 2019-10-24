@@ -19,6 +19,7 @@ import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Collections;
 
 /**
  * Entity manager factory for the user module.
@@ -26,14 +27,14 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  *
  */
-public class UserEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class UserEntityManagerFactory extends AbstractEntityManagerFactory {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(UserEntityManagerFactory.class);
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-user";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONSTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONSTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static UserEntityManagerFactory instance = new UserEntityManagerFactory();
 

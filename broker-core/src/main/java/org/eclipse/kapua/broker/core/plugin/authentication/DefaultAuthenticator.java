@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Default authenticator implementation
@@ -124,7 +125,7 @@ public class DefaultAuthenticator implements Authenticator {
                         message,
                         kcc);
             } catch (Exception e) {
-                logger.error("Exception sending the {} message: {}", systemMessageType.name().toLowerCase(), e.getMessage(), e);
+                logger.error("Exception sending the {} message: {}", StringUtils.lowerCase(systemMessageType.name()), e.getMessage(), e);
             } finally {
                 if (producerWrapper != null) {
                     JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION).returnObject(producerWrapper);

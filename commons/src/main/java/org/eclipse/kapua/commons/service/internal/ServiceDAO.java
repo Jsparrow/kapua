@@ -83,6 +83,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link ServiceDAO} utility methods.
@@ -337,9 +338,7 @@ public class ServiceDAO {
 
         // Fetch LAZY attributes if necessary
         if (kapuaQuery.getFetchAttributes() != null) {
-            for (String fetchAttribute : kapuaQuery.getFetchAttributes()) {
-                entityRoot.fetch(entityType.getSingularAttribute(fetchAttribute), JoinType.LEFT);
-            }
+            kapuaQuery.getFetchAttributes().forEach(fetchAttribute -> entityRoot.fetch(entityType.getSingularAttribute(fetchAttribute), JoinType.LEFT));
         }
 
         //
@@ -378,7 +377,7 @@ public class ServiceDAO {
         if (kapuaQuery.getSortCriteria() != null) {
             FieldSortCriteria sortCriteria = (FieldSortCriteria) kapuaQuery.getSortCriteria();
 
-            if (SortOrder.ASCENDING.equals(sortCriteria.getSortOrder())) {
+            if (SortOrder.ASCENDING == sortCriteria.getSortOrder()) {
                 order = cb.asc(extractAttribute(entityRoot, sortCriteria.getAttributeName()));
             } else {
                 order = cb.desc(extractAttribute(entityRoot, sortCriteria.getAttributeName()));
@@ -594,7 +593,7 @@ public class ServiceDAO {
 
         // Fields to query properties of sub attributes of the root entity
         Attribute<?, ?> attribute;
-        if (attrName.contains(ATTRIBUTE_SEPARATOR)) {
+        if (StringUtils.contains(attrName, ATTRIBUTE_SEPARATOR)) {
             attribute = entityType.getAttribute(attrName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[0]);
         } else {
             attribute = entityType.getAttribute(attrName);
@@ -622,7 +621,7 @@ public class ServiceDAO {
                 case LIKE:
                     strAttrValue = attrValue.toString().replace(LIKE, ESCAPE + LIKE).replace(ANY, ESCAPE + ANY);
                     ParameterExpression<String> pl = cb.parameter(String.class);
-                    binds.put(pl, LIKE + strAttrValue + LIKE);
+                    binds.put(pl, new StringBuilder().append(LIKE).append(strAttrValue).append(LIKE).toString());
                     expr = cb.like(extractAttribute(entityRoot, attrName), pl);
                     break;
 
@@ -706,7 +705,7 @@ public class ServiceDAO {
     private static <E, P> Path<P> extractAttribute(@NotNull Root<E> entityRoot, @NotNull String attributeName) {
 
         Path<P> expressionPath;
-        if (attributeName.contains(ATTRIBUTE_SEPARATOR)) {
+        if (StringUtils.contains(attributeName, ATTRIBUTE_SEPARATOR)) {
             expressionPath = entityRoot.get(attributeName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[0]).get(attributeName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[1]);
         } else {
             expressionPath = entityRoot.get(attributeName);
@@ -790,7 +789,7 @@ public class ServiceDAO {
 
     private static boolean checkGroupPermission(@NotNull Domain domain, @NotNull List<Permission> groupPermissions, @NotNull Permission p) {
         if ((p.getDomain() == null || domain.getName().equals(p.getDomain())) &&
-                (p.getAction() == null || Actions.read.equals(p.getAction()))) {
+                (p.getAction() == null || Actions.read == p.getAction())) {
             if (p.getGroupId() == null) {
                 groupPermissions.clear();
                 return true;

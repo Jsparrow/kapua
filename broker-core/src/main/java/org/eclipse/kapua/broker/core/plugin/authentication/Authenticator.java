@@ -38,7 +38,7 @@ public interface Authenticator {
      * @throws KapuaException
      *             if any checks fails (credential not valid, profile missing, ...)
      */
-    public abstract List<org.eclipse.kapua.broker.core.plugin.authentication.AuthorizationEntry> connect(KapuaConnectionContext kcc)
+    abstract List<org.eclipse.kapua.broker.core.plugin.authentication.AuthorizationEntry> connect(KapuaConnectionContext kcc)
             throws KapuaException;
 
     /**
@@ -48,20 +48,20 @@ public interface Authenticator {
      * @param error
      *            not null if the disconnection is due to an error not related to the client (network I/O error, server side error, ...)
      */
-    public abstract void disconnect(KapuaConnectionContext kcc, Throwable error);
+    abstract void disconnect(KapuaConnectionContext kcc, Throwable error);
 
     /**
      * Send the connect message (this message is mainly for internal use to enforce the stealing link)
      * 
      * @param kcc
      */
-    public abstract void sendConnectMessage(KapuaConnectionContext kcc);
+    abstract void sendConnectMessage(KapuaConnectionContext kcc);
 
     /**
      * Send the disconnect message (this message is mainly for internal use)
      * 
      * @param kcc
      */
-    public abstract void sendDisconnectMessage(KapuaConnectionContext kcc);
+    abstract void sendDisconnectMessage(KapuaConnectionContext kcc);
 
 }

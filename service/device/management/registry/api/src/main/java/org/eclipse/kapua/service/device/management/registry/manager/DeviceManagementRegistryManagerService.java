@@ -94,8 +94,8 @@ public interface DeviceManagementRegistryManagerService extends KapuaService {
         //
         boolean isLastNotification = true;
         for (DeviceManagementOperationProperty ip : deviceManagementOperation.getInputProperties()) {
-            if (ip.getName().equals("kapua.package.download.install")) {
-                if (resource.equals("download")) {
+            if ("kapua.package.download.install".equals(ip.getName())) {
+                if ("download".equals(resource)) {
                     isLastNotification = !Boolean.parseBoolean(ip.getPropertyValue());
                 }
                 break;

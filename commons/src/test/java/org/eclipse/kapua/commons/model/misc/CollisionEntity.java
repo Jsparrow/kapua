@@ -37,22 +37,23 @@ public class CollisionEntity extends AbstractKapuaNamedEntity {
     @Column(name = "test_field")
     private String testField;
 
-    public String getType() {
-        return TYPE;
-    }
-
-    public static void initializeCollisionIdGenerator(CollisionIdGenerator collisionIdGenerator) {
-        CollisionEntity.collisionIdGenerator = collisionIdGenerator;
-    }
-
     public CollisionEntity() {
     }
 
-    public CollisionEntity(String testField) {
+	public CollisionEntity(String testField) {
         this.testField = testField;
     }
 
-    /**
+	@Override
+	public String getType() {
+        return TYPE;
+    }
+
+	public static void initializeCollisionIdGenerator(CollisionIdGenerator collisionIdGenerator) {
+        CollisionEntity.collisionIdGenerator = collisionIdGenerator;
+    }
+
+	/**
      * Before update action to correctly set the modified on and modified by fields
      */
     @PrePersist
@@ -64,7 +65,7 @@ public class CollisionEntity extends AbstractKapuaNamedEntity {
         setCreatedOn(new Date());
     }
 
-    public String getTestField() {
+	public String getTestField() {
         return testField;
     }
 

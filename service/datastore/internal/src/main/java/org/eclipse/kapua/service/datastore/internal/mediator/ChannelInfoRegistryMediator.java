@@ -48,7 +48,6 @@ public interface ChannelInfoRegistryMediator {
     void onBeforeChannelInfoDelete(ChannelInfo channelInfo)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException;
 
     /**

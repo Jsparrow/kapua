@@ -18,6 +18,7 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.locator.KapuaProvider;
+import java.util.Collections;
 
 /**
  * Entity manager factory for the authorization module.
@@ -30,7 +31,7 @@ public class AuthorizationEntityManagerFactory extends AbstractEntityManagerFact
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-authorization";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONSTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONSTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static AuthorizationEntityManagerFactory instance = new AuthorizationEntityManagerFactory();
 

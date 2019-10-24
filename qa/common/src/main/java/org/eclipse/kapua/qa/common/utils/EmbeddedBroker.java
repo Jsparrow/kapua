@@ -48,14 +48,14 @@ public class EmbeddedBroker {
 
     private static final boolean NO_EMBEDDED_SERVERS = Boolean.getBoolean("org.eclipse.kapua.qa.noEmbeddedServers");
 
-    private Map<String, List<AutoCloseable>> closables = new HashMap<>();
+	private static BrokerService broker;
 
-    private static BrokerService broker;
+	private Map<String, List<AutoCloseable>> closables = new HashMap<>();
 
-    public EmbeddedBroker() {
+	public EmbeddedBroker() {
     }
 
-    @Given("^Start Broker$")
+	@Given("^Start Broker$")
     public void start() {
 
         if (NO_EMBEDDED_SERVERS) {
@@ -92,7 +92,7 @@ public class EmbeddedBroker {
         }
     }
 
-    @Given("^Stop Broker$")
+	@Given("^Stop Broker$")
     public void stop() {
 
         if (NO_EMBEDDED_SERVERS) {
@@ -103,7 +103,7 @@ public class EmbeddedBroker {
 
             // close all resources
 
-            closables.values().stream().flatMap(values -> values.stream()).forEach(s::closeSuppressed);
+            closables.values().stream().flatMap(List::stream).forEach(s::closeSuppressed);
 
             // shut down broker
 
@@ -115,7 +115,7 @@ public class EmbeddedBroker {
 
         } catch (Exception e) {
             logger.error("Failed to stop Broker!");
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         DatastoreMediator.getInstance().clearCache();
@@ -124,7 +124,7 @@ public class EmbeddedBroker {
             try {
                 Thread.sleep(Duration.ofSeconds(EXTRA_STARTUP_DELAY).toMillis());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         logger.info("Stopping Broker instance ... done!");

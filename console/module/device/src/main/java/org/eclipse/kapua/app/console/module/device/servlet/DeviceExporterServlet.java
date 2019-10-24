@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import org.apache.commons.lang3.StringUtils;
 
 public class DeviceExporterServlet extends HttpServlet {
 
@@ -74,7 +75,7 @@ public class DeviceExporterServlet extends HttpServlet {
                 throw new IllegalArgumentException("format");
             }
 
-            if (scopeIdString == null || scopeIdString.isEmpty()) {
+            if (scopeIdString == null || StringUtils.isEmpty(scopeIdString)) {
                 throw new IllegalArgumentException("scopeIdString");
             }
 
@@ -104,17 +105,17 @@ public class DeviceExporterServlet extends HttpServlet {
             AndPredicate andPred = query.andPredicate();
 
             String clientId = request.getParameter("clientId");
-            if (clientId != null && !clientId.isEmpty()) {
+            if (clientId != null && !StringUtils.isEmpty(clientId)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.CLIENT_ID, clientId, Operator.STARTS_WITH));
             }
 
             String displayName = request.getParameter("displayName");
-            if (displayName != null && !displayName.isEmpty()) {
+            if (displayName != null && !StringUtils.isEmpty(displayName)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.DISPLAY_NAME, displayName, Operator.STARTS_WITH));
             }
 
             String serialNumber = request.getParameter("serialNumber");
-            if (serialNumber != null && !serialNumber.isEmpty()) {
+            if (serialNumber != null && !StringUtils.isEmpty(serialNumber)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.SERIAL_NUMBER, serialNumber));
             }
 
@@ -129,41 +130,41 @@ public class DeviceExporterServlet extends HttpServlet {
             }
 
             String iotFrameworkVersion = request.getParameter("iotFrameworkVersion");
-            if (iotFrameworkVersion != null && !iotFrameworkVersion.isEmpty()) {
+            if (iotFrameworkVersion != null && !StringUtils.isEmpty(iotFrameworkVersion)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.APPLICATION_FRAMEWORK_VERSION, iotFrameworkVersion));
             }
 
             String applicationIdentifiers = request.getParameter("applicationIdentifiers");
-            if (applicationIdentifiers != null && !applicationIdentifiers.isEmpty()) {
+            if (applicationIdentifiers != null && !StringUtils.isEmpty(applicationIdentifiers)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.APPLICATION_IDENTIFIERS, applicationIdentifiers, Operator.LIKE));
             }
 
             String customAttribute1 = request.getParameter("customAttribute1");
-            if (customAttribute1 != null && !customAttribute1.isEmpty()) {
+            if (customAttribute1 != null && !StringUtils.isEmpty(customAttribute1)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.CUSTOM_ATTRIBUTE_1, customAttribute1));
             }
 
             String customAttribute2 = request.getParameter("customAttribute2");
-            if (customAttribute2 != null && !customAttribute2.isEmpty()) {
+            if (customAttribute2 != null && !StringUtils.isEmpty(customAttribute2)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.CUSTOM_ATTRIBUTE_2, customAttribute2));
             }
 
             String groupId = request.getParameter("accessGroup");
-            if (groupId != null && !groupId.isEmpty()) {
+            if (groupId != null && !StringUtils.isEmpty(groupId)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.GROUP_ID, KapuaEid.parseCompactId(groupId)));
             }
 
             String tagId = request.getParameter("tag");
-            if (tagId != null && !tagId.isEmpty()) {
+            if (tagId != null && !StringUtils.isEmpty(tagId)) {
                 andPred = andPred.and(query.attributePredicate(DeviceAttributes.TAG_IDS, new KapuaId[]{KapuaEid.parseCompactId(tagId)}));
             }
 
             String sortAttribute = request.getParameter("sortAttribute");
-            if (sortAttribute != null && !sortAttribute.isEmpty()) {
+            if (sortAttribute != null && !StringUtils.isEmpty(sortAttribute)) {
 
                 String sortOrderString = request.getParameter("sortOrder");
                 SortOrder sortOrder;
-                if (sortOrderString != null && !sortOrderString.isEmpty()) {
+                if (sortOrderString != null && !StringUtils.isEmpty(sortOrderString)) {
                     sortOrder = SortOrder.valueOf(sortOrderString);
                 } else {
                     sortOrder = SortOrder.ASCENDING;

@@ -17,15 +17,15 @@ import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseTreeModel;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.apache.commons.lang3.StringUtils;
 
-public class GwtTopic extends KapuaBaseTreeModel implements Serializable, IsSerializable {
+public class GwtTopic extends KapuaBaseTreeModel implements IsSerializable {
 
     private static final long serialVersionUID = 7519496938895060911L;
 
     static final Date NO_TIMESTAMP = new Date(0);
 
     public GwtTopic() {
-        super();
     }
 
     public GwtTopic(String topicName, String baseTopic, String semanticTopic, Date timestamp) {
@@ -45,7 +45,7 @@ public class GwtTopic extends KapuaBaseTreeModel implements Serializable, IsSeri
                 }
 
                 if (slashCount == 5) {
-                    exceededSemanticTopic = semanticTopic.substring(charIndex + 1);
+                    exceededSemanticTopic = StringUtils.substring(semanticTopic, charIndex + 1);
                     break;
                 }
 
@@ -60,8 +60,8 @@ public class GwtTopic extends KapuaBaseTreeModel implements Serializable, IsSeri
 
     public GwtTopic(String topicName, String baseTopic, String semanticTopic, Date timestamp, KapuaBaseTreeModel[] children) {
         this(topicName, baseTopic, semanticTopic, timestamp);
-        for (int i = 0; i < children.length; i++) {
-            add(children[i]);
+        for (KapuaBaseTreeModel aChildren : children) {
+            add(aChildren);
         }
     }
 

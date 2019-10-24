@@ -24,17 +24,14 @@ import org.slf4j.LoggerFactory;
  */
 public class JmsConnectionFactory {
 
-    private JmsConnectionFactory() {
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(JmsConnectionFactory.class);
 
-    /**
+	/**
      * ActiveMQ vm connection factory instance
      */
     public static final ActiveMQConnectionFactory VM_CONN_FACTORY;
 
-    // the workers used the same string connection without asynch=true
+	// the workers used the same string connection without asynch=true
     static {
         logger.info("Instantiate amq embedded connection factory...");
 
@@ -82,6 +79,9 @@ public class JmsConnectionFactory {
         VM_CONN_FACTORY.setUseAsyncSend(true);
 
         logger.info("Instantiate activemq embedded connection factory... done");
+    }
+
+	private JmsConnectionFactory() {
     }
 
 }

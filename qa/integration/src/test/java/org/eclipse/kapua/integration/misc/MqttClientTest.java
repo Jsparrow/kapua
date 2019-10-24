@@ -23,6 +23,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Topic listener class that implements implementation of mqtt listener that listens on
@@ -128,7 +129,7 @@ public class MqttClientTest extends Assert {
     private String topicTranslator(String topic) {
         String translated;
 
-        translated = topic.substring(topic.indexOf(DEFAULT_ACCOUNT) + DEFAULT_ACCOUNT.length() + 1);
+        translated = StringUtils.substring(topic, StringUtils.indexOf(topic, DEFAULT_ACCOUNT) + DEFAULT_ACCOUNT.length() + 1);
         translated = translated.replace('/', '_');
 
         return translated;

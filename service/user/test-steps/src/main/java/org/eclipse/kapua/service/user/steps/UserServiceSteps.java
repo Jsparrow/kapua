@@ -207,7 +207,7 @@ public class UserServiceSteps extends TestBase {
 
         stepData.put("UserCreator", uc);
 
-        scenario.write("User " + userName + " created.");
+        scenario.write(new StringBuilder().append("User ").append(userName).append(" created.").toString());
     }
 
     @When("^I create user$")
@@ -281,9 +281,7 @@ public class UserServiceSteps extends TestBase {
         UserListResult queryResult = userService.query(query);
         iFoundUsers = new HashSet<>();
         List<User> users = queryResult.getItems();
-        for (User userItem : users) {
-            iFoundUsers.add(new ComparableUser(userItem));
-        }
+        users.forEach(userItem -> iFoundUsers.add(new ComparableUser(userItem)));
         stepData.put("UserList", iFoundUsers);
     }
 
@@ -317,9 +315,7 @@ public class UserServiceSteps extends TestBase {
     public void findUserFull(List<CucUser> userList) {
         User user = (User) stepData.get("User");
 
-        for (CucUser userItem : userList) {
-            matchUserData(user, userItem);
-        }
+        userList.forEach(userItem -> matchUserData(user, userItem));
     }
 
     @Then("^I find users$")
@@ -378,9 +374,7 @@ public class UserServiceSteps extends TestBase {
         UserQuery query = userFactory.newQuery(new KapuaEid(BigInteger.valueOf(scopeId)));
         UserListResult queryResult = userService.query(query);
         Set<ComparableUser> iFoundUsers = new HashSet<>();
-        for (User userItem : queryResult.getItems()) {
-            iFoundUsers.add(new ComparableUser(userItem));
-        }
+        queryResult.getItems().forEach(userItem -> iFoundUsers.add(new ComparableUser(userItem)));
         stepData.put("UserList", iFoundUsers);
     }
 
@@ -581,9 +575,8 @@ public class UserServiceSteps extends TestBase {
         // User is created within account that was last created in steps
         ComparableUser tmpUser = null;
         HashSet<ComparableUser> createdList = createUsersInList(userList, (Account) stepData.get("LastAccount"));
-        Iterator<ComparableUser> userIterator = createdList.iterator();
-        while (userIterator.hasNext()) {
-            tmpUser = userIterator.next();
+        for (ComparableUser aCreatedList : createdList) {
+            tmpUser = aCreatedList;
         }
 
         stepData.put("UserA", tmpUser);
@@ -596,9 +589,8 @@ public class UserServiceSteps extends TestBase {
         // User is created within account that was last created in steps
         ComparableUser tmpUser = null;
         HashSet<ComparableUser> createdList = createUsersInList(userList, (Account) stepData.get("LastAccount"));
-        Iterator<ComparableUser> userIterator = createdList.iterator();
-        while (userIterator.hasNext()) {
-            tmpUser = userIterator.next();
+        for (ComparableUser aCreatedList : createdList) {
+            tmpUser = aCreatedList;
         }
         stepData.put("UserB", tmpUser);
         stepData.put("LastUser", tmpUser);
@@ -610,9 +602,8 @@ public class UserServiceSteps extends TestBase {
         // User is created within account that was last created in steps
         ComparableUser tmpUser = null;
         HashSet<ComparableUser> createdList = createUsersInList(userList, (Account) stepData.get("LastAccount"));
-        Iterator<ComparableUser> userIterator = createdList.iterator();
-        while (userIterator.hasNext()) {
-            tmpUser = userIterator.next();
+        for (ComparableUser aCreatedList : createdList) {
+            tmpUser = aCreatedList;
         }
         stepData.put("LastUser", tmpUser);
         stepData.put("LastUserId", tmpUser.getUser().getId());
@@ -694,9 +685,7 @@ public class UserServiceSteps extends TestBase {
             scopeId = SYS_SCOPE_ID;
         }
 
-        for (CucConfig config : cucConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        cucConfigs.forEach(config -> config.addConfigToMap(valueMap));
 
         primeException();
         try {
@@ -713,9 +702,7 @@ public class UserServiceSteps extends TestBase {
         KapuaId accId = new KapuaEid(BigInteger.valueOf(accountId));
         KapuaId scopeId = SYS_SCOPE_ID;
 
-        for (CucConfig config : cucConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        cucConfigs.forEach(config -> config.addConfigToMap(valueMap));
 
         primeException();
         try {
@@ -742,9 +729,7 @@ public class UserServiceSteps extends TestBase {
             scopeId = SYS_SCOPE_ID;
         }
 
-        for (CucConfig config : cucConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        cucConfigs.forEach(config -> config.addConfigToMap(valueMap));
 
         primeException();
         try {
@@ -1049,7 +1034,7 @@ public class UserServiceSteps extends TestBase {
                     thisUser.getDisplayName().equals(otherUser.getDisplayName()) &&
                     thisUser.getEmail().equals(otherUser.getEmail()) &&
                     thisUser.getPhoneNumber().equals(otherUser.getPhoneNumber()) &&
-                    thisUser.getStatus().equals(otherUser.getStatus());
+                    thisUser.getStatus() == otherUser.getStatus();
         }
     }
 }

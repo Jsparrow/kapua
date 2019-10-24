@@ -17,14 +17,13 @@ import org.eclipse.kapua.app.console.module.api.shared.model.KapuaBaseModel;
 import java.io.Serializable;
 import java.util.Date;
 
-public class GwtDatastoreDevice extends KapuaBaseModel implements Serializable {
+public class GwtDatastoreDevice extends KapuaBaseModel {
 
     private static final long serialVersionUID = 5756712401178232349L;
 
     public static final Date NO_TIMESTAMP = new Date(0);
 
     public GwtDatastoreDevice() {
-        super();
     }
 
     public GwtDatastoreDevice(String device, Date timestamp) {

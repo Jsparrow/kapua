@@ -80,13 +80,15 @@ public class ExceptionMessageUtils {
         try {
             resourceBundle = ResourceBundle.getBundle(resourceBundleName, locale);
         } catch (MissingResourceException mre) {
-            LOG.warn("Could not load exception messages for resource: {} in locale: {}. A generic error message will be printed.", resourceBundleName, locale);
+            LOG.error(mre.getMessage(), mre);
+			LOG.warn("Could not load exception messages for resource: {} in locale: {}. A generic error message will be printed.", resourceBundleName, locale);
             return null;
         }
         try {
             messagePattern = resourceBundle.getString(code.name());
         } catch (MissingResourceException mre) {
-            LOG.warn("Could not load exception messages for code: {}. A generic error message will be printed.", code.name());
+            LOG.error(mre.getMessage(), mre);
+			LOG.warn("Could not load exception messages for code: {}. A generic error message will be printed.", code.name());
         }
 
         return messagePattern;

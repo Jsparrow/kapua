@@ -25,16 +25,16 @@ public class FormUtils {
 
     public static boolean isDirty(FieldSet fieldSet) {
         List<Component> fields = fieldSet.getItems();
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i) instanceof MultiField) {
-                MultiField<?> multiField = (MultiField<?>) fields.get(i);
+        for (Component field1 : fields) {
+            if (field1 instanceof MultiField) {
+                MultiField<?> multiField = (MultiField<?>) field1;
                 for (Field<?> field : multiField.getAll()) {
                     if (field.isRendered() && field.isDirty() && !(field.getValue() == null && field.getOriginalValue().equals(""))) {
                         return true;
                     }
                 }
-            } else if (fields.get(i) instanceof Field) {
-                Field<?> field = (Field<?>) fields.get(i);
+            } else if (field1 instanceof Field) {
+                Field<?> field = (Field<?>) field1;
                 if (field.isRendered() && field.isDirty() && !(field.getValue() == null && field.getOriginalValue().equals(""))) {
                     return true;
                 }
@@ -45,9 +45,9 @@ public class FormUtils {
 
     public static boolean isValid(FieldSet fieldSet) {
         List<Component> fields = fieldSet.getItems();
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i) instanceof Field) {
-                Field<?> field = (Field<?>) fields.get(i);
+        for (Component field1 : fields) {
+            if (field1 instanceof Field) {
+                Field<?> field = (Field<?>) field1;
                 if (field.isRendered() && !field.isValid()) {
                     return false;
                 }

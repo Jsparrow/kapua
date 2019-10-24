@@ -26,18 +26,6 @@ public final class Wait {
     private Wait() {
     }
 
-    @FunctionalInterface
-    public interface Condition {
-
-        public boolean test() throws Exception;
-    }
-
-    @FunctionalInterface
-    public interface AssertCondition {
-
-        public void test() throws Exception;
-    }
-
     /**
      * Test for a specific amount of time for a state of become {@code true}
      * <p>
@@ -83,15 +71,15 @@ public final class Wait {
         return false;
     }
 
-    public static boolean testFor(final Duration duration, final Duration testPeriod, final Condition condition) {
+	public static boolean testFor(final Duration duration, final Duration testPeriod, final Condition condition) {
         return testFor(null, duration, testPeriod, condition);
     }
 
-    public static boolean testFor(final Duration duration, final Condition condition) {
+	public static boolean testFor(final Duration duration, final Condition condition) {
         return testFor(duration, Duration.ofMillis(100), condition);
     }
 
-    /**
+	/**
      * Wait for a condition or fail
      * 
      * @param action
@@ -112,7 +100,7 @@ public final class Wait {
         throw new WaitTimeoutException(action, duration);
     }
 
-    /**
+	/**
      * Allow to wait using assertions
      * 
      * @param action
@@ -146,5 +134,17 @@ public final class Wait {
         }
 
         throw new WaitTimeoutException(action, duration, cause.get());
+    }
+
+	@FunctionalInterface
+    public interface Condition {
+
+        boolean test() throws Exception;
+    }
+
+    @FunctionalInterface
+    public interface AssertCondition {
+
+        void test() throws Exception;
     }
 }

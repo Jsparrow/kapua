@@ -19,7 +19,7 @@ import org.eclipse.kapua.service.device.management.message.request.KapuaRequestC
  *
  * @since 1.0
  */
-public class ChannelRequestChannel extends AssetRequestChannel implements KapuaRequestChannel {
+public class ChannelRequestChannel extends AssetRequestChannel {
 
     private String assetName;
 

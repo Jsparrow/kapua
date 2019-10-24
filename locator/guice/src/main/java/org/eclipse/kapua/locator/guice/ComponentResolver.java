@@ -32,7 +32,7 @@ public class ComponentResolver<I, P extends I> {
             throw new KapuaLocatorException(KapuaLocatorErrorCodes.FACTORY_PROVIDER_INVALID, implementation, factory);
         }
 
-        return new ComponentResolver<M,I>((Class<M>)factory, (Class<I>)implementation);
+        return new ComponentResolver<>((Class<M>)factory, (Class<I>)implementation);
     }
 
     public Class<I> getProvidedClass() {

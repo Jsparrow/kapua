@@ -23,18 +23,17 @@ public class ServiceConfigQueryImpl extends AbstractKapuaQuery<ServiceConfig> im
 
     /**
      * Constructor
-     */
-    private ServiceConfigQueryImpl() {
-        super();
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public ServiceConfigQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private ServiceConfigQueryImpl() {
     }
 }

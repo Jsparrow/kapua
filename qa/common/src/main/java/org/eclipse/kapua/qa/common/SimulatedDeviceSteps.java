@@ -171,106 +171,84 @@ public class SimulatedDeviceSteps {
 
     @Then("Device (.*) for account (.*) is registered after (\\d+) seconds?")
     public void deviceIsRegistered(final String clientId, final String accountName, final int timeout) throws Exception {
-        Wait.assertFor("Wait for connection state to become " + DeviceConnectionStatus.CONNECTED, Duration.ofSeconds(timeout), DEFAULT_PERIOD, () -> {
-            session.withLogin(() -> {
-                assertConnectionStatus(clientId, accountName, DeviceConnectionStatus.CONNECTED);
-            });
-        });
+        Wait.assertFor("Wait for connection state to become " + DeviceConnectionStatus.CONNECTED, Duration.ofSeconds(timeout), DEFAULT_PERIOD, () -> session.withLogin(() -> assertConnectionStatus(clientId, accountName, DeviceConnectionStatus.CONNECTED)));
     }
 
     @Then("Device (.*) for account (.*) is not registered after (\\d+) seconds?")
     public void deviceIsNotRegistered(final String clientId, final String accountName, final int timeout) throws Exception {
-        Wait.assertFor("Wait for connection state to become " + DeviceConnectionStatus.DISCONNECTED, Duration.ofSeconds(timeout), DEFAULT_PERIOD, () -> {
-            session.withLogin(() -> {
-                assertConnectionStatus(clientId, accountName, DeviceConnectionStatus.DISCONNECTED);
-            });
-        });
+        Wait.assertFor("Wait for connection state to become " + DeviceConnectionStatus.DISCONNECTED, Duration.ofSeconds(timeout), DEFAULT_PERIOD, () -> session.withLogin(() -> assertConnectionStatus(clientId, accountName, DeviceConnectionStatus.DISCONNECTED)));
     }
 
     @Then("I expect the device to report the applications")
     public void checkApplications(final List<String> applications) throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    final Set<String> apps = new HashSet<>(Arrays.asList(device.getApplicationIdentifiers().split(",")));
-                    Assert.assertEquals(new HashSet<>(applications), apps);
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					final Set<String> apps = new HashSet<>(
+							Arrays.asList(device.getApplicationIdentifiers().split(",")));
+					Assert.assertEquals(new HashSet<>(applications), apps);
+				})));
     }
 
     @Then("The device should report simulator device information")
     public void checkDeviceInformation() throws Exception {
         final String clientId = currentDevice.getClientId();
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, clientId, device -> {
-
-                    Assert.assertNotNull(device);
-
-                    Assert.assertEquals("Kura Simulator (Display Name)", device.getDisplayName());
-                    Assert.assertEquals("Kura Simulator (Model Name)", device.getModelName());
-                    Assert.assertEquals("kura-simulator-" + clientId, device.getModelId());
-                    // Assert.assertEquals("ksim-part-123456-" + clientId, device.getPartNumber());
-                    Assert.assertEquals("ksim-serial-123456-" + clientId, device.getSerialNumber());
-                    // Assert.assertEquals( "1", device.getAvailableProcessors () );
-                    // Assert.assertEquals( "640", device.getTotalMemory());
-                    Assert.assertEquals("fw.v42", device.getFirmwareVersion());
-                    Assert.assertEquals("bios.v42", device.getBiosVersion());
-                    // Assert.assertEquals( "Kura Simulator (OS)", device.getOperatingSystem());
-                    // Assert.assertEquals("ksim-os-v42", device.getOperatingSystemVersion());
-                    // Assert.assertEquals("ksim-arch", device.getOperatingSystemArchitecture());
-                    // Assert.assertEquals("Kura Simulator (Java)", device.getJvmName());
-                    Assert.assertEquals("ksim-java-v42", device.getJvmVersion());
-                    // Assert.assertEquals( "Kura Simulator (Java Profile)", device.getJvmProfile());
-                    Assert.assertEquals("ksim-kura-v42", device.getApplicationFrameworkVersion());
-                    // Assert.assertEquals("Kura Simulator (OSGi version)", device.getOsgiFrameworkName());
-                    Assert.assertEquals("ksim-osgi-v42", device.getOsgiFrameworkVersion());
-                });
-            });
-        });
+        // Assert.assertEquals("ksim-part-123456-" + clientId, device.getPartNumber());
+		// Assert.assertEquals( "1", device.getAvailableProcessors () );
+		// Assert.assertEquals( "640", device.getTotalMemory());
+		// Assert.assertEquals( "Kura Simulator (OS)", device.getOperatingSystem());
+		// Assert.assertEquals("ksim-os-v42", device.getOperatingSystemVersion());
+		// Assert.assertEquals("ksim-arch", device.getOperatingSystemArchitecture());
+		// Assert.assertEquals("Kura Simulator (Java)", device.getJvmName());
+		// Assert.assertEquals( "Kura Simulator (Java Profile)", device.getJvmProfile());
+		// Assert.assertEquals("Kura Simulator (OSGi version)", device.getOsgiFrameworkName());
+		session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(), account -> With.withDevice(account, clientId, device -> {
+			Assert.assertNotNull(device);
+			Assert.assertEquals("Kura Simulator (Display Name)", device.getDisplayName());
+			Assert.assertEquals("Kura Simulator (Model Name)", device.getModelName());
+			Assert.assertEquals("kura-simulator-" + clientId, device.getModelId());
+			Assert.assertEquals("ksim-serial-123456-" + clientId, device.getSerialNumber());
+			Assert.assertEquals("fw.v42", device.getFirmwareVersion());
+			Assert.assertEquals("bios.v42", device.getBiosVersion());
+			Assert.assertEquals("ksim-java-v42", device.getJvmVersion());
+			Assert.assertEquals("ksim-kura-v42", device.getApplicationFrameworkVersion());
+			Assert.assertEquals("ksim-osgi-v42", device.getOsgiFrameworkVersion());
+		})));
     }
 
     @When("I start the bundle (.*) with version (.*)")
     public void startBundle(final String bundleSymbolicName, final String version) throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    DeviceBundle bundle = findBundle(bundleSymbolicName, version);
-                    DeviceBundleManagementService service = KapuaLocator.getInstance().getService(DeviceBundleManagementService.class);
-                    service.start(account.getId(), device.getId(), Long.toString(bundle.getId()), DEFAULT_REQUEST_TIMEOUT);
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					DeviceBundle bundle = findBundle(bundleSymbolicName, version);
+					DeviceBundleManagementService service = KapuaLocator.getInstance()
+							.getService(DeviceBundleManagementService.class);
+					service.start(account.getId(), device.getId(), Long.toString(bundle.getId()),
+							DEFAULT_REQUEST_TIMEOUT);
+				})));
     }
 
     @When("I stop the bundle (.*) with version (.*)")
     public void stopBundle(final String bundleSymbolicName, final String version) throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    DeviceBundle bundle = findBundle(bundleSymbolicName, version);
-                    DeviceBundleManagementService service = KapuaLocator.getInstance().getService(DeviceBundleManagementService.class);
-                    service.stop(account.getId(), device.getId(), Long.toString(bundle.getId()), DEFAULT_REQUEST_TIMEOUT);
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					DeviceBundle bundle = findBundle(bundleSymbolicName, version);
+					DeviceBundleManagementService service = KapuaLocator.getInstance()
+							.getService(DeviceBundleManagementService.class);
+					service.stop(account.getId(), device.getId(), Long.toString(bundle.getId()),
+							DEFAULT_REQUEST_TIMEOUT);
+				})));
     }
 
     @When("I fetch the bundle states")
     public void fetchBundlesState() throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    DeviceBundleManagementService service = KapuaLocator.getInstance().getService(DeviceBundleManagementService.class);
-                    DeviceBundles bundles = service.get(account.getId(), device.getId(), DEFAULT_REQUEST_TIMEOUT);
-
-                    Assert.assertNotNull(bundles);
-
-                    this.bundles = bundles.getBundles();
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					DeviceBundleManagementService service = KapuaLocator.getInstance()
+							.getService(DeviceBundleManagementService.class);
+					DeviceBundles bundles = service.get(account.getId(), device.getId(), DEFAULT_REQUEST_TIMEOUT);
+					Assert.assertNotNull(bundles);
+					this.bundles = bundles.getBundles();
+				})));
     }
 
     @Then("The bundle (.*) with version (.*) is present and (.*)")
@@ -298,19 +276,15 @@ public class SimulatedDeviceSteps {
 
     @When("I fetch the package states")
     public void fetchPackagesState() throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    final DevicePackageManagementService service = KapuaLocator.getInstance().getService(DevicePackageManagementService.class);
-
-                    final DevicePackages packages = service.getInstalled(account.getId(), device.getId(), DEFAULT_REQUEST_TIMEOUT);
-
-                    Assert.assertNotNull(packages);
-
-                    this.packages = packages.getPackages();
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					final DevicePackageManagementService service = KapuaLocator.getInstance()
+							.getService(DevicePackageManagementService.class);
+					final DevicePackages packages = service.getInstalled(account.getId(), device.getId(),
+							DEFAULT_REQUEST_TIMEOUT);
+					Assert.assertNotNull(packages);
+					this.packages = packages.getPackages();
+				})));
     }
 
     @Then("There must be no installed packages")
@@ -333,7 +307,7 @@ public class SimulatedDeviceSteps {
 
         // sort
 
-        Collections.sort(b, Comparator.comparing(DevicePackageBundleInfo::getName));
+        b.sort(Comparator.comparing(DevicePackageBundleInfo::getName));
 
         // now test
 
@@ -345,42 +319,37 @@ public class SimulatedDeviceSteps {
 
     @When("I start to download package \"(.+)\" with version (.+) from (.*)")
     public void downloadPackage(final String packageName, final String version, final URI uri) throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    final DevicePackageManagementService service = KapuaLocator.getInstance().getService(DevicePackageManagementService.class);
-
-                    final DevicePackageDownloadRequest request = KapuaLocator.getInstance().getFactory(DevicePackageFactory.class).newPackageDownloadRequest();
-                    request.setInstall(true);
-                    request.setName(packageName);
-                    request.setVersion(version);
-                    request.setUri(uri);
-
-                    service.downloadExec(account.getId(), device.getId(), request, DEFAULT_REQUEST_TIMEOUT);
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					final DevicePackageManagementService service = KapuaLocator.getInstance()
+							.getService(DevicePackageManagementService.class);
+					final DevicePackageDownloadRequest request = KapuaLocator.getInstance()
+							.getFactory(DevicePackageFactory.class).newPackageDownloadRequest();
+					request.setInstall(true);
+					request.setName(packageName);
+					request.setVersion(version);
+					request.setUri(uri);
+					service.downloadExec(account.getId(), device.getId(), request, DEFAULT_REQUEST_TIMEOUT);
+				})));
     }
 
     @Then("The download state changes to (.+) in the next (\\d+) seconds?")
     public void assertDownloadState(final String state, int waitSeconds) throws Exception {
-        session.withLogin(() -> {
-            With.withUserAccount(currentDevice.getAccountName(), account -> {
-                With.withDevice(account, currentDevice.getClientId(), device -> {
-                    final DevicePackageManagementService service = KapuaLocator.getInstance().getService(DevicePackageManagementService.class);
-                    final DevicePackageDownloadStatus downloadState = DevicePackageDownloadStatus.valueOf(state);
-
-                    Wait.waitFor("Download state change", Duration.ofSeconds(waitSeconds), Duration.ofMillis(500), () -> {
-                        final DevicePackageDownloadOperation operation = service.downloadStatus(account.getId(), device.getId(), DEFAULT_REQUEST_TIMEOUT);
-                        if (operation == null) {
-                            return false;
-                        }
-
-                        return downloadState.equals(operation.getStatus());
-                    });
-                });
-            });
-        });
+        session.withLogin(() -> With.withUserAccount(currentDevice.getAccountName(),
+				account -> With.withDevice(account, currentDevice.getClientId(), device -> {
+					final DevicePackageManagementService service = KapuaLocator.getInstance()
+							.getService(DevicePackageManagementService.class);
+					final DevicePackageDownloadStatus downloadState = DevicePackageDownloadStatus.valueOf(state);
+					Wait.waitFor("Download state change", Duration.ofSeconds(waitSeconds), Duration.ofMillis(500),
+							() -> {
+								final DevicePackageDownloadOperation operation = service.downloadStatus(account.getId(),
+										device.getId(), DEFAULT_REQUEST_TIMEOUT);
+								if (operation == null) {
+									return false;
+								}
+								return downloadState.equals(operation.getStatus());
+							});
+				})));
     }
 
     private DevicePackage findPackage(final String packageName, final String version) {

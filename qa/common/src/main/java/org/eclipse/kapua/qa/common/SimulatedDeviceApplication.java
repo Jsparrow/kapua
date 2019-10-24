@@ -27,7 +27,37 @@ import org.eclipse.kura.core.message.protobuf.KuraPayloadProto.KuraPayload.Build
 
 public class SimulatedDeviceApplication implements Application {
 
-    private class HandlerImpl implements Handler {
+    private final Set<HandlerImpl> handlers = new CopyOnWriteArraySet<>();
+	private Descriptor descriptor;
+
+	public SimulatedDeviceApplication(String applicationId) {
+        this.descriptor = new Descriptor(applicationId);
+    }
+
+	@Override
+    public Descriptor getDescriptor() {
+        return this.descriptor;
+    }
+
+	@Override
+    public Handler createHandler(final ApplicationContext context) {
+        final HandlerImpl handler = new HandlerImpl(context);
+        handlers.add(handler);
+        return handler;
+    }
+
+	public void closeHandler(final HandlerImpl handler) {
+        handlers.remove(handler);
+    }
+
+	public void publishData(final String topic, final Instant timestamp, final Map<String, Object> data) {
+        final Builder builder = KuraPayload.newBuilder();
+        builder.setTimestamp(timestamp.toEpochMilli());
+        Metrics.buildMetrics(builder, data);
+        handlers.forEach(handler -> handler.publishData(Topic.data(topic), builder));
+    }
+
+	private class HandlerImpl implements Handler {
 
         private final ApplicationContext context;
 
@@ -44,36 +74,6 @@ public class SimulatedDeviceApplication implements Application {
             context.sender(data).send(builder);
         }
 
-    }
-
-    private final Set<HandlerImpl> handlers = new CopyOnWriteArraySet<>();
-    private Descriptor descriptor;
-
-    public SimulatedDeviceApplication(String applicationId) {
-        this.descriptor = new Descriptor(applicationId);
-    }
-
-    @Override
-    public Descriptor getDescriptor() {
-        return this.descriptor;
-    }
-
-    @Override
-    public Handler createHandler(final ApplicationContext context) {
-        final HandlerImpl handler = new HandlerImpl(context);
-        handlers.add(handler);
-        return handler;
-    }
-
-    public void closeHandler(final HandlerImpl handler) {
-        handlers.remove(handler);
-    }
-
-    public void publishData(final String topic, final Instant timestamp, final Map<String, Object> data) {
-        final Builder builder = KuraPayload.newBuilder();
-        builder.setTimestamp(timestamp.toEpochMilli());
-        Metrics.buildMetrics(builder, data);
-        handlers.forEach(handler -> handler.publishData(Topic.data(topic), builder));
     }
 
 }

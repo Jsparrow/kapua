@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model.query;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Sortable field definition
  *
@@ -38,7 +40,7 @@ public class SortField {
     }
 
     public static SortField of(SortDirection direction, final String fieldName) {
-        if (fieldName == null || fieldName.isEmpty()) {
+        if (fieldName == null || StringUtils.isEmpty(fieldName)) {
             return null;
         }
 

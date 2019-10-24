@@ -19,11 +19,15 @@ import org.eclipse.kapua.qa.markers.junit.JUnitTests;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Category(JUnitTests.class)
 public class KapuaDateUtilsTest extends Assert {
 
-    @Test
+    private static final Logger logger = LoggerFactory.getLogger(KapuaDateUtilsTest.class);
+
+	@Test
     public void testConstructor() throws Exception {
         Constructor<KapuaDateUtils> dateUtils = KapuaDateUtils.class.getDeclaredConstructor();
         dateUtils.setAccessible(true);
@@ -56,13 +60,15 @@ public class KapuaDateUtilsTest extends Assert {
                 try {
                     Assert.assertNull(KapuaDateUtils.parseDate(listOfFalseStrings[i]));
                 } catch (Exception ex) {
-                    fail("No exception expected for Null");
+                    logger.error(ex.getMessage(), ex);
+					fail("No exception expected for Null");
                 }
             } else {
                 try {
                     KapuaDateUtils.parseDate(listOfFalseStrings[i]);
                     fail("Exception expected for: " + listOfFalseStrings[i]);
                 } catch (Exception ex) {
+					logger.error(ex.getMessage(), ex);
                     // Expected
                 }
             }
@@ -72,7 +78,8 @@ public class KapuaDateUtilsTest extends Assert {
             try {
                 KapuaDateUtils.parseDate(listOfPermittedStrings[i]);
             } catch (Exception ex) {
-                fail("No exception expected for: " + listOfPermittedStrings[i]);
+                logger.error(ex.getMessage(), ex);
+				fail("No exception expected for: " + listOfPermittedStrings[i]);
             }
         }
     }
@@ -85,13 +92,15 @@ public class KapuaDateUtilsTest extends Assert {
         try {
             Assert.assertNull(KapuaDateUtils.formatDate(falseDate));
         } catch (Exception ex) {
-            fail("No exception expected for Null");
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected for Null");
         }
         // Positive tests
         try {
             KapuaDateUtils.formatDate(permittedDate);
         } catch (Exception ex) {
-            fail("No exception expected for: " + permittedDate);
+            logger.error(ex.getMessage(), ex);
+			fail("No exception expected for: " + permittedDate);
         }
     }
 }

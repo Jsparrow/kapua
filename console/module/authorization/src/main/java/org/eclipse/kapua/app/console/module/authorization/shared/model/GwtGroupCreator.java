@@ -24,7 +24,6 @@ public class GwtGroupCreator extends GwtEntityCreator {
     private String description;
 
     public GwtGroupCreator() {
-        super();
     }
 
     public String getName() {

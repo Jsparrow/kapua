@@ -69,8 +69,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
-            throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
         //
         // Extract credentials
         AccessTokenCredentialsImpl token = (AccessTokenCredentialsImpl) authenticationToken;
@@ -115,7 +114,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
         }
 
         // Check disabled
-        if (UserStatus.DISABLED.equals(user.getStatus())) {
+        if (UserStatus.DISABLED == user.getStatus()) {
             throw new DisabledAccountException();
         }
 
@@ -154,8 +153,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
     }
 
     @Override
-    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info)
-            throws AuthenticationException {
+    protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info) {
         SessionAuthenticationInfo kapuaInfo = (SessionAuthenticationInfo) info;
 
         //

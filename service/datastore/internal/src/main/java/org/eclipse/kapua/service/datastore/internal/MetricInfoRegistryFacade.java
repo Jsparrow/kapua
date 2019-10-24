@@ -232,7 +232,6 @@ public class MetricInfoRegistryFacade {
     public MetricInfo find(KapuaId scopeId, StorableId id)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(scopeId, "scopeId");
         ArgumentValidator.notNull(id, "id");
@@ -261,7 +260,6 @@ public class MetricInfoRegistryFacade {
     public MetricInfoListResult query(MetricInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -293,7 +291,6 @@ public class MetricInfoRegistryFacade {
     public long count(MetricInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
@@ -325,7 +322,6 @@ public class MetricInfoRegistryFacade {
     public void delete(MetricInfoQuery query)
             throws KapuaIllegalArgumentException,
             ConfigurationException,
-            QueryMappingException,
             ClientException {
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");

@@ -32,7 +32,6 @@ public class KuraDisconnectPayload extends KuraPayload implements DeviceLifecycl
      * Constructor
      */
     public KuraDisconnectPayload() {
-        super();
     }
 
     /**
@@ -42,8 +41,6 @@ public class KuraDisconnectPayload extends KuraPayload implements DeviceLifecycl
      * @param displayName
      */
     public KuraDisconnectPayload(String uptime, String displayName) {
-        super();
-
         getMetrics().put(UPTIME, uptime);
         getMetrics().put(DISPLAY_NAME, displayName);
     }

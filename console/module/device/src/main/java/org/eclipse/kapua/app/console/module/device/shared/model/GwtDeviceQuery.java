@@ -20,8 +20,6 @@ public class GwtDeviceQuery extends GwtQuery {
     private GwtDeviceQueryPredicates predicates;
 
     public GwtDeviceQuery() {
-        super();
-
         setPredicates(new GwtDeviceQueryPredicates());
     }
 

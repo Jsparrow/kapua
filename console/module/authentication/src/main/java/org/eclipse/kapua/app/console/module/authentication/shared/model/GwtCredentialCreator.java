@@ -16,7 +16,7 @@ import org.eclipse.kapua.app.console.module.api.shared.model.GwtEntityCreator;
 import java.io.Serializable;
 import java.util.Date;
 
-public class GwtCredentialCreator extends GwtEntityCreator implements Serializable {
+public class GwtCredentialCreator extends GwtEntityCreator {
 
     private static final long serialVersionUID = 1L;
 

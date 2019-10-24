@@ -12,6 +12,7 @@
 package org.eclipse.kapua.app.console.module.api.client.util;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaSafeHtmlUtils {
 
@@ -30,22 +31,22 @@ public class KapuaSafeHtmlUtils {
             return null;
         }
 
-        if (safeHtml.indexOf("&amp;") != -1) {
+        if (StringUtils.contains(safeHtml, "&amp;")) {
             safeHtml = safeHtml.replace("&amp;", "&");
         }
-        if (safeHtml.indexOf("amp;") != -1) {
+        if (StringUtils.contains(safeHtml, "amp;")) {
             safeHtml = safeHtml.replace("amp;","");
         }
-        if (safeHtml.indexOf("&lt;") != -1) {
+        if (StringUtils.contains(safeHtml, "&lt;")) {
             safeHtml = safeHtml.replace("&lt;", "<");
         }
-        if (safeHtml.indexOf("&gt;") != -1) {
+        if (StringUtils.contains(safeHtml, "&gt;")) {
             safeHtml = safeHtml.replace("&gt;", ">");
         }
-        if (safeHtml.indexOf("&quot;") != -1) {
+        if (StringUtils.contains(safeHtml, "&quot;")) {
             safeHtml = safeHtml.replace("&quot;", "\"");
         }
-        if (safeHtml.indexOf("&#39;") != -1) {
+        if (StringUtils.contains(safeHtml, "&#39;")) {
             safeHtml = safeHtml.replace("&#39;", "'");
         }
         return safeHtml;

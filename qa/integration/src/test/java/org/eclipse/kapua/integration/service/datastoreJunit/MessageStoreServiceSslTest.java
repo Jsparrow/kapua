@@ -114,6 +114,7 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             storeMessage("ssl_test/no_ssl");
             fail("ClientException should be thrown!");
         } catch (ClientException e) {
+			logger.error(e.getMessage(), e);
             // good
         } finally {
             DatastoreClientFactory.close();
@@ -134,7 +135,8 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             DatastoreClientFactory.getInstance();
             storeMessage("ssl_test/ssl");
         } catch (ClientException e) {
-            fail("No ClientException should be thrown!");
+            logger.error(e.getMessage(), e);
+			fail("No ClientException should be thrown!");
         } finally {
             DatastoreClientFactory.close();
         }
@@ -154,7 +156,8 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             DatastoreClientFactory.getInstance();
             storeMessage("ssl_test/ssl_trust_server_no_trust_store_set");
         } catch (ClientException e) {
-            fail("No ClientException should be thrown!");
+            logger.error(e.getMessage(), e);
+			fail("No ClientException should be thrown!");
         } finally {
             DatastoreClientFactory.close();
         }
@@ -174,7 +177,8 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             DatastoreClientFactory.getInstance();
             storeMessage("ssl_test/ssl_trust_server_default_trust_store_set");
         } catch (ClientException e) {
-            fail("No ClientException should be thrown!");
+            logger.error(e.getMessage(), e);
+			fail("No ClientException should be thrown!");
         } finally {
             DatastoreClientFactory.close();
         }
@@ -194,14 +198,15 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             DatastoreClientFactory.getInstance();
             storeMessage("ssl_test/ssl_trust_server_self_signed_tust");
         } catch (ClientException e) {
-            fail("No ClientException should be thrown!");
+            logger.error(e.getMessage(), e);
+			fail("No ClientException should be thrown!");
         } finally {
             DatastoreClientFactory.close();
         }
     }
 
     private void storeMessage(String semanticTopic) throws InterruptedException, KapuaException, ParseException {
-        Account account = getTestAccountCreator(adminScopeId);
+        Account account = getTestAccountCreator();
 
         String clientId = String.format("device-%d", new Date().getTime());
         DeviceCreator deviceCreator = DEVICE_FACTORY.newCreator(account.getId(), clientId);
@@ -228,7 +233,7 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
     private KapuaDataMessage insertMessage(Account account, String clientId, KapuaId deviceId, String semanticTopic, byte[] payload, Date sentOn) throws InterruptedException, KapuaException {
         KapuaDataPayload messagePayload = KAPUA_DATA_MESSAGE_FACTORY.newKapuaDataPayload();
         Map<String, Object> metrics = new HashMap<>();
-        metrics.put("float", new Float((float) 0.01));
+        metrics.put("float", Float.valueOf((float) 0.01));
         messagePayload.setMetrics(metrics);
         messagePayload.setBody(payload);
         Date receivedOn = Date.from(KapuaDateUtils.getKapuaSysDate());
@@ -345,7 +350,20 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
         messageQuery.setPredicate(andPredicate);
     }
 
-    private class DateRange {
+    /**
+     * Return a new account created just for the test.<br>
+     * <b>WARNING!!!!!!! Current implementation is not compliance with that since it is a temporary implementation that returns the default kapua-sys account</b>
+     *
+     * @return
+     * @throws KapuaException
+     */
+    private Account getTestAccountCreator() throws KapuaException {
+        KapuaLocator locator = KapuaLocator.getInstance();
+        Account account = locator.getService(AccountService.class).findByName("kapua-sys");
+        return account;
+    }
+
+	private class DateRange {
 
         private final Date lowerBound;
         private final Date upperBound;
@@ -363,20 +381,6 @@ public class MessageStoreServiceSslTest extends AbstractMessageStoreServiceTest 
             return upperBound;
         }
 
-    }
-
-    /**
-     * Return a new account created just for the test.<br>
-     * <b>WARNING!!!!!!! Current implementation is not compliance with that since it is a temporary implementation that returns the default kapua-sys account</b>
-     *
-     * @param scopeId
-     * @return
-     * @throws KapuaException
-     */
-    private Account getTestAccountCreator(KapuaId scopeId) throws KapuaException {
-        KapuaLocator locator = KapuaLocator.getInstance();
-        Account account = locator.getService(AccountService.class).findByName("kapua-sys");
-        return account;
     }
 
 }

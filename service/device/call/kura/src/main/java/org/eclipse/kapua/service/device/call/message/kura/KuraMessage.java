@@ -28,7 +28,6 @@ public class KuraMessage<C extends KuraChannel, P extends KuraPayload> implement
      * Constructor
      */
     public KuraMessage() {
-        super();
     }
 
     /**

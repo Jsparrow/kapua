@@ -28,20 +28,18 @@ public class DeviceQueryImpl extends AbstractKapuaQuery<Device> implements Devic
 
     /**
      * Constructor
-     */
-    private DeviceQueryImpl() {
-        super();
-
-        setSortCriteria(new FieldSortCriteriaImpl(DeviceAttributes.CLIENT_ID, SortOrder.ASCENDING));
-    }
-
-    /**
-     * Constructor
      *
      * @param scopeId
      */
     public DeviceQueryImpl(KapuaId scopeId) {
         this();
         setScopeId(scopeId);
+    }
+
+	/**
+     * Constructor
+     */
+    private DeviceQueryImpl() {
+        setSortCriteria(new FieldSortCriteriaImpl(DeviceAttributes.CLIENT_ID, SortOrder.ASCENDING));
     }
 }

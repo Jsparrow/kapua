@@ -30,7 +30,6 @@ public class ClientInfoListResultImpl extends AbstractStorableListResult<ClientI
      * Construct a client info result list
      */
     public ClientInfoListResultImpl() {
-        super();
     }
 
     /**

@@ -22,7 +22,7 @@ public interface ModuleContext {
      * 
      * @return the client instance, never returns {@code null}
      */
-    public Client getClient();
+    Client getClient();
 
     /**
      * Adapt the module context to the requested class
@@ -31,5 +31,5 @@ public interface ModuleContext {
      *            the class to adapt to
      * @return the result, never returns {@code null}, but may return {@link Optional#empty()}
      */
-    public <T> Optional<T> adapt(Class<T> clazz);
+    <T> Optional<T> adapt(Class<T> clazz);
 }

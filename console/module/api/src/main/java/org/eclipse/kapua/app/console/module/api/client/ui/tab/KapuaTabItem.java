@@ -54,10 +54,11 @@ public abstract class KapuaTabItem<M extends GwtEntityModel> extends TabItem {
     }
 
     public void refresh() {
-        if (dirty) {
-            doRefresh();
-            dirty = false;
-        }
+        if (!dirty) {
+			return;
+		}
+		doRefresh();
+		dirty = false;
     }
 
     public boolean isDirty() {

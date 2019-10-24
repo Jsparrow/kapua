@@ -22,13 +22,12 @@ import org.slf4j.LoggerFactory;
 public final class ConnectorDescriptorProviders {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectorDescriptorProviders.class);
+	private static ConnectorDescriptorProvider provider;
 
-    private ConnectorDescriptorProviders() {
+	private ConnectorDescriptorProviders() {
     }
 
-    private static ConnectorDescriptorProvider provider;
-
-    /**
+	/**
      * Get a {@link ConnectorDescriptorProvider} instance
      *
      * @return An instance of {@link ConnectorDescriptorProvider}, never returns {@code null}
@@ -46,7 +45,7 @@ public final class ConnectorDescriptorProviders {
         }
     }
 
-    /**
+	/**
      * Get a {@link ConnectorDescriptor} using the default instance
      * 
      * @param connectorName
@@ -57,7 +56,7 @@ public final class ConnectorDescriptorProviders {
         return getInstance().getDescriptor(connectorName);
     }
 
-    /**
+	/**
      * Locate an instance of {@link ConnectorDescriptorProvider}
      *
      * @return An instance of {@link ConnectorDescriptorProvider}, never returns {@code null}
@@ -71,7 +70,7 @@ public final class ConnectorDescriptorProviders {
         return new DefaultConnectorDescriptionProvider();
     }
 
-    /**
+	/**
      * Locate provider instances using {@link ServiceLoader}
      *
      * @return An instance of {@link ConnectorDescriptorProvider}, or {@code null} if none was found

@@ -20,7 +20,10 @@ public class GwtCredential extends GwtUpdatableEntityModel {
 
     private static final long serialVersionUID = -469650746033310482L;
 
-    @Override
+    public GwtCredential() {
+    }
+
+	@Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
         if ("credentialTypeEnum".equals(property)) {
@@ -60,127 +63,123 @@ public class GwtCredential extends GwtUpdatableEntityModel {
         }
     }
 
-    public String getStatus() {
+	public String getStatus() {
         return (String) get("status");
     }
 
-    public GwtCredential() {
-        super();
-    }
-
-    public String getUserId() {
+	public String getUserId() {
         return get("userId");
     }
 
-    public void setUserId(String userId) {
+	public void setUserId(String userId) {
         set("userId", userId);
     }
 
-    public String getCredentialType() {
+	public String getCredentialType() {
         return get("credentialType");
     }
 
-    public GwtCredentialType getCredentialTypeEnum() {
+	public GwtCredentialType getCredentialTypeEnum() {
         return get("credentialTypeEnum");
     }
 
-    public void setCredentialType(String credentialType) {
+	public void setCredentialType(String credentialType) {
         set("credentialType", credentialType);
     }
 
-    public String getSubjectType() {
+	public String getSubjectType() {
         return get("subjectType");
     }
 
-    public GwtSubjectType getSubjectTypeEnum() {
+	public GwtSubjectType getSubjectTypeEnum() {
         return get("subjectTypeEnum");
     }
 
-    public void setSubjectType(String subjectType) {
+	public void setSubjectType(String subjectType) {
         set("subjectType", subjectType);
     }
 
-    public String getCredentialKey() {
+	public String getCredentialKey() {
         return get("credentialKey");
     }
 
-    public void setCredentialKey(String credentialKey) {
+	public void setCredentialKey(String credentialKey) {
         set("credentialKey", credentialKey);
     }
 
-    public String getUsername() {
+	public String getUsername() {
         return get("username");
     }
 
-    public void setUsername(String username) {
+	public void setUsername(String username) {
         set("username", username);
     }
 
-    public String getCredentialStatus() {
+	public String getCredentialStatus() {
         return (String) get("credentialStatus");
     }
 
-    public GwtCredentialStatus getCredentialStatusEnum() {
+	public GwtCredentialStatus getCredentialStatusEnum() {
         return (GwtCredentialStatus) get("credentialStatusEnum");
     }
 
-    public void setCredentialStatus(String credentialStatus) {
+	public void setCredentialStatus(String credentialStatus) {
         set("credentialStatus", credentialStatus);
     }
 
-    public Date getExpirationDate() {
+	public Date getExpirationDate() {
         return get("expirationDate");
     }
 
-    public String getExpirationDateFormatted() {
+	public String getExpirationDateFormatted() {
         return get("expirationDateFormatted");
     }
 
-    public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(Date expirationDate) {
         set("expirationDate", expirationDate);
     }
 
-    public String getFirstLoginFailureFormatted() {
+	public String getFirstLoginFailureFormatted() {
         return get("firstLoginFailureFormatted");
     }
 
-    public Integer getLoginFailures() {
+	public Integer getLoginFailures() {
         return get("loginFailures");
     }
 
-    public void setLoginFailures(Integer loginFailures) {
+	public void setLoginFailures(Integer loginFailures) {
         set("loginFailures", loginFailures);
     }
 
-    public Date getFirstLoginFailure() {
+	public Date getFirstLoginFailure() {
         return get("firstLoginFailure");
     }
 
-    public void setFirstLoginFailure(Date firstLoginFailure) {
+	public void setFirstLoginFailure(Date firstLoginFailure) {
         set("firstLoginFailure", firstLoginFailure);
     }
 
-    public String getLoginFailuresResetFormatted() {
+	public String getLoginFailuresResetFormatted() {
         return get("loginFailuresResetFormatted");
     }
 
-    public Date getLoginFailuresReset() {
+	public Date getLoginFailuresReset() {
         return get("loginFailuresReset");
     }
 
-    public void setLoginFailuresReset(Date loginFailuresReset) {
+	public void setLoginFailuresReset(Date loginFailuresReset) {
         set("loginFailuresReset", loginFailuresReset);
     }
 
-    public String getLockoutResetFormatted() {
+	public String getLockoutResetFormatted() {
         return get("lockoutResetFormatted");
     }
 
-    public Date getLockoutReset() {
+	public Date getLockoutReset() {
         return get("lockoutReset");
     }
 
-    public void setLockoutReset(Date lockoutReset) {
+	public void setLockoutReset(Date lockoutReset) {
         set("lockoutReset", lockoutReset);
     }
 }

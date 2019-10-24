@@ -29,7 +29,6 @@ public class KuraNotifyMessage extends KuraAppMessage<KuraNotifyChannel, KuraNot
      * Constructor
      */
     public KuraNotifyMessage() {
-        super();
     }
 
     /**

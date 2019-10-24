@@ -81,7 +81,8 @@ public class TocdImpl implements KapuaTocd {
      * Objects of the following type(s) are allowed in the list
      * {@link TadImpl }
      */
-    public List<KapuaTad> getAD() {
+    @Override
+	public List<KapuaTad> getAD() {
         if (ad == null) {
             ad = new ArrayList<>();
         }
@@ -93,9 +94,7 @@ public class TocdImpl implements KapuaTocd {
         if (this.ad == null) {
             this.ad = new ArrayList<>();
         }
-        for (KapuaTad adInList : ad) {
-            this.ad.add((TadImpl) adInList);
-        }
+        ad.forEach(adInList -> this.ad.add((TadImpl) adInList));
     }
 
     /**
@@ -132,7 +131,8 @@ public class TocdImpl implements KapuaTocd {
      * Objects of the following type(s) are allowed in the list
      * {@link TiconImpl }
      */
-    public List<KapuaTicon> getIcon() {
+    @Override
+	public List<KapuaTicon> getIcon() {
         if (icon == null) {
             icon = new ArrayList<>();
         }
@@ -144,9 +144,7 @@ public class TocdImpl implements KapuaTocd {
         if (this.icon == null) {
             this.icon = new ArrayList<>();
         }
-        for (KapuaTicon iconInList : icon) {
-            this.icon.add((TiconImpl) iconInList);
-        }
+        icon.forEach(iconInList -> this.icon.add((TiconImpl) iconInList));
     }
 
     /**
@@ -183,7 +181,8 @@ public class TocdImpl implements KapuaTocd {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
             any = new ArrayList<>();
         }
@@ -210,7 +209,8 @@ public class TocdImpl implements KapuaTocd {
      * @return possible object is
      * {@link String }
      */
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
@@ -220,7 +220,8 @@ public class TocdImpl implements KapuaTocd {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setName(String value) {
+    @Override
+	public void setName(String value) {
         this.name = value;
     }
 
@@ -230,7 +231,8 @@ public class TocdImpl implements KapuaTocd {
      * @return possible object is
      * {@link String }
      */
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
@@ -240,7 +242,8 @@ public class TocdImpl implements KapuaTocd {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setDescription(String value) {
+    @Override
+	public void setDescription(String value) {
         this.description = value;
     }
 
@@ -250,7 +253,8 @@ public class TocdImpl implements KapuaTocd {
      * @return possible object is
      * {@link String }
      */
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
 
@@ -260,7 +264,8 @@ public class TocdImpl implements KapuaTocd {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setId(String value) {
+    @Override
+	public void setId(String value) {
         this.id = value;
     }
 
@@ -276,7 +281,8 @@ public class TocdImpl implements KapuaTocd {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 

@@ -32,11 +32,11 @@ public class CucumberWithProperties extends Cucumber {
 
         CucumberProperty[] systemProperties = getProperties(clazz);
         for (CucumberProperty property : systemProperties) {
-            if ((property.value() == null) || (property.value().length() == 0)) {
+            if ((property.value() == null) || (property.value().isEmpty())) {
                 logger.info("Clearing property " + property.key());
                 System.clearProperty(property.key());
             } else {
-                logger.info("Setting property " + property.key() + ", value is " + property.value());
+                logger.info(new StringBuilder().append("Setting property ").append(property.key()).append(", value is ").append(property.value()).toString());
                 System.setProperty(property.key(), property.value());
             }
         }

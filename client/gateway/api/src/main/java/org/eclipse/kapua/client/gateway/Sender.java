@@ -18,9 +18,9 @@ import java.util.concurrent.CompletionStage;
  */
 public interface Sender {
 
-    public CompletionStage<?> send(Payload payload);
+    CompletionStage<?> send(Payload payload);
 
-    public default CompletionStage<?> send(final Payload.Builder payload) {
+    default CompletionStage<?> send(final Payload.Builder payload) {
         return send(payload.build());
     }
 }

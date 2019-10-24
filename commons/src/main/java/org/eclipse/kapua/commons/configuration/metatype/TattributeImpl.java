@@ -71,7 +71,7 @@ public class TattributeImpl implements KapuaTattribute {
     @XmlAttribute(name = "content")
     protected String content;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the value property.
@@ -93,9 +93,10 @@ public class TattributeImpl implements KapuaTattribute {
      * Objects of the following type(s) are allowed in the list
      * {@link String }
      */
-    public List<String> getValue() {
+    @Override
+	public List<String> getValue() {
         if (value == null) {
-            value = new ArrayList<String>();
+            value = new ArrayList<>();
         }
         return this.value;
     }
@@ -121,9 +122,10 @@ public class TattributeImpl implements KapuaTattribute {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -134,7 +136,8 @@ public class TattributeImpl implements KapuaTattribute {
      * @return possible object is
      * {@link String }
      */
-    public String getAdref() {
+    @Override
+	public String getAdref() {
         return adref;
     }
 
@@ -144,7 +147,8 @@ public class TattributeImpl implements KapuaTattribute {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setAdref(String value) {
+    @Override
+	public void setAdref(String value) {
         this.adref = value;
     }
 
@@ -154,7 +158,8 @@ public class TattributeImpl implements KapuaTattribute {
      * @return possible object is
      * {@link String }
      */
-    public String getContent() {
+    @Override
+	public String getContent() {
         return content;
     }
 
@@ -164,7 +169,8 @@ public class TattributeImpl implements KapuaTattribute {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setContent(String value) {
+    @Override
+	public void setContent(String value) {
         this.content = value;
     }
 
@@ -180,7 +186,8 @@ public class TattributeImpl implements KapuaTattribute {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 

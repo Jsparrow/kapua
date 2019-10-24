@@ -40,10 +40,6 @@ public class ThrowableInfo {
     @XmlTransient
     private final boolean showStacktrace = KapuaApiSetting.getInstance().getBoolean(KapuaApiSettingKeys.API_EXCEPTION_STACKTRACE_SHOW, false);
 
-    protected ThrowableInfo() {
-        super();
-    }
-
     public ThrowableInfo(Status httpStatus, Throwable throwable) {
         this.httpErrorCode = httpStatus.getStatusCode();
         this.message = throwable.getMessage();
@@ -56,27 +52,30 @@ public class ThrowableInfo {
 
     }
 
-    public int getHttpErrorCode() {
+	protected ThrowableInfo() {
+    }
+
+	public int getHttpErrorCode() {
         return httpErrorCode;
     }
 
-    public void setHttpErrorCode(Status httpErrorCode) {
+	public void setHttpErrorCode(Status httpErrorCode) {
         this.httpErrorCode = httpErrorCode.getStatusCode();
     }
 
-    public String getMessage() {
+	public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+	public void setMessage(String message) {
         this.message = message;
     }
 
-    public String getStackTrace() {
+	public String getStackTrace() {
         return stackTrace;
     }
 
-    private void setStackTrace(String stackTrace) {
+	private void setStackTrace(String stackTrace) {
         this.stackTrace = stackTrace;
     }
 

@@ -338,7 +338,7 @@ public class AccountServiceSteps extends TestBase {
 
         Account tmpAcc = accountService.findByName(accName);
         Date expirationDate;
-        if (expirationDateStr.equals("never")) {
+        if ("never".equals(expirationDateStr)) {
             expirationDate = null;
         } else {
             expirationDate = new SimpleDateFormat("yyyy-DD-mm").parse(expirationDateStr);
@@ -518,9 +518,7 @@ public class AccountServiceSteps extends TestBase {
         Account account = (Account) stepData.get("LastAccount");
         Properties accProps = account.getEntityProperties();
 
-        for (StringTuple param : paramList) {
-            accProps.setProperty(param.getName(), param.getValue());
-        }
+        paramList.forEach(param -> accProps.setProperty(param.getName(), param.getValue()));
         account.setEntityProperties(accProps);
 
         try {
@@ -701,9 +699,7 @@ public class AccountServiceSteps extends TestBase {
         Account account = (Account) stepData.get("LastAccount");
         Properties accProps = account.getEntityProperties();
 
-        for (StringTuple param : paramList) {
-            assertEquals(param.getValue(), accProps.getProperty(param.getName()));
-        }
+        paramList.forEach(param -> assertEquals(param.getValue(), accProps.getProperty(param.getName())));
     }
 
     @Then("^The account has metadata$")
@@ -764,9 +760,7 @@ public class AccountServiceSteps extends TestBase {
         KapuaId accId;
         KapuaId scopeId;
 
-        for (CucConfig config : cucConfigs) {
-            config.addConfigToMap(valueMap);
-        }
+        cucConfigs.forEach(config -> config.addConfigToMap(valueMap));
 
         primeException();
         try {
@@ -805,7 +799,7 @@ public class AccountServiceSteps extends TestBase {
         tmpAccCreator.setOrganizationCity("home_city");
         tmpAccCreator.setOrganizationAddressLine1("address_line_1");
         tmpAccCreator.setOrganizationAddressLine2("address_line_2");
-        tmpAccCreator.setOrganizationEmail("org_" + name + "@org.com");
+        tmpAccCreator.setOrganizationEmail(new StringBuilder().append("org_").append(name).append("@org.com").toString());
         tmpAccCreator.setOrganizationZipPostCode("1234");
         tmpAccCreator.setOrganizationPhoneNumber("012/123-456-789");
 
@@ -928,7 +922,7 @@ public class AccountServiceSteps extends TestBase {
     // *****************
 
     // Custom String tuple class for name/value pairs as given in the cucumber feature file
-    static public class StringTuple {
+    public static class StringTuple {
 
         private String name;
         private String value;

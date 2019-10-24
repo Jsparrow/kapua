@@ -60,7 +60,6 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
      * Constructor
      */
     public KapuaMessageImpl() {
-        super();
     }
 
     /**

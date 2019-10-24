@@ -61,7 +61,8 @@ public class TranslatorException extends KapuaException {
         super(code, cause, arguments);
     }
 
-    protected String getKapuaErrorMessagesBundle() {
+    @Override
+	protected String getKapuaErrorMessagesBundle() {
         return TRANSLATOR_ERROR_MESSAGES;
     }
 }

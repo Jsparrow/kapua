@@ -117,7 +117,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             }
 
             for (Map.Entry<String, GwtTopic> entry : topicMap.entrySet()) {
-                if (!entry.getKey().contains("/") || (entry.getKey().split("/").length == 2 && entry.getKey().split("/")[1].equals("#"))) {
+                if (!StringUtils.contains(entry.getKey(), "/") || (entry.getKey().split("/").length == 2 && "#".equals(entry.getKey().split("/")[1]))) {
                     channelInfoList.add(entry.getValue());
                 }
             }
@@ -156,7 +156,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                 String semanticTopic = topic.getSemanticTopic();
                 StorablePredicate predicate;
 
-                if (semanticTopic.endsWith("/#")) {
+                if (StringUtils.endsWith(semanticTopic, "/#")) {
                     predicate = new ChannelMatchPredicateImpl(semanticTopic.replaceFirst("/#$", "/"));
                 } else {
                     predicate = new TermPredicateImpl(MessageField.CHANNEL, semanticTopic);
@@ -280,7 +280,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
         clientInfoQuery.setLimit(config.getLimit());
         clientInfoQuery.setOffset(config.getOffset());
         SortDirection sortDirection = config.getSortDir() == Style.SortDir.ASC ? SortDirection.ASC : SortDirection.DESC;
-        String sortField = config.getSortField().equals("friendlyDevice") ? ClientInfoField.CLIENT_ID.field() : ClientInfoField.TIMESTAMP.field();
+        String sortField = "friendlyDevice".equals(config.getSortField()) ? ClientInfoField.CLIENT_ID.field() : ClientInfoField.TIMESTAMP.field();
         clientInfoQuery.setSortFields(Collections.singletonList(SortField.of(sortDirection, sortField)));
 
         ClientInfoListResult result = null;
@@ -305,7 +305,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                     String clientId = client.getClientId();
                     String displayName = clientIdsMap.get(clientId);
                     if (StringUtils.isNotEmpty(displayName)) {
-                        gwtDatastoreDevice.setFriendlyDevice(displayName + " (" + clientId + ")");
+                        gwtDatastoreDevice.setFriendlyDevice(new StringBuilder().append(displayName).append(" (").append(clientId).append(")").toString());
                     } else {
                         gwtDatastoreDevice.setFriendlyDevice(clientId);
                     }
@@ -329,7 +329,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             ChannelInfoListResult result = clientInfoService.query(query);
             if (result != null && !result.isEmpty()) {
                 for (ChannelInfo client : result.getItems()) {
-                    if (client.getName().startsWith("W1/A1") && client.getClientId().contentEquals(selectedDevice.getDevice())) {
+                    if (StringUtils.startsWith(client.getName(), "W1/A1") && client.getClientId().contentEquals(selectedDevice.getDevice())) {
                         asset.add(KapuaGwtDataModelConverter.convertToAssets(client));
                     }
                 }
@@ -343,7 +343,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
     @Override
     public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String scopeId, GwtTopic topic) throws GwtKapuaException {
         StorablePredicate predicate;
-        if (topic.getSemanticTopic().endsWith("/#")) {
+        if (StringUtils.endsWith(topic.getSemanticTopic(), "/#")) {
             predicate = STORABLE_PREDICATE_FACTORY.newChannelMatchPredicate(topic.getSemanticTopic().replaceFirst("/#$", "/"));
         } else {
             predicate = STORABLE_PREDICATE_FACTORY.newTermPredicate(MessageField.CHANNEL, topic.getSemanticTopic());
@@ -373,7 +373,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
     public PagingLoadResult<GwtMessage> findMessagesByTopic(PagingLoadConfig loadConfig, String scopeId, GwtTopic topic, List<GwtHeader> headers, Date startDate, Date endDate)
             throws GwtKapuaException {
         StorablePredicate predicate;
-        if (topic.getSemanticTopic().endsWith("/#")) {
+        if (StringUtils.endsWith(topic.getSemanticTopic(), "/#")) {
             predicate = STORABLE_PREDICATE_FACTORY.newChannelMatchPredicate(topic.getSemanticTopic().replaceFirst("/#$", "/"));
         } else {
             predicate = STORABLE_PREDICATE_FACTORY.newTermPredicate(MessageField.CHANNEL, topic.getSemanticTopic());
@@ -453,9 +453,9 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
         query.setPredicate(andPredicate);
         if (!StringUtils.isEmpty(loadConfig.getSortField())) {
             String sortField = loadConfig.getSortField();
-            if (sortField.equals("timestampFormatted")) {
+            if ("timestampFormatted".equals(sortField)) {
                 sortField = MessageField.TIMESTAMP.field();
-            } else if (sortField.equals("clientId")) {
+            } else if ("clientId".equals(sortField)) {
                 sortField = MessageField.CLIENT_ID.field();
             }
             query.setSortFields(Collections.singletonList(SortField.of(SortDirection.valueOf(loadConfig.getSortDir().name()), sortField)));

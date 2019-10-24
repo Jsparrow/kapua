@@ -54,26 +54,37 @@ public abstract class AuthenticationLogic {
 
     protected static final String PERMISSION_LOG = "{0}/{1}/{2} - {3}";
 
-    protected String aclHash;
-    protected String aclAdvisory;
+	protected static final Domain BROKER_DOMAIN = BrokerDomains.BROKER_DOMAIN;
 
-    protected ClientMetric clientMetric = ClientMetric.getInstance();
-    protected LoginMetric loginMetric = LoginMetric.getInstance();
-    protected PublishMetric publishMetric = PublishMetric.getInstance();
-    protected SubscribeMetric subscribeMetric = SubscribeMetric.getInstance();
+	protected static final Domain DATASTORE_DOMAIN = new DatastoreDomain();
 
-    protected static final Domain BROKER_DOMAIN = BrokerDomains.BROKER_DOMAIN;
-    protected static final Domain DATASTORE_DOMAIN = new DatastoreDomain();
-    protected static final Domain DEVICE_MANAGEMENT_DOMAIN = new DeviceManagementDomain();
+	protected static final Domain DEVICE_MANAGEMENT_DOMAIN = new DeviceManagementDomain();
 
-    protected DeviceConnectionOptionFactory deviceConnectionOptionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionOptionFactory.class);
-    protected DeviceConnectionOptionService deviceConnectionOptionService = KapuaLocator.getInstance().getService(DeviceConnectionOptionService.class);
-    protected AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
-    protected DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
-    protected PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
-    protected DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
+	protected String aclHash;
 
-    /**
+	protected String aclAdvisory;
+
+	protected ClientMetric clientMetric = ClientMetric.getInstance();
+
+	protected LoginMetric loginMetric = LoginMetric.getInstance();
+
+	protected PublishMetric publishMetric = PublishMetric.getInstance();
+
+	protected SubscribeMetric subscribeMetric = SubscribeMetric.getInstance();
+
+	protected DeviceConnectionOptionFactory deviceConnectionOptionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionOptionFactory.class);
+
+	protected DeviceConnectionOptionService deviceConnectionOptionService = KapuaLocator.getInstance().getService(DeviceConnectionOptionService.class);
+
+	protected AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
+
+	protected DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
+
+	protected PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
+
+	protected DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
+
+	/**
      * Default constructor
      *
      * @param addressPrefix     prefix address to prepend to all the addressed when building the ACL list
@@ -85,7 +96,7 @@ public abstract class AuthenticationLogic {
         aclAdvisory = addressPrefix + advisoryPrefix;
     }
 
-    /**
+	/**
      * Execute the connect logic returning the authorization list (ACL)
      *
      * @param kcc
@@ -95,7 +106,7 @@ public abstract class AuthenticationLogic {
     public abstract List<org.eclipse.kapua.broker.core.plugin.authentication.AuthorizationEntry> connect(KapuaConnectionContext kcc)
             throws KapuaException;
 
-    /**
+	/**
      * Execute the disconnection logic
      *
      * @param kcc
@@ -105,13 +116,13 @@ public abstract class AuthenticationLogic {
      */
     public abstract boolean disconnect(KapuaConnectionContext kcc, Throwable error);
 
-    /**
+	/**
      * @param kcc
      * @return
      */
     protected abstract List<AuthorizationEntry> buildAuthorizationMap(KapuaConnectionContext kcc);
 
-    /**
+	/**
      * Format the ACL resource based on the pattern and the account name looking into the connection context property
      *
      * @param pattern
@@ -122,7 +133,7 @@ public abstract class AuthenticationLogic {
         return MessageFormat.format(pattern, kcc.getAccountName());
     }
 
-    /**
+	/**
      * Format the ACL resource based on the pattern and the account name and client id looking into the connection context property
      *
      * @param pattern
@@ -133,7 +144,7 @@ public abstract class AuthenticationLogic {
         return MessageFormat.format(pattern, kcc.getAccountName(), kcc.getClientId());
     }
 
-    /**
+	/**
      * Create the authorization entry base on the ACL and the resource address
      *
      * @param kcc
@@ -151,7 +162,7 @@ public abstract class AuthenticationLogic {
         return entry;
     }
 
-    /**
+	/**
      * Enforce the device connection/user bound (if enabled)<br>
      * <b>Utility method used by the connection logic</b>
      *
@@ -164,7 +175,7 @@ public abstract class AuthenticationLogic {
     protected void enforceDeviceConnectionUserBound(Map<String, Object> options, DeviceConnection deviceConnection, KapuaId scopeId, KapuaId userId) throws KapuaException {
         if (deviceConnection != null) {
             ConnectionUserCouplingMode connectionUserCouplingMode = deviceConnection.getUserCouplingMode();
-            if (ConnectionUserCouplingMode.INHERITED.equals(deviceConnection.getUserCouplingMode())) {
+            if (ConnectionUserCouplingMode.INHERITED == deviceConnection.getUserCouplingMode()) {
                 connectionUserCouplingMode = loadConnectionUserCouplingModeFromConfig(scopeId, options);
             }
             enforceDeviceUserBound(connectionUserCouplingMode, deviceConnection, scopeId, userId);
@@ -174,7 +185,7 @@ public abstract class AuthenticationLogic {
         }
     }
 
-    /**
+	/**
      * Enforce the device connection/user bound (if enabled)<br>
      * <b>Utility method used by the connection logic</b>
      *
@@ -186,7 +197,9 @@ public abstract class AuthenticationLogic {
      */
     protected void enforceDeviceUserBound(ConnectionUserCouplingMode connectionUserCouplingMode, DeviceConnection deviceConnection, KapuaId scopeId, KapuaId userId)
             throws KapuaException {
-        if (ConnectionUserCouplingMode.STRICT.equals(connectionUserCouplingMode)) {
+        // TODO manage the error message. is it better to throw a more specific exception or keep it obfuscated for security reason?
+				// TODO manage the error message. is it better to throw a more specific exception or keep it obfuscated for security reason?
+		if (ConnectionUserCouplingMode.STRICT == connectionUserCouplingMode) {
             if (deviceConnection == null) {
                 checkConnectionCountByReservedUserId(scopeId, userId, 0);
             } else {
@@ -213,7 +226,7 @@ public abstract class AuthenticationLogic {
         }
     }
 
-    /**
+	/**
      * Check the connection count for a specific reserved user id<br>
      * <b>Utility method used by the connection logic</b>
      *
@@ -235,7 +248,7 @@ public abstract class AuthenticationLogic {
         }
     }
 
-    /**
+	/**
      * Load the device connection/user coupling mode<br>
      * <b>Utility method used by the connection logic</b>
      *
@@ -261,7 +274,7 @@ public abstract class AuthenticationLogic {
         }
     }
 
-    protected boolean isStealingLink(KapuaConnectionContext kcc, Throwable error) {
+	protected boolean isStealingLink(KapuaConnectionContext kcc, Throwable error) {
         boolean stealingLinkDetected = false;
         if (kcc.getOldConnectionId() != null) {
             stealingLinkDetected = !kcc.getOldConnectionId().equals(kcc.getConnectionId());

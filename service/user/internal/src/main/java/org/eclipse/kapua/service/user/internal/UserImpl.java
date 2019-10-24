@@ -75,7 +75,6 @@ public class UserImpl extends AbstractKapuaNamedEntity implements User {
      * @since 1.0.0
      */
     public UserImpl() {
-        super();
     }
 
     /**

@@ -13,95 +13,102 @@ package org.eclipse.kapua.commons.about;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AboutEntry {
 
-    public static class License {
+    private String id;
+
+	private String name;
+
+	private String version;
+
+	private License license = License.UNKNOWN;
+
+	private String notice;
+
+	public void setId(final String id) {
+        this.id = id;
+    }
+
+	public String getId() {
+        return id;
+    }
+
+	public void setName(final String name) {
+        this.name = name;
+    }
+
+	public String getName() {
+        return name;
+    }
+
+	public void setVersion(final String version) {
+        this.version = version;
+    }
+
+	public String getVersion() {
+        return version;
+    }
+
+	public void setLicense(final License license) {
+        this.license = license != null ? license : License.UNKNOWN;
+    }
+
+	public License getLicense() {
+        return license;
+    }
+
+	public void setNotice(String notice) {
+        this.notice = notice;
+    }
+
+	public String getNotice() {
+        return notice;
+    }
+
+	public static class License {
 
         public static final License UNKNOWN = new License("Unknown", null, null);
-        public static final License APL2;
-        public static final License EPL;
+		public static final License APL2;
+		public static final License EPL;
 
-        static {
+		static {
             URL urlApache = null;
             URL urlEpl = null;
             try {
                 urlApache = new URL("http://www.apache.org/licenses/");
                 urlEpl = new URL("https://www.eclipse.org/legal/epl-v10.html");
             } catch (MalformedURLException e) {
+				logger.error(e.getMessage(), e);
             }
 
             APL2 = new License("Apache License 2.0", null, urlApache);
             EPL = new License("EPL", "Eclipse Public License", urlEpl);
         }
 
-        private final String name;
-        private final String text;
-        private final URL url;
+		private final Logger logger = LoggerFactory.getLogger(License.class);
+		private final String name;
+		private final String text;
+		private final URL url;
 
-        public License(final String name, final String text, final URL url) {
+		public License(final String name, final String text, final URL url) {
             this.name = name;
             this.text = text;
             this.url = url;
         }
 
-        public String getName() {
+		public String getName() {
             return name;
         }
 
-        public String getText() {
+		public String getText() {
             return text;
         }
 
-        public URL getUrl() {
+		public URL getUrl() {
             return url;
         }
-    }
-
-    private String id;
-
-    private String name;
-    private String version;
-    private License license = License.UNKNOWN;
-    private String notice;
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setVersion(final String version) {
-        this.version = version;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setLicense(final License license) {
-        this.license = license != null ? license : License.UNKNOWN;
-    }
-
-    public License getLicense() {
-        return license;
-    }
-
-    public void setNotice(String notice) {
-        this.notice = notice;
-    }
-
-    public String getNotice() {
-        return notice;
     }
 }

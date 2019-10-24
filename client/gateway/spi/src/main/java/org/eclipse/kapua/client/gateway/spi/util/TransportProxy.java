@@ -101,9 +101,7 @@ public final class TransportProxy implements Transport, AutoCloseable {
     }
 
     private void fireEvent(final boolean state, final Set<Listener> listeners) {
-        executor.execute(() -> {
-            listeners.stream().forEach(l -> l.stateChange(state));
-        });
+        executor.execute(() -> listeners.stream().forEach(l -> l.stateChange(state)));
     }
 
     private void attach() {
@@ -118,13 +116,12 @@ public final class TransportProxy implements Transport, AutoCloseable {
 
         // check for a listener handle
 
-        if (handle != null) {
-
-            // and close it
-
-            handle.close();
-            handle = null;
-        }
+        // and close it
+		if (handle == null) {
+			return;
+		}
+		handle.close();
+		handle = null;
     }
 
     /**

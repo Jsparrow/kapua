@@ -38,7 +38,12 @@ public class KapuaEidTest {
     @SuppressWarnings("unused")
     private final long notUsed;
 
-    @Parameters
+    public KapuaEidTest(BigInteger eid, long notUsed) {
+        this.eid = eid;
+        this.notUsed = notUsed;
+    }
+
+	@Parameters
     public static Collection<Object[]> eids() {
         return Arrays.asList(new Object[][] {
                 { new BigInteger(64, new Random()), 0L },
@@ -46,12 +51,7 @@ public class KapuaEidTest {
         });
     }
 
-    public KapuaEidTest(BigInteger eid, long notUsed) {
-        this.eid = eid;
-        this.notUsed = notUsed;
-    }
-
-    @Test
+	@Test
     public void test() {
         KapuaEid kid = new KapuaEid(eid);
         String sid = kid.toCompactId();
@@ -65,7 +65,7 @@ public class KapuaEidTest {
         Assert.assertEquals(kid.toCompactId(), kid1.toCompactId());
     }
 
-    @Test
+	@Test
     public void testParseKapuaId() {
         KapuaEid kapuaEid = new KapuaEid(eid);
         KapuaEid parsedKapuaEid = KapuaEid.parseKapuaId(kapuaEid);

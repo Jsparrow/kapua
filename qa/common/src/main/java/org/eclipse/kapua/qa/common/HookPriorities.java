@@ -19,14 +19,13 @@ import cucumber.api.java.Before;
  */
 public final class HookPriorities {
 
-    private HookPriorities() {
-    }
-
     /*
      * Fire up the database first and shut it down last
      */
     public static final int DATABASE = 1_000;
-    public static final int DATASTORE = 2_000;
-    public static final int DEFAULT = 10_000;
+	public static final int DATASTORE = 2_000;
+	public static final int DEFAULT = 10_000;
+	private HookPriorities() {
+    }
 
 }

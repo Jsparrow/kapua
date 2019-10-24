@@ -60,6 +60,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Steps used in integration scenarios with running MQTT broker and process of
@@ -69,74 +71,77 @@ import java.util.stream.Collectors;
 @ScenarioScoped
 public class BrokerSteps extends TestBase {
 
-    /**
+    private static final Logger logger = LoggerFactory.getLogger(BrokerSteps.class);
+
+	/**
      * Embedded broker configuration file from classpath resources.
      */
     public static final String ACTIVEMQ_XML = "xbean:activemq.xml";
 
-    /**
-     * Device birth topic.
-     */
-    private String mqttBirth;
-
-    /**
-     * Device death topic.
-     */
-    private String mqttDc;
-
-    /**
+	/**
      * URI of mqtt broker.
      */
     private static final String BROKER_URI = "tcp://localhost:1883";
 
-    /**
+	/**
+     * Service for connecting devices.
+     */
+    private static DeviceConnectionService deviceConnectionService;
+
+	/**
+     * Device birth topic.
+     */
+    private String mqttBirth;
+
+	/**
+     * Device death topic.
+     */
+    private String mqttDc;
+
+	/**
      * Access to device management service.
      */
     private DevicePackageManagementService devicePackageManagementService;
 
-    /**
+	/**
      * Device registry service for managing devices in DB.
      */
     private DeviceRegistryService deviceRegistryService;
 
-    /**
+	/**
      * Configuration service for kura devices.
      */
     private DeviceConfigurationManagementService deviceConfiguratiomManagementService;
 
-    /**
+	/**
      * Kura snapshot management service.
      */
     @SuppressWarnings("unused")
     private DeviceSnapshotManagementService deviceSnapshotManagementService;
 
-    /**
+	/**
      * Kura bundle management service.
      */
     private DeviceBundleManagementService deviceBundleManagementService;
 
-    /**
+	/**
      * Service for issuing commnads on Kura device.
      */
     private DeviceCommandManagementService deviceCommandManagementService;
 
-    /**
+	/**
      * Factory for creating commands sent to Kura.
      */
     private DeviceCommandFactory deviceCommandFactory;
 
-    /**
-     * Service for connecting devices.
-     */
-    private static DeviceConnectionService deviceConnectionService;
-
-    /**
+	/**
      * Client simulating Kura device
      */
     private KuraDevice kuraDevice;
-    private ArrayList<KuraDevice> kuraDevices = kuraDevices = new ArrayList<>();
 
-    /**
+	private ArrayList<KuraDevice> kuraDevices = kuraDevices = new ArrayList<>();
+
+	/**
      * Scenario scoped step data.
      */
 //    private StepData stepData;
@@ -148,7 +153,7 @@ public class BrokerSteps extends TestBase {
         this.database = database;
     }
 
-    @Before
+	@Before
     public void beforeScenario(Scenario scenario) {
 
         this.scenario = scenario;
@@ -169,7 +174,7 @@ public class BrokerSteps extends TestBase {
         XmlUtil.setContextProvider(consoleProvider);
     }
 
-    @After
+	@After
     public void afterScenario() throws Exception {
 
         if (kuraDevice != null) {
@@ -181,7 +186,7 @@ public class BrokerSteps extends TestBase {
         this.stepData = null;
     }
 
-    @When("^I start the Kura Mock$")
+	@When("^I start the Kura Mock$")
     public void startKuraMock() {
 
         if (!kuraDevices.isEmpty()) {
@@ -194,7 +199,7 @@ public class BrokerSteps extends TestBase {
         stepData.put("KuraDevices", kuraDevices);
     }
 
-    @When("I get the KuraMock device(?:|s)$")
+	@When("I get the KuraMock device(?:|s)$")
     public void getKuraMockDevice() throws Exception {
         ArrayList<Device> deviceList = new ArrayList<>();
         for (KuraDevice kuraDevice : kuraDevices) {
@@ -207,51 +212,49 @@ public class BrokerSteps extends TestBase {
         stepData.put("DeviceList", deviceList);
     }
 
-    @When("^KuraMock is disconnected$")
+	@When("^KuraMock is disconnected$")
     public void kuraMockDisconnected() throws Exception {
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
         deviceDeathMessage();
 
-        for (KuraDevice kuraDevice : kuraDevices) {
-            kuraDevice.mqttClientDisconnect();
-        }
+        kuraDevices.forEach(KuraDevice::mqttClientDisconnect);
     }
 
-    @When("^Device birth message is sent$")
+	@When("^Device birth message is sent$")
     public void deviceBirthMessage() throws Exception {
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
 
         for(KuraDevice kuraDevice : kuraDevices) {
-            mqttBirth = "$EDC/kapua-sys/"+kuraDevice.getClientId()+"/MQTT/BIRTH";
+            mqttBirth = new StringBuilder().append("$EDC/kapua-sys/").append(kuraDevice.getClientId()).append("/MQTT/BIRTH").toString();
             kuraDevice.sendMessageFromFile(mqttBirth, 0, false, "/mqtt/rpione3_MQTT_BIRTH.mqtt");
 
         }
 
     }
 
-    @When("^Device is connected$")
+	@When("^Device is connected$")
     public void deviceConnected() throws Exception {
 
         deviceBirthMessage();
     }
 
-    @When("^Device death message is sent$")
+	@When("^Device death message is sent$")
     public void deviceDeathMessage() throws Exception {
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
 
         for(KuraDevice kuraDevice : kuraDevices) {
-            mqttDc = "$EDC/kapua-sys/"+kuraDevice.getClientId()+"/MQTT/DC";
+            mqttDc = new StringBuilder().append("$EDC/kapua-sys/").append(kuraDevice.getClientId()).append("/MQTT/DC").toString();
             kuraDevice.sendMessageFromFile(mqttDc, 0, false, "/mqtt/rpione3_MQTT_DC.mqtt");
         }
     }
 
-    @When("^Device is disconnected$")
+	@When("^Device is disconnected$")
     public void deviceDisconnected() throws Exception {
 
         deviceDeathMessage();
     }
 
-    @When("^Packages are requested$")
+	@When("^Packages are requested$")
     public void requestPackages() throws Exception {
 
         for(KuraDevice kuraDevice : kuraDevices) {
@@ -265,7 +268,7 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @Then("^Packages are received$")
+	@Then("^Packages are received$")
     public void packagesReceived() {
 
         @SuppressWarnings("unchecked")
@@ -275,21 +278,21 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @Then("^Number of received packages is (\\d+)$")
+	@Then("^Number of received packages is (\\d+)$")
     public void checkNumberOfReceivedDevicePackages(long number) {
         @SuppressWarnings("unchecked")
         List<DevicePackage> receivedPackages = (List<DevicePackage>) stepData.get("packages");
         assertEquals(number, receivedPackages.size());
     }
 
-    @Then("Package named (.*) with version (.*) is received$")
+	@Then("Package named (.*) with version (.*) is received$")
     public void assertPackage(final String packageName, final String version) {
         final DevicePackage pkg = findPackageByNameAndVersion(packageName, version);
         Assert.assertEquals(packageName, pkg.getName());
         Assert.assertEquals(version, pkg.getVersion());
     }
 
-    private DevicePackage findPackageByNameAndVersion(final String packageSymbolicName, final String version) {
+	private DevicePackage findPackageByNameAndVersion(final String packageSymbolicName, final String version) {
         List<DevicePackage> savedPackages = (List<DevicePackage>) stepData.get("packages");
         List<DevicePackage> packages = savedPackages.stream()
                 .filter(bundle -> bundle.getName().equals(packageSymbolicName))
@@ -306,7 +309,7 @@ public class BrokerSteps extends TestBase {
         return packages.get(0);
     }
 
-    @When("^Bundles are requested$")
+	@When("^Bundles are requested$")
     public void requestBundles() throws Exception {
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
 
@@ -319,21 +322,21 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @Then("^Bundles are received$")
+	@Then("^Bundles are received$")
     public void bundlesReceived() {
         @SuppressWarnings("unchecked")
         List<DeviceBundle> bundles = (List<DeviceBundle>) stepData.get("bundles");
         assertEquals(137, bundles.size());
     }
 
-    @When("A bundle named (.*) with id (.*) and version (.*) is present and (.*)$")
+	@When("A bundle named (.*) with id (.*) and version (.*) is present and (.*)$")
     public void bundleIsPresent(String bundleSymbolicName, long id ,String version, String state) {
         DeviceBundle bundle = findBundleByNameAndVersion(bundleSymbolicName, version);
         Assert.assertEquals(id, bundle.getId());
         Assert.assertEquals(state, bundle.getState());
     }
 
-    private DeviceBundle findBundleByNameAndVersion(final String bundleSymbolicName, final String version) {
+	private DeviceBundle findBundleByNameAndVersion(final String bundleSymbolicName, final String version) {
         List<DeviceBundle> savedBundles = (List<DeviceBundle>) stepData.get("bundles");
         List<DeviceBundle> bundles = savedBundles.stream()
                 .filter(bundle -> bundle.getName().equals(bundleSymbolicName))
@@ -350,7 +353,7 @@ public class BrokerSteps extends TestBase {
         return bundles.get(0);
     }
 
-    @When("^Configuration is requested$")
+	@When("^Configuration is requested$")
     public void requestConfiguration() throws Exception {
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
 
@@ -363,7 +366,7 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @When("A Configuration named (.*) has property (.*) with value (.*)$")
+	@When("A Configuration named (.*) has property (.*) with value (.*)$")
     public void checkConfiguration(String configurationName, String configurationKey, String configurationValue) {
         DeviceComponentConfiguration configuration = findConfigurationByNameAndValue(configurationName, configurationKey, configurationValue);
         Assert.assertEquals(configurationName, configuration.getDefinition().getId());
@@ -371,7 +374,7 @@ public class BrokerSteps extends TestBase {
         Assert.assertTrue(configuration.getProperties().get(configurationKey).toString().equals(configurationValue));
     }
 
-    private DeviceComponentConfiguration findConfigurationByNameAndValue(final String configurationName, final String configurationKey, final String configurationValue) {
+	private DeviceComponentConfiguration findConfigurationByNameAndValue(final String configurationName, final String configurationKey, final String configurationValue) {
         List<DeviceComponentConfiguration> savedConfigurations = (List<DeviceComponentConfiguration>) stepData.get("configurations");
         List<DeviceComponentConfiguration> configurations = savedConfigurations.stream()
                 .filter(configuration -> configuration.getDefinition().getId().equals(configurationName))
@@ -389,14 +392,14 @@ public class BrokerSteps extends TestBase {
         return configurations.get(0);
     }
 
-    @Then("^Configuration is received$")
+	@Then("^Configuration is received$")
     public void configurationReceived() {
         @SuppressWarnings("unchecked")
         List<DeviceComponentConfiguration> configurations = (List<DeviceComponentConfiguration>) stepData.get("configurations");
         assertEquals(17, configurations.size());
     }
 
-    @When("^Command (.*) is executed$")
+	@When("^Command (.*) is executed$")
     public void executeCommand(String command) throws Exception {
 
         for(KuraDevice kuraDevice : kuraDevices) {
@@ -412,14 +415,14 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @Then("^Exit code (\\d+) is received$")
+	@Then("^Exit code (\\d+) is received$")
     public void configurationReceived(int expectedExitCode) {
 
         Integer commandExitCode = (Integer) stepData.get("commandExitCode");
         assertEquals(expectedExitCode, commandExitCode.intValue());
     }
 
-    @Then("^Device is connected with \"(.*)\" server ip$")
+	@Then("^Device is connected with \"(.*)\" server ip$")
     public void deviceWithServerIp(String serverIp) {
 
         DeviceConnection deviceConn = null;
@@ -429,14 +432,14 @@ public class BrokerSteps extends TestBase {
                 deviceConn = deviceConnectionService.findByClientId(SYS_SCOPE_ID, kuraDevice.getClientId());
             }
         } catch (KapuaException ex) {
-            stepData.put("ExceptionCaught", true);
+            logger.error(ex.getMessage(), ex);
+			stepData.put("ExceptionCaught", true);
             return;
         }
         assertEquals(serverIp, deviceConn.getServerIp());
     }
 
-
-    @When("^Client with name \"(.*)\" with client id \"(.*)\" user \"(.*)\" password \"(.*)\" is connected$")
+	@When("^Client with name \"(.*)\" with client id \"(.*)\" user \"(.*)\" password \"(.*)\" is connected$")
     public void clientConnect(String clientName, String clientId, String user, String password) throws Exception {
         MqttClient mqttClient = null;
         MqttConnectOptions clientOpts = new MqttConnectOptions();
@@ -445,14 +448,14 @@ public class BrokerSteps extends TestBase {
             mqttClient = new MqttClient(BROKER_URI, clientId,
                     new MemoryPersistence());
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         clientOpts.setUserName(user);
         clientOpts.setPassword(password.toCharArray());
         try {
             mqttClient.connect(clientOpts);
         } catch (MqttException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         if (mqttClient != null) {
             stepData.put(clientName, mqttClient);
@@ -461,7 +464,7 @@ public class BrokerSteps extends TestBase {
         }
     }
 
-    @When("^topic \"(.*)\" content \"(.*)\" is published by client named \"(.*)\"$")
+	@When("^topic \"(.*)\" content \"(.*)\" is published by client named \"(.*)\"$")
     public void publishMessageByClient(String topic, String content, String clientName) throws Exception {
         MqttClient mqttClient = (MqttClient) stepData.get(clientName);
         byte[] payload = Files.readAllBytes(Paths.get(getClass().getResource(content).toURI()));
@@ -472,7 +475,7 @@ public class BrokerSteps extends TestBase {
         mqttClient.publish(topic, payload, 0, false);
     }
 
-    @Then("^Client named \"(.*)\" is connected$")
+	@Then("^Client named \"(.*)\" is connected$")
     public void clientConnected(String clientName) throws Exception {
         MqttClient mqttClient = (MqttClient) stepData.get(clientName);
         if (mqttClient == null) {
@@ -481,7 +484,7 @@ public class BrokerSteps extends TestBase {
         assertEquals(true, mqttClient.isConnected());
     }
 
-    @Then("^Client named \"(.*)\" is not connected$")
+	@Then("^Client named \"(.*)\" is not connected$")
     public void clientNotConnected(String clientName) throws Exception {
         MqttClient mqttClient = (MqttClient) stepData.get(clientName);
         if (mqttClient == null) {
@@ -490,7 +493,7 @@ public class BrokerSteps extends TestBase {
         assertEquals(false, mqttClient.isConnected());
     }
 
-    @Then("^Disconnect client with name \"(.*)\"$")
+	@Then("^Disconnect client with name \"(.*)\"$")
     public void disconnectClient(String clientName) throws Exception {
         MqttClient mqttClient = (MqttClient) stepData.get(clientName);
         if (mqttClient == null) {
@@ -500,12 +503,13 @@ public class BrokerSteps extends TestBase {
             mqttClient.disconnect();
             mqttClient.close();
         } catch (Exception e) {
+			logger.error(e.getMessage(), e);
             // Exception eaten on purpose.
             // Disconnect is for sanity only.
         }
     }
 
-    @Then("^Device(?:|s) status is \"([^\"]*)\"$")
+	@Then("^Device(?:|s) status is \"([^\"]*)\"$")
     public void deviceStatusIs(String deviceStatus) throws Exception {
         DeviceConnection deviceConn = null;
         ArrayList<KuraDevice> kuraDevices = (ArrayList<KuraDevice>) stepData.get("KuraDevices");
@@ -514,12 +518,13 @@ public class BrokerSteps extends TestBase {
                 deviceConn = deviceConnectionService.findByClientId(SYS_SCOPE_ID, kuraDevice.getClientId());
             }
         } catch (KapuaException ex) {
-            return;
+            logger.error(ex.getMessage(), ex);
+			return;
         }
         assertEquals(deviceStatus, deviceConn.getStatus().toString());
     }
 
-    @And("^I add (\\d+) devices to Kura Mock$")
+	@And("^I add (\\d+) devices to Kura Mock$")
     public void iAddDeviceToKuraMock(int numberOfDevices) {
 
         if (!kuraDevices.isEmpty()) {
@@ -535,7 +540,7 @@ public class BrokerSteps extends TestBase {
         stepData.put("KuraDevices", kuraDevices);
     }
 
-    @When("^Device(?:|s) \"([^\"]*)\" connected$")
+	@When("^Device(?:|s) \"([^\"]*)\" connected$")
     public void deviceConnected(String arg0) throws Exception {
         try {
             deviceBirthMessage();

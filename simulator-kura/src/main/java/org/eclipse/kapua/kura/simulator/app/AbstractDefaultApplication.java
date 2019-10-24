@@ -21,18 +21,18 @@ public abstract class AbstractDefaultApplication implements Application {
 
     private final Descriptor descriptor;
 
-    protected abstract void processRequest(final Request request) throws Exception;
-
     public AbstractDefaultApplication(final String applicationId) {
         this.descriptor = new Descriptor(applicationId);
     }
 
-    @Override
+	protected abstract void processRequest(final Request request) throws Exception;
+
+	@Override
     public Descriptor getDescriptor() {
         return this.descriptor;
     }
 
-    @Override
+	@Override
     public Handler createHandler(final ApplicationContext context) {
         return new Handler() {
 
@@ -48,7 +48,7 @@ public abstract class AbstractDefaultApplication implements Application {
         };
     }
 
-    protected void process(final ApplicationContext context, final Message message) {
+	protected void process(final ApplicationContext context, final Message message) {
         logger.debug("Received message: {}", message);
 
         final Request request;
@@ -69,7 +69,7 @@ public abstract class AbstractDefaultApplication implements Application {
         }
     }
 
-    protected void close() throws Exception {
+	protected void close() throws Exception {
     }
 
 }

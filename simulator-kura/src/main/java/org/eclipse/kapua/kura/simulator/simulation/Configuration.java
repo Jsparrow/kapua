@@ -16,10 +16,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 public class Configuration {
 
     public static final String DEFAULT_VALUE_NAME = "value";
+	private Map<String, Application> applications = new HashMap<>();
+
+	public void setApplications(final Map<String, Application> applications) {
+        Objects.requireNonNull(applications);
+        this.applications = applications;
+    }
+
+	public Map<String, Application> getApplications() {
+        return this.applications;
+    }
+
+	public void validate() {
+        final List<Exception> violations = new LinkedList<>();
+
+        this.applications.values().forEach(app -> app.validate(violations));
+
+        if (violations.isEmpty()) {
+			return;
+		}
+		final IllegalStateException ex = new IllegalStateException("Configuration has validation errors");
+		violations.forEach(ex::addSuppressed);
+		throw ex;
+    }
 
     public static class Scheduler {
 
@@ -74,23 +98,23 @@ public class Configuration {
 
         private void validate(final Map<String, Map<String, Object>> generators, final String id, final List<Exception> violations) {
 
-            if (this.bodyGenerator != null && !this.bodyGenerator.isEmpty()) {
+            if (this.bodyGenerator != null && !StringUtils.isEmpty(this.bodyGenerator)) {
                 validateGeneratorReference(generators, String.format("Topic %s/body", id), this.bodyGenerator, violations);
             }
 
-            if (this.positionGenerator != null && !this.positionGenerator.isEmpty()) {
+            if (this.positionGenerator != null && !StringUtils.isEmpty(this.positionGenerator)) {
                 validateGeneratorReference(generators, String.format("Topic %s/position", id), this.positionGenerator, violations);
             }
 
-            for (final Map.Entry<String, MetricsMapping> entry : this.metrics.entrySet()) {
+            this.metrics.entrySet().forEach((final Map.Entry<String, MetricsMapping> entry) -> {
                 final String generator = entry.getValue().getGenerator();
-                if (generator != null && !generator.isEmpty()) {
+                if (generator != null && !StringUtils.isEmpty(generator)) {
                     validateGeneratorReference(generators, String.format("Topic %s/Metric %s", id, entry.getKey()), generator, violations);
                 } else if (generators.size() != 1) {
                     violations.add(new IllegalStateException(
                             String.format("Topic %s/Metric %s uses 'default' generator which requires exactly one generation, but there are: %s", id, entry.getKey(), generators.size())));
                 }
-            }
+            });
 
         }
 
@@ -168,44 +192,22 @@ public class Configuration {
             return this.topics;
         }
 
-        public void validate() throws IllegalStateException {
+        public void validate() {
             final List<Exception> violations = new LinkedList<>();
 
             validate(violations);
 
-            if (!violations.isEmpty()) {
-                final IllegalStateException ex = new IllegalStateException("Configuration has validation errors");
-                violations.forEach(ex::addSuppressed);
-                throw ex;
-            }
+            if (violations.isEmpty()) {
+				return;
+			}
+			final IllegalStateException ex = new IllegalStateException("Configuration has validation errors");
+			violations.forEach(ex::addSuppressed);
+			throw ex;
         }
 
         void validate(final List<Exception> violations) {
             this.scheduler.validate(violations);
             this.topics.forEach((id, topic) -> topic.validate(this.generators, id, violations));
-        }
-    }
-
-    private Map<String, Application> applications = new HashMap<>();
-
-    public void setApplications(final Map<String, Application> applications) {
-        Objects.requireNonNull(applications);
-        this.applications = applications;
-    }
-
-    public Map<String, Application> getApplications() {
-        return this.applications;
-    }
-
-    public void validate() throws IllegalStateException {
-        final List<Exception> violations = new LinkedList<>();
-
-        this.applications.values().forEach(app -> app.validate(violations));
-
-        if (!violations.isEmpty()) {
-            final IllegalStateException ex = new IllegalStateException("Configuration has validation errors");
-            violations.forEach(ex::addSuppressed);
-            throw ex;
         }
     }
 }

@@ -37,6 +37,8 @@ import org.eclipse.kapua.service.tag.Tag;
 import org.eclipse.kapua.service.tag.TagService;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides logic used to validate preconditions required to execute the device service operation.
@@ -45,7 +47,9 @@ import java.util.List;
  */
 public final class DeviceValidation {
 
-    private static final DeviceDomain DEVICE_DOMAIN = new DeviceDomain();
+    private static final Logger logger = LoggerFactory.getLogger(DeviceValidation.class);
+
+	private static final DeviceDomain DEVICE_DOMAIN = new DeviceDomain();
 
     private static AuthorizationService authorizationService;
     private static GroupService groupService;
@@ -65,34 +69,35 @@ public final class DeviceValidation {
             deviceRegistryService = KapuaLocator.getInstance().getService(DeviceRegistryService.class);
             deviceFactory = KapuaLocator.getInstance().getFactory(DeviceFactory.class);
         } catch (ExceptionInInitializerError e) {
+			logger.error(e.getMessage(), e);
 
         }
-    }
-
-    public static void authorizationService(AuthorizationService authorizationService) {
-        DeviceValidation.authorizationService = authorizationService;
-    }
-
-    public static void groupService(GroupService groupService) {
-        DeviceValidation.groupService = groupService;
-    }
-
-    public static void permissionFactory(PermissionFactory permissionFactory) {
-        DeviceValidation.permissionFactory = permissionFactory;
-    }
-
-    public static void deviceRegistryService(DeviceRegistryService deviceRegistryService) {
-        DeviceValidation.deviceRegistryService = deviceRegistryService;
-    }
-
-    public static void deviceFactory(DeviceFactory deviceFactory) {
-        DeviceValidation.deviceFactory = deviceFactory;
     }
 
     private DeviceValidation() {
     }
 
-    /**
+	public static void authorizationService(AuthorizationService authorizationService) {
+        DeviceValidation.authorizationService = authorizationService;
+    }
+
+	public static void groupService(GroupService groupService) {
+        DeviceValidation.groupService = groupService;
+    }
+
+	public static void permissionFactory(PermissionFactory permissionFactory) {
+        DeviceValidation.permissionFactory = permissionFactory;
+    }
+
+	public static void deviceRegistryService(DeviceRegistryService deviceRegistryService) {
+        DeviceValidation.deviceRegistryService = deviceRegistryService;
+    }
+
+	public static void deviceFactory(DeviceFactory deviceFactory) {
+        DeviceValidation.deviceFactory = deviceFactory;
+    }
+
+	/**
      * Validates the device creates precondition
      *
      * @param deviceCreator
@@ -113,7 +118,7 @@ public final class DeviceValidation {
         return deviceCreator;
     }
 
-    /**
+	/**
      * Validates the device updates precondition
      *
      * @param device
@@ -145,7 +150,7 @@ public final class DeviceValidation {
         return device;
     }
 
-    /**
+	/**
      * Validates the find device precondition
      *
      * @param scopeId
@@ -160,7 +165,7 @@ public final class DeviceValidation {
         authorizationService.checkPermission(permissionFactory.newPermission(DEVICE_DOMAIN, Actions.read, scopeId, groupId));
     }
 
-    /**
+	/**
      * Validates the device query precondition
      *
      * @param query
@@ -179,7 +184,7 @@ public final class DeviceValidation {
         authorizationService.checkPermission(permissionFactory.newPermission(DEVICE_DOMAIN, Actions.read, query.getScopeId(), Group.ANY));
     }
 
-    /**
+	/**
      * Validates the device count precondition
      *
      * @param query
@@ -191,7 +196,7 @@ public final class DeviceValidation {
         authorizationService.checkPermission(permissionFactory.newPermission(DEVICE_DOMAIN, Actions.read, query.getScopeId(), Group.ANY));
     }
 
-    /**
+	/**
      * Validates the device delete precondition
      *
      * @param scopeId
@@ -206,7 +211,7 @@ public final class DeviceValidation {
         authorizationService.checkPermission(permissionFactory.newPermission(DEVICE_DOMAIN, Actions.delete, scopeId, groupId));
     }
 
-    /**
+	/**
      * Validates the device find by identifier precondition
      *
      * @param scopeId
@@ -221,7 +226,7 @@ public final class DeviceValidation {
         // Check access is performed by the query method.
     }
 
-    /**
+	/**
      * Finds the current {@link Group} id assigned to the given {@link Device} id.
      *
      * @param scopeId  The scope {@link KapuaId} of the {@link Device}

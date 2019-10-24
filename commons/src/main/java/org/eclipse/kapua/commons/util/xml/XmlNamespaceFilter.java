@@ -45,8 +45,6 @@ public class XmlNamespaceFilter extends XMLFilterImpl {
      */
     public XmlNamespaceFilter(String namespaceUri,
             boolean addNamespace) {
-        super();
-
         if (addNamespace) {
             this.usedNamespaceUri = namespaceUri;
         } else {
@@ -87,12 +85,12 @@ public class XmlNamespaceFilter extends XMLFilterImpl {
 
     private void startControlledPrefixMapping()
             throws SAXException {
-        if (addNamespace && !addedNamespace) {
-            // We should add namespace since it is set and has not yet been done.
-            super.startPrefixMapping("", usedNamespaceUri);
-
-            // Make sure we dont do it twice
-            addedNamespace = true;
-        }
+        if (!(addNamespace && !addedNamespace)) {
+			return;
+		}
+		// We should add namespace since it is set and has not yet been done.
+		super.startPrefixMapping("", usedNamespaceUri);
+		// Make sure we dont do it twice
+		addedNamespace = true;
     }
 }

@@ -25,10 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BirthCertificateBuilder {
 
-    private final GatewayConfiguration configuration;
+    private static final Logger logger = LoggerFactory.getLogger(BirthCertificateBuilder.class);
+	private final GatewayConfiguration configuration;
     private final Instant started;
     private final Supplier<Set<String>> applicationIds;
 
@@ -80,6 +83,7 @@ public class BirthCertificateBuilder {
                 metrics.put("connection_ip", String.join(",", addresses));
             }
         } catch (final Exception e) {
+			logger.error(e.getMessage(), e);
         }
     }
 

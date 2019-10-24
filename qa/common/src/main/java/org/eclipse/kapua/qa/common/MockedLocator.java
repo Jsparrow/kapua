@@ -88,6 +88,7 @@ public class MockedLocator extends KapuaLocator {
             try {
                 service = guiceInjector.getInstance(serviceClass);
             } catch (ConfigurationException gce) {
+				logger.error(gce.getMessage(), gce);
                 // Guice didn't find instance - eat exception and return null for instance
             }
         }
@@ -104,6 +105,7 @@ public class MockedLocator extends KapuaLocator {
             try {
                 factory = guiceInjector.getInstance(factoryClass);
             } catch (ConfigurationException gce) {
+				logger.error(gce.getMessage(), gce);
                 // Guice didn't find instance - eat exception and return null for instance
             }
         }

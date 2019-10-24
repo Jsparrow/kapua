@@ -19,7 +19,6 @@ public class Label extends com.extjs.gxt.ui.client.widget.Label {
     private KapuaIcon icon;
 
     public Label(String text, KapuaIcon icon) {
-        super();
         setText(text);
         setIcon(icon);
     }

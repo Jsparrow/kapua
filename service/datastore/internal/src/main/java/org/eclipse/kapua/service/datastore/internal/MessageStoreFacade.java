@@ -75,6 +75,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Message store facade
@@ -85,15 +86,17 @@ public final class MessageStoreFacade {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageStoreFacade.class);
 
-    private final Counter metricMessagesAlreadyInTheDatastoreCount;
+	private static final String METRIC_COMPONENT_NAME = "datastore";
 
-    private static final String METRIC_COMPONENT_NAME = "datastore";
+	private final Counter metricMessagesAlreadyInTheDatastoreCount;
 
-    private final MessageStoreMediator mediator;
-    private final ConfigurationProvider configProvider;
-    private DatastoreClient client;
+	private final MessageStoreMediator mediator;
 
-    /**
+	private final ConfigurationProvider configProvider;
+
+	private DatastoreClient client;
+
+	/**
      * Constructs the message store facade
      *
      * @param confProvider
@@ -109,7 +112,7 @@ public final class MessageStoreFacade {
         metricMessagesAlreadyInTheDatastoreCount = metricService.getCounter(METRIC_COMPONENT_NAME, "datastore", "store", "messages", "already_in_the_datastore", "count");
     }
 
-    /**
+	/**
      * Store a message
      *
      * @param message
@@ -144,7 +147,7 @@ public final class MessageStoreFacade {
         // Use the account service plan to determine whether we will give
         // precede to the device time
         long indexedOn = KapuaDateUtils.getKapuaSysDate().toEpochMilli();
-        if (DataIndexBy.DEVICE_TIMESTAMP.equals(accountServicePlan.getDataIndexBy())) {
+        if (DataIndexBy.DEVICE_TIMESTAMP == accountServicePlan.getDataIndexBy()) {
             if (capturedOn != null) {
                 indexedOn = capturedOn.getTime();
             } else {
@@ -175,7 +178,7 @@ public final class MessageStoreFacade {
         if (message.getPayload() != null && message.getPayload().getMetrics() != null && !message.getPayload().getMetrics().isEmpty()) {
 
             Map<String, Object> messageMetrics = message.getPayload().getMetrics();
-            for (Map.Entry<String, Object> messageMetric : messageMetrics.entrySet()) {
+            messageMetrics.entrySet().forEach(messageMetric -> {
                 String metricName = DatastoreUtils.normalizeMetricName(messageMetric.getKey());
                 String clientMetricType = DatastoreUtils.getClientMetricFromType(messageMetric.getValue().getClass());
                 Metric metric = new Metric(metricName, clientMetricType);
@@ -183,7 +186,7 @@ public final class MessageStoreFacade {
                 // each metric is potentially a dynamic field so report it a new mapping
                 String mappedName = DatastoreUtils.getMetricValueQualifier(metricName, clientMetricType);
                 metrics.put(mappedName, metric);
-            }
+            });
         }
         mediator.onUpdatedMappings(message.getScopeId(), indexedOn, metrics);
 
@@ -194,7 +197,7 @@ public final class MessageStoreFacade {
         return new StorableIdImpl(insertResponse.getId());
     }
 
-    /**
+	/**
      * Delete message by identifier.<br>
      * <b>Be careful using this function since it doesn't guarantee the datastore consistency.<br>
      * It just deletes the message by id without checking the consistency of the registries.</b>
@@ -233,7 +236,7 @@ public final class MessageStoreFacade {
         // otherwise no message to be deleted found
     }
 
-    /**
+	/**
      * Find message by identifier
      *
      * @param scopeId
@@ -263,7 +266,7 @@ public final class MessageStoreFacade {
         return client.find(typeDescriptor, idsQuery, DatastoreMessage.class);
     }
 
-    /**
+	/**
      * Find messages matching the given query
      *
      * @param query
@@ -296,7 +299,7 @@ public final class MessageStoreFacade {
         return result;
     }
 
-    /**
+	/**
      * Get messages count matching the given query
      *
      * @param query
@@ -326,7 +329,7 @@ public final class MessageStoreFacade {
         return client.count(typeDescriptor, query);
     }
 
-    /**
+	/**
      * Delete messages count matching the given query.<br>
      * <b>Be careful using this function since it doesn't guarantee the datastore consistency.<br>
      * It just deletes the messages that matching the query without checking the consistency of the registries.</b>
@@ -357,9 +360,9 @@ public final class MessageStoreFacade {
         client.deleteByQuery(typeDescriptor, query);
     }
 
-    // TODO cache will not be reset from the client code it should be automatically reset
+	// TODO cache will not be reset from the client code it should be automatically reset
     // after some time.
-    private void resetCache(KapuaId scopeId, KapuaId deviceId, String channel, String clientId)
+    private void resetCache(KapuaId scopeId, String channel)
             throws Exception {
 
         boolean isAnyClientId;
@@ -372,7 +375,7 @@ public final class MessageStoreFacade {
             isAnyClientId = isAnyClientId(channel);
             semTopic = channel;
 
-            if (semTopic.isEmpty() && !isAnyClientId) {
+            if (StringUtils.isEmpty(semTopic) && !isAnyClientId) {
                 isClientToDelete = true;
             }
         } else {
@@ -452,45 +455,41 @@ public final class MessageStoreFacade {
 
         logger.debug("Removed channels for: {}", channel);
         // Remove client
-        if (isClientToDelete) {
-            ClientInfoQueryImpl clientInfoQuery = new ClientInfoQueryImpl(scopeId);
-            clientInfoQuery.setLimit(pageSize + 1);
-            clientInfoQuery.setOffset(offset);
+		if (!isClientToDelete) {
+			return;
+		}
+		ClientInfoQueryImpl clientInfoQuery = new ClientInfoQueryImpl(scopeId);
+		clientInfoQuery.setLimit(pageSize + 1);
+		clientInfoQuery.setOffset(offset);
+		channelPredicate = new ChannelMatchPredicateImpl(MessageField.CHANNEL.field(), channel);
+		clientInfoQuery.setPredicate(channelPredicate);
+		offset = 0;
+		totalHits = 1;
+		while (totalHits > 0) {
+		    TypeDescriptor typeDescriptor = new TypeDescriptor(dataIndexName, ClientInfoSchema.CLIENT_TYPE_NAME);
+		    ResultList<ClientInfo> clients = client.query(typeDescriptor, clientInfoQuery, ClientInfo.class);
 
-            channelPredicate = new ChannelMatchPredicateImpl(MessageField.CHANNEL.field(), channel);
-            clientInfoQuery.setPredicate(channelPredicate);
-            offset = 0;
-            totalHits = 1;
-            while (totalHits > 0) {
-                TypeDescriptor typeDescriptor = new TypeDescriptor(dataIndexName, ClientInfoSchema.CLIENT_TYPE_NAME);
-                ResultList<ClientInfo> clients = client.query(typeDescriptor, clientInfoQuery, ClientInfo.class);
+		    totalHits = clients.getTotalCount();
+		    LocalCache<String, Boolean> clientsCache = DatastoreCacheManager.getInstance().getClientsCache();
+		    long toBeProcessed = totalHits > pageSize ? pageSize : totalHits;
 
-                totalHits = clients.getTotalCount();
-                LocalCache<String, Boolean> clientsCache = DatastoreCacheManager.getInstance().getClientsCache();
-                long toBeProcessed = totalHits > pageSize ? pageSize : totalHits;
-
-                for (int i = 0; i < toBeProcessed; i++) {
-                    String id = clients.getResult().get(i).getId().toString();
-                    if (clientsCache.get(id)) {
-                        clientsCache.remove(id);
-                    }
-                }
-                if (totalHits > pageSize) {
-                    offset += pageSize + 1;
-                }
-            }
-
-            logger.debug("Removed cached clients for: {}", channel);
-            TypeDescriptor typeClientDescriptor = new TypeDescriptor(dataIndexName, ClientInfoSchema.CLIENT_TYPE_NAME);
-            client.deleteByQuery(typeClientDescriptor, clientInfoQuery);
-
-            logger.debug("Removed clients for: {}", channel);
-        }
+		    for (int i = 0; i < toBeProcessed; i++) {
+		        String id = clients.getResult().get(i).getId().toString();
+		        if (clientsCache.get(id)) {
+		            clientsCache.remove(id);
+		        }
+		    }
+		    if (totalHits > pageSize) {
+		        offset += pageSize + 1;
+		    }
+		}
+		logger.debug("Removed cached clients for: {}", channel);
+		TypeDescriptor typeClientDescriptor = new TypeDescriptor(dataIndexName, ClientInfoSchema.CLIENT_TYPE_NAME);
+		client.deleteByQuery(typeClientDescriptor, clientInfoQuery);
+		logger.debug("Removed clients for: {}", channel);
     }
 
-    // Utility methods
-
-    /**
+	/**
      * Check if the full channel admit any account (so if the channel starts with a specific wildcard).<br>
      * In the MQTT word this method return true if the topic starts with '+/'.
      *
@@ -501,7 +500,7 @@ public final class MessageStoreFacade {
         return DatastoreChannel.SINGLE_LEVEL_WCARD.equals(accountPart);
     }
 
-    /**
+	/**
      * Check if the channel admit any client identifier (so if the channel has a specific wildcard in the second topic level).<br>
      * In the MQTT word this method return true if the topic starts with 'account/+/'.
      *
@@ -513,7 +512,7 @@ public final class MessageStoreFacade {
         return DatastoreChannel.SINGLE_LEVEL_WCARD.equals(clientId);
     }
 
-    /**
+	/**
      * This constructor should be used for wrapping Kapua message into datastore message for insert purpose
      *
      * @param message
@@ -540,21 +539,24 @@ public final class MessageStoreFacade {
         return datastoreMessage;
     }
 
-    private List<String> getDataIndexesByAccount(KapuaId scopeId) throws ClientException {
+	private List<String> getDataIndexesByAccount(KapuaId scopeId) throws ClientException {
         List<String> result = new ArrayList<>();
         result.addAll(Arrays.asList(client.findIndexes(new IndexRequest(scopeId.toStringId() + "-*")).getIndexes()));
         return result;
     }
 
-    public void refreshAllIndexes() throws ClientException {
+	public void refreshAllIndexes() throws ClientException {
         client.refreshAllIndexes();
     }
 
-    public void deleteAllIndexes() throws ClientException {
+	public void deleteAllIndexes() throws ClientException {
         client.deleteAllIndexes();
     }
 
-    public void deleteIndexes(String indexExp) throws ClientException {
+	public void deleteIndexes(String indexExp) throws ClientException {
         client.deleteIndexes(indexExp);
     }
+
+    // Utility methods
+
 }

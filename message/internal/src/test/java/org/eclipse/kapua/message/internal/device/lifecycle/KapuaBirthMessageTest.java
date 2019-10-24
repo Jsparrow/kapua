@@ -22,35 +22,10 @@ import org.junit.experimental.categories.Category;
 @Category(JUnitTests.class)
 public class KapuaBirthMessageTest extends Assert {
 
-    private static final String PAYLOAD_DISPLAY_STR = "" +
-            "acceptEncoding=UTF-8" +
-            "~~applicationFramework=applicationFramework" +
-            "~~applicationFrameworkVersion=applicationFrameworkV-1" +
-            "~~applicationIdentifiers=applicationIdentifiers" +
-            "~~availableProcessors=1" +
-            "~~bios=bios" +
-            "~~biosVersion=biosV-1" +
-            "~~connectionInterface=connectionInterface" +
-            "~~connectionIp=192.168.1.1" +
-            "~~containerFramework=containerFramework" +
-            "~~containerFrameworkVersion=containerFrameworkV-1" +
-            "~~displayName=Display Name" +
-            "~~firmware=firmware-1" +
-            "~~firmwareVersion=firmwareV-1" +
-            "~~jvm=Oracle HotSpot" +
-            "~~jvmProfile=desktop" +
-            "~~jvmVersion=8" +
-            "~~modelId=Model Id-1" +
-            "~~modelName=Model Name" +
-            "~~modemIccid=8991101200003204510" +
-            "~~modemImei=49-015420-323751" +
-            "~~modemImsi=359881234567890" +
-            "~~os=Linux~~osArch=Linux x86" +
-            "~~osVersion=osV-1" +
-            "~~partNumber=part-1" +
-            "~~serialNumber=SN-123" +
-            "~~totalMemory=4" +
-            "~~uptime=12";
+    private static final String PAYLOAD_DISPLAY_STR = new StringBuilder().append("").append("acceptEncoding=UTF-8").append("~~applicationFramework=applicationFramework").append("~~applicationFrameworkVersion=applicationFrameworkV-1").append("~~applicationIdentifiers=applicationIdentifiers").append("~~availableProcessors=1").append("~~bios=bios").append("~~biosVersion=biosV-1")
+			.append("~~connectionInterface=connectionInterface").append("~~connectionIp=192.168.1.1").append("~~containerFramework=containerFramework").append("~~containerFrameworkVersion=containerFrameworkV-1").append("~~displayName=Display Name").append("~~firmware=firmware-1").append("~~firmwareVersion=firmwareV-1").append("~~jvm=Oracle HotSpot").append("~~jvmProfile=desktop")
+			.append("~~jvmVersion=8").append("~~modelId=Model Id-1").append("~~modelName=Model Name").append("~~modemIccid=8991101200003204510").append("~~modemImei=49-015420-323751").append("~~modemImsi=359881234567890").append("~~os=Linux~~osArch=Linux x86").append("~~osVersion=osV-1").append("~~partNumber=part-1")
+			.append("~~serialNumber=SN-123").append("~~totalMemory=4").append("~~uptime=12").toString();
 
     @Test
     public void kapuaBirthPayloadInitConstructor() {

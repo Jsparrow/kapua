@@ -22,7 +22,7 @@ import org.eclipse.kapua.service.device.management.packages.model.download.Devic
  * @since 1.0
  *
  */
-public class PackageResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload {
+public class PackageResponsePayload extends KapuaResponsePayloadImpl {
 
     /**
      * Set the package download operation identifier

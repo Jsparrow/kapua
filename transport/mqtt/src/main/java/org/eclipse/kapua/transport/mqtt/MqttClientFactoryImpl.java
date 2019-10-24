@@ -43,6 +43,6 @@ public class MqttClientFactoryImpl implements TransportClientFactory<MqttTopic, 
     }
 
     private String formatNodeUri(String nodeAddress) {
-        return SystemSetting.getInstance().getString(SystemSettingKey.BROKER_SCHEME) + "://" + nodeAddress + ":" + SystemSetting.getInstance().getString(SystemSettingKey.BROKER_PORT);
+        return new StringBuilder().append(SystemSetting.getInstance().getString(SystemSettingKey.BROKER_SCHEME)).append("://").append(nodeAddress).append(":").append(SystemSetting.getInstance().getString(SystemSettingKey.BROKER_PORT)).toString();
     }
 }

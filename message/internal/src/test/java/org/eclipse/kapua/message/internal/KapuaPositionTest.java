@@ -31,30 +31,15 @@ public class KapuaPositionTest extends Assert {
 
     private static ZonedDateTime referenceDate = ZonedDateTime.of(2017, 1, 18, 12, 10, 46, 238000000, ZoneId.of(DateXmlAdapter.TIME_ZONE_UTC));
 
-    private static final String POSITION_DISPLAY_STR = "^altitude=.*" +
-            "~~heading=.*" +
-            "~~latitude=.*" +
-            "~~longitude=.*" +
-            "~~precision=.*" +
-            "~~satellites=.*" +
-            "~~speed=.*" +
-            "~~status=.*" +
-            "~~timestamp=.*$";
+    private static final String POSITION_DISPLAY_STR = new StringBuilder().append("^altitude=.*").append("~~heading=.*").append("~~latitude=.*").append("~~longitude=.*").append("~~precision=.*").append("~~satellites=.*").append("~~speed=.*").append("~~status=.*")
+			.append("~~timestamp=.*$").toString();
 
 
     private static final String POSITION_XML_STR = //
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NEWLINE +
-                    "<position>" + NEWLINE +
-                    "   <altitude>430.3</altitude>" + NEWLINE +
-                    "   <heading>280.0</heading>" + NEWLINE +
-                    "   <latitude>15.3333</latitude>" + NEWLINE +
-                    "   <longitude>45.1111</longitude>" + NEWLINE +
-                    "   <precision>12.0</precision>" + NEWLINE +
-                    "   <satellites>5</satellites>" + NEWLINE +
-                    "   <speed>60.2</speed>" + NEWLINE +
-                    "   <status>4</status>" + NEWLINE +
-                    "   <timestamp>2017-01-18T12:10:46.238Z</timestamp>" + NEWLINE +
-                    "</position>" + NEWLINE;
+            new StringBuilder().append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>").append(NEWLINE).append("<position>").append(NEWLINE).append("   <altitude>430.3</altitude>").append(NEWLINE).append("   <heading>280.0</heading>")
+			.append(NEWLINE).append("   <latitude>15.3333</latitude>").append(NEWLINE).append("   <longitude>45.1111</longitude>").append(NEWLINE).append("   <precision>12.0</precision>").append(NEWLINE).append("   <satellites>5</satellites>")
+			.append(NEWLINE).append("   <speed>60.2</speed>").append(NEWLINE).append("   <status>4</status>").append(NEWLINE).append("   <timestamp>2017-01-18T12:10:46.238Z</timestamp>").append(NEWLINE).append("</position>")
+			.append(NEWLINE).toString();
 
     @Before
     public void before() throws Exception {
@@ -83,8 +68,7 @@ public class KapuaPositionTest extends Assert {
         KapuaMessageUtil.populatePosition(position, referenceDate);
 
         String displayStr = position.toDisplayString();
-        assertTrue("\nExpected: " + POSITION_DISPLAY_STR +
-                        "\nActual:   " + displayStr,
+        assertTrue(new StringBuilder().append("\nExpected: ").append(POSITION_DISPLAY_STR).append("\nActual:   ").append(displayStr).toString(),
                 displayStr.matches(POSITION_DISPLAY_STR));
     }
 

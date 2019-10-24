@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility class that allows loading files from different locations according to the
@@ -111,10 +112,10 @@ public class KapuaFileUtils {
     }
 
     private static boolean hasFileScheme(String stringPath) {
-        return stringPath.startsWith("file://");
+        return StringUtils.startsWith(stringPath, "file://");
     }
 
     private static boolean hasHttpScheme(String stringPath) {
-        return stringPath.startsWith("http://") || stringPath.startsWith("https://");
+        return StringUtils.startsWith(stringPath, "http://") || StringUtils.startsWith(stringPath, "https://");
     }
 }

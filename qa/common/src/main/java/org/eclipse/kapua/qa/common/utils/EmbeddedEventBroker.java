@@ -12,7 +12,6 @@
 package org.eclipse.kapua.qa.common.utils;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 
 import cucumber.runtime.java.guice.ScenarioScoped;
+import java.util.Collections;
 
 @ScenarioScoped
 public class EmbeddedEventBroker {
@@ -50,16 +50,16 @@ public class EmbeddedEventBroker {
 
     private static Map<String, List<AutoCloseable>> closables = new HashMap<>();
 
-    private DBHelper database;
+	private static EmbeddedJMS jmsServer;
 
-    private static EmbeddedJMS jmsServer;
+	private DBHelper database;
 
-    @Inject
+	@Inject
     public EmbeddedEventBroker(final DBHelper database) {
         this.database = database;
     }
 
-    @Given("^Start Event Broker$")
+	@Given("^Start Event Broker$")
     public void start() {
 
         if (NO_EMBEDDED_SERVERS) {
@@ -79,7 +79,7 @@ public class EmbeddedEventBroker {
                     "tcp://127.0.0.1:5672?protocols=AMQP");
             configuration.addConnectorConfiguration("connector", "tcp://127.0.0.1:5672");
             JMSConfiguration jmsConfig = new JMSConfigurationImpl();
-            ConnectionFactoryConfiguration cfConfig = new ConnectionFactoryConfigurationImpl().setName("cf").setConnectorNames(Arrays.asList("connector")).setBindings("cf");
+            ConnectionFactoryConfiguration cfConfig = new ConnectionFactoryConfigurationImpl().setName("cf").setConnectorNames(Collections.singletonList("connector")).setBindings("cf");
             jmsConfig.getConnectionFactoryConfigurations().add(cfConfig);
 
             jmsServer = new EmbeddedJMS().setConfiguration(configuration).setJmsConfiguration(jmsConfig).start();
@@ -94,7 +94,7 @@ public class EmbeddedEventBroker {
         }
     }
 
-    @Given("^Stop Event Broker$")
+	@Given("^Stop Event Broker$")
     public void stop() {
 
         if (NO_EMBEDDED_SERVERS) {
@@ -103,7 +103,7 @@ public class EmbeddedEventBroker {
         logger.info("Stopping Event Broker instance ...");
         try (final Suppressed<RuntimeException> s = Suppressed.withRuntimeException()) {
             // close all resources
-            closables.values().stream().flatMap(values -> values.stream()).forEach(s::closeSuppressed);
+            closables.values().stream().flatMap(List::stream).forEach(s::closeSuppressed);
             // shut down broker
             if (jmsServer != null) {
                 jmsServer.stop();
@@ -116,7 +116,7 @@ public class EmbeddedEventBroker {
             try {
                 Thread.sleep(Duration.ofSeconds(EXTRA_STARTUP_DELAY).toMillis());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         logger.info("Stopping Event Broker instance ... done!");

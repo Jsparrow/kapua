@@ -18,7 +18,10 @@ public class GwtRolePermission extends GwtEntityModel {
 
     private static final long serialVersionUID = 6331197556606146242L;
 
-    @Override
+    public GwtRolePermission() {
+    }
+
+	@Override
     @SuppressWarnings({ "unchecked" })
     public <X> X get(String property) {
         if ("actionEnum".equals(property)) {
@@ -28,19 +31,15 @@ public class GwtRolePermission extends GwtEntityModel {
         }
     }
 
-    public GwtRolePermission() {
-        super();
-    }
-
-    public String getRoleId() {
+	public String getRoleId() {
         return get("roleId");
     }
 
-    public void setRoleId(String roleId) {
+	public void setRoleId(String roleId) {
         set("roleId", roleId);
     }
 
-    /**
+	/**
      * @return the domain of this permission
      * @since 1.0.0
      */
@@ -48,11 +47,11 @@ public class GwtRolePermission extends GwtEntityModel {
         return get("domain");
     }
 
-    public void setDomain(String domain) {
+	public void setDomain(String domain) {
         set("domain", domain == null ? "ALL" : domain);
     }
 
-    /**
+	/**
      * @return the action of this permission
      * @since 1.0.0
      */
@@ -60,15 +59,15 @@ public class GwtRolePermission extends GwtEntityModel {
         return get("action");
     }
 
-    public GwtAction getActionEnum() {
+	public GwtAction getActionEnum() {
         return get("actionEnum");
     }
 
-    public void setAction(String action) {
+	public void setAction(String action) {
         set("action", action == null ? "ALL" : action);
     }
 
-    /**
+	/**
      * @return the target scope id of this permission
      * @since 1.0.0
      */
@@ -76,19 +75,19 @@ public class GwtRolePermission extends GwtEntityModel {
         return get("targetScopeId");
     }
 
-    public void setTargetScopeId(String targetScopeId) {
+	public void setTargetScopeId(String targetScopeId) {
         set("targetScopeId", targetScopeId == null ? "ALL" : targetScopeId);
     }
 
-    public String getTargetScopeIdByName() {
+	public String getTargetScopeIdByName() {
         return get("targetScopeIdByName");
     }
 
-    public void setTargetScopeIdByName(String targetScopeIdByName) {
+	public void setTargetScopeIdByName(String targetScopeIdByName) {
         set("targetScopeIdByName", targetScopeIdByName == null ? "ALL" : targetScopeIdByName);
     }
 
-    /**
+	/**
      * @return the group id of this permission
      * @since 1.0.0
      */
@@ -96,23 +95,23 @@ public class GwtRolePermission extends GwtEntityModel {
         return get("groupId");
     }
 
-    public void setGroupId(String groupId) {
+	public void setGroupId(String groupId) {
         set("groupId", groupId == null ? "ALL" : groupId);
     }
 
-    public boolean getForwardable() {
+	public boolean getForwardable() {
         return get("forwardable");
     }
 
-    public void setForwardable(boolean forwardable) {
+	public void setForwardable(boolean forwardable) {
         set("forwardable", forwardable);
     }
 
-    public String getGroupName() {
+	public String getGroupName() {
         return get("groupName");
     }
 
-    public void setGroupName(String groupName) {
+	public void setGroupName(String groupName) {
         set("groupName", groupName);
     }
 

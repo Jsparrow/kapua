@@ -31,7 +31,7 @@ public class SineGeneratorFactory extends AbstractGeneratorFactory {
 
         final Double amplitude = Get.getDouble(configuration, "amplitude").orElse(100.0);
         final Double offset = Get.getDouble(configuration, "offset").orElse(0.0);
-        final Short shift = Get.getInteger(configuration, "shift").map(i -> i.shortValue()).orElse(null);
+        final Short shift = Get.getInteger(configuration, "shift").map(Integer::shortValue).orElse(null);
 
         return Optional.of(Generator.onlyMetrics(Generators.fromSingle("value", Generators.sine(period, amplitude, offset, shift))));
     }

@@ -56,8 +56,6 @@ public class JsonMessageQuery {
      * @since 1.0.0
      */
     public JsonMessageQuery() {
-        super();
-
         fetchStyle = StorableFetchStyle.SOURCE_FULL;
         fetchAttributes = new ArrayList<>();
         askTotalCount = false;

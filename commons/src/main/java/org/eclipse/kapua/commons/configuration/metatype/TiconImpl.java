@@ -75,7 +75,8 @@ public class TiconImpl implements KapuaTicon {
      * {@link Element }
      * {@link Object }
      */
-    public List<Object> getAny() {
+    @Override
+	public List<Object> getAny() {
         if (any == null) {
             any = new ArrayList<>();
         }
@@ -88,7 +89,8 @@ public class TiconImpl implements KapuaTicon {
      * @return possible object is
      * {@link String }
      */
-    public String getResource() {
+    @Override
+	public String getResource() {
         return resource;
     }
 
@@ -98,7 +100,8 @@ public class TiconImpl implements KapuaTicon {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setResource(String value) {
+    @Override
+	public void setResource(String value) {
         this.resource = value;
     }
 
@@ -108,7 +111,8 @@ public class TiconImpl implements KapuaTicon {
      * @return possible object is
      * {@link BigInteger }
      */
-    public BigInteger getSize() {
+    @Override
+	public BigInteger getSize() {
         return size;
     }
 
@@ -118,7 +122,8 @@ public class TiconImpl implements KapuaTicon {
      * @param value allowed object is
      *              {@link BigInteger }
      */
-    public void setSize(BigInteger value) {
+    @Override
+	public void setSize(BigInteger value) {
         this.size = value;
     }
 
@@ -134,7 +139,8 @@ public class TiconImpl implements KapuaTicon {
      *
      * @return always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    @Override
+	public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
     }
 

@@ -27,21 +27,20 @@ public class SubjectUnauthorizedExceptionInfo extends KapuaExceptionInfo {
     @XmlElement(name = "permission")
     private Permission permission;
 
-    protected SubjectUnauthorizedExceptionInfo() {
-        super();
-    }
-
     public SubjectUnauthorizedExceptionInfo(Status httpStatus, SubjectUnauthorizedException kapuaException) {
         super(httpStatus, kapuaException.getCode(), kapuaException);
 
         setPermission(kapuaException.getPermission());
     }
 
-    public Permission getPermission() {
+	protected SubjectUnauthorizedExceptionInfo() {
+    }
+
+	public Permission getPermission() {
         return permission;
     }
 
-    public void setPermission(Permission permission) {
+	public void setPermission(Permission permission) {
         this.permission = permission;
     }
 }

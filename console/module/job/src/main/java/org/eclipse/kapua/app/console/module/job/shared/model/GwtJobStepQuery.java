@@ -16,40 +16,40 @@ import org.eclipse.kapua.app.console.module.api.shared.model.query.GwtQuery;
 
 public class GwtJobStepQuery extends GwtQuery {
 
-    public enum GwtSortOrder implements IsSerializable {
-        ASCENDING, DESCENDING
-    }
-
-    public enum GwtSortAttribute implements IsSerializable {
-        STEP_INDEX, JOB_STEP_NAME;
-    }
-
     private String jobId;
-    private GwtSortOrder sortOrder;
-    private GwtSortAttribute sortAttribute;
+	private GwtSortOrder sortOrder;
+	private GwtSortAttribute sortAttribute;
 
-    public String getJobId() {
+	public String getJobId() {
         return jobId;
     }
 
-    public void setJobId(String jobId) {
+	public void setJobId(String jobId) {
         this.jobId = jobId;
     }
 
-    public GwtSortOrder getSortOrder() {
+	public GwtSortOrder getSortOrder() {
         return sortOrder;
     }
 
-    public void setSortOrder(GwtSortOrder sortOrder) {
+	public void setSortOrder(GwtSortOrder sortOrder) {
         this.sortOrder = sortOrder;
     }
 
-    public GwtSortAttribute getSortAttribute() {
+	public GwtSortAttribute getSortAttribute() {
         return sortAttribute;
     }
 
-    public void setSortAttribute(GwtSortAttribute sortAttribute) {
+	public void setSortAttribute(GwtSortAttribute sortAttribute) {
         this.sortAttribute = sortAttribute;
+    }
+
+	public enum GwtSortOrder implements IsSerializable {
+        ASCENDING, DESCENDING
+    }
+
+	public enum GwtSortAttribute implements IsSerializable {
+        STEP_INDEX, JOB_STEP_NAME;
     }
 
 }

@@ -19,7 +19,6 @@ public class GwtLoginCredential extends KapuaBaseModel {
     private static final long serialVersionUID = -7683275209937145099L;
 
     public GwtLoginCredential() {
-        super();
     }
 
     public GwtLoginCredential(String username, String password) {

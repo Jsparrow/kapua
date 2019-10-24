@@ -38,7 +38,7 @@ public interface GwtUserService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtUser create(GwtXSRFToken xsfrToken, GwtUserCreator gwtUserCreator)
+    GwtUser create(GwtXSRFToken xsfrToken, GwtUserCreator gwtUserCreator)
             throws GwtKapuaException;
 
     /**
@@ -48,7 +48,7 @@ public interface GwtUserService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public GwtUser update(GwtXSRFToken xsfrToken, GwtUser gwtUser)
+    GwtUser update(GwtXSRFToken xsfrToken, GwtUser gwtUser)
             throws GwtKapuaException;
 
     /**
@@ -57,7 +57,7 @@ public interface GwtUserService extends RemoteService {
      * @param gwtUserId
      * @throws GwtKapuaException
      */
-    public void delete(GwtXSRFToken xsfrToken, String accountId, String gwtUserId)
+    void delete(GwtXSRFToken xsfrToken, String accountId, String gwtUserId)
             throws GwtKapuaException;
 
     /**
@@ -68,7 +68,7 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      * 
      */
-    public GwtUser find(String accountId, String userId)
+    GwtUser find(String accountId, String userId)
             throws GwtKapuaException;
 
     /**
@@ -79,7 +79,7 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      * 
      */
-    public ListLoadResult<GwtUser> findAll(String scopeIdString)
+    ListLoadResult<GwtUser> findAll(String scopeIdString)
             throws GwtKapuaException;
 
     /**
@@ -90,12 +90,12 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      * 
      */
-    public PagingLoadResult<GwtUser> query(PagingLoadConfig loadConfig, GwtUserQuery gwtUserQuery)
+    PagingLoadResult<GwtUser> query(PagingLoadConfig loadConfig, GwtUserQuery gwtUserQuery)
             throws GwtKapuaException;
 
-    public ListLoadResult<GwtGroupedNVPair> getUserDescription(String shortScopeId, String shortUserId) throws GwtKapuaException;
+    ListLoadResult<GwtGroupedNVPair> getUserDescription(String shortScopeId, String shortUserId) throws GwtKapuaException;
 
     PagingLoadResult<GwtUser> getUsersForRole(PagingLoadConfig pagingLoadConfig, GwtAccessRoleQuery query) throws GwtKapuaException;
 
-    public PagingLoadResult<GwtUser> getUsersForAccount(PagingLoadConfig loadConfig, GwtUserQuery gwtUserQuery, String accountId) throws GwtKapuaException;
+    PagingLoadResult<GwtUser> getUsersForAccount(PagingLoadConfig loadConfig, GwtUserQuery gwtUserQuery, String accountId) throws GwtKapuaException;
 }

@@ -48,15 +48,6 @@ public class AccessRoleImpl extends AbstractKapuaEntity implements AccessRole {
     private KapuaEid roleId;
 
     /**
-     * Empty constructor required by JPA.
-     *
-     * @since 1.0.0
-     */
-    protected AccessRoleImpl() {
-        super();
-    }
-
-    /**
      * Constructor.
      *
      * @param scopeId The scope {@link KapuaId} to set for this {@link AccessRole}.
@@ -66,7 +57,7 @@ public class AccessRoleImpl extends AbstractKapuaEntity implements AccessRole {
         super(scopeId);
     }
 
-    /**
+	/**
      * Clone constructor.
      *
      * @param accessRole The {@link AccessRole} to clone.
@@ -80,27 +71,35 @@ public class AccessRoleImpl extends AbstractKapuaEntity implements AccessRole {
         setRoleId(accessRole.getRoleId());
     }
 
-    @Override
+	/**
+     * Empty constructor required by JPA.
+     *
+     * @since 1.0.0
+     */
+    protected AccessRoleImpl() {
+    }
+
+	@Override
     public void setAccessInfoId(KapuaId accessInfoId) {
         this.accessInfoId = KapuaEid.parseKapuaId(accessInfoId);
     }
 
-    @Override
+	@Override
     public KapuaId getAccessInfoId() {
         return accessInfoId;
     }
 
-    @Override
+	@Override
     public void setRoleId(KapuaId roleId) {
         this.roleId = KapuaEid.parseKapuaId(roleId);
     }
 
-    @Override
+	@Override
     public KapuaId getRoleId() {
         return roleId;
     }
 
-    @Override
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -109,7 +108,7 @@ public class AccessRoleImpl extends AbstractKapuaEntity implements AccessRole {
         return result;
     }
 
-    @Override
+	@Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

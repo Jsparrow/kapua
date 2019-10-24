@@ -15,9 +15,9 @@ import org.eclipse.kapua.model.domain.AbstractDomain;
 import org.eclipse.kapua.model.domain.Actions;
 import org.eclipse.kapua.model.domain.Domain;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Collections;
 
 /**
  * Broker domain.<br>
@@ -28,7 +28,7 @@ import java.util.Set;
 public class BrokerDomain extends AbstractDomain {
 
     private String name = "broker";
-    private Set<Actions> actions = new HashSet<>(Arrays.asList(Actions.connect));
+    private Set<Actions> actions = new HashSet<>(Collections.singletonList(Actions.connect));
 
     @Override
     public String getName() {

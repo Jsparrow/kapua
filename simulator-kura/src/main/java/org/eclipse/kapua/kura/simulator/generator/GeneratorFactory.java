@@ -16,5 +16,5 @@ import java.util.Optional;
 
 public interface GeneratorFactory {
 
-    public Optional<Generator> create(Map<String, Object> configuration);
+    Optional<Generator> create(Map<String, Object> configuration);
 }

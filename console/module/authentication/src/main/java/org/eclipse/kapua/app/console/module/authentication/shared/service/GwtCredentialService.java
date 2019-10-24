@@ -32,7 +32,7 @@ public interface GwtCredentialService extends RemoteService {
      * @return
      * @throws GwtKapuaException
      */
-    public PagingLoadResult<GwtCredential> query(PagingLoadConfig loadConfig, GwtCredentialQuery gwtCredentialQuery)
+    PagingLoadResult<GwtCredential> query(PagingLoadConfig loadConfig, GwtCredentialQuery gwtCredentialQuery)
             throws GwtKapuaException;
 
     /**
@@ -41,18 +41,18 @@ public interface GwtCredentialService extends RemoteService {
      * @param gwtCredentialId
      * @throws GwtKapuaException
      */
-    public void delete(GwtXSRFToken xsfrToken, String stringScopeId, String gwtCredentialId)
+    void delete(GwtXSRFToken xsfrToken, String stringScopeId, String gwtCredentialId)
             throws GwtKapuaException;
 
-    public GwtCredential create(GwtXSRFToken gwtXsrfToken, GwtCredentialCreator gwtRoleCreator)
+    GwtCredential create(GwtXSRFToken gwtXsrfToken, GwtCredentialCreator gwtRoleCreator)
             throws GwtKapuaException;
 
-    public GwtCredential update(GwtXSRFToken gwtXsrfToken, GwtCredential gwtCredential)
+    GwtCredential update(GwtXSRFToken gwtXsrfToken, GwtCredential gwtCredential)
             throws GwtKapuaException;
 
-    public void changePassword(GwtXSRFToken gwtXsrfToken, String oldPassword, String newPassword, String stringUserId, String stringScopeId)
+    void changePassword(GwtXSRFToken gwtXsrfToken, String oldPassword, String newPassword, String stringUserId, String stringScopeId)
             throws GwtKapuaException;
 
-    public void unlock(GwtXSRFToken xsfrToken, String stringScopeId, String gwtCredentialId)
+    void unlock(GwtXSRFToken xsfrToken, String stringScopeId, String gwtCredentialId)
             throws GwtKapuaException;
 }

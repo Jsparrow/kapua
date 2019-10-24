@@ -26,12 +26,13 @@ public interface ServiceConfig extends KapuaUpdatableEntity {
     /**
      * Service configuration type
      */
-    public static final String TYPE = "scfg";
+    String TYPE = "scfg";
 
     /**
      * Return the service type
      */
-    public default String getType() {
+    @Override
+	default String getType() {
         return TYPE;
     }
 
@@ -40,14 +41,14 @@ public interface ServiceConfig extends KapuaUpdatableEntity {
      *
      * @return
      */
-    public String getPid();
+    String getPid();
 
     /**
      * Set service pid
      *
      * @param pid
      */
-    public void setPid(String pid);
+    void setPid(String pid);
 
     /**
      * Return service configurations
@@ -55,7 +56,7 @@ public interface ServiceConfig extends KapuaUpdatableEntity {
      * @return
      * @throws KapuaException
      */
-    public Properties getConfigurations() throws KapuaException;
+    Properties getConfigurations() throws KapuaException;
 
     /**
      * Set service configurations
@@ -63,5 +64,5 @@ public interface ServiceConfig extends KapuaUpdatableEntity {
      * @param configurations
      * @throws KapuaException
      */
-    public void setConfigurations(Properties configurations) throws KapuaException;
+    void setConfigurations(Properties configurations) throws KapuaException;
 }

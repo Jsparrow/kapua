@@ -130,23 +130,23 @@ public class GwtKapuaJobModelConverter {
         JobQuery query = JOB_FACTORY.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobQuery.getScopeId()));
 
         AndPredicate predicate = query.andPredicate();
-        if (gwtJobQuery.getName() != null && !gwtJobQuery.getName().isEmpty()) {
+        if (gwtJobQuery.getName() != null && !StringUtils.isEmpty(gwtJobQuery.getName())) {
             predicate.and(query.attributePredicate(JobAttributes.NAME, gwtJobQuery.getName(), Operator.LIKE));
         }
-        if (gwtJobQuery.getDescription() != null && !gwtJobQuery.getDescription().isEmpty()) {
+        if (gwtJobQuery.getDescription() != null && !StringUtils.isEmpty(gwtJobQuery.getDescription())) {
             predicate.and(query.attributePredicate(JobAttributes.DESCRIPTION, gwtJobQuery.getDescription(), Operator.LIKE));
         }
         query.setLimit(loadConfig.getLimit());
         query.setOffset(loadConfig.getOffset());
 
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? JobAttributes.NAME : loadConfig.getSortField();
-        if (sortField.equals("jobName")) {
+        if ("jobName".equals(sortField)) {
             sortField = JobAttributes.NAME;
-        } else if (sortField.equals("createdOnFormatted")) {
+        } else if ("createdOnFormatted".equals(sortField)) {
             sortField = JobAttributes.CREATED_ON;
         }
 
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setPredicate(predicate);
@@ -159,7 +159,7 @@ public class GwtKapuaJobModelConverter {
 
         AndPredicate andPredicate = query.andPredicate();
 
-        if (gwtJobTargetQuery.getJobId() != null && !gwtJobTargetQuery.getJobId().trim().isEmpty()) {
+        if (gwtJobTargetQuery.getJobId() != null && !StringUtils.isEmpty(gwtJobTargetQuery.getJobId().trim())) {
             andPredicate.and(query.attributePredicate(JobTargetAttributes.JOB_ID, GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobTargetQuery.getJobId())));
         }
         query.setPredicate(andPredicate);
@@ -169,7 +169,7 @@ public class GwtKapuaJobModelConverter {
             query.setOffset(loadConfig.getOffset());
 
             String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? JobTargetAttributes.ENTITY_ID : loadConfig.getSortField();
-            SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+            SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
             FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
             query.setSortCriteria(sortCriteria);
         }
@@ -181,7 +181,7 @@ public class GwtKapuaJobModelConverter {
         JobStepQuery query = JOB_STEP_FACTORY.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobStepQuery.getScopeId()));
 
         AndPredicate andPredicate = query.andPredicate();
-        if (gwtJobStepQuery.getJobId() != null && !gwtJobStepQuery.getJobId().trim().isEmpty()) {
+        if (gwtJobStepQuery.getJobId() != null && !StringUtils.isEmpty(gwtJobStepQuery.getJobId().trim())) {
             andPredicate.and(query.attributePredicate(JobStepAttributes.JOB_ID, GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobStepQuery.getJobId())));
         }
         query.setPredicate(andPredicate);
@@ -199,11 +199,11 @@ public class GwtKapuaJobModelConverter {
     private static FieldSortCriteria getFieldSortCriteria(GwtJobStepQuery gwtJobStepQuery, PagingLoadConfig loadConfig) {
         if (gwtJobStepQuery.getSortAttribute() != null) {
             String sortField = null;
-            if (gwtJobStepQuery.getSortAttribute().equals(GwtJobStepQuery.GwtSortAttribute.STEP_INDEX)) {
+            if (gwtJobStepQuery.getSortAttribute() == GwtJobStepQuery.GwtSortAttribute.STEP_INDEX) {
                 sortField = JobStepAttributes.STEP_INDEX;
             }
             SortOrder sortOrder = null;
-            if (gwtJobStepQuery.getSortOrder().equals(GwtJobStepQuery.GwtSortOrder.DESCENDING)) {
+            if (gwtJobStepQuery.getSortOrder() == GwtJobStepQuery.GwtSortOrder.DESCENDING) {
                 sortOrder = SortOrder.DESCENDING;
             } else {
                 sortOrder = SortOrder.ASCENDING;
@@ -211,14 +211,14 @@ public class GwtKapuaJobModelConverter {
             return new FieldSortCriteriaImpl(sortField, sortOrder);
         } else {
             String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? JobStepAttributes.STEP_INDEX : loadConfig.getSortField();
-            if (sortField.equals("jobStepName")) {
+            if ("jobStepName".equals(sortField)) {
                 sortField = JobStepAttributes.NAME;
-            } else if (sortField.equals("jobStepDefinitionId")) {
+            } else if ("jobStepDefinitionId".equals(sortField)) {
                 sortField = JobStepAttributes.JOB_STEP_DEFINITION_ID;
-            } else if (sortField.equals("jobStepDefinitionName")) {
+            } else if ("jobStepDefinitionName".equals(sortField)) {
                 sortField = JobStepAttributes.JOB_STEP_DEFINITION_ID;
             }
-            SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+            SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
             return new FieldSortCriteriaImpl(sortField, sortOrder);
         }
     }
@@ -269,15 +269,15 @@ public class GwtKapuaJobModelConverter {
         );
 
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? TriggerAttributes.ENTITY_ID : loadConfig.getSortField();
-        if (sortField.equals("triggerName")) {
+        if ("triggerName".equals(sortField)) {
             sortField = TriggerAttributes.NAME;
-        } else if (sortField.equals("startsOnFormatted")) {
+        } else if ("startsOnFormatted".equals(sortField)) {
             sortField = TriggerAttributes.STARTS_ON;
-        } else if (sortField.equals("endsOnFormatted")) {
+        } else if ("endsOnFormatted".equals(sortField)) {
             sortField = TriggerAttributes.ENDS_ON;
         }
 
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setPredicate(andPredicate);
@@ -301,12 +301,12 @@ public class GwtKapuaJobModelConverter {
         JobExecutionQuery query = JOB_EXECUTION_FACTORY.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobExecutionQuery.getScopeId()));
         query.setPredicate(query.attributePredicate(JobExecutionAttributes.JOB_ID, GwtKapuaCommonsModelConverter.convertKapuaId(gwtJobExecutionQuery.getJobId())));
         String sortField = StringUtils.isEmpty(pagingLoadConfig.getSortField()) ? JobAttributes.NAME : pagingLoadConfig.getSortField();
-        if (sortField.equals("startedOnFormatted")) {
+        if ("startedOnFormatted".equals(sortField)) {
             sortField = JobAttributes.STARTED_ON;
-        } else if (sortField.equals("endedOnFormatted")) {
+        } else if ("endedOnFormatted".equals(sortField)) {
             sortField = JobAttributes.ENDED_ON;
         }
-        SortOrder sortOrder = pagingLoadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = pagingLoadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         query.setSortCriteria(query.fieldSortCriteria(sortField, sortOrder));
         query.setLimit(pagingLoadConfig.getLimit());
         query.setOffset(pagingLoadConfig.getOffset());

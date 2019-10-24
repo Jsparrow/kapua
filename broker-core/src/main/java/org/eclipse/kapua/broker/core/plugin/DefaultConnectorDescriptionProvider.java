@@ -29,6 +29,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A default implementation of the {@link ConnectorDescriptorProvider} interface
@@ -106,7 +107,7 @@ class DefaultConnectorDescriptionProvider implements ConnectorDescriptorProvider
 
         String transports = p.getProperty("transports", "");
         for (String transport : transports.split("\\s*,\\s*")) {
-            if (!transport.isEmpty()) {
+            if (!StringUtils.isEmpty(transport)) {
                 ConnectorDescriptor desc = loadFromProperties(p, transport);
                 configuration.put(transport, desc);
             }
@@ -125,7 +126,7 @@ class DefaultConnectorDescriptionProvider implements ConnectorDescriptorProvider
             {
                 String key = String.format("%s.device.%s", transport, mt.name());
                 String clazzName = p.getProperty(key);
-                if (clazzName != null && !clazzName.isEmpty()) {
+                if (clazzName != null && !StringUtils.isEmpty(clazzName)) {
                     Class<? extends DeviceMessage<?, ?>> clazz = (Class<? extends DeviceMessage<?, ?>>) Class.forName(clazzName).asSubclass(DeviceMessage.class);
                     deviceClasses.put(mt, clazz);
                 } else {
@@ -136,7 +137,7 @@ class DefaultConnectorDescriptionProvider implements ConnectorDescriptorProvider
             {
                 String key = String.format("%s.kapua.%s", transport, mt.name());
                 String clazzName = p.getProperty(key);
-                if (clazzName != null && !clazzName.isEmpty()) {
+                if (clazzName != null && !StringUtils.isEmpty(clazzName)) {
                     Class<? extends KapuaMessage<?, ?>> clazz = (Class<? extends KapuaMessage<?, ?>>) Class.forName(clazzName).asSubclass(KapuaMessage.class);
                     kapuaClasses.put(mt, clazz);
                 } else {

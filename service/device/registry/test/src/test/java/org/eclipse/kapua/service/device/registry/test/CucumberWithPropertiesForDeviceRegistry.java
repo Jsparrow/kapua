@@ -41,10 +41,14 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CucumberWithPropertiesForDeviceRegistry extends CucumberWithProperties {
 
-    public CucumberWithPropertiesForDeviceRegistry(Class<?> clazz) throws InitializationError, IOException {
+    private static final Logger logger = LoggerFactory.getLogger(CucumberWithPropertiesForDeviceRegistry.class);
+
+	public CucumberWithPropertiesForDeviceRegistry(Class<?> clazz) throws InitializationError, IOException {
         super(clazz);
         setupDI();
     }
@@ -68,6 +72,7 @@ public class CucumberWithPropertiesForDeviceRegistry extends CucumberWithPropert
                 try {
                     Mockito.doNothing().when(mockedAuthorization).checkPermission(Matchers.any(Permission.class));
                 } catch (KapuaException e) {
+					logger.error(e.getMessage(), e);
                     // skip
                 }
                 bind(AuthorizationService.class).toInstance(mockedAuthorization);

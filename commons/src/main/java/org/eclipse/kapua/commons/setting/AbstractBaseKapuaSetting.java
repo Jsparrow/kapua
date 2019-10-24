@@ -33,8 +33,14 @@ import org.apache.commons.configuration.PropertyConverter;
 public class AbstractBaseKapuaSetting<K extends SettingKey> {
 
     private boolean systemPropertyHotSwap;
+	protected final DataConfiguration config;
 
-    /**
+	public AbstractBaseKapuaSetting(final DataConfiguration dataConfiguration) {
+        this.config = dataConfiguration;
+        systemPropertyHotSwap = config.getBoolean(SystemSettingKey.SETTINGS_HOTSWAP.key(), false);
+    }
+
+	/**
      * Create an abstract configuration from a provided map
      * <p>
      * This is useful for testing when the configuration has to be provided
@@ -50,14 +56,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return new AbstractBaseKapuaSetting<>(new DataConfiguration(new MapConfiguration(map)));
     }
 
-    protected final DataConfiguration config;
-
-    public AbstractBaseKapuaSetting(final DataConfiguration dataConfiguration) {
-        this.config = dataConfiguration;
-        systemPropertyHotSwap = config.getBoolean(SystemSettingKey.SETTINGS_HOTSWAP.key(), false);
-    }
-
-    /**
+	/**
      * Get the property for the key
      *
      * @param cls
@@ -70,7 +69,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.get(cls, key.key());
     }
 
-    /**
+	/**
      * Get the property for the key 'key'. Returns a default value if no property for that key is found.
      *
      * @param cls
@@ -84,7 +83,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.get(cls, key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get the property list values for the key 'key'
      *
      * @param cls
@@ -95,7 +94,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getList(cls, key.key());
     }
 
-    /**
+	/**
      * Get properties map with key matching the provided prefix and regex
      *
      * @param valueType
@@ -116,7 +115,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return map;
     }
 
-    /**
+	/**
      * Get properties map with key matching the provided prefix
      *
      * @param valueType
@@ -134,7 +133,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return map;
     }
 
-    /**
+	/**
      * Get an integer property
      *
      * @param key
@@ -150,7 +149,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getInt(key.key());
     }
 
-    /**
+	/**
      * Get an integer property with a default value (if property is not found)
      *
      * @param key
@@ -167,7 +166,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getInt(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get an integer property with a default value (if property is not found)
      *
      * @param key
@@ -184,7 +183,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getInt(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a boolean property
      *
      * @param key
@@ -200,7 +199,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getBoolean(key.key());
     }
 
-    /**
+	/**
      * Get a boolean property with a default value (if property is not found)
      *
      * @param key
@@ -217,7 +216,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getBoolean(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a boolean property with a default value (if property is not found)
      *
      * @param key
@@ -234,7 +233,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getBoolean(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a String property
      *
      * @param key
@@ -250,7 +249,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getString(key.key());
     }
 
-    /**
+	/**
      * Get a String property with a default value (if property is not found)
      *
      * @param key
@@ -267,7 +266,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getString(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a long property
      *
      * @param key
@@ -283,7 +282,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getLong(key.key());
     }
 
-    /**
+	/**
      * Get a long property with a default value (if property is not found)
      *
      * @param key
@@ -300,7 +299,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getLong(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a long property with a default value (if property is not found)
      *
      * @param key
@@ -317,7 +316,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getLong(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a float property
      *
      * @param key
@@ -333,7 +332,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getFloat(key.key());
     }
 
-    /**
+	/**
      * Get a float property with a default value (if property is not found)
      *
      * @param key
@@ -350,7 +349,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getFloat(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a float property with a default value (if property is not found)
      *
      * @param key
@@ -367,7 +366,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getFloat(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a double property
      *
      * @param key
@@ -383,7 +382,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getDouble(key.key());
     }
 
-    /**
+	/**
      * Get a double property with a default value (if property is not found)
      *
      * @param key
@@ -400,7 +399,7 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getDouble(key.key(), defaultValue);
     }
 
-    /**
+	/**
      * Get a double property with a default value (if property is not found)
      *
      * @param key
@@ -417,11 +416,11 @@ public class AbstractBaseKapuaSetting<K extends SettingKey> {
         return config.getDouble(key.key(), defaultValue);
     }
 
-    public boolean isSystemPropertyHotSwap() {
+	public boolean isSystemPropertyHotSwap() {
         return systemPropertyHotSwap;
     }
 
-    public void setSystemPropertyHotSwap(boolean systemPropertyHotSwap) {
+	public void setSystemPropertyHotSwap(boolean systemPropertyHotSwap) {
         this.systemPropertyHotSwap = systemPropertyHotSwap;
     }
 }

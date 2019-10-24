@@ -21,7 +21,8 @@ public class SwappableListStore<M extends ModelData> extends ListStore<M> {
         super(loader);
     }
 
-    public void swapModelInstance(M oldModel, M newModel) {
+    @Override
+	public void swapModelInstance(M oldModel, M newModel) {
         super.swapModelInstance(oldModel, newModel);
     }
 }

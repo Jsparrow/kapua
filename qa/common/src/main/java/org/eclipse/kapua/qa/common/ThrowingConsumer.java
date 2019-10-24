@@ -14,5 +14,5 @@ package org.eclipse.kapua.qa.common;
 @FunctionalInterface
 public interface ThrowingConsumer<T> {
 
-    public void accept(T t) throws Exception;
+    void accept(T t) throws Exception;
 }

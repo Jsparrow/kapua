@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import org.eclipse.kapua.app.console.module.api.client.ui.dialog.ActionDialog;
+import org.apache.commons.lang3.StringUtils;
 
 public class KapuaDateField extends DateField {
 
@@ -29,11 +30,9 @@ public class KapuaDateField extends DateField {
     private Boolean enabledDateFieldEvents = false;
 
     public KapuaDateField() {
-        super();
     }
 
     public KapuaDateField(ActionDialog actionDialog) {
-        super();
         this.dialog = actionDialog;
         this.enabledDateFieldEvents = true;
 
@@ -64,16 +63,17 @@ public class KapuaDateField extends DateField {
 
             @Override
             public void handleEvent(BaseEvent be) {
-                if (be.getType() == Events.OnPaste) {
-                    final Timer timer = new Timer() {
+                if (be.getType() != Events.OnPaste) {
+					return;
+				}
+				final Timer timer = new Timer() {
 
-                        @Override
-                        public void run() {
-                            setDateFieldState();
-                        }
-                    };
-                    timer.schedule(100);
-                }
+				    @Override
+				    public void run() {
+				        setDateFieldState();
+				    }
+				};
+				timer.schedule(100);
             }
         };
 
@@ -86,17 +86,18 @@ public class KapuaDateField extends DateField {
             }
         };
 
-        if (enabledDateFieldEvents) {
-            KapuaDateField.this.addListener(Events.KeyUp, dateListener);
-            KapuaDateField.this.addListener(Events.OnMouseUp, dateListener);
-            KapuaDateField.this.addListener(Events.OnPaste, pasteEventListener);
-            sinkEvents(Event.ONPASTE);
-        }
+        if (!enabledDateFieldEvents) {
+			return;
+		}
+		KapuaDateField.this.addListener(Events.KeyUp, dateListener);
+		KapuaDateField.this.addListener(Events.OnMouseUp, dateListener);
+		KapuaDateField.this.addListener(Events.OnPaste, pasteEventListener);
+		sinkEvents(Event.ONPASTE);
     }
 
     private void setDateFieldState() {
         if (dialog != null) {
-            if (!KapuaDateField.this.getRawValue().isEmpty() && KapuaDateField.this.getOriginalValue() == null) {
+            if (!StringUtils.isEmpty(KapuaDateField.this.getRawValue()) && KapuaDateField.this.getOriginalValue() == null) {
                 dialog.setDateValueNotNull(true);
             } else {
                 dialog.setDateValueNotNull(false);

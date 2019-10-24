@@ -22,19 +22,19 @@ public class CountResult {
 
     private long count;
 
-    protected CountResult() {
-    }
-
     public CountResult(long count) {
         this.count = count;
     }
 
-    @XmlElement(name = "count")
+	protected CountResult() {
+    }
+
+	@XmlElement(name = "count")
     public long getCount() {
         return count;
     }
 
-    public void setCount(long count) {
+	public void setCount(long count) {
         this.count = count;
     }
 }

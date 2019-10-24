@@ -38,19 +38,23 @@ public class DeviceConnectionOptionCreatorImpl extends AbstractKapuaUpdatableEnt
         super(scopeId);
     }
 
-    public ConnectionUserCouplingMode getUserCouplingMode() {
+    @Override
+	public ConnectionUserCouplingMode getUserCouplingMode() {
         return userCouplingMode;
     }
 
-    public void setUserCouplingMode(ConnectionUserCouplingMode userCouplingMode) {
+    @Override
+	public void setUserCouplingMode(ConnectionUserCouplingMode userCouplingMode) {
         this.userCouplingMode = userCouplingMode;
     }
 
-    public KapuaId getReservedUserId() {
+    @Override
+	public KapuaId getReservedUserId() {
         return reservedUserId;
     }
 
-    public void setReservedUserId(KapuaId reservedUserId) {
+    @Override
+	public void setReservedUserId(KapuaId reservedUserId) {
         this.reservedUserId = reservedUserId;
     }
 }

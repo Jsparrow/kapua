@@ -16,5 +16,5 @@ import java.nio.ByteBuffer;
 @FunctionalInterface
 public interface MqttMessageHandler {
 
-    public void handleMessage(String topic, ByteBuffer payload) throws Exception;
+    void handleMessage(String topic, ByteBuffer payload) throws Exception;
 }

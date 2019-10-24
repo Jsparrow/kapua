@@ -38,7 +38,6 @@ public class GroupImpl extends AbstractKapuaNamedEntity implements Group {
      * @since 1.1.0
      */
     public GroupImpl() {
-        super();
     }
 
     /**

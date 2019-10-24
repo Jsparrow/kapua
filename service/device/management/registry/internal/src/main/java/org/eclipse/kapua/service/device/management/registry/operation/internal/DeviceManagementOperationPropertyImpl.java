@@ -35,49 +35,49 @@ public class DeviceManagementOperationPropertyImpl implements DeviceManagementOp
     public DeviceManagementOperationPropertyImpl() {
     }
 
-    private DeviceManagementOperationPropertyImpl(DeviceManagementOperationProperty jobStepProperty) {
-        setName(jobStepProperty.getName());
-        setPropertyType(jobStepProperty.getPropertyType());
-        setPropertyValue(jobStepProperty.getPropertyValue());
-    }
-
     public DeviceManagementOperationPropertyImpl(String name, String propertyType, String propertyValue) {
         setName(name);
         setPropertyType(propertyType);
         setPropertyValue(propertyValue);
     }
 
-    @Override
+	private DeviceManagementOperationPropertyImpl(DeviceManagementOperationProperty jobStepProperty) {
+        setName(jobStepProperty.getName());
+        setPropertyType(jobStepProperty.getPropertyType());
+        setPropertyValue(jobStepProperty.getPropertyValue());
+    }
+
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getPropertyType() {
         return propertyType;
     }
 
-    @Override
+	@Override
     public void setPropertyType(String propertyType) {
         this.propertyType = propertyType;
     }
 
-    @Override
+	@Override
     public String getPropertyValue() {
         return propertyValue;
     }
 
-    @Override
+	@Override
     public void setPropertyValue(String propertyValue) {
         this.propertyValue = propertyValue;
     }
 
-    public static DeviceManagementOperationPropertyImpl parse(DeviceManagementOperationProperty jobStepProperty) {
+	public static DeviceManagementOperationPropertyImpl parse(DeviceManagementOperationProperty jobStepProperty) {
         return jobStepProperty != null ?
                 (jobStepProperty instanceof DeviceManagementOperationPropertyImpl ?
                         (DeviceManagementOperationPropertyImpl) jobStepProperty :

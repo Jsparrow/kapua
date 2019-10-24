@@ -20,6 +20,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.kapua.KapuaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Jms producer wrapper.<BR>
@@ -55,7 +56,7 @@ public abstract class JmsProducerWrapper {
             connection.start();
         }
         session = connection.createSession(transacted, Session.AUTO_ACKNOWLEDGE);
-        if (destination != null && destination.trim().length() > 0) {
+        if (destination != null && StringUtils.trim(destination).length() > 0) {
             producer = session.createProducer(session.createQueue(destination));
         } else {
             producer = session.createProducer(null);

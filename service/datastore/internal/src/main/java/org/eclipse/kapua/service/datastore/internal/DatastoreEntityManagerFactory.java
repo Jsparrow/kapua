@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
+import java.util.Collections;
 
 /**
  * Datastore entity manager factory implementation
@@ -24,11 +25,11 @@ import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
  * @since 1.0
  *
  */
-public class DatastoreEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory {
+public class DatastoreEntityManagerFactory extends AbstractEntityManagerFactory {
 
     private static final String PERSISTENCE_UNIT_NAME = "kapua-datastore";
     private static final String DATASOURCE_NAME = "kapua-dbpool";
-    private static final Map<String, String> UNIQUE_CONSTRAINTS = new HashMap<>();
+    private static final Map<String, String> UNIQUE_CONSTRAINTS = Collections.unmodifiableMap(new HashMap<>());
 
     private static DatastoreEntityManagerFactory instance = new DatastoreEntityManagerFactory();
 

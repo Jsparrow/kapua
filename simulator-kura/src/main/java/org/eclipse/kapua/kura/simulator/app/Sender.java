@@ -26,29 +26,29 @@ import com.google.protobuf.ByteString;
 
 public interface Sender {
 
-    public void send(KuraPayload.Builder payload);
+    void send(KuraPayload.Builder payload);
 
-    public default void send(final byte[] body) {
+    default void send(final byte[] body) {
         send(Collections.emptyMap(), body);
     }
 
-    public default void send(final String body) {
+    default void send(final String body) {
         send(Collections.emptyMap(), body.getBytes(StandardCharsets.UTF_8));
     }
 
-    public default void send(final String body, final Charset charset) {
+    default void send(final String body, final Charset charset) {
         send(Collections.emptyMap(), body.getBytes(charset));
     }
 
-    public default void send(final Map<String, Object> metrics) {
+    default void send(final Map<String, Object> metrics) {
         send(metrics, null);
     }
 
-    public default void send() {
+    default void send() {
         send(null, (byte[]) null);
     }
 
-    public default void send(final Map<String, Object> metrics, final byte[] body) {
+    default void send(final Map<String, Object> metrics, final byte[] body) {
         final Builder payload = KuraPayload.newBuilder();
 
         if (metrics != null) {
@@ -62,13 +62,7 @@ public interface Sender {
         send(payload);
     }
 
-    public static Sender transportSender(final Topic topic, final Transport transport) {
-        return new Sender() {
-
-            @Override
-            public void send(final Builder payload) {
-                transport.sendMessage(topic, payload.build().toByteArray());
-            }
-        };
+    static Sender transportSender(final Topic topic, final Transport transport) {
+        return (final Builder payload) -> transport.sendMessage(topic, payload.build().toByteArray());
     }
 }

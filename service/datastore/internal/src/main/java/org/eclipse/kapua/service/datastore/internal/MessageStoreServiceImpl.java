@@ -59,27 +59,39 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     protected static final String METRIC_COMPONENT_NAME = "datastore";
 
     protected static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
-    // metrics
+
+	protected static final Integer MAX_ENTRIES_ON_DELETE = DatastoreSettings.getInstance().getInt(DatastoreSettingKey.CONFIG_MAX_ENTRIES_ON_DELETE);
+
+	// metrics
     private final Counter metricMessageCount;
-    private final Counter metricCommunicationErrorCount;
-    private final Counter metricConfigurationErrorCount;
-    private final Counter metricGenericErrorCount;
-    private final Counter metricValidationErrorCount;
-    // store timers
+
+	private final Counter metricCommunicationErrorCount;
+
+	private final Counter metricConfigurationErrorCount;
+
+	private final Counter metricGenericErrorCount;
+
+	private final Counter metricValidationErrorCount;
+
+	// store timers
     private final Timer metricDataSaveTime;
-    // queues counters
+
+	// queues counters
     private final Counter metricQueueCommunicationErrorCount;
-    private final Counter metricQueueConfigurationErrorCount;
-    private final Counter metricQueueGenericErrorCount;
 
-    protected final AccountService accountService = LOCATOR.getService(AccountService.class);
-    protected final AuthorizationService authorizationService = LOCATOR.getService(AuthorizationService.class);
-    protected final PermissionFactory permissionFactory = LOCATOR.getFactory(PermissionFactory.class);
-    protected static final Integer MAX_ENTRIES_ON_DELETE = DatastoreSettings.getInstance().getInt(DatastoreSettingKey.CONFIG_MAX_ENTRIES_ON_DELETE);
+	private final Counter metricQueueConfigurationErrorCount;
 
-    protected final MessageStoreFacade messageStoreFacade;
+	private final Counter metricQueueGenericErrorCount;
 
-    /**
+	protected final AccountService accountService = LOCATOR.getService(AccountService.class);
+
+	protected final AuthorizationService authorizationService = LOCATOR.getService(AuthorizationService.class);
+
+	protected final PermissionFactory permissionFactory = LOCATOR.getFactory(PermissionFactory.class);
+
+	protected final MessageStoreFacade messageStoreFacade;
+
+	/**
      * Default constructor
      *
      * @throws ClientUnavailableException
@@ -104,7 +116,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         metricDataSaveTime = metricService.getTimer(METRIC_COMPONENT_NAME, "datastore", "store", "messages", "time", "s");
     }
 
-    @Override
+	@Override
     public StorableId store(KapuaMessage<?, ?> message)
             throws KapuaException {
         String datastoreId = UUID.randomUUID().toString();
@@ -134,7 +146,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public StorableId store(KapuaMessage<?, ?> message, String datastoreId)
             throws KapuaException {
         ArgumentValidator.notEmptyOrNull(datastoreId, "datastoreId");
@@ -164,7 +176,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public void delete(KapuaId scopeId, StorableId id)
             throws KapuaException {
         checkDataAccess(scopeId, Actions.delete);
@@ -175,7 +187,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public DatastoreMessage find(KapuaId scopeId, StorableId id, StorableFetchStyle fetchStyle)
             throws KapuaException {
         checkDataAccess(scopeId, Actions.read);
@@ -186,7 +198,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public MessageListResult query(MessageQuery query)
             throws KapuaException {
         checkDataAccess(query.getScopeId(), Actions.read);
@@ -197,7 +209,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public long count(MessageQuery query)
             throws KapuaException {
         checkDataAccess(query.getScopeId(), Actions.read);
@@ -208,7 +220,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    @Override
+	@Override
     public void delete(MessageQuery query)
             throws KapuaException {
         ArgumentValidator.numRange(query.getLimit(), 0, MAX_ENTRIES_ON_DELETE, "limit");
@@ -221,7 +233,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         }
     }
 
-    protected void checkDataAccess(KapuaId scopeId, Actions action)
+	protected void checkDataAccess(KapuaId scopeId, Actions action)
             throws KapuaException {
         Permission permission = permissionFactory.newPermission(DatastoreDomains.DATASTORE_DOMAIN, action, scopeId);
         authorizationService.checkPermission(permission);

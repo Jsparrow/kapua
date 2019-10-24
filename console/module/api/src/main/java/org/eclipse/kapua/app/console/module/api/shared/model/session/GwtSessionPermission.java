@@ -20,7 +20,6 @@ public class GwtSessionPermission extends KapuaBaseModel {
     private GwtSessionPermissionScope permissionScope;
 
     public GwtSessionPermission() {
-        super();
     }
 
     public GwtSessionPermission(String domain, GwtSessionPermissionAction action, GwtSessionPermissionScope permissionScope) {

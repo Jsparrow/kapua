@@ -85,7 +85,7 @@ public class QuartzTriggerDriver {
         }
 
         // Quartz Trigger data map definition
-        TriggerKey triggerKey = TriggerKey.triggerKey(jobId.toCompactId().concat("-").concat(uniqueId.toCompactId()), scopeId.toCompactId());
+        TriggerKey triggerKey = TriggerKey.triggerKey((new StringBuilder().append(jobId.toCompactId()).append("-").append(uniqueId.toCompactId()).toString()), scopeId.toCompactId());
 
         // Quartz Trigger definition
         TriggerBuilder<org.quartz.Trigger> triggerBuilder = TriggerBuilder.newTrigger()
@@ -103,14 +103,7 @@ public class QuartzTriggerDriver {
     }
 
     public static void createIntervalJobTrigger(@NotNull Trigger trigger) throws KapuaIllegalNullArgumentException, QuartzTriggerDriverException {
-        Integer interval = null;
-
-        for (TriggerProperty tp : trigger.getTriggerProperties()) {
-            if ("interval".equals(tp.getName())) {
-                interval = (Integer) ObjectValueConverter.fromString(tp.getPropertyValue(), Integer.class);
-                break;
-            }
-        }
+        Integer interval = trigger.getTriggerProperties().stream().filter(tp -> "interval".equals(tp.getName())).findFirst().map(tp -> (Integer) ObjectValueConverter.fromString(tp.getPropertyValue(), Integer.class)).orElse(null);
 
         if (interval == null) {
             throw new KapuaIllegalNullArgumentException("interval");
@@ -125,14 +118,7 @@ public class QuartzTriggerDriver {
 
 
     public static void createCronJobTrigger(@NotNull Trigger trigger) throws KapuaIllegalNullArgumentException, QuartzTriggerDriverException {
-        String cron = null;
-
-        for (TriggerProperty tp : trigger.getTriggerProperties()) {
-            if ("cronExpression".equals(tp.getName())) {
-                cron = (String) ObjectValueConverter.fromString(tp.getPropertyValue(), String.class);
-                break;
-            }
-        }
+        String cron = trigger.getTriggerProperties().stream().filter(tp -> "cronExpression".equals(tp.getName())).findFirst().map(tp -> (String) ObjectValueConverter.fromString(tp.getPropertyValue(), String.class)).orElse(null);
 
         if (Strings.isNullOrEmpty(cron)) {
             throw new KapuaIllegalNullArgumentException("cronExpression");

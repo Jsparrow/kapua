@@ -18,7 +18,6 @@ import org.eclipse.kapua.app.console.module.api.shared.model.session.GwtSessionP
 public class EndpointSessionPermission extends GwtSessionPermission {
 
     protected EndpointSessionPermission() {
-        super();
     }
 
     private EndpointSessionPermission(GwtSessionPermissionAction action) {

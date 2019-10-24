@@ -21,13 +21,17 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Messages translator implementation from {@link org.eclipse.kapua.transport.message.mqtt.MqttMessage} to {@link org.eclipse.kapua.service.device.call.message.kura.KuraMessage}
  */
 public class TranslatorDataMqttKura extends Translator<MqttMessage, KuraDataMessage> {
 
-    @Override
+    private static final Logger logger = LoggerFactory.getLogger(TranslatorDataMqttKura.class);
+
+	@Override
     public KuraDataMessage translate(MqttMessage mqttMessage)
             throws KapuaException {
         //
@@ -63,7 +67,8 @@ public class TranslatorDataMqttKura extends Translator<MqttMessage, KuraDataMess
         try {
             kuraPayload.readFromByteArray(mqttBody);
         } catch (MessageException ex) {
-            kuraPayload.setBody(mqttBody);
+            logger.error(ex.getMessage(), ex);
+			kuraPayload.setBody(mqttBody);
         }
 
         //

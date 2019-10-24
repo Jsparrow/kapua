@@ -52,10 +52,14 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStat
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GwtKapuaDeviceModelConverter {
 
-    private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(GwtKapuaDeviceModelConverter.class);
+
+	private static final KapuaLocator LOCATOR = KapuaLocator.getInstance();
 
     private static final DeviceFactory DEVICE_FACTORY = LOCATOR.getFactory(DeviceFactory.class);
     private static final DeviceConnectionFactory DEVICE_CONNECTION_FACTORY = LOCATOR.getFactory(DeviceConnectionFactory.class);
@@ -71,16 +75,16 @@ public class GwtKapuaDeviceModelConverter {
         DeviceConnectionQuery query = DEVICE_CONNECTION_FACTORY.newQuery(GwtKapuaCommonsModelConverter.convertKapuaId(gwtDeviceConnectionQuery.getScopeId()));
         AndPredicate predicate = query.andPredicate();
 
-        if (gwtDeviceConnectionQuery.getClientId() != null && !gwtDeviceConnectionQuery.getClientId().trim().isEmpty()) {
+        if (gwtDeviceConnectionQuery.getClientId() != null && !StringUtils.isEmpty(gwtDeviceConnectionQuery.getClientId().trim())) {
             predicate.and(query.attributePredicate(DeviceConnectionAttributes.CLIENT_ID, gwtDeviceConnectionQuery.getClientId(), Operator.LIKE));
         }
         if (gwtDeviceConnectionQuery.getConnectionStatus() != null && !gwtDeviceConnectionQuery.getConnectionStatus().equals(GwtDeviceConnectionStatus.ANY.toString())) {
             predicate.and(query.attributePredicate(DeviceConnectionAttributes.STATUS, convertConnectionStatus(gwtDeviceConnectionQuery.getConnectionStatus()), Operator.EQUAL));
         }
-        if (gwtDeviceConnectionQuery.getClientIP() != null && !gwtDeviceConnectionQuery.getClientIP().trim().isEmpty()) {
+        if (gwtDeviceConnectionQuery.getClientIP() != null && !StringUtils.isEmpty(gwtDeviceConnectionQuery.getClientIP().trim())) {
             predicate.and(query.attributePredicate(DeviceConnectionAttributes.CLIENT_IP, gwtDeviceConnectionQuery.getClientIP(), Operator.LIKE));
         }
-        if (gwtDeviceConnectionQuery.getUserName() != null && !gwtDeviceConnectionQuery.getUserName().trim().isEmpty()) {
+        if (gwtDeviceConnectionQuery.getUserName() != null && !StringUtils.isEmpty(gwtDeviceConnectionQuery.getUserName().trim())) {
             predicate.and(query.attributePredicate(DeviceConnectionAttributes.USER_ID, gwtDeviceConnectionQuery.getUserName(), Operator.LIKE));
         }
         if (gwtDeviceConnectionQuery.getGwtDeviceConnectionUser() != null) {
@@ -96,17 +100,17 @@ public class GwtKapuaDeviceModelConverter {
             }
         }
 
-        if (gwtDeviceConnectionQuery.getProtocol() != null && !gwtDeviceConnectionQuery.getProtocol().trim().isEmpty()) {
+        if (gwtDeviceConnectionQuery.getProtocol() != null && !StringUtils.isEmpty(gwtDeviceConnectionQuery.getProtocol().trim())) {
             predicate.and(query.attributePredicate(DeviceConnectionAttributes.PROTOCOL, gwtDeviceConnectionQuery.getProtocol(), Operator.LIKE));
         }
 
         String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? DeviceConnectionAttributes.CLIENT_ID : loadConfig.getSortField();
-        if (sortField.equals("connectionUserCouplingMode")) {
+        if ("connectionUserCouplingMode".equals(sortField)) {
             sortField = DeviceConnectionAttributes.USER_COUPLING_MODE;
-        } else if (sortField.equals("modifiedOnFormatted")) {
+        } else if ("modifiedOnFormatted".equals(sortField)) {
             sortField = DeviceConnectionAttributes.MODIFIED_ON;
         }
-        SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+        SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
         FieldSortCriteria sortCriteria = query.fieldSortCriteria(sortField, sortOrder);
         query.setSortCriteria(sortCriteria);
         query.setOffset(loadConfig.getOffset());
@@ -148,7 +152,7 @@ public class GwtKapuaDeviceModelConverter {
             channel.setType(ObjectTypeConverter.fromString(gwtDeviceAssetChannel.getType()));
             channel.setValue(ObjectValueConverter.fromString(gwtDeviceAssetChannel.getValue(), channel.getType()));
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         channel.setTimestamp(gwtDeviceAssetChannel.getTimestamp());
         channel.setMode(convertDeviceAssetChannel(gwtDeviceAssetChannel.getModeEnum()));
@@ -225,8 +229,8 @@ public class GwtKapuaDeviceModelConverter {
         }
         if (predicates.getSortAttribute() != null && loadConfig != null) {
             String sortField = StringUtils.isEmpty(loadConfig.getSortField()) ? DeviceAttributes.CLIENT_ID : loadConfig.getSortField();
-            SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
-            if (sortField.equals("lastEventOnFormatted")) {
+            SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+            if ("lastEventOnFormatted".equals(sortField)) {
                 sortField = DeviceAttributes.LAST_EVENT_ON;
             }
             query.setSortCriteria(query.fieldSortCriteria(sortField, sortOrder));
@@ -254,12 +258,12 @@ public class GwtKapuaDeviceModelConverter {
 
         if (loadConfig != null && loadConfig.getSortField() != null) {
             String sortField = loadConfig.getSortField();
-            SortOrder sortOrder = loadConfig.getSortDir().equals(SortDir.DESC) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+            SortOrder sortOrder = loadConfig.getSortDir() == SortDir.DESC ? SortOrder.DESCENDING : SortOrder.ASCENDING;
 
-            if (sortField.equals("startedOnFormatted")) {
+            if ("startedOnFormatted".equals(sortField)) {
                 sortField = DeviceManagementOperationAttributes.STARTED_ON;
             }
-            if (sortField.equals("endedOnFormatted")) {
+            if ("endedOnFormatted".equals(sortField)) {
                 sortField = DeviceManagementOperationAttributes.ENDED_ON;
             }
             query.setSortCriteria(query.fieldSortCriteria(sortField, sortOrder));

@@ -33,21 +33,20 @@ public class EndpointUsageImpl implements EndpointUsage {
         setName(endpointUsage.getName());
     }
 
-    @Override
+    public EndpointUsageImpl() {
+    }
+
+	@Override
     public String getName() {
         return name;
     }
 
-    @Override
+	@Override
     public void setName(String name) {
         this.name = name;
     }
 
-    public EndpointUsageImpl() {
-        super();
-    }
-
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -59,12 +58,12 @@ public class EndpointUsageImpl implements EndpointUsage {
         return Objects.equals(name, that.name);
     }
 
-    @Override
+	@Override
     public int hashCode() {
         return Objects.hash(name);
     }
 
-    public static EndpointUsageImpl parse(EndpointUsage endpointUsage) {
+	public static EndpointUsageImpl parse(EndpointUsage endpointUsage) {
         return endpointUsage != null ? endpointUsage instanceof EndpointUsageImpl ? (EndpointUsageImpl) endpointUsage : new EndpointUsageImpl(endpointUsage) : null;
     }
 }

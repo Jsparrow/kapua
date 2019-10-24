@@ -17,54 +17,51 @@ import org.eclipse.kapua.app.console.module.api.client.ui.color.Color;
 
 public class KapuaIcon extends Text {
 
-    private IconSet icon;
-    private Color color;
-    private Integer emSize;
-    private String title;
-    private boolean spin;
-
     private static Color defaultColor = Color.BLUE_KAPUA;
+	private IconSet icon;
+	private Color color;
+	private Integer emSize;
+	private String title;
+	private boolean spin;
 
-    public KapuaIcon(IconSet icon) {
-        super();
-
+	public KapuaIcon(IconSet icon) {
         this.icon = icon;
         this.color = defaultColor;
     }
 
-    public static Color getDefaultColor() {
+	public static Color getDefaultColor() {
         return defaultColor;
     }
 
-    public static void setDefaultColor(Color defaultColor) {
+	public static void setDefaultColor(Color defaultColor) {
         KapuaIcon.defaultColor = defaultColor;
     }
 
-    public void setColor(Color color) {
+	public void setColor(Color color) {
         this.color = color;
     }
 
-    public void setEmSize(Integer emSize) {
+	public void setEmSize(Integer emSize) {
         this.emSize = emSize;
     }
 
-    public void setSpin(boolean spin) {
+	public void setSpin(boolean spin) {
         this.spin = spin;
     }
 
-    @Override
+	@Override
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @Override
+	@Override
     protected void onRender(Element target, int index) {
         super.onRender(target, index);
 
         setText(getInlineHTML());
     }
 
-    public String getInlineHTML() {
+	public String getInlineHTML() {
         StringBuilder sb = new StringBuilder("<i class='fa ");
         sb.append(icon.getStyleName());
 

@@ -36,7 +36,7 @@ public interface MetricsService extends KapuaService {
      * @param names
      * @return
      */
-    public Counter getCounter(String module, String component, String... names);
+    Counter getCounter(String module, String component, String... names);
 
     /**
      * Get a Histogram for the specified name. If the histogram doesn't exist the method should create a new one histogram with the specified name.
@@ -46,7 +46,7 @@ public interface MetricsService extends KapuaService {
      * @param names
      * @return
      */
-    public Histogram getHistogram(String module, String component, String... names);
+    Histogram getHistogram(String module, String component, String... names);
 
     /**
      * Get a Timer for the specified name. If the timer doesn't exist the method should create a new one timer with the specified name.
@@ -56,7 +56,7 @@ public interface MetricsService extends KapuaService {
      * @param names
      * @return
      */
-    public Timer getTimer(String module, String component, String... names);
+    Timer getTimer(String module, String component, String... names);
 
     /**
      * Register a Gauge for the specified name. If the Gauge exists the method throws exception.
@@ -67,13 +67,13 @@ public interface MetricsService extends KapuaService {
      * @throws KapuaException
      *             if the metric is already defined
      */
-    public void registerGauge(Gauge<?> gauge, String module, String component, String... names) throws KapuaException;
+    void registerGauge(Gauge<?> gauge, String module, String component, String... names) throws KapuaException;
 
     /**
      * Return the MetricRegistry containing all the metrics
      * 
      * @return MetricRegistry
      */
-    public MetricRegistry getMetricRegistry();
+    MetricRegistry getMetricRegistry();
 
 }

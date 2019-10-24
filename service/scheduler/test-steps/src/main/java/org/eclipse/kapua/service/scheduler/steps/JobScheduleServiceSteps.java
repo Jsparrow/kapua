@@ -51,23 +51,13 @@ import java.util.List;
 @ScenarioScoped
 public class JobScheduleServiceSteps extends TestBase {
 
-    private TriggerFactory triggerFactory;
-    private TriggerService triggerService;
-    private TriggerDefinitionFactory triggerDefinitionFactory;
-    private TriggerDefinitionService triggerDefinitionService;
-
-
-// ****************************************************************************************
-// * Implementation of Gherkin steps used in JobService.feature scenarios.                *
-// *                                                                                      *
-// * MockedLocator is used for Location Service. Mockito is used to mock other            *
-// * services that the Account services dependent on. Dependent services are:             *
-// * - Authorization Service                                                              *
-// ****************************************************************************************
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JobScheduleServiceSteps.class);
+	private TriggerFactory triggerFactory;
+	private TriggerService triggerService;
+	private TriggerDefinitionFactory triggerDefinitionFactory;
+	private TriggerDefinitionService triggerDefinitionService;
 
-    // Default constructor
+	// Default constructor
     @Inject
     public JobScheduleServiceSteps(StepData stepData, DBHelper dbHelper) {
 
@@ -75,17 +65,7 @@ public class JobScheduleServiceSteps extends TestBase {
         this.database = dbHelper;
     }
 
-    // ************************************************************************************
-    // ************************************************************************************
-    // * Definition of Cucumber scenario steps                                            *
-    // ************************************************************************************
-    // ************************************************************************************
-
-    // ************************************************************************************
-    // * Setup and tear-down steps                                                        *
-    // ************************************************************************************
-
-    @Before
+	@Before
     public void beforeScenario(Scenario scenario) {
 
         this.scenario = scenario;
@@ -111,7 +91,7 @@ public class JobScheduleServiceSteps extends TestBase {
         XmlUtil.setContextProvider(new TestJAXBContextProvider());
     }
 
-    @After
+	@After
     public void afterScenario() {
 
         // ************************************************************************************
@@ -132,11 +112,7 @@ public class JobScheduleServiceSteps extends TestBase {
         }
     }
 
-    // ************************************************************************************
-    // * The Cucumber test steps                                                          *
-    // ************************************************************************************
-
-    @And("^I try to create scheduler with name \"([^\"]*)\"$")
+	@And("^I try to create scheduler with name \"([^\"]*)\"$")
     public void iTryToCreateSchedulerWithName(String schedulerName) throws Exception {
         TriggerCreator triggerCreator = triggerFactory.newCreator(getCurrentScopeId());
         KapuaId triggerDefinitionId = (KapuaId) stepData.get("TriggerDefinitionId");
@@ -155,7 +131,7 @@ public class JobScheduleServiceSteps extends TestBase {
         }
     }
 
-    @And("^I found trigger properties with name \"([^\"]*)\"$")
+	@And("^I found trigger properties with name \"([^\"]*)\"$")
     public void iFoundTriggerPropertiesWithName(String triggerDefinitionName) throws Exception {
         primeException();
 
@@ -171,7 +147,7 @@ public class JobScheduleServiceSteps extends TestBase {
         }
     }
 
-    @And("^A regular trigger creator with the name \"([^\"]*)\" and following properties$")
+	@And("^A regular trigger creator with the name \"([^\"]*)\" and following properties$")
     public void aRegularTriggerCreatorWithTheNameAndFollowingProperties(String triggerName, List<CucTriggerProperty> list) {
         TriggerCreator triggerCreator = triggerFactory.newCreator(getCurrentScopeId());
         KapuaId currentTriggerDefId = (KapuaId) stepData.get("TriggerDefinitionId");
@@ -180,15 +156,13 @@ public class JobScheduleServiceSteps extends TestBase {
         triggerCreator.setTriggerDefinitionId(currentTriggerDefId);
 
         List<TriggerProperty> tmpPropList = new ArrayList<>();
-        for(CucTriggerProperty prop : list) {
-            tmpPropList.add(triggerFactory.newTriggerProperty(prop.getName(), prop.getType(), prop.getValue()));
-        }
+        list.forEach(prop -> tmpPropList.add(triggerFactory.newTriggerProperty(prop.getName(), prop.getType(), prop.getValue())));
         triggerCreator.setTriggerProperties(tmpPropList);
 
         stepData.put("TriggerCreator", triggerCreator);
     }
 
-    @And("^I try to create a new trigger entity from the existing creator$")
+	@And("^I try to create a new trigger entity from the existing creator$")
     public void iCreateANewTriggerEntityFromTheExistingCreator() throws Exception {
         TriggerCreator triggerCreator = (TriggerCreator) stepData.get("TriggerCreator");
         triggerCreator.setScopeId(getCurrentScopeId());
@@ -206,7 +180,7 @@ public class JobScheduleServiceSteps extends TestBase {
         }
     }
 
-    @And("^I try to edit trigger name \"([^\"]*)\"$")
+	@And("^I try to edit trigger name \"([^\"]*)\"$")
     public void iTryToEditTriggerName(String newTriggerName) throws Exception {
         try {
             Trigger trigger = (Trigger) stepData.get("Trigger");
@@ -219,7 +193,7 @@ public class JobScheduleServiceSteps extends TestBase {
         }
     }
 
-    @And("^I try to delete last created trigger$")
+	@And("^I try to delete last created trigger$")
     public void iTryToDeleteTrigger() throws Exception {
         try {
             Trigger trigger = (Trigger) stepData.get("Trigger");
@@ -229,5 +203,34 @@ public class JobScheduleServiceSteps extends TestBase {
             verifyException(ex);
         }
     }
+
+
+// ****************************************************************************************
+// * Implementation of Gherkin steps used in JobService.feature scenarios.                *
+// *                                                                                      *
+// * MockedLocator is used for Location Service. Mockito is used to mock other            *
+// * services that the Account services dependent on. Dependent services are:             *
+// * - Authorization Service                                                              *
+// ****************************************************************************************
+
+    
+
+    // ************************************************************************************
+    // ************************************************************************************
+    // * Definition of Cucumber scenario steps                                            *
+    // ************************************************************************************
+    // ************************************************************************************
+
+    // ************************************************************************************
+    // * Setup and tear-down steps                                                        *
+    // ************************************************************************************
+
+    
+
+    // ************************************************************************************
+    // * The Cucumber test steps                                                          *
+    // ************************************************************************************
+
+    
 }
 

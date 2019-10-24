@@ -26,7 +26,6 @@ public class KuraRequestMessage extends KuraAppMessage<KuraRequestChannel, KuraR
      * Constructor
      */
     public KuraRequestMessage() {
-        super();
     }
 
     /**

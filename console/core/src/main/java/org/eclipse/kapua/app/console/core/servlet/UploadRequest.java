@@ -49,11 +49,7 @@ class UploadRequest extends ServletFileUpload {
         List<FileItem> items = null;
         items = parseRequest(req);
 
-        // Process the uploaded items
-        Iterator<FileItem> iter = items.iterator();
-        while (iter.hasNext()) {
-            FileItem item = iter.next();
-
+        for (FileItem item : items) {
             if (item.isFormField()) {
                 String name = item.getFieldName();
                 String value = item.getString();

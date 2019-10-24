@@ -19,27 +19,13 @@ import org.eclipse.kapua.app.console.module.device.shared.model.GwtDeviceQueryPr
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GwtDeviceConnectionQueryPredicates extends KapuaBaseModel implements Serializable {
+public class GwtDeviceConnectionQueryPredicates extends KapuaBaseModel {
 
     private static final long serialVersionUID = 571130152596171388L;
 
     public GwtDeviceConnectionQueryPredicates() {
         setSortAttribute(GwtSortAttribute.CLIENT_ID.name());
         setSortOrder(GwtSortOrder.ASCENDING.name());
-    }
-
-    public enum GwtDeviceConnectionUser implements IsSerializable {
-        ANY;
-
-        private GwtDeviceConnectionUser() {
-        }
-    }
-
-    public enum GwtDeviceConnectionReservedUser implements IsSerializable {
-        ANY, NONE;
-
-        private GwtDeviceConnectionReservedUser() {
-        }
     }
 
     @Override
@@ -54,72 +40,86 @@ public class GwtDeviceConnectionQueryPredicates extends KapuaBaseModel implement
         }
     }
 
-    public String getClientId() {
+	public String getClientId() {
         return (String) get("clientId");
     }
 
-    public String getUnescapedClientId() {
+	public String getUnescapedClientId() {
         return (String) getUnescaped("clientId");
     }
 
-    public void setClientId(String clientId) {
+	public void setClientId(String clientId) {
         set("clientId", clientId);
     }
 
-    public String getConnectionStatus() {
+	public String getConnectionStatus() {
         return get("connectionStatus");
     }
 
-    public GwtDeviceQueryPredicates.GwtDeviceConnectionStatus getConnectionStatusEnum() {
+	public GwtDeviceQueryPredicates.GwtDeviceConnectionStatus getConnectionStatusEnum() {
         return get("connectionStatusEnum");
     }
 
-    public void setConnectionStatus(String deviceConnectionStatus) {
+	public void setConnectionStatus(String deviceConnectionStatus) {
         set("connectionStatus", deviceConnectionStatus);
     }
 
-    public String getSortOrder() {
+	public String getSortOrder() {
         return (String) get("sortOrder");
     }
 
-    public GwtSortOrder getSortOrderEnum() {
+	public GwtSortOrder getSortOrderEnum() {
         return get("sortOrderEnum");
     }
 
-    public void setSortOrder(String sortOrder) {
+	public void setSortOrder(String sortOrder) {
         set("sortOrder", sortOrder);
     }
 
-    public String getSortAttribute() {
+	public String getSortAttribute() {
         return (String) get("sortAttribute");
     }
 
-    public GwtSortAttribute getSortAttributeEnum() {
+	public GwtSortAttribute getSortAttributeEnum() {
         return get("sortAttributeEnum");
     }
 
-    public void setSortAttribute(String sortAttribute) {
+	public void setSortAttribute(String sortAttribute) {
         set("sortAttribute", sortAttribute);
     }
 
-    public String getUserId() {
+	public String getUserId() {
         return (String) get("userId");
     }
 
-    public void setUserId(String userId) {
+	public void setUserId(String userId) {
         set("userId", userId);
     }
 
-    public GwtDeviceConnectionUser getDeviceConnectionUserEnum() {
+	public GwtDeviceConnectionUser getDeviceConnectionUserEnum() {
         return get("deviceConnectionUserEnum");
     }
 
-    public void setDeviceConnectionUser(String deviceConnectionUser) {
+	public void setDeviceConnectionUser(String deviceConnectionUser) {
         set("deviceConnectionUser", deviceConnectionUser);
     }
 
-    public String getDeviceConnectionUser() {
+	public String getDeviceConnectionUser() {
         return (String) get("deviceConnectionUser");
+    }
+
+	public enum GwtDeviceConnectionUser implements IsSerializable {
+        ANY;
+
+        private GwtDeviceConnectionUser() {
+        }
+    }
+
+	public enum GwtDeviceConnectionReservedUser implements IsSerializable {
+        ANY, NONE;
+
+        private GwtDeviceConnectionReservedUser() {
+        }
     }
 
 }

@@ -24,10 +24,10 @@ import org.eclipse.kapua.app.console.module.authorization.shared.model.GwtAccess
 @RemoteServiceRelativePath("accesspermission")
 public interface GwtAccessPermissionService extends RemoteService {
 
-    public GwtAccessPermission create(GwtXSRFToken gwtXsrfToken, GwtAccessPermissionCreator gwtAccessPermissionCreator)
+    GwtAccessPermission create(GwtXSRFToken gwtXsrfToken, GwtAccessPermissionCreator gwtAccessPermissionCreator)
             throws GwtKapuaException;
 
-    public PagingLoadResult<GwtAccessPermission> findByUserId(PagingLoadConfig loadConfig, String scopeShortId, String userShortId)
+    PagingLoadResult<GwtAccessPermission> findByUserId(PagingLoadConfig loadConfig, String scopeShortId, String userShortId)
             throws GwtKapuaException;
 
     void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String accessPermissionShortId)

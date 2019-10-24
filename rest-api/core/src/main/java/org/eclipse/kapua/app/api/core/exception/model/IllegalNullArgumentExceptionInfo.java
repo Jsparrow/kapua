@@ -26,21 +26,20 @@ public class IllegalNullArgumentExceptionInfo extends KapuaExceptionInfo {
     @XmlElement(name = "argumentName")
     private String argumentName;
 
-    protected IllegalNullArgumentExceptionInfo() {
-        super();
-    }
-
     public IllegalNullArgumentExceptionInfo(Status httpStatus, KapuaIllegalNullArgumentException kapuaException) {
         super(httpStatus, kapuaException.getCode(), kapuaException);
 
         setArgumentName(kapuaException.getArgumentName());
     }
 
-    public String getArgumenName() {
+	protected IllegalNullArgumentExceptionInfo() {
+    }
+
+	public String getArgumenName() {
         return argumentName;
     }
 
-    private void setArgumentName(String argumentName) {
+	private void setArgumentName(String argumentName) {
         this.argumentName = argumentName;
     }
 }

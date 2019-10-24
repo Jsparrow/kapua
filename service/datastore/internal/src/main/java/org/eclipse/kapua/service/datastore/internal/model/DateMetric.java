@@ -20,7 +20,7 @@ import org.eclipse.kapua.service.datastore.model.Metric;
  * 
  * @since 1.0
  */
-public class DateMetric extends MetricImpl<Date> implements Metric<Date> {
+public class DateMetric extends MetricImpl<Date> {
 
     /**
      * Construct a date metric with the provided name and value

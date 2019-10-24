@@ -80,7 +80,7 @@ public class GwtDeviceAssetServiceImpl extends KapuaRemoteServiceServlet impleme
                 DeviceAsset assetMetadata = assetsMetadata.getAssets().get(assetIndex);
                 DeviceAsset assetValues = assetsValues.getAssets().get(assetIndex);
                 for (DeviceAssetChannel channelMetadata : assetMetadata.getChannels()) {
-                    if (channelMetadata.getMode().equals(DeviceAssetChannelMode.READ) || channelMetadata.getMode().equals(DeviceAssetChannelMode.READ_WRITE)) {
+                    if (channelMetadata.getMode() == DeviceAssetChannelMode.READ || channelMetadata.getMode() == DeviceAssetChannelMode.READ_WRITE) {
                         for (DeviceAssetChannel channelValue : assetValues.getChannels()) {
                             if (channelValue.getName().equals(channelMetadata.getName())) {
                                 channelMetadata.setValue(channelValue.getValue());
